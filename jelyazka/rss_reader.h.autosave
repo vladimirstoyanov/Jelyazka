@@ -1,0 +1,15 @@
+#ifndef RSS_READER_H
+#define RSS_READER_H
+
+#include "search.h"
+#include "sitestruct.h"
+
+class RSSReader
+{
+public:
+    RSSReader(){}
+    ~RSSReader(){}
+    
+};
+
+#endif // RSS_READER_H
