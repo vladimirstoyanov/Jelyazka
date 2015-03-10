@@ -658,7 +658,7 @@ SiteStruct::site_struct * SiteStruct::initStruct(QString site_name, QString type
 
 void SiteStruct::loadOptions()
 {
-    QFile file("Options");
+    QFile file("../resources/Options");
     if(!file.open(QIODevice::ReadOnly)) {
         QMessageBox::critical(0, "Error!", file.errorString());
     }

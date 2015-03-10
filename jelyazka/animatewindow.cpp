@@ -117,7 +117,7 @@ void CAnimateWindow::animate2()
 void CAnimateWindow::LoadImage_()
 {
    imageLabel = new QLabel(this);
-   close_button_img  = QImage("x_button.png");
+   close_button_img  = QImage("../resources/x_button.png");
    imageLabel->setPixmap(QPixmap::fromImage(close_button_img));
    imageLabel->setGeometry(QRect(this->width()-35,5,30,30));
    imageLabel->show();
@@ -214,7 +214,7 @@ bool CAnimateWindow::eventFilter(QObject *o, QEvent *event)
     {
         if (isXchanged)
         {
-            close_button_img  = QImage("x_button.png");
+            close_button_img  = QImage("../resources/x_button.png");
             imageLabel->setPixmap(QPixmap::fromImage(close_button_img));
             imageLabel->show();
             isXchanged=0;
@@ -223,7 +223,7 @@ bool CAnimateWindow::eventFilter(QObject *o, QEvent *event)
 
         if (p.x()>this->width()-36 && p.x()<this->width() -4 && p.y()>4 && p.y()<36)
         {
-            close_button_img  = QImage("x_button_gradient.png");
+            close_button_img  = QImage("../resources/x_button_gradient.png");
             imageLabel->setPixmap(QPixmap::fromImage(close_button_img));
             imageLabel->show();
             isXchanged = 1;

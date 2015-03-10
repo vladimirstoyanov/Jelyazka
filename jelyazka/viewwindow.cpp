@@ -61,7 +61,7 @@ ViewWindow::ViewWindow(QWidget *parent, SiteStruct *tmp_site_struct):
 
     //load "Add RSS" image
     imageAddRSSLabel = new QLabel(this);
-    add_rss_button_img  = QImage("rss-icon-40x40.png");
+    add_rss_button_img  = QImage("../resources/rss-icon-40x40.png");
     imageAddRSSLabel->setPixmap(QPixmap::fromImage(add_rss_button_img));
     imageAddRSSLabel->setGeometry(QRect(5,5,40,40));
     imageAddRSSLabel->setWhatsThis("Add RSS Feeds");
@@ -75,7 +75,7 @@ ViewWindow::ViewWindow(QWidget *parent, SiteStruct *tmp_site_struct):
 
     //laod "Options" image
     imageOptionsLabel = new QLabel(this);
-    options_button_img  = QImage("Black_Settings.png");
+    options_button_img  = QImage("../resources/Black_Settings.png");
     imageOptionsLabel->setPixmap(QPixmap::fromImage(options_button_img));
     imageOptionsLabel->setGeometry(QRect(50,5,40,40));
     imageOptionsLabel->setWhatsThis("Options");
@@ -87,7 +87,7 @@ ViewWindow::ViewWindow(QWidget *parent, SiteStruct *tmp_site_struct):
 
     //laod "Refresh" image
     imageRefreshLabel = new QLabel(this);
-    refresh_button_img = QImage("refresh.png");
+    refresh_button_img = QImage("../resources/refresh.png");
     imageRefreshLabel->setPixmap(QPixmap::fromImage(refresh_button_img));
     imageRefreshLabel->setGeometry(QRect(95,5,40,40));
     imageRefreshLabel->setWhatsThis("Help");
@@ -99,7 +99,7 @@ ViewWindow::ViewWindow(QWidget *parent, SiteStruct *tmp_site_struct):
 
     //laod "Help" image
     imageHelpLabel = new QLabel(this);
-    help_button_img  = QImage("icon40x40help.png");
+    help_button_img  = QImage("../resources/icon40x40help.png");
     imageHelpLabel->setPixmap(QPixmap::fromImage(help_button_img));
     imageHelpLabel->setGeometry(QRect(140,5,40,40));
     imageHelpLabel->setWhatsThis("Help");
@@ -115,7 +115,7 @@ ViewWindow::ViewWindow(QWidget *parent, SiteStruct *tmp_site_struct):
 
     //laod "X" image
     imageXLabel = new QLabel(this);
-    x_button_img  = QImage("x_button.png");
+    x_button_img  = QImage("../resources/x_button.png");
     imageXLabel->setPixmap(QPixmap::fromImage(x_button_img));
     imageXLabel->setGeometry(QRect(window_size.width()-35,5,30,30));
     imageXLabel->show();
@@ -126,7 +126,7 @@ ViewWindow::ViewWindow(QWidget *parent, SiteStruct *tmp_site_struct):
 
     //laod "Minimize" image
     imageMinimizeLabel = new QLabel(this);
-    minimize_button_img  = QImage("minimize_button.png");
+    minimize_button_img  = QImage("../resources/minimize_button.png");
     imageMinimizeLabel->setPixmap(QPixmap::fromImage(minimize_button_img));
     imageMinimizeLabel->setGeometry(QRect(window_size.width()-97,5,30,30));
     imageMinimizeLabel->show();
@@ -137,7 +137,7 @@ ViewWindow::ViewWindow(QWidget *parent, SiteStruct *tmp_site_struct):
 
     //laod "Maximize" image
     imageMaximizeLabel = new QLabel(this);
-    maximize_button_img  = QImage("maximize_button.png");
+    maximize_button_img  = QImage("../resources/maximize_button.png");
     imageMaximizeLabel->setPixmap(QPixmap::fromImage(maximize_button_img));
     imageMaximizeLabel->setGeometry(QRect(window_size.width()-66,5,30,30));
     imageMaximizeLabel->show();
@@ -443,7 +443,7 @@ void ViewWindow::mouseMove(QPoint p, QMouseEvent *e, QObject *o)
 
     if (isXchanged)
     {
-        x_button_img  = QImage("x_button.png");
+        x_button_img  = QImage("../resources/x_button.png");
         imageXLabel->setPixmap(QPixmap::fromImage(x_button_img));
         imageXLabel->show();
         isXchanged=0;
@@ -452,14 +452,14 @@ void ViewWindow::mouseMove(QPoint p, QMouseEvent *e, QObject *o)
 
     if (isMaximizechanged)
     {
-        maximize_button_img  = QImage("maximize_button.png");
+        maximize_button_img  = QImage("../resources/maximize_button.png");
         imageMaximizeLabel->setPixmap(QPixmap::fromImage(maximize_button_img));
         imageMaximizeLabel->show();
         isMaximizechanged=0;
     }
     if (isMinimizechanged)
     {
-        minimize_button_img  = QImage("minimize_button.png");
+        minimize_button_img  = QImage("../resources/minimize_button.png");
         imageMinimizeLabel->setPixmap(QPixmap::fromImage(minimize_button_img));
         imageMinimizeLabel->show();
         isMinimizechanged=0;
@@ -468,7 +468,7 @@ void ViewWindow::mouseMove(QPoint p, QMouseEvent *e, QObject *o)
 
     if (p.x()>width-36 && p.x()<width -4 && p.y()>4 && p.y()<36)
     {
-        x_button_img  = QImage("x_button_gradient.png");
+        x_button_img  = QImage("../resources/x_button_gradient.png");
         imageXLabel->setPixmap(QPixmap::fromImage(x_button_img));
         imageXLabel->show();
         isXchanged = 1;
@@ -487,7 +487,7 @@ void ViewWindow::mouseMove(QPoint p, QMouseEvent *e, QObject *o)
     }
     else if (p.x()>width-66 && p.x()<width -35 && p.y()>4 && p.y()<36)
     {
-        maximize_button_img  = QImage("maximize_button_gradient.png");
+        maximize_button_img  = QImage("../resources/maximize_button_gradient.png");
         imageMaximizeLabel->setPixmap(QPixmap::fromImage(maximize_button_img));
         imageMaximizeLabel->show();
         isMaximizechanged = 1;
@@ -495,7 +495,7 @@ void ViewWindow::mouseMove(QPoint p, QMouseEvent *e, QObject *o)
     }
     else if (p.x()>width-96 && p.x()<width -65 && p.y()>4 && p.y()<36)
     {
-        minimize_button_img  = QImage("minimize_button_gradient.png");
+        minimize_button_img  = QImage("../resources/minimize_button_gradient.png");
         imageMinimizeLabel->setPixmap(QPixmap::fromImage(minimize_button_img));
         imageMinimizeLabel->show();
         isMinimizechanged = 1;

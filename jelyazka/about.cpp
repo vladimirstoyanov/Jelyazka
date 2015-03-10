@@ -28,7 +28,7 @@ About::About(QWidget *parent) :
     ui->textBrowser->setGeometry(0,0,this->width(), this->height() - (ui->pushButton->height() + 10));
     ui->pushButton->setGeometry(this->width() - (ui->pushButton->width()+5), this->height() - (ui->pushButton->height()+5), ui->pushButton->width(), ui->pushButton->height());
 
-    ui->textBrowser->setHtml("Jelyazka RSS Reader written by Vladimir Stoyanov.<p>e-mail:<a href=\"mailto:firojjsci@gmail.com\">firojjsci@gmail.com</p>");
+    ui->textBrowser->setHtml("Jelyazka RSS Reader written by Vladimir Stoyanov.<p>e-mail:<a href=\"mailto:vlado_stoyanov@yahoo.com\">vlado_stoyanov@yahoo.com</p>");
 
     ui->textBrowser->setOpenLinks(1);
     ui->textBrowser->setOpenExternalLinks(1);

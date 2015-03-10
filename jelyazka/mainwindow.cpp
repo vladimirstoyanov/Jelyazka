@@ -131,7 +131,7 @@ void MainWindow::createTrayIcon()
 
 void MainWindow::setIcon()
 {
-    trayIcon->setIcon(QIcon("Jelyazka_icon.png"));
+    trayIcon->setIcon(QIcon("../resources/Jelyazka_icon.png"));
 }
 
 void MainWindow::trayIconClicked(QSystemTrayIcon::ActivationReason reason)

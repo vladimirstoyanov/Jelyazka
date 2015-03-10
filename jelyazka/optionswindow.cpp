@@ -515,7 +515,7 @@ void OptionsWindow::updateFiltersTable()
 
 void OptionsWindow::loadOptions()
 {
-    QFile file("Options");
+    QFile file("../resources/Options");
     if(!file.open(QIODevice::ReadOnly)) {
         QMessageBox::critical(0, "Error!", "Can't read \'Options\' file: " + file.errorString());
         return;
@@ -666,7 +666,7 @@ void OptionsWindow::loadOptions()
 //save options in 'Options' file
 void OptionsWindow::saveOptions()
 {
-    QFile file("Options");
+    QFile file("../resouce/Options");
     file.open(QIODevice::WriteOnly);
     QTextStream out(&file);
     out << "Refresh time: " << QString::number(sb_refresh_time->value()) <<'\n';

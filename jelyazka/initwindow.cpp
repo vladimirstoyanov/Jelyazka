@@ -37,7 +37,7 @@ InitWindow::InitWindow(QWidget *parent) :
     this->setStyleSheet("background-color:black;");
 
     imageInitLabel = new QLabel(this);
-    init_img  = new QImage("jelyazka_02_end.png");
+    init_img  = new QImage("../resources/jelyazka_02_end.png");
     imageInitLabel->setPixmap(QPixmap::fromImage(*init_img));
     imageInitLabel->setGeometry(QRect(0,0,300,300));
     imageInitLabel->show();
