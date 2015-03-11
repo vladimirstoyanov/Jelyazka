@@ -33,7 +33,7 @@
 #include "viewwindow.h"
 #include "animatewindow.h"
 #include "initwindow.h"
-#include "refreshfeedsdata.h";
+#include "refreshfeedsdata.h"
 #include "about.h"
 
 namespace Ui {

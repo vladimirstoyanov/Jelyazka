@@ -161,7 +161,7 @@ int WebSearchInterface::checkSiteStructForExistingURL(QString url)
     if (site_struct == NULL)
         return 1;
 
-    for (int i=0; i<site_struct->s_struct.size(); i++)
+    for (uint i=0; i<site_struct->s_struct.size(); i++)
         if (url == site_struct->s_struct[i].url)
             return 1;
 
@@ -403,7 +403,7 @@ void WebSearchInterface::on_pushButton_2_clicked() //add RSS feeds button
             continue;
         }
 
-        qry.prepare("insert into rss (name, url, version) values (\'"+ feeds_struct_tmp_iterator->rss_name + "\',\'" + feeds_struct_tmp_iterator->rss_link + + "\',\'" + QString::number(feeds_struct_tmp_iterator->version) + "\')");
+        qry.prepare("insert into favorite_feeds (name, url, version) values (\'"+ feeds_struct_tmp_iterator->rss_name + "\',\'" + feeds_struct_tmp_iterator->rss_link + + "\',\'" + QString::number(feeds_struct_tmp_iterator->version) + "\')");
         if (!qry.exec())
         {
             log.write("Fail:" + qry.lastError().text(),  "add_rss_log.txt");

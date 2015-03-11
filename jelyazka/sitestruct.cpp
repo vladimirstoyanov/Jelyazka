@@ -60,11 +60,11 @@ void SiteStruct::loadStrctureFromDB()
     createTables();
 
     //get all rss feeds urls
-    query.prepare( "SELECT * FROM rss" );
+    query.prepare( "SELECT * FROM favorite_feeds" );
 
     if( !query.exec() )
     {
-        qDebug()<<"Some error, when trying to read from \'rss\' table...";
+        qDebug()<<"Some error, when trying to read from \'favorite_feeds\' table...";
         return;
     }
 
@@ -216,7 +216,7 @@ void SiteStruct::run() //runnning another thread (synchronize data for n time)
 
     mutex->lock();
     int index=-1;
-    for (int i=0; i<s_struct.size(); i++)
+    for (uint i=0; i<s_struct.size(); i++)
     {
         if (!s_struct.at(i).isRead)
         {
@@ -316,13 +316,13 @@ void SiteStruct::createTables()
     }
 
     //"rss" table
-    if (!db.tables().contains(QLatin1String("rss"))) //if hasn't 'rss' table
+    if (!db.tables().contains(QLatin1String("favorite_feeds"))) //if hasn't 'rss' table
     {
         //create 'rss'table
         if (db.isOpen())
         {
                 QSqlQuery query;
-                if (!query.exec("create table rss "
+                if (!query.exec("create table favorite_feeds "
                           "(id integer PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, "
                           "name varchar, "
                           "url varchar, "
@@ -394,7 +394,7 @@ int SiteStruct::getArticlesForIndexRSS2(QString content,uint struct_index)
 {
     int item_b_index=0, item_e_index=0;
     CSearch cs;
-    int n = content.length();
+    //int n = content.length();
 
     while(1)
     {

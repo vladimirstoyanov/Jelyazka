@@ -157,7 +157,7 @@ void MainWindow::onDone()
     trayIcon->show();
     view_window->show();
     rfd->start();
-    for (int i=0; i<s_struct->s_struct.size(); i++)
+    for (uint i=0; i<s_struct->s_struct.size(); i++)
       s_struct->data_for_animatewindow+="<index=" + QString::number(i) + ">";
     s_struct->emitAnimateWindow();
 }

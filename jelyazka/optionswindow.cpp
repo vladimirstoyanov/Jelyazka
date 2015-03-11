@@ -248,11 +248,11 @@ void OptionsWindow::fillViewListView()
 {
     QSqlQuery query;
 
-    query.prepare( "SELECT * FROM rss" );
+    query.prepare( "SELECT * FROM favorite_feeds" );
 
     if( !query.exec() )
     {
-        qDebug()<<"Some error, when trying to read from \'rss' table...";
+        qDebug()<<"Some error, when trying to read from \'favorite_feeds' table...";
         return;
     }
 
@@ -325,13 +325,13 @@ void OptionsWindow::rssTableUpdate()
     }
 
     //init l_items_for_remove
-    for(int i=0; i<l_old_view_feed.size(); i++)
+    for(uint i=0; i<l_old_view_feed.size(); i++)
         l_items_for_remove.push_back(0);
 
-    for (int i=0;  i<view_feeds->count(); i++)
+    for (uint i=0;  i<view_feeds->count(); i++)
     {
         //qDebug()<<view_feeds->item(i)->text();
-        for (int j = 0; j<l_old_view_feed.size(); j++)
+        for (uint j = 0; j<l_old_view_feed.size(); j++)
         {
             //qDebug()<<"COMPARING WITH: "<< l_old_view_feed[j];
             if (view_feeds->item(i)->text() == l_old_view_feed[j])
@@ -357,7 +357,7 @@ void OptionsWindow::rssTableUpdate()
 
     QList<bool> l_item_indexes_from_site_struct;
     //init l_item_indexes_from_site_struct;
-    for (int i=0; i<site_struct->s_struct.size(); i++)
+    for (uint i=0; i<site_struct->s_struct.size(); i++)
         l_item_indexes_from_site_struct.push_back(1);
 
     //remove old items
@@ -365,7 +365,7 @@ void OptionsWindow::rssTableUpdate()
         if (l_items_for_remove[i] == 0)
         {
             removeDataFromRSSTable(l_old_view_feed[i],0);
-            for (int j=0; j<site_struct->s_struct.size(); j++)
+            for (uint j=0; j<site_struct->s_struct.size(); j++)
             {
                 //qDebug()<<"COMPARING "<<l_old_view_feed[i]<<" WITH: "<<site_struct->s_struct[j].site_name;
                 if (l_old_view_feed[i] == site_struct->s_struct[j].site_name)
@@ -394,15 +394,15 @@ void OptionsWindow::removeDataFromRSSTable(QString site_name, bool all_data)
 
     if (all_data)
     {
-        qry.prepare("delete from rss");
+        qry.prepare("delete from favorite_feeds");
         if (!qry.exec())
-            qDebug()<<"Fail:" + qry.lastError().text(),  "add_rss_log.txt";
+            qDebug()<<"Fail:" + qry.lastError().text();
         return;
     }
 
-    qry.prepare(QString("delete from rss where name=\'%1\'").arg(site_name));
+    qry.prepare(QString("delete from favorite_feeds where name=\'%1\'").arg(site_name));
     if (!qry.exec())
-        qDebug()<<"Fail:" + qry.lastError().text(),  "add_rss_log.txt";
+        qDebug()<<"Fail:" + qry.lastError().text();
 }
 
 //insert row to 'rss' DB table
@@ -410,10 +410,10 @@ void OptionsWindow::insertRowToRSSTable(QString name, QString url, QString versi
 {
     QSqlQuery qry;
 
-    qry.prepare("insert into rss (name, url, version) values (\'"+ name+"\',\'" + url+ "\',\'" + version + "\')");
+    qry.prepare("insert into favorite_feeds (name, url, version) values (\'"+ name+"\',\'" + url+ "\',\'" + version + "\')");
     if (!qry.exec())
     {
-        qDebug()<<"Fail:" + qry.lastError().text(),  "add_rss_log.txt";
+        qDebug()<<"Fail:" + qry.lastError().text();
     }
 }
 
@@ -429,7 +429,7 @@ void OptionsWindow::findAndReturnURLAndVersion(QString site_name, QString &url, 
         query.prepare(QString("SELECT * FROM collect_feeds WHERE name=\"%1\"").arg(site_name));
         if (!query.exec())
         {
-            qDebug()<<"Fail:" + query.lastError().text(),  "add_rss_log.txt";
+            qDebug()<<"Fail:" + query.lastError().text();
             url = "";
             version = "";
             return;
@@ -479,13 +479,13 @@ void OptionsWindow::updateFiltersTable()
     }
 
     //init l_items_for_remove
-    for(int i=0; i<l_old_filters.size(); i++)
+    for(uint i=0; i<l_old_filters.size(); i++)
         l_items_for_remove.push_back(0);
 
     vw->l_filters.clear();
     for (int i=0;  i<lw_filter_list->count(); i++)
     {
-        for (int j = 0; j<l_old_filters.size(); j++)
+        for (uint j = 0; j<l_old_filters.size(); j++)
         {
             if (lw_filter_list->item(i)->text() == l_old_filters[j])
             {
@@ -707,12 +707,12 @@ void OptionsWindow::updateCollectFeedListView()
 {
     if (collect_feeds->count() == 0)
     {
-        for (int i=0; i<l_old_collect_feed.size(); i++)
+        for (uint i=0; i<l_old_collect_feed.size(); i++)
             removeDataFromCollectFeeds(l_old_collect_feed[i]);
         return;
     }
 
-    for (int i=0; i<l_old_collect_feed.size(); i++)
+    for (uint i=0; i<l_old_collect_feed.size(); i++)
     {
         for (int j=0; j<collect_feeds->count(); j++)
         {
@@ -1070,7 +1070,7 @@ void OptionsWindow::insertRowToFiltersTable(QString filter_name)
     qry.prepare("insert into filters (filter) values (\'"+ filter_name+"\')");
     if (!qry.exec())
     {
-        qDebug()<<"OptionsWindow::insertRowToFiltersTable(QString filter_name) fail:" + qry.lastError().text(),  "add_rss_log.txt";
+        qDebug()<<"OptionsWindow::insertRowToFiltersTable(QString filter_name) fail:" + qry.lastError().text();
     }
 }
 
@@ -1083,7 +1083,7 @@ void OptionsWindow::removeDataFromFilters(QString filter_name, bool all_data)
     else
         qry.prepare(QString("delete from filters where name=\"%1\"").arg(filter_name));
     if (!qry.exec())
-        qDebug()<<"OptionsWindow::removeDataFromFilters(QString filter_name, bool all_data) fail:" + qry.lastError().text(),  "add_rss_log.txt";
+        qDebug()<<"OptionsWindow::removeDataFromFilters(QString filter_name, bool all_data) fail:" + qry.lastError().text();
 }
 
 void OptionsWindow::removeDataFromCollectFeeds(QString site_name)
@@ -1092,7 +1092,7 @@ void OptionsWindow::removeDataFromCollectFeeds(QString site_name)
 
     qry.prepare(QString("delete from collect_feeds where name=\"%1\"").arg(site_name));
     if (!qry.exec())
-        qDebug()<<"OptionsWindow::removeDataFromCollectFeeds(QString site_name) fail delete from collect_feeds where filter... " + qry.lastError().text(),  "add_rss_log.txt";
+        qDebug()<<"OptionsWindow::removeDataFromCollectFeeds(QString site_name) fail delete from collect_feeds where filter... " + qry.lastError().text();
 }
 
 //Filter option: adding string to filter list
