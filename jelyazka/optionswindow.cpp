@@ -803,7 +803,7 @@ void OptionsWindow::resizeEvent(QResizeEvent *event)
 //show event
 void OptionsWindow::showEvent(QShowEvent *event)
 {
-
+    this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
     loadOptions();
 
     download_feed_status->hide();

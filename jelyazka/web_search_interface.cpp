@@ -190,6 +190,8 @@ void WebSearchInterface::keyPressEvent(QKeyEvent *event)
 
 void WebSearchInterface::showEvent(QShowEvent *)
 {
+    this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
+
     tn = new TreeNode;
     int row_count = model->rowCount();
     model->removeRows(0, row_count);

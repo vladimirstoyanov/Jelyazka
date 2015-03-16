@@ -20,6 +20,7 @@
 #define HELP_H
 
 #include <QWidget>
+#include <QDesktopWidget>
 
 namespace Ui {
 class Help;

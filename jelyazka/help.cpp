@@ -41,6 +41,7 @@ Help::~Help()
 void Help::showEvent(QShowEvent *)
 {
     ui->textBrowser->setGeometry(5,5,this->width()-10, this->height()-10);
+    this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
     loadHelp();
 }
 

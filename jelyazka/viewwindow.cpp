@@ -145,6 +145,8 @@ ViewWindow::ViewWindow(QWidget *parent, SiteStruct *tmp_site_struct):
 	#ifdef _WIN32
 		imageAddRSSLabel->setToolTipDuration(5000);
 	#endif
+    minimize = 0;
+    close = 0;
 
 }
 
@@ -172,7 +174,7 @@ void ViewWindow::initTextBrowser()
 
     //find index of ui->comboBox->currentText() in 's_struct' structure
     int index=-1;
-    for (int i=0; i<site_struct->s_struct.size(); i++)
+    for (uint i=0; i<site_struct->s_struct.size(); i++)
     {
         if (site_struct->s_struct[i].site_name==cur_text)
         {
@@ -210,7 +212,7 @@ void ViewWindow::initDataInComboBoxFromStructure()
 {
     ui->comboBox->clear();
 
-    for (int i=0; i<site_struct->s_struct.size(); i++)
+    for (uint i=0; i<site_struct->s_struct.size(); i++)
         addToCombobox(site_struct->s_struct[i].site_name);
 }
 
@@ -285,6 +287,13 @@ void ViewWindow::closeEvent(QCloseEvent *event)
 }
 void ViewWindow::showEvent(QShowEvent *)
 {
+    if (minimize || close)
+    {
+        minimize=0;
+        close = 0;
+        return;
+    }
+
     this->adjustSize();
     this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
 
@@ -360,7 +369,9 @@ void ViewWindow::mouseButtonPressed(QPoint p , QObject *o)
 
         resizing = 0;
         pressReleased = 0;
+        close = 1;
         this->hide();
+
         //e->ignore();
     }
     else if (imageMaximizeLabel->geometry().contains(p))
@@ -383,6 +394,7 @@ void ViewWindow::mouseButtonPressed(QPoint p , QObject *o)
     {
         resizing = 0;
         pressReleased = 0;
+        minimize = 1;
         this->showMinimized();
     }
     else if (mouseInGrip(p) && o->objectName() == "ViewWindow")

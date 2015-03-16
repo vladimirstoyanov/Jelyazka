@@ -93,6 +93,8 @@ private:
     Help *help_gui;
     bool show_flag;
     bool resizing;
+    bool minimize;
+    bool close;
 
 
     int width;
