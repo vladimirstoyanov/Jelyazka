@@ -38,8 +38,6 @@
 #include <QList>
 #include "help.h"
 
-using namespace std;
-
 namespace Ui {
 class ViewWindow;
 }
@@ -119,7 +117,7 @@ private:
             text ="";
         }
     };
-    vector <article> site_view_structure;
+    std::vector <article> site_view_structure;
 
     void initDataInComboBox();
     void addToCombobox(QString str);

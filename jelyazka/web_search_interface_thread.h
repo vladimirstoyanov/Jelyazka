@@ -27,7 +27,6 @@
 #include <QList>
 #include <boost/ptr_container/ptr_list.hpp>
 #include "logger.h"
-using namespace std;
 
 class WebSearchInterfaceThread : public QObject, public QRunnable
 {

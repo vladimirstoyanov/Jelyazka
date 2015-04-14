@@ -22,7 +22,6 @@
 #include "search.h"
 #include <string>
 #include <vector>
-using namespace std;
 
 CSearch::CSearch()
 {
@@ -33,7 +32,7 @@ CSearch::~CSearch()
 
 void CSearch::search_Before(QString text, QString subtext, int *index)
 {
-    vector<int> T(subtext.length() + 1, -1);
+    std::vector<int> T(subtext.length() + 1, -1);
 
     if(subtext.length() == 0 && subtext.length()>text.length())
     {
@@ -66,7 +65,7 @@ void CSearch::search_Before(QString text, QString subtext, int *index)
 }
 void CSearch::search_After(QString text, QString subtext, int *index)
 {
-    vector<int> T(subtext.length() + 1, -1);
+    std::vector<int> T(subtext.length() + 1, -1);
 
     if(subtext.length() == 0 && subtext.length()>text.length())
     {

@@ -38,8 +38,6 @@
 #include <QWaitCondition>
 #include <QTextCodec>
 
-using namespace std;
-
 class CAnimateWindow;
 
 class SiteStruct : public QObject, public QRunnable
