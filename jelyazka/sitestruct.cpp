@@ -121,7 +121,11 @@ void SiteStruct::synchronizeData(int struct_index, QString content)
 
     //adding new data
     for (uint i=0; i<tmp_struct.size(); i++)
+    {
+        if (INT_SIZE<=s_struct.at(struct_index).articles.size())
+            s_struct.at(struct_index).articles.erase(s_struct.at(struct_index).articles.begin() + s_struct.at(struct_index).articles.size()-1);
         s_struct.at(struct_index).articles.push_front(tmp_struct[i]);
+    }
 
 }
 
@@ -384,6 +388,13 @@ int SiteStruct::getArticlesForIndexRSS(QString content,uint struct_index)
         convert_string(art.link, true);
         getDescription(item_b_index, item_e_index, art.text, content);
 
+        if (INT_SIZE <= s_struct[struct_index].articles.size()) //prevent int overflow
+        {
+            s_struct[struct_index].articles.erase(s_struct[struct_index].articles.begin() + s_struct[struct_index].articles.size()-1);
+            s_struct[struct_index].articles.push_front(art);
+            continue;
+        }
+
         s_struct[struct_index].articles.push_back(art);
     }
     return 0;
@@ -419,6 +430,13 @@ int SiteStruct::getArticlesForIndexRSS2(QString content,uint struct_index)
         art.link = returnURL(content, index_link);
         convert_string(art.link, true);
         getContent(item_b_index, item_e_index, art.text, content);
+
+        if (INT_SIZE <= s_struct[struct_index].articles.size()) //prevent int overflow
+        {
+            s_struct[struct_index].articles.erase(s_struct[struct_index].articles.begin() + s_struct[struct_index].articles.size()-1);
+            s_struct[struct_index].articles.push_front(art);
+            continue;
+        }
 
         s_struct[struct_index].articles.push_back(art);
 

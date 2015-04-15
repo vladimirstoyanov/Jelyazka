@@ -38,6 +38,8 @@
 #include <QWaitCondition>
 #include <QTextCodec>
 
+#define INT_SIZE 2147483646
+
 class CAnimateWindow;
 
 class SiteStruct : public QObject, public QRunnable

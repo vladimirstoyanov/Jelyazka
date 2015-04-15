@@ -295,6 +295,9 @@ void WebSearchInterface::onFoundRSS(int type, QString name, QString url, QString
             name = change_name(name); //make unique name
         treeInsert(tn, name);
 
+        if (INT_SIZE<=old_names.size())
+            return;
+
         old_names.push_back(new QString(name));
 
         if (!version)
@@ -374,6 +377,7 @@ void WebSearchInterface::on_pushButton_3_clicked() //'Remove' button clicked
     }
     paintRows();
 }
+
 void WebSearchInterface::on_pushButton_2_clicked() //add RSS feeds button
 {
     QSqlQuery qry;
@@ -383,6 +387,7 @@ void WebSearchInterface::on_pushButton_2_clicked() //add RSS feeds button
 
     if (feeds_struct_tmp.size()>0)
         buidBinaryTreeFromDBData();
+
     boost::ptr_list<rss_data>::iterator feeds_struct_tmp_iterator;
     for(feeds_struct_tmp_iterator = feeds_struct_tmp.begin(); feeds_struct_tmp_iterator!=feeds_struct_tmp.end(); feeds_struct_tmp_iterator++)
     {
@@ -410,6 +415,12 @@ void WebSearchInterface::on_pushButton_2_clicked() //add RSS feeds button
         {
             log.write("Fail:" + qry.lastError().text(),  "add_rss_log.txt");
             continue;
+        }
+
+        if (INT_SIZE<=site_struct->s_struct.size()) //prevent int overflow
+        {
+            QMessageBox::critical(0,"Error","Size of RSS feeds must be less than from " + QString::number(INT_SIZE) + "! Please remove any RSS feeds!");
+            break;
         }
 
         //add to 'site_struct'
@@ -491,8 +502,14 @@ int WebSearchInterface::getArticlesForIndexRSS(QString content, QString rss_name
 
         site_struct->getDescription(item_b_index, item_e_index, f.description, content);
 
+        if (INT_SIZE <= rd->data.size()) //prevent int overflow
+            break;
+
         rd->data.append(f);
     }
+
+    if (INT_SIZE<=feeds_struct_tmp.size())
+        return 1;
 
     feeds_struct_tmp.push_back(rd);
 
@@ -534,8 +551,14 @@ int WebSearchInterface::getArticlesForIndexRSS2(QString content, QString rss_nam
         site_struct->convert_string(f.link, true);
         site_struct->getContent(item_b_index, item_e_index, f.description, content);
 
+        if (INT_SIZE <= rd->data.size()) //prevent int overflow
+            break;
+
         rd->data.append(f);
     }
+
+    if (INT_SIZE<=feeds_struct_tmp.size()) //prevent int overflow
+        return 1;
 
     feeds_struct_tmp.push_back(rd);
 
