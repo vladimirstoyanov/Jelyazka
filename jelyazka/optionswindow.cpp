@@ -424,7 +424,7 @@ void OptionsWindow::findAndReturnURLAndVersion(QString site_name, QString &url, 
     url = "";
     version="";
 
-    if (site_struct->db.isOpen())
+    if (site_struct->sqliteDataBase.isOpen())
     {
         query.prepare(QString("SELECT * FROM collect_feeds WHERE name=\"%1\"").arg(site_name));
         if (!query.exec())

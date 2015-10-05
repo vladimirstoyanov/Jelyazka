@@ -60,7 +60,7 @@ public:
     
     SiteStruct(QObject *parent);
     ~SiteStruct();
-    QSqlDatabase db;
+    QSqlDatabase sqliteDataBase;
 
     struct article //article struct
     {

@@ -28,9 +28,9 @@ SiteStruct::SiteStruct(QObject *parent)
     network_proxy = NULL;
 
     //open db
-    db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("sites.db3");
-    db.open();
+    sqliteDataBase = QSqlDatabase::addDatabase("QSQLITE");
+    sqliteDataBase.setDatabaseName("sites.db3");
+    sqliteDataBase.open();
 
     loadStrctureFromDB();
 
@@ -47,7 +47,7 @@ SiteStruct::SiteStruct(QObject *parent)
 
 SiteStruct::~SiteStruct()
 {
-    db.close();
+    sqliteDataBase.close();
     delete mutex;
     if (network_proxy!=NULL)
         delete network_proxy;
@@ -286,10 +286,10 @@ void SiteStruct::emitAnimateWindow()
 void SiteStruct::createTables()
 {
     //"collec_feeds" table
-    if (!db.tables().contains(QLatin1String("collect_feeds"))) //if hasn't 'collect_feeds' table
+    if (!sqliteDataBase.tables().contains(QLatin1String("collect_feeds"))) //if hasn't 'collect_feeds' table
     {
         //create 'collect_feeds'table
-        if (db.isOpen())
+        if (sqliteDataBase.isOpen())
         {
                 QSqlQuery query;
                 if (!query.exec("create table collect_feeds "
@@ -304,10 +304,10 @@ void SiteStruct::createTables()
     }
 
     //"all_urls" table
-    if (!db.tables().contains(QLatin1String("all_urls"))) //if hasn't 'all_urls' table
+    if (!sqliteDataBase.tables().contains(QLatin1String("all_urls"))) //if hasn't 'all_urls' table
     {
         //create 'collect_feeds' table
-        if (db.isOpen())
+        if (sqliteDataBase.isOpen())
         {
                 QSqlQuery query;
                 if (!query.exec("create table all_urls "
@@ -320,10 +320,10 @@ void SiteStruct::createTables()
     }
 
     //"rss" table
-    if (!db.tables().contains(QLatin1String("favorite_feeds"))) //if hasn't 'rss' table
+    if (!sqliteDataBase.tables().contains(QLatin1String("favorite_feeds"))) //if hasn't 'rss' table
     {
         //create 'rss'table
-        if (db.isOpen())
+        if (sqliteDataBase.isOpen())
         {
                 QSqlQuery query;
                 if (!query.exec("create table favorite_feeds "
@@ -338,10 +338,10 @@ void SiteStruct::createTables()
     }
 
     //"filter" table
-    if (!db.tables().contains(QLatin1String("filters"))) //if hasn't 'rss' table
+    if (!sqliteDataBase.tables().contains(QLatin1String("filters"))) //if hasn't 'rss' table
     {
         //create 'rss' table
-        if (db.isOpen())
+        if (sqliteDataBase.isOpen())
         {
                 QSqlQuery query;
                 if (!query.exec("create table filters "

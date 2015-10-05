@@ -12,8 +12,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = jelyazka
 TEMPLATE = app
-INCLUDEPATH += /mnt/sda2/Programing/boost_1_57_0/ #The path to the Boost libraries.
-RC_FILE = icon.rc
+INCLUDEPATH += D:/boost_1_55_0/ #The path to the Boost libraries.
 
 
 SOURCES += main.cpp\
@@ -30,7 +29,8 @@ SOURCES += main.cpp\
     optionswindow.cpp \
     refreshfeedsdata.cpp \
     help.cpp \
-    about.cpp
+    about.cpp \
+    db.cpp
 
 HEADERS  += mainwindow.h \
     net.h \
@@ -45,7 +45,8 @@ HEADERS  += mainwindow.h \
     optionswindow.h \
     refreshfeedsdata.h \
     help.h \
-    about.h
+    about.h \
+    db.h
 
 FORMS    += mainwindow.ui \
     viewwindow.ui \
