@@ -30,7 +30,9 @@ SOURCES += main.cpp\
     refreshfeedsdata.cpp \
     help.cpp \
     about.cpp \
-    db.cpp
+    db.cpp \
+    rssdata.cpp \
+    rssarticle.cpp
 
 HEADERS  += mainwindow.h \
     net.h \
@@ -46,7 +48,9 @@ HEADERS  += mainwindow.h \
     refreshfeedsdata.h \
     help.h \
     about.h \
-    db.h
+    db.h \
+    rssdata.h \
+    rssarticle.h
 
 FORMS    += mainwindow.ui \
     viewwindow.ui \

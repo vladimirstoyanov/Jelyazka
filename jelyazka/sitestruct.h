@@ -94,7 +94,7 @@ public:
             isLoaded = false;
             version = "0";
         }
-    }ss;
+    };
     boost::ptr_vector<site_struct> s_struct;
     //QList<site_struct> s_struct;
 

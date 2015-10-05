@@ -99,3 +99,5 @@ void DB::closeDB()
 {
    sqliteDataBase.close();
 }
+
+

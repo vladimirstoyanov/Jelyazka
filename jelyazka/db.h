@@ -7,8 +7,8 @@ class DB
 {
 public:
     DB();
-    //void loadStrctureFromDB();
     void createTables();
+    void loadStrctureFromDB();
 private:
     QSqlDatabase sqliteDataBase;
 
