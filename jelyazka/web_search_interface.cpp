@@ -20,6 +20,7 @@
 #include "ui_web_search_interface.h"
 #include "net.h"
 #include "search.h"
+#include "rssarticle.h"
 #include <QDebug>
 
 WebSearchInterface::WebSearchInterface(QWidget *parent, SiteStruct *tmp_site_struct, ViewWindow *view_window) :
@@ -162,7 +163,7 @@ int WebSearchInterface::checkSiteStructForExistingURL(QString url)
         return 1;
 
     for (uint i=0; i<site_struct->s_struct.size(); i++)
-        if (url == site_struct->s_struct[i].url)
+        if (url == site_struct->s_struct[i].getURL())
             return 1;
 
     return 0;
@@ -425,16 +426,17 @@ void WebSearchInterface::on_pushButton_2_clicked() //add RSS feeds button
 
         //add to 'site_struct'
         site_struct->s_struct.push_back(site_struct->initStruct(feeds_struct_tmp_iterator->rss_name,"RSS",feeds_struct_tmp_iterator->rss_link));
-        site_struct->s_struct[site_struct->s_struct.size()-1].version = QString::number(feeds_struct_tmp_iterator->version);
+        site_struct->s_struct[site_struct->s_struct.size()-1].getVersion() = QString::number(feeds_struct_tmp_iterator->version);
 
         //adding data (titles, links, descriptions)
+        RSSArticle art;
         for (int i=0; i<feeds_struct_tmp_iterator->data.size(); i++)
         {
-            site_struct->art.title = feeds_struct_tmp_iterator->data[i].title;
-            site_struct->art.link = feeds_struct_tmp_iterator->data[i].link;
-            site_struct->art.text = feeds_struct_tmp_iterator->data[i].description;
+            art.setTitle(feeds_struct_tmp_iterator->data[i].title);
+            art.setLink(feeds_struct_tmp_iterator->data[i].link);
+            art.setText(feeds_struct_tmp_iterator->data[i].description);
 
-            site_struct->s_struct[site_struct->s_struct.size()-1].articles.push_back(site_struct->art);
+            site_struct->s_struct[site_struct->s_struct.size()-1].articlesPushBack(art);
         }
     }
 

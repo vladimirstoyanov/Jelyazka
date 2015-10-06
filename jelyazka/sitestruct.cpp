@@ -70,12 +70,12 @@ void SiteStruct::loadStrctureFromDB()
 
     while( query.next() )
     {
-        site_struct *st = new site_struct();
-        st->site_name = query.value( 1 ).toByteArray().data();
-        st->url = query.value( 2 ).toByteArray().data();
-        st->type = "RSS";
-        st->version = query.value(3).toByteArray().data();
-        s_struct.push_back(st);
+        RSSData *rssData = new RSSData();
+        rssData->setSiteName(query.value( 1 ).toByteArray().data());
+        rssData->setURL(query.value( 2 ).toByteArray().data());
+        rssData->setType("RSS");
+        rssData->setVersion(query.value(3).toByteArray().data());
+        s_struct.push_back(rssData);
     }
 }
 
@@ -83,32 +83,32 @@ void SiteStruct::synchronizeData(int struct_index, QString content)
 {
     int index = 0;
 
-    QList <article> tmp_struct;
+    QList <RSSArticle> tmp_struct;
 
     if (s_struct.size()<=struct_index)
         return;
 
-    if (s_struct[struct_index].articles.size()==0) //if articles list is empty
+    if (s_struct[struct_index].getArticlesSize()==0) //if articles list is empty
     {
-        if(s_struct[struct_index].version == "2005")
+        if(s_struct[struct_index].getVersion() == "2005")
             getArticlesForIndexRSS2(content,struct_index);
         else
             getArticlesForIndexRSS(content,struct_index);
         return;
     }
 
-    article ar;
-    if(s_struct[struct_index].version == "2005")
-         findSiteDataRSS2(index, content, ar.title,ar.link,ar.text);
+    RSSArticle ar;
+    if(s_struct[struct_index].getVersion() == "2005")
+         findSiteDataRSS2(index, content, ar);
     else
-        findSiteDataRSS(index, content, ar.title,ar.link,ar.text);
-    while (ar.link != s_struct[struct_index].articles[0].link && index!=-1) //synchronize
+        findSiteDataRSS(index, content,  ar);
+    while (ar.getLink() != s_struct[struct_index].articleAt(0).getLink() && index!=-1) //synchronize
     {
         tmp_struct.push_back(ar);
-        if(s_struct[struct_index].version == "2005")
-            findSiteDataRSS2(index,content,ar.title,ar.link,ar.text);
+        if(s_struct[struct_index].getVersion() == "2005")
+            findSiteDataRSS2(index,content, ar);
         else
-            findSiteDataRSS(index, content, ar.title,ar.link,ar.text);
+            findSiteDataRSS(index, content, ar);
     }
 
     if (tmp_struct.size()==0)
@@ -122,14 +122,14 @@ void SiteStruct::synchronizeData(int struct_index, QString content)
     //adding new data
     for (uint i=0; i<tmp_struct.size(); i++)
     {
-        if (INT_SIZE<=s_struct.at(struct_index).articles.size())
-            s_struct.at(struct_index).articles.erase(s_struct.at(struct_index).articles.begin() + s_struct.at(struct_index).articles.size()-1);
-        s_struct.at(struct_index).articles.push_front(tmp_struct[i]);
+        if (INT_SIZE<=s_struct.at(struct_index).getArticlesSize())
+            s_struct.at(struct_index).eraseArticleAt(s_struct.at(struct_index).getArticlesSize()-1);
+        s_struct.at(struct_index).articlesPushFront(tmp_struct[i]);
     }
 
 }
 
-void SiteStruct::findSiteDataRSS(int &index, QString content, QString &title, QString &link, QString &text)
+void SiteStruct::findSiteDataRSS(int &index, QString content, RSSArticle &ar) //QString &title, QString &link, QString &text)
 {
     int item_b_index=index, item_e_index=index;
     CSearch cs;
@@ -163,6 +163,8 @@ void SiteStruct::findSiteDataRSS(int &index, QString content, QString &title, QS
     }
 
     index = item_e_index;
+    QString title, link, text;
+
     if(getTextBetweenIndexes(item_b_index, item_e_index, "<title>", "</title>", title, content))
          return;
     convert_string(title, false);
@@ -170,9 +172,13 @@ void SiteStruct::findSiteDataRSS(int &index, QString content, QString &title, QS
          return;
     convert_string(link, true);
     getDescription(item_b_index, item_e_index, text, content);
+
+    ar.setLink(link);
+    ar.setText(text);
+    ar.setTitle(title);
 }
 
-void SiteStruct::findSiteDataRSS2(int &index, QString content, QString &title, QString &link, QString &text)
+void SiteStruct::findSiteDataRSS2(int &index, QString content, RSSArticle &ar)// QString &title, QString &link, QString &text)
 {
     int item_b_index=index, item_e_index=index;
     CSearch cs;
@@ -200,6 +206,8 @@ void SiteStruct::findSiteDataRSS2(int &index, QString content, QString &title, Q
      }
 
      index = item_e_index;
+     QString title, link, text;
+
      if(getTextBetweenIndexes(item_b_index, item_e_index, "<title", "</title>", title, content))
          return;
      convert_string(title, false);
@@ -211,6 +219,10 @@ void SiteStruct::findSiteDataRSS2(int &index, QString content, QString &title, Q
      convert_string(link, true);
 
      getContent(item_b_index, item_e_index, text, content);
+
+     ar.setLink(link);
+     ar.setText(text);
+     ar.setTitle(title);
 }
 
 void SiteStruct::run() //runnning another thread (synchronize data for n time)
@@ -222,10 +234,10 @@ void SiteStruct::run() //runnning another thread (synchronize data for n time)
     int index=-1;
     for (uint i=0; i<s_struct.size(); i++)
     {
-        if (!s_struct.at(i).isRead)
+        if (!s_struct.at(i).getIsRead())
         {
             index = i;
-            s_struct.at(i).isRead = true;
+            s_struct.at(i).setIsRead(true);// = true;
             break;
         }
     }
@@ -234,11 +246,11 @@ void SiteStruct::run() //runnning another thread (synchronize data for n time)
         return;
 
     content = "";
-    if (net.getQuery(s_struct.at(index).url,content))
+    if (net.getQuery(s_struct.at(index).getURL(),content))
     {
-        qDebug()<<s_struct.at(index).url + ": http get query has been failed!";
+        qDebug()<<s_struct.at(index).getURL() + ": http get query has been failed!";
         mutex->lock();
-        s_struct.at(index).isLoaded = true;
+        s_struct.at(index).setIsLoaded(true); //= true;
         if (!checkIsLoaded())
         {
             mutex->unlock();
@@ -249,12 +261,12 @@ void SiteStruct::run() //runnning another thread (synchronize data for n time)
     }
     mutex->lock();
     if (first_load == 0)
-        emit loadRSS(s_struct.at(index).site_name, s_struct.at(index).url);
+        emit loadRSS(s_struct.at(index).getSiteName(), s_struct.at(index).getURL());
     if (isAddOption == 0)
-        emit Finish(s_struct[index].site_name, 0);
+        emit Finish(s_struct[index].getSiteName(), 0);
     synchronizeData(index,content);
-    qDebug()<<"index:" + QString::number(index) + "url:" + s_struct[index].url + " count:"  + QString::number(s_struct[index].articles.size());
-    s_struct[index].isLoaded = true;
+    qDebug()<<"index:" + QString::number(index) + "url:" + s_struct[index].getURL() + " count:"  + QString::number(s_struct[index].getArticlesSize());
+    s_struct[index].setIsLoaded(true);// = true;
     checkIsLoaded();
     mutex->unlock();
 }
@@ -379,23 +391,29 @@ int SiteStruct::getArticlesForIndexRSS(QString content,uint struct_index)
                 continue;
         }
 
-        if(getTextBetweenIndexes(item_b_index, item_e_index, "<title>", "</title>", art.title, content))
+        QString title, link, text;
+        if(getTextBetweenIndexes(item_b_index, item_e_index, "<title>", "</title>", title, content))
             break;
-        convert_string(art.title, false);
-        if (getTextBetweenIndexes(item_b_index, item_e_index, "<link>", "</link>", art.link,content))
+        convert_string(title, false);
+        if (getTextBetweenIndexes(item_b_index, item_e_index, "<link>", "</link>", link,content))
             break;
 
-        convert_string(art.link, true);
-        getDescription(item_b_index, item_e_index, art.text, content);
+        convert_string(link, true);
+        getDescription(item_b_index, item_e_index, text, content);
 
-        if (INT_SIZE <= s_struct[struct_index].articles.size()) //prevent int overflow
+        RSSArticle art;
+        art.setLink(link);
+        art.setText(text);
+        art.setTitle(title);
+
+        if (INT_SIZE <= s_struct[struct_index].getArticlesSize()) //prevent int overflow
         {
-            s_struct[struct_index].articles.erase(s_struct[struct_index].articles.begin() + s_struct[struct_index].articles.size()-1);
-            s_struct[struct_index].articles.push_front(art);
+            s_struct[struct_index].eraseArticleAt(s_struct[struct_index].getArticlesSize()-1);
+            s_struct[struct_index].articlesPushFront(art);
             continue;
         }
 
-        s_struct[struct_index].articles.push_back(art);
+        s_struct[struct_index].articlesPushBack(art);
     }
     return 0;
 }
@@ -419,26 +437,33 @@ int SiteStruct::getArticlesForIndexRSS2(QString content,uint struct_index)
         if (item_e_index == -1)
             break;
 
-        if(getTextBetweenIndexes(item_b_index, item_e_index, "<title", "</title>", art.title, content))
+        QString title, link, text;
+
+        if(getTextBetweenIndexes(item_b_index, item_e_index, "<title", "</title>", title, content))
             break;
-        convert_string(art.title, false);
+        convert_string(title, false);
 
         int index_link = item_b_index;
         cs.search_Before(content, "<link", &index_link);
         if (index_link == -1 || index_link>item_e_index)
             break;
-        art.link = returnURL(content, index_link);
-        convert_string(art.link, true);
-        getContent(item_b_index, item_e_index, art.text, content);
+        link = returnURL(content, index_link);
+        convert_string(link, true);
+        getContent(item_b_index, item_e_index, text, content);
 
-        if (INT_SIZE <= s_struct[struct_index].articles.size()) //prevent int overflow
+        RSSArticle art;
+        art.setLink(link);
+        art.setText(text);
+        art.setTitle(title);
+
+        if (INT_SIZE <= s_struct[struct_index].getArticlesSize()) //prevent int overflow
         {
-            s_struct[struct_index].articles.erase(s_struct[struct_index].articles.begin() + s_struct[struct_index].articles.size()-1);
-            s_struct[struct_index].articles.push_front(art);
+            s_struct[struct_index].eraseArticleAt(s_struct[struct_index].getArticlesSize()-1);
+            s_struct[struct_index].articlesPushFront(art);
             continue;
         }
 
-        s_struct[struct_index].articles.push_back(art);
+        s_struct[struct_index].articlesPushBack(art);
 
     }
     return 0;
@@ -643,7 +668,7 @@ int SiteStruct::checkIsLoaded()
     uint count = 0;
 
     for (uint i = 0; i< s_struct.size(); i++)
-        if (s_struct[i].isLoaded)
+        if (s_struct[i].getIsLoaded())
             count++;
 
 
@@ -663,13 +688,13 @@ int SiteStruct::checkIsLoaded()
     return 1;
 }
 
-SiteStruct::site_struct * SiteStruct::initStruct(QString site_name, QString type, QString url)
+RSSData * SiteStruct::initStruct(QString site_name, QString type, QString url)
 {
-    site_struct *s = new site_struct();
+    RSSData *s = new RSSData();
 
-    s->site_name = site_name;
-    s->type = type;
-    s->url = url;
+    s->setSiteName(site_name);
+    s->setType(type);
+    s->setURL(url);
 
     return s;
 }

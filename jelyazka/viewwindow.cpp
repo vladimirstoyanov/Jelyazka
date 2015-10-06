@@ -176,7 +176,7 @@ void ViewWindow::initTextBrowser()
     int index=-1;
     for (uint i=0; i<site_struct->s_struct.size(); i++)
     {
-        if (site_struct->s_struct[i].site_name==cur_text)
+        if (site_struct->s_struct[i].getSiteName()==cur_text)
         {
             index = i;
             break;
@@ -213,7 +213,7 @@ void ViewWindow::initDataInComboBoxFromStructure()
     ui->comboBox->clear();
 
     for (uint i=0; i<site_struct->s_struct.size(); i++)
-        addToCombobox(site_struct->s_struct[i].site_name);
+        addToCombobox(site_struct->s_struct[i].getSiteName());
 }
 
 void ViewWindow::addToCombobox(QString str)
@@ -232,13 +232,13 @@ int ViewWindow::showArticle(uint struct_index, uint article_index)
          //qDebug()<<"show article first if.";
         return 0;
     }
-    if (site_struct->s_struct[struct_index].articles.size() == 0)
+    if (site_struct->s_struct[struct_index].getArticlesSize() == 0)
     {
         //qDebug()<<"show article second if.";
         ui->textBrowser->setHtml("");
         return 0;
     }
-    if (article_index>=site_struct->s_struct[struct_index].articles.size()||article_index<0)
+    if (article_index>=site_struct->s_struct[struct_index].getArticlesSize()||article_index<0)
     {
         if (!show_flag)
             ui->textBrowser->setHtml("");
@@ -246,7 +246,7 @@ int ViewWindow::showArticle(uint struct_index, uint article_index)
         return 0;
     }
 
-    QString title_tmp = site_struct->s_struct[struct_index].articles[article_index].title,text_tmp = site_struct->s_struct[struct_index].articles[article_index].text;
+    QString title_tmp = site_struct->s_struct[struct_index].articleAt(article_index).getTitle(),text_tmp = site_struct->s_struct[struct_index].articleAt(article_index).getText();
     if (!checkForFilters(title_tmp, text_tmp))
     {
         show_flag = false;
@@ -256,7 +256,7 @@ int ViewWindow::showArticle(uint struct_index, uint article_index)
     }
     show_flag = true;
 
-    ui->textBrowser->setHtml(QString("<h2>%1</h2>\nLink: <a href=\"%2\">%2</a><br><br>%3").arg(title_tmp,site_struct->s_struct[struct_index].articles[article_index].link,text_tmp));
+    ui->textBrowser->setHtml(QString("<h2>%1</h2>\nLink: <a href=\"%2\">%2</a><br><br>%3").arg(title_tmp,site_struct->s_struct[struct_index].articleAt(article_index).getLink(),text_tmp));
 
     return 1;
 }
@@ -421,10 +421,10 @@ void ViewWindow::refreshFeed()
         QApplication::restoreOverrideCursor();
         return;
     }
-    if (!net.getQuery(site_struct->s_struct[current_site_index].url,content))
+    if (!net.getQuery(site_struct->s_struct[current_site_index].getURL(),content))
     {
         site_struct->synchronizeData(current_site_index, content);
-        if (site_struct->s_struct[current_site_index].articles.size()<=current_article_index)
+        if (site_struct->s_struct[current_site_index].getArticlesSize()<=current_article_index)
             current_article_index = 0;
         showArticle(current_site_index,current_article_index);
 

@@ -42,6 +42,31 @@ bool RSSData::getIsLoaded()
     return isLoaded;
 }
 
+size_t RSSData::getArticlesSize()
+{
+    return articles.size();
+}
+
+RSSArticle RSSData::articleAt(unsigned int index)
+{
+    return articles[index];
+}
+
+void RSSData::eraseArticleAt(unsigned int index)
+{
+    articles.erase(articles.begin() + index);
+}
+
+void RSSData::articlesPushFront(RSSArticle ar)
+{
+    articles.push_front(ar);
+}
+
+void RSSData::articlesPushBack(RSSArticle ar)
+{
+    articles.push_back(ar);
+}
+
 //set
 void RSSData::setType(QString type_tmp)
 {

@@ -37,6 +37,8 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <QWaitCondition>
 #include <QTextCodec>
+#include "rssdata.h"
+#include "rssarticle.h"
 
 #define INT_SIZE 2147483646
 
@@ -62,6 +64,7 @@ public:
     ~SiteStruct();
     QSqlDatabase sqliteDataBase;
 
+    /*
     struct article //article struct
     {
         QString title; //title of article
@@ -74,7 +77,8 @@ public:
             text ="";
         }
     }art;
-
+    */
+    /*
     struct site_struct{
         QString type;
         QString site_name;
@@ -95,11 +99,12 @@ public:
             version = "0";
         }
     };
-    boost::ptr_vector<site_struct> s_struct;
+    */
+    boost::ptr_vector<RSSData> s_struct;
     //QList<site_struct> s_struct;
 
     void loadStrctureFromDB(); //load settings in sites.obj
-    site_struct * initStruct(QString site_name, QString type, QString url);
+    RSSData * initStruct(QString site_name, QString type, QString url);
     void synchronizeData(int site_index, QString content);
     void run (); //function exec when thread start
     int getRefreshTime(){return refresh_time_feeds;}
@@ -129,8 +134,8 @@ private:
 
     void createTables();
     void loadOptions();
-    void findSiteDataRSS(int &index, QString content, QString &title, QString &link, QString &text);
-    void findSiteDataRSS2(int &index, QString content, QString &title, QString &link, QString &text);
+    void findSiteDataRSS(int &index, QString content, RSSArticle &ar); //QString &title, QString &link, QString &text);
+    void findSiteDataRSS2(int &index, QString content, RSSArticle &ar); // QString &title, QString &link, QString &text);
     int getArticlesForIndexRSS(QString content,uint struct_index);
     int getArticlesForIndexRSS2(QString content,uint struct_index);
     int checkIsLoaded();

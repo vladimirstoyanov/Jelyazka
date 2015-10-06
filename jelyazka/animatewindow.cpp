@@ -141,8 +141,8 @@ void CAnimateWindow::onShowAnimateWindow(QString data)
 
     for (int i=0; i<indexes.size(); i++)
         if (site_struct->s_struct.size()>indexes[i])
-            if (site_struct->s_struct[indexes[i]].articles.size()>0)
-                html_source+="<a href = \""+site_struct->s_struct[indexes[i]].articles[0].link + "\" style=\"color: #000000\">"+site_struct->s_struct[indexes[i]].site_name+": " + site_struct->s_struct[indexes[i]].articles[0].title+ "</a><br><hr>";
+            if (site_struct->s_struct[indexes[i]].getArticlesSize()>0)
+                html_source+="<a href = \""+site_struct->s_struct[indexes[i]].articleAt(0).getLink() + "\" style=\"color: #000000\">"+site_struct->s_struct[indexes[i]].getSiteName() +": " + site_struct->s_struct[indexes[i]].articleAt(0).getTitle()+ "</a><br><hr>";
 
     //Add links
     ui->textBrowser->setHtml(html_source);

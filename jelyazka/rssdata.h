@@ -18,6 +18,11 @@ public:
     QString getVersion();
     bool getIsRead();
     bool getIsLoaded();
+    size_t getArticlesSize();
+    RSSArticle articleAt(unsigned int index);
+    void eraseArticleAt(unsigned int index);
+    void articlesPushFront(RSSArticle ar);
+    void articlesPushBack(RSSArticle ar);
 
     //set
     void setType(QString type);

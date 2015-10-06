@@ -307,8 +307,8 @@ void OptionsWindow::rssTableUpdate()
             insertRowToRSSTable(view_feeds->item(i)->text(), url, version);
             isAddedToView = true;
             site_struct->s_struct.push_back(site_struct->initStruct(view_feeds->item(i)->text(),"RSS",url));
-            site_struct->s_struct[site_struct->s_struct.size()-1].isRead = false;
-            site_struct->s_struct[site_struct->s_struct.size()-1].version = version;
+            site_struct->s_struct[site_struct->s_struct.size()-1].setIsRead(false);
+            site_struct->s_struct[site_struct->s_struct.size()-1].setVersion(version);
             tp->start(site_struct);
         }
         if (!isAddedToView)
@@ -347,8 +347,8 @@ void OptionsWindow::rssTableUpdate()
                 findAndReturnURLAndVersion(view_feeds->item(i)->text(),url,version);
                 insertRowToRSSTable(view_feeds->item(i)->text(), url, version);
                 site_struct->s_struct.push_back(site_struct->initStruct(view_feeds->item(i)->text(),"RSS",url));
-                site_struct->s_struct[site_struct->s_struct.size()-1].isRead = false;
-                site_struct->s_struct[site_struct->s_struct.size()-1].version = version;
+                site_struct->s_struct[site_struct->s_struct.size()-1].setIsRead(false);
+                site_struct->s_struct[site_struct->s_struct.size()-1].setVersion(version);
                 isAddedToView = true;
                 tp->start(site_struct);
             }
@@ -368,7 +368,7 @@ void OptionsWindow::rssTableUpdate()
             for (uint j=0; j<site_struct->s_struct.size(); j++)
             {
                 //qDebug()<<"COMPARING "<<l_old_view_feed[i]<<" WITH: "<<site_struct->s_struct[j].site_name;
-                if (l_old_view_feed[i] == site_struct->s_struct[j].site_name)
+                if (l_old_view_feed[i] == site_struct->s_struct[j].getSiteName())
                 {
                     l_item_indexes_from_site_struct[j] = 0;
                     break;

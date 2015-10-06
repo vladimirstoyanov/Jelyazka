@@ -55,7 +55,7 @@ void RefreshFeedsData::run() //refresh feeds
                 qDebug()<<"site_struct->s_struct.size()<=i";
                 break;
             }
-            QString url = site_struct->s_struct[i].url;
+            QString url = site_struct->s_struct[i].getURL();
             if (net.getQuery(url,content))
             {
                 qDebug()<<"Fail to connect: "<<url;
