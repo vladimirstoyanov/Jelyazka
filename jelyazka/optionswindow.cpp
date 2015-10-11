@@ -387,7 +387,7 @@ void OptionsWindow::removeDataFromRSSTable(QString site_name, bool all_data)
 //insert row to 'rss' DB table
 void OptionsWindow::insertRowToRSSTable(QString name, QString url, QString version)
 {
-    db.insertRowToRSSTable(name, url, version);
+    db.insertIntoFavoriteFeeds(name, url, version);
 }
 
 //from site_name, return url and version

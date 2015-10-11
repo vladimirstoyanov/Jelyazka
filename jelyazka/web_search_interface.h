@@ -81,7 +81,7 @@ private:
     QThreadPool *tp2;
     bool userEdit;
     bool programEdit;
-
+    DB db;
 
     struct TreeNode {
        QString item;

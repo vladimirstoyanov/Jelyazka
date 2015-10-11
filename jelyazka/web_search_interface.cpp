@@ -381,8 +381,6 @@ void WebSearchInterface::on_pushButton_3_clicked() //'Remove' button clicked
 
 void WebSearchInterface::on_pushButton_2_clicked() //add RSS feeds button
 {
-    QSqlQuery qry;
-    Logger log;
     this->setEnabled(false);
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
@@ -404,19 +402,8 @@ void WebSearchInterface::on_pushButton_2_clicked() //add RSS feeds button
         QString name_tmp = insertName(v.toString());
         feeds_struct_tmp_iterator->rss_name=name_tmp;
 
-        qry.prepare("insert into collect_feeds (name, url, version) values (\'"+ feeds_struct_tmp_iterator->rss_name+"\',\'" + feeds_struct_tmp_iterator->rss_link + "\',\'" + QString::number(feeds_struct_tmp_iterator->version) + "\')");
-        if (!qry.exec())
-        {
-            log.write("Fail:" + qry.lastError().text(),  "add_rss_log.txt");
-            continue;
-        }
-
-        qry.prepare("insert into favorite_feeds (name, url, version) values (\'"+ feeds_struct_tmp_iterator->rss_name + "\',\'" + feeds_struct_tmp_iterator->rss_link + + "\',\'" + QString::number(feeds_struct_tmp_iterator->version) + "\')");
-        if (!qry.exec())
-        {
-            log.write("Fail:" + qry.lastError().text(),  "add_rss_log.txt");
-            continue;
-        }
+        db.insertIntoCollectFeeds(feeds_struct_tmp_iterator->rss_name, feeds_struct_tmp_iterator->rss_link, QString::number(feeds_struct_tmp_iterator->version));
+        db.insertIntoFavoriteFeeds(feeds_struct_tmp_iterator->rss_name, feeds_struct_tmp_iterator->rss_link, QString::number(feeds_struct_tmp_iterator->version));
 
         if (INT_SIZE<=site_struct->s_struct.size()) //prevent int overflow
         {
@@ -723,7 +710,6 @@ QString WebSearchInterface::insertName(QString name)
 
 void WebSearchInterface::buidBinaryTreeFromDBData()
 {
-    Logger log;
     if (tn!=NULL)
     {
         destroyTree(tn);
@@ -731,19 +717,15 @@ void WebSearchInterface::buidBinaryTreeFromDBData()
     }
     tn = new TreeNode;
 
-    //treeInsert
-    QSqlQuery qry;
-    qry.prepare("select * from collect_feeds");
-    if (!qry.exec())
+    boost::ptr_vector<QString> tmp;
+    boost::ptr_vector<QString>::iterator it;
+    db.getCollectFeeds(&tmp);
+
+    for (it = tmp.begin(); it!=tmp.end(); ++it)
     {
-        log.write("Fail:" + qry.lastError().text(),  "add_rss_log.txt");
-    }
-    while(qry.next())
-    {
-       QString name = qry.value( 1 ).toByteArray().data();
-       while(treeContains(tn,name))
-           name = change_name(name); //make unique name
-       treeInsert(tn, name);
+        while(treeContains(tn,*it))
+            *it = change_name(*it); //make unique name
+        treeInsert(tn, *it);
     }
 }
 

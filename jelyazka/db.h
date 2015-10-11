@@ -13,8 +13,17 @@ public:
     void loadStrctureFromDB(boost::ptr_vector<RSSData> *s_struct);
     void getFavoriteFeeds(boost::ptr_vector<QString> *l_old_view_feed);
     void removeDataFromRSSTable(QString site_name, bool all_data);
-    void insertRowToRSSTable(QString name, QString url, QString version);
+
+    void insertIntoFavoriteFeeds(QString name, QString url, QString version);
+    void insertIntoCollectFeeds(QString name, QString url, QString version);
+    int insertIntoAllURLs(QString);
+
     void findAndReturnURLAndVersion(QString site_name, QString &url, QString &version);
+    int selectURLFromAllURLs(QString);
+    int deleteAllFromAllURL();
+
+
+
     void getCollectFeeds(boost::ptr_vector<QString> *l_old_collect_feed);
     void getFilterList(boost::ptr_vector<QString> *l_old_filters);
     void insertRowToFiltersTable(QString filter_name);

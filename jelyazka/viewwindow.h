@@ -37,6 +37,7 @@
 #include <QStringList>
 #include <QList>
 #include "help.h"
+#include "db.h"
 
 namespace Ui {
 class ViewWindow;
@@ -93,6 +94,7 @@ private:
     bool resizing;
     bool minimize;
     bool close;
+    DB db;
 
 
     int width;

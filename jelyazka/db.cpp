@@ -183,7 +183,7 @@ void DB::removeDataFromRSSTable(QString site_name, bool all_data)
 }
 
 //insert row to 'rss' DB table
-void DB::insertRowToRSSTable(QString name, QString url, QString version)
+void DB::insertIntoFavoriteFeeds(QString name, QString url, QString version)
 {
     QSqlQuery qry;
 
@@ -192,6 +192,30 @@ void DB::insertRowToRSSTable(QString name, QString url, QString version)
     {
         qDebug()<<"Fail:" + qry.lastError().text();
     }
+}
+
+void DB::insertIntoCollectFeeds(QString name, QString url, QString version)
+{
+    QSqlQuery qry;
+
+    qry.prepare("insert into collect_feeds (name, url, version) values (\'"+ name+"\',\'" + url+ "\',\'" + version + "\')");
+    if (!qry.exec())
+    {
+        qDebug()<<"Fail:" + qry.lastError().text();
+    }
+}
+
+int DB::insertIntoAllURLs(QString url)
+{
+    QSqlQuery query;
+
+    if (!query.exec("insert into all_urls (url) values (\'" + url+ "\')"))
+    {
+        qDebug()<<"Error insert: "  + url;
+        return 0;
+    }
+
+    return 1;
 }
 
 //from site_name, return url and version
@@ -217,6 +241,32 @@ void DB::findAndReturnURLAndVersion(QString site_name, QString &url, QString &ve
             version = query.value(3).toByteArray().data();
         }
     }
+}
+
+int DB::selectURLFromAllURLs(QString url)
+{
+        QSqlQuery query;
+
+        if( !query.exec("SELECT url FROM all_urls WHERE url=\'" + url + "\'") )
+        {
+            qDebug()<<"Error select: "  + url;
+            return 0 ;
+        }
+
+        while( query.next() )
+            return 1;
+
+        return 0;
+}
+
+int DB::deleteAllFromAllURL()
+{
+    QSqlQuery query;
+    query.prepare("delete from all_urls");
+    if (!query.exec())
+        qDebug()<<"Fail delete:" + query.lastError().text();
+
+    return 1;
 }
 
 

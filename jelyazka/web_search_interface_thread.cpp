@@ -416,42 +416,17 @@ int WebSearchInterfaceThread::checkForRootURL(QString url, int i, int i1)
 
 int WebSearchInterfaceThread::insertUrlDB(QString url)//+
 {
-    QSqlQuery query;
-
-    if (!query.exec("insert into all_urls (url) values (\'" + url+ "\')"))
-    {
-        qDebug()<<"Error insert: "  + url;
-        return 0;
-    }
-    return 1;
+    return db.insertIntoAllURLs(url);
 }
 
 int WebSearchInterfaceThread::findUrlDB(QString url)
 {
-    QSqlQuery query;
-
-    if( !query.exec("SELECT url FROM all_urls WHERE url=\'" + url + "\'") )
-    {
-        qDebug()<<"Error select: "  + url;
-        return 0 ;
-    }
-
-    while( query.next() )
-        return 1;
-
-    return 0;
+    return db.selectURLFromAllURLs(url);
 }
 
 int WebSearchInterfaceThread::deleteAllFrom_all_url_table() //delete all_url table
 {
-    QSqlQuery query;
-
-    query.prepare("delete from all_urls");
-    if (!query.exec())
-        qDebug()<<"Fail delete:" + query.lastError().text();
-
-    return 1;
-
+    return db.deleteAllFromAllURL();
 }
 
 QString WebSearchInterfaceThread::getEncodingFromRSS(QString content) //+

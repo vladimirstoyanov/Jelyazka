@@ -23,7 +23,6 @@
 #include <QtCore>
 #include <QThreadPool>
 #include <QDebug>
-#include <QtSql/QtSql>
 #include <fstream>
 #include <string>
 #include <QString>
@@ -40,6 +39,7 @@
 #include "rssdata.h"
 #include "rssarticle.h"
 #include "db.h"
+
 #define INT_SIZE 2147483646
 
 class CAnimateWindow;
@@ -62,7 +62,6 @@ public:
     
     SiteStruct(QObject *parent);
     ~SiteStruct();
-    QSqlDatabase sqliteDataBase;
 
     boost::ptr_vector<RSSData> s_struct; //vector with all rss data
 

@@ -27,6 +27,7 @@
 #include <QList>
 #include <boost/ptr_container/ptr_list.hpp>
 #include "logger.h"
+#include "db.h"
 
 class WebSearchInterfaceThread : public QObject, public QRunnable
 {
@@ -62,6 +63,7 @@ public:
 private:
     Logger log;
     QString url_root;
+    DB db;
     QString getEncodingFromRSS(QString content);
     void allURLVariants(QString url);
     void addOrRemoveWWW(QString url, QString *new_url);

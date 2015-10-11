@@ -687,21 +687,12 @@ int ViewWindow::checkForFontTag(QString str1)
 
 void ViewWindow::initFilters()
 {
-    QSqlQuery query;
+    boost::ptr_vector<QString>::iterator it;
+    boost::ptr_vector<QString> tmp;
+    db.getFilterList(&tmp);
 
-    query.prepare( "SELECT * FROM filters" );
-
-    if( !query.exec() )
-    {
-        qDebug()<<"Some error, when trying to read from \'filters' table...";
-        return;
-    }
-
-    while( query.next() )
-    {
-        l_filters.append(query.value( 1 ).toByteArray().data());
-    }
-
+    for (it=tmp.begin(); it!=tmp.end(); ++it)
+        l_filters.append(*it);
 }
 
 void ViewWindow::keyPressEvent(QKeyEvent *event)
