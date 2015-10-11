@@ -42,6 +42,8 @@
 #include "viewwindow.h"
 #include <boost/ptr_container/ptr_list.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include "rssarticle.h"
+#include "rssdata.h"
 
 namespace Ui {
 class WebSearchInterface;
@@ -95,35 +97,8 @@ private:
     };
     TreeNode *tn;
     typedef TreeNode treenode;
-    struct feeds
-    {
-        QString title;
-        QString link;
-        QString description;
-        feeds()
-        {
-            title="";
-            link="";
-            description="";
-        }
-    };
 
-    struct rss_data
-    {
-        QString rss_name;
-        QString rss_link;
-        int version;
-        QString encoding;
-        QList<feeds> data;
-        rss_data()
-        {
-            rss_name="";
-            encoding="";
-            version = 0;
-        }
-    };
-
-    boost::ptr_list<rss_data> feeds_struct_tmp;
+    boost::ptr_list<RSSData> feeds_struct_tmp;
     boost::ptr_vector<QString> old_names;
 
     void treeInsert(TreeNode *&root, QString newItem);

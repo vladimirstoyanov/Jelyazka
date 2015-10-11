@@ -387,11 +387,11 @@ void WebSearchInterface::on_pushButton_2_clicked() //add RSS feeds button
     if (feeds_struct_tmp.size()>0)
         buidBinaryTreeFromDBData();
 
-    boost::ptr_list<rss_data>::iterator feeds_struct_tmp_iterator;
+    boost::ptr_list<RSSData>::iterator feeds_struct_tmp_iterator;
     for(feeds_struct_tmp_iterator = feeds_struct_tmp.begin(); feeds_struct_tmp_iterator!=feeds_struct_tmp.end(); feeds_struct_tmp_iterator++)
     {
         int row=0;
-        if (!isFeedChecked(feeds_struct_tmp_iterator->rss_link, row)) //if rss feed is unchecked
+        if (!isFeedChecked(feeds_struct_tmp_iterator->getURL(), row)) //if rss feed is unchecked
             continue;
 
         QModelIndex mi;
@@ -400,10 +400,11 @@ void WebSearchInterface::on_pushButton_2_clicked() //add RSS feeds button
         mi = model->index(row,0);
         v=mi.data();
         QString name_tmp = insertName(v.toString());
-        feeds_struct_tmp_iterator->rss_name=name_tmp;
+        feeds_struct_tmp_iterator->setSiteName(name_tmp);
 
-        db.insertIntoCollectFeeds(feeds_struct_tmp_iterator->rss_name, feeds_struct_tmp_iterator->rss_link, QString::number(feeds_struct_tmp_iterator->version));
-        db.insertIntoFavoriteFeeds(feeds_struct_tmp_iterator->rss_name, feeds_struct_tmp_iterator->rss_link, QString::number(feeds_struct_tmp_iterator->version));
+        QString version = feeds_struct_tmp_iterator->getVersion();
+        db.insertIntoCollectFeeds(feeds_struct_tmp_iterator->getSiteName(), feeds_struct_tmp_iterator->getURL(),version);
+        db.insertIntoFavoriteFeeds(feeds_struct_tmp_iterator->getSiteName(), feeds_struct_tmp_iterator->getURL(), version);
 
         if (INT_SIZE<=site_struct->s_struct.size()) //prevent int overflow
         {
@@ -412,16 +413,16 @@ void WebSearchInterface::on_pushButton_2_clicked() //add RSS feeds button
         }
 
         //add to 'site_struct'
-        site_struct->s_struct.push_back(site_struct->initStruct(feeds_struct_tmp_iterator->rss_name,"RSS",feeds_struct_tmp_iterator->rss_link));
-        site_struct->s_struct[site_struct->s_struct.size()-1].getVersion() = QString::number(feeds_struct_tmp_iterator->version);
+        site_struct->s_struct.push_back(site_struct->initStruct(feeds_struct_tmp_iterator->getURL(),"RSS",feeds_struct_tmp_iterator->getURL()));
+        site_struct->s_struct[site_struct->s_struct.size()-1].setVersion(version);
 
         //adding data (titles, links, descriptions)
         RSSArticle art;
-        for (int i=0; i<feeds_struct_tmp_iterator->data.size(); i++)
+        for (int i=0; i<feeds_struct_tmp_iterator->getArticlesSize(); i++)
         {
-            art.setTitle(feeds_struct_tmp_iterator->data[i].title);
-            art.setLink(feeds_struct_tmp_iterator->data[i].link);
-            art.setText(feeds_struct_tmp_iterator->data[i].description);
+            art.setTitle(feeds_struct_tmp_iterator->articleAt(i).getTitle());
+            art.setLink(feeds_struct_tmp_iterator->articleAt(i).getLink());
+            art.setText(feeds_struct_tmp_iterator->articleAt(i).getText());
 
             site_struct->s_struct[site_struct->s_struct.size()-1].articlesPushBack(art);
         }
@@ -454,15 +455,15 @@ int WebSearchInterface::getArticlesForIndexRSS(QString content, QString rss_name
     int n = content.length();
 
 
-    rss_data *rd = new rss_data();
-    rd->rss_name =  rss_name;
-    rd->rss_link = rss_link;
-    rd->version = 0;
-    rd->encoding = encoding;
+    RSSData *rd = new RSSData();
+    rd->setSiteName(rss_name);
+    rd->setURL(rss_link);
+    rd->setVersion(0);
+    rd->setEncoding(encoding);
 
     while(1)
     {
-        feeds f;
+        RSSArticle f;
         cs.search_After(content,"<item", &item_b_index);
         if (item_b_index == -1)
             break;
@@ -479,22 +480,26 @@ int WebSearchInterface::getArticlesForIndexRSS(QString content, QString rss_name
                 continue;
         }
 
-        if(site_struct->getTextBetweenIndexes(item_b_index, item_e_index, "<title>", "</title>", f.title, content))
+        QString title, link, description;
+        if(site_struct->getTextBetweenIndexes(item_b_index, item_e_index, "<title>", "</title>", title, content))
             break;
 
-        site_struct->convert_string(f.title, false);
+        site_struct->convert_string(title, false);
 
-        if (site_struct->getTextBetweenIndexes(item_b_index, item_e_index, "<link>", "</link>", f.link,content))
+        if (site_struct->getTextBetweenIndexes(item_b_index, item_e_index, "<link>", "</link>", link,content))
             break;
 
-        site_struct->convert_string(f.link, true);        
+        site_struct->convert_string(link, true);
 
-        site_struct->getDescription(item_b_index, item_e_index, f.description, content);
+        site_struct->getDescription(item_b_index, item_e_index, description, content);
 
-        if (INT_SIZE <= rd->data.size()) //prevent int overflow
+        if (INT_SIZE <= rd->getArticlesSize()) //prevent int overflow
             break;
 
-        rd->data.append(f);
+        f.setLink(link);
+        f.setTitle(title);
+        f.setText(description);
+        rd->articlesPushBack(f);
     }
 
     if (INT_SIZE<=feeds_struct_tmp.size())
@@ -511,14 +516,14 @@ int WebSearchInterface::getArticlesForIndexRSS2(QString content, QString rss_nam
     int item_b_index=0, item_e_index=0;
     CSearch cs;
 
-    rss_data *rd = new rss_data();
-    rd->rss_name =  rss_name;
-    rd->rss_link = rss_link;
-    rd->version = 2005;
+    RSSData *rd = new RSSData();
+    rd->setSiteName(rss_name);
+    rd->setURL(rss_link);
+    rd->setVersion("2005");
 
     while(1)
     {
-        feeds f;
+        RSSArticle f;
         cs.search_After(content,"<entry", &item_b_index);
         if (item_b_index == -1)
             break;
@@ -529,21 +534,25 @@ int WebSearchInterface::getArticlesForIndexRSS2(QString content, QString rss_nam
         if (item_e_index == -1)
             break;
 
-        if(site_struct->getTextBetweenIndexes(item_b_index, item_e_index, "<title", "</title>", f.title, content))
+        QString title, link, desctiption;
+        if(site_struct->getTextBetweenIndexes(item_b_index, item_e_index, "<title", "</title>", title, content))
             break;
-        site_struct->convert_string(f.title, false);
+        site_struct->convert_string(title, false);
         int index_link = item_b_index;
         cs.search_Before(content, "<link", &index_link);
         if (index_link == -1 || index_link>item_e_index)
             break;
-        f.link = site_struct->returnURL(content, index_link);
-        site_struct->convert_string(f.link, true);
-        site_struct->getContent(item_b_index, item_e_index, f.description, content);
+        link = site_struct->returnURL(content, index_link);
+        site_struct->convert_string(link, true);
+        site_struct->getContent(item_b_index, item_e_index, desctiption, content);
 
-        if (INT_SIZE <= rd->data.size()) //prevent int overflow
+        if (INT_SIZE <= rd->getArticlesSize()) //prevent int overflow
             break;
 
-        rd->data.append(f);
+        f.setLink(link);
+        f.setTitle(title);
+        f.setText(desctiption);
+        rd->articlesPushBack(f);
     }
 
     if (INT_SIZE<=feeds_struct_tmp.size()) //prevent int overflow

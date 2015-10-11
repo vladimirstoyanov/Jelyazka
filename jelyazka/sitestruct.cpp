@@ -337,6 +337,7 @@ int SiteStruct::getArticlesForIndexRSS2(QString content,uint struct_index)
 
         if(getTextBetweenIndexes(item_b_index, item_e_index, "<title", "</title>", title, content))
             break;
+
         convert_string(title, false);
 
         int index_link = item_b_index;
