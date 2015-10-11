@@ -38,6 +38,7 @@
 #include <QList>
 #include "help.h"
 #include "db.h"
+#include "rssarticle.h"
 
 namespace Ui {
 class ViewWindow;
@@ -95,8 +96,6 @@ private:
     bool minimize;
     bool close;
     DB db;
-
-
     int width;
     int height;
     bool isXchanged;
@@ -107,19 +106,6 @@ private:
     QPoint curPoint;
     QPoint movePointPos;
     QPoint resizePoint;
-    struct article
-    {
-        QString title;
-        QString link;
-        QString text;
-        article()
-        {
-            title="";
-            link="";
-            text ="";
-        }
-    };
-    std::vector <article> site_view_structure;
 
     void initDataInComboBox();
     void addToCombobox(QString str);
