@@ -1,0 +1,21 @@
+=============Bugs=====================
+- Proxy settings doesn't working;
+- After update 'favorite rss list', the program crashes;
+- After add new rss feeds, 'Search RSS feed(s)' window stucked;
+- When the cursor is at some custom button from main window and after that move fast the cursor, then
+the custom button doesn't change it state (it is looke like the cursor is in it);
+- the resize icon doesn't dissapear sometimes;
+- sometimes in 'description view' any symbols doesn't encoded properly;
+- ToolTips doens't appear when 'animatewindow' is appearing.
+- 'mailto' urls are recoring too;
+
+=============Tasks==================
+- integrate youtube;
+- integrate facebook;
+- integrate twitter;
+- adding image to 'description view';
+- get the icon of RSS feed and make it appear in 'animatewindow';
+- pause button in searching;
+- history of RSS feeds;
+- understanding JavaScript in 'a href' tags;
+
