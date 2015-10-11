@@ -46,7 +46,7 @@ MainWindow::MainWindow(InitWindow *init_window)
     connect(init_window,SIGNAL(Done()),this,SLOT(onDone()));
 
     //initialize site_struct class
-    s_struct = new SiteStruct(aw);
+    s_struct = new SiteStruct();
     s_struct->setAutoDelete(false);
 
     //initialize viewwindow class

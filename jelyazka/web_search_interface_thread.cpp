@@ -19,7 +19,7 @@
 #include "web_search_interface_thread.h"
 #include "net.h"
 
-WebSearchInterfaceThread::WebSearchInterfaceThread(QObject *parent) :
+WebSearchInterfaceThread::WebSearchInterfaceThread() :
     QRunnable()
 {
     stop_thread = false;

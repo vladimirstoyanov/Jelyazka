@@ -38,7 +38,7 @@ public:
     QList<int> l_flags;
 
 
-    explicit WebSearchInterfaceThread(QObject *parent = 0);
+    explicit WebSearchInterfaceThread();
 
     ~WebSearchInterfaceThread();
     void run();

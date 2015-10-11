@@ -225,7 +225,7 @@ void ViewWindow::addToCombobox(QString str)
     ui->comboBox->setCurrentIndex (0);
 }
 
-int ViewWindow::showArticle(uint struct_index, uint article_index)
+int ViewWindow::showArticle(int struct_index, int article_index)
 {
     if (struct_index>=site_struct->s_struct.size()||struct_index<0)
     {
@@ -278,6 +278,7 @@ void ViewWindow::on_pushButton_2_clicked() // button '>'
 
 void ViewWindow::on_comboBox_currentIndexChanged(const QString &arg1) //event when content is changed
 {
+    qDebug()<<"[ViewWindow::on_comboBox_currentIndexChanged] current RSS:"<<arg1;
     initTextBrowser();
 }
 void ViewWindow::closeEvent(QCloseEvent *event)

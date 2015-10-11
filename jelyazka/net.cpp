@@ -256,8 +256,8 @@ bool Net::checkInMiddle(QString url, QString substring, int begin_index) //0 - c
     if (begin_index+n1 >= n) //if begin
         return 1;
 
-    uint j=0;
-    for (begin_index; begin_index<n; begin_index++) //check if in the beginig have http://
+    int j=0;
+    for (; begin_index<n; begin_index++) //check if in the beginig have http://
     {
         if (j==n1)
             return 0;
@@ -280,7 +280,7 @@ void Net::checkAndChangeURL2(QString &url)
     if (!flag)
         index+=4;
 
-    for (index; index<url_tmp.length(); index++)
+    for (; index<url_tmp.length(); index++)
         url += url_tmp[index];
 }
 

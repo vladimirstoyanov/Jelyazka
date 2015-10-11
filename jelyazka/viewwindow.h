@@ -109,7 +109,7 @@ private:
 
     void initDataInComboBox();
     void addToCombobox(QString str);
-    int showArticle(uint struct_index, uint article_index);
+    int showArticle(int struct_index, int article_index);
     void closeEvent(QCloseEvent *); // Overriding the window's close event
     void showEvent(QShowEvent *);
     void resizeEvent(QResizeEvent *event);

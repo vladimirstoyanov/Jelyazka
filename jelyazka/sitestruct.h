@@ -60,7 +60,7 @@ public:
     QWaitCondition condition_tread;
     QWaitCondition condition_view;
     
-    SiteStruct(QObject *parent);
+    SiteStruct();
     ~SiteStruct();
 
     boost::ptr_vector<RSSData> s_struct; //vector with all rss data

@@ -63,7 +63,7 @@ WebSearchInterface::WebSearchInterface(QWidget *parent, SiteStruct *tmp_site_str
     ui->tableView->setModel(model);
 
     //start thread
-    mThread = new WebSearchInterfaceThread(this);
+    mThread = new WebSearchInterfaceThread();
     mThread->setAutoDelete(false);
     connect(mThread, SIGNAL(FoundRSS(int,QString, QString, QString, QString,int)), this, SLOT(onFoundRSS(int,QString,QString,QString, QString,int)),Qt::QueuedConnection);
     connect(mThread, SIGNAL(EndOfUrls()),this, SLOT(onEndOfUrls()));

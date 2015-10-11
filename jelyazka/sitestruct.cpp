@@ -18,7 +18,7 @@
 */
 #include "sitestruct.h"
 
-SiteStruct::SiteStruct(QObject *parent)
+SiteStruct::SiteStruct()
     : QRunnable()
 {
     first_load = false;
@@ -87,7 +87,7 @@ void SiteStruct::synchronizeData(int struct_index, QString content)
     }
 
     //adding new data
-    for (uint i=0; i<tmp_struct.size(); i++)
+    for (int i=0; i<tmp_struct.size(); i++)
     {
         if (INT_SIZE<=s_struct.at(struct_index).getArticlesSize())
             s_struct.at(struct_index).eraseArticleAt(s_struct.at(struct_index).getArticlesSize()-1);
