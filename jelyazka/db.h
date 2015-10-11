@@ -2,22 +2,33 @@
 #define DB_H
 
 #include <QtSql/QtSql>
+#include "rssdata.h"
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class DB
 {
 public:
     DB();
     void createTables();
-    void loadStrctureFromDB();
+    void loadStrctureFromDB(boost::ptr_vector<RSSData> *s_struct);
+    void getFavoriteFeeds(boost::ptr_vector<QString> *l_old_view_feed);
+    void removeDataFromRSSTable(QString site_name, bool all_data);
+    void insertRowToRSSTable(QString name, QString url, QString version);
+    void findAndReturnURLAndVersion(QString site_name, QString &url, QString &version);
+    void getCollectFeeds(boost::ptr_vector<QString> *l_old_collect_feed);
+    void getFilterList(boost::ptr_vector<QString> *l_old_filters);
+    void insertRowToFiltersTable(QString filter_name);
+    void removeDataFromFilters(QString filter_name, bool all_data);
+    void removeDataFromCollectFeeds(QString site_name);
+    void getCollectFeedsThatContainingText(QString text, boost::ptr_vector<QString> *l_favorite_rss); //cf_find_feeds text changed event
+
 private:
     QSqlDatabase sqliteDataBase;
 
     void openDB();
     void closeDB();
 
-//signals:
 
-//public slots:
 };
 
 #endif // DB_H

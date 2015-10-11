@@ -39,7 +39,7 @@
 #include <QTextCodec>
 #include "rssdata.h"
 #include "rssarticle.h"
-
+#include "db.h"
 #define INT_SIZE 2147483646
 
 class CAnimateWindow;
@@ -64,46 +64,8 @@ public:
     ~SiteStruct();
     QSqlDatabase sqliteDataBase;
 
-    /*
-    struct article //article struct
-    {
-        QString title; //title of article
-        QString link;
-        QString text;
-        article()
-        {
-            title=""; //init
-            link="";
-            text ="";
-        }
-    }art;
-    */
-    /*
-    struct site_struct{
-        QString type;
-        QString site_name;
-        QString url;
-        QString encoding;
-        QString version;
-        bool isRead;
-        bool isLoaded;
-        //boost::ptr_list<article> articles; //new
-        QList<article> articles;
-        site_struct(){
-            site_name= "";
-            url= "";
-            type ="";
-            encoding = "";
-            isRead = false;
-            isLoaded = false;
-            version = "0";
-        }
-    };
-    */
-    boost::ptr_vector<RSSData> s_struct;
-    //QList<site_struct> s_struct;
+    boost::ptr_vector<RSSData> s_struct; //vector with all rss data
 
-    void loadStrctureFromDB(); //load settings in sites.obj
     RSSData * initStruct(QString site_name, QString type, QString url);
     void synchronizeData(int site_index, QString content);
     void run (); //function exec when thread start
@@ -123,7 +85,6 @@ public:
 signals:
     void showAnimateWindow(QString data); //anitate window signal
     void loadRSS(QString name, QString url); //signal load rss feed
-    //void addRSS(QString name, bool finish); //signal load rss feed
     void Finish(QString name, bool finish); //signal to option, when add rss feeds from 'collect' to 'view'
 
 private:
@@ -131,8 +92,8 @@ private:
     bool first_flag;
     QThreadPool *tp;
     int refresh_time_feeds;
+    DB db;
 
-    void createTables();
     void loadOptions();
     void findSiteDataRSS(int &index, QString content, RSSArticle &ar); //QString &title, QString &link, QString &text);
     void findSiteDataRSS2(int &index, QString content, RSSArticle &ar); // QString &title, QString &link, QString &text);

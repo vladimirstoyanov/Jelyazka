@@ -246,24 +246,16 @@ int OptionsWindow::addStringToWatchList(QString cur_text)
 //fill view_feeds (QListWidget var)
 void OptionsWindow::fillViewListView()
 {
-    QSqlQuery query;
-
-    query.prepare( "SELECT * FROM favorite_feeds" );
-
-    if( !query.exec() )
-    {
-        qDebug()<<"Some error, when trying to read from \'favorite_feeds' table...";
-        return;
-    }
+    boost::ptr_vector<QString> tmp;
+    db.getFavoriteFeeds(&tmp);
 
     l_old_view_feed.clear();
 
-    while(query.next())
+    boost::ptr_vector<QString>::iterator it;
+    for (it=tmp.begin(); it!=tmp.end(); ++it)
     {
-        QString *name = new QString;
-        *name = query.value(1).toByteArray().data();
-        view_feeds->insertItem(view_feeds->count(), *name);
-        l_old_view_feed.push_back(name);
+        view_feeds->insertItem(view_feeds->count(), *it);
+        l_old_view_feed.push_back(new QString(*it));
     }
 }
 
@@ -389,57 +381,19 @@ void OptionsWindow::rssTableUpdate()
 //then remove all data from 'rss' table
 void OptionsWindow::removeDataFromRSSTable(QString site_name, bool all_data)
 {
-
-    QSqlQuery qry;
-
-    if (all_data)
-    {
-        qry.prepare("delete from favorite_feeds");
-        if (!qry.exec())
-            qDebug()<<"Fail:" + qry.lastError().text();
-        return;
-    }
-
-    qry.prepare(QString("delete from favorite_feeds where name=\'%1\'").arg(site_name));
-    if (!qry.exec())
-        qDebug()<<"Fail:" + qry.lastError().text();
+    db.removeDataFromRSSTable(site_name, all_data);
 }
 
 //insert row to 'rss' DB table
 void OptionsWindow::insertRowToRSSTable(QString name, QString url, QString version)
 {
-    QSqlQuery qry;
-
-    qry.prepare("insert into favorite_feeds (name, url, version) values (\'"+ name+"\',\'" + url+ "\',\'" + version + "\')");
-    if (!qry.exec())
-    {
-        qDebug()<<"Fail:" + qry.lastError().text();
-    }
+    db.insertRowToRSSTable(name, url, version);
 }
 
 //from site_name, return url and version
 void OptionsWindow::findAndReturnURLAndVersion(QString site_name, QString &url, QString &version)
 {
-    QSqlQuery query;
-    url = "";
-    version="";
-
-    if (site_struct->sqliteDataBase.isOpen())
-    {
-        query.prepare(QString("SELECT * FROM collect_feeds WHERE name=\"%1\"").arg(site_name));
-        if (!query.exec())
-        {
-            qDebug()<<"Fail:" + query.lastError().text();
-            url = "";
-            version = "";
-            return;
-        }
-        if(query.next())
-        {
-            url = query.value( 2 ).toByteArray().data();
-            version = query.value(3).toByteArray().data();
-        }
-    }
+    db.findAndReturnURLAndVersion(site_name, url, version);
 }
 
 void OptionsWindow::updateFiltersTable()
@@ -727,47 +681,33 @@ void OptionsWindow::updateCollectFeedListView()
 //fill collect_feed (QListWidget)
 void OptionsWindow::fillCollectListView()
 {
-    QSqlQuery query;
+    boost::ptr_vector<QString>tmp;
+    db.getCollectFeeds(&tmp);
 
-    query.prepare("SELECT * FROM collect_feeds");
-
-    if(!query.exec())
-    {
-        qDebug()<<"OptionsWindow::fillCollectListView(): Some error, when trying to read from \'site_name' table...";
-        return;
-    }
     l_old_collect_feed.clear();
 
-    while( query.next() )
-    {
-        QString *name = new QString;
-        *name = query.value( 1 ).toByteArray().data();
+    boost::ptr_vector<QString>::iterator it;
 
-        collect_feeds->insertItem(collect_feeds->count(), *name);
-        l_old_collect_feed.push_back(name);
+    for (it = tmp.begin(); it!=tmp.end(); ++it)
+    {
+        collect_feeds->insertItem(collect_feeds->count(), *it);
+        l_old_collect_feed.push_back(new QString(*it));
     }
 }
 
 void OptionsWindow::fillFilterListView()
 {
-    QSqlQuery query;
-
-    query.prepare( "SELECT * FROM filters" );
-
-    if( !query.exec() )
-    {
-        qDebug()<<"void OptionsWindow::fillFilterListView(): Some error, when trying to read from \'filters' table...";
-        return;
-    }
+    boost::ptr_vector <QString> tmp;
+    db.getFilterList(&tmp);
 
     l_old_filters.clear();
 
-    while( query.next() )
+    boost::ptr_vector <QString>::iterator it;
+
+    for (it = tmp.begin(); it!=tmp.end(); ++it)
     {
-        QString *filter = new QString;
-        *filter = query.value( 1 ).toByteArray().data();
-        if (!addStringToFilterList(*filter))
-             l_old_filters.push_back(filter);
+        addStringToFilterList(*it);
+        l_old_filters.push_back(new QString(*it));
     }
 }
 
@@ -840,7 +780,7 @@ void OptionsWindow::on_pushButton_2_clicked()
         delete l[i];
 }
 
-//'OK' button has been clicked
+//'OK' button event
 void OptionsWindow::on_OK_Button_clicked()
 {
     download_feed_status->show();
@@ -1065,34 +1005,17 @@ void OptionsWindow::on_pb_remove_filter()
 
 void OptionsWindow::insertRowToFiltersTable(QString filter_name)
 {
-    QSqlQuery qry;
-
-    qry.prepare("insert into filters (filter) values (\'"+ filter_name+"\')");
-    if (!qry.exec())
-    {
-        qDebug()<<"OptionsWindow::insertRowToFiltersTable(QString filter_name) fail:" + qry.lastError().text();
-    }
+    db.insertRowToFiltersTable(filter_name);
 }
 
 void OptionsWindow::removeDataFromFilters(QString filter_name, bool all_data)
 {
-    QSqlQuery qry;
-
-    if (all_data)
-        qry.prepare("delete from filters");
-    else
-        qry.prepare(QString("delete from filters where name=\"%1\"").arg(filter_name));
-    if (!qry.exec())
-        qDebug()<<"OptionsWindow::removeDataFromFilters(QString filter_name, bool all_data) fail:" + qry.lastError().text();
+    db.removeDataFromFilters(filter_name, all_data);
 }
 
 void OptionsWindow::removeDataFromCollectFeeds(QString site_name)
 {
-    QSqlQuery qry;
-
-    qry.prepare(QString("delete from collect_feeds where name=\"%1\"").arg(site_name));
-    if (!qry.exec())
-        qDebug()<<"OptionsWindow::removeDataFromCollectFeeds(QString site_name) fail delete from collect_feeds where filter... " + qry.lastError().text();
+    db.removeDataFromCollectFeeds(site_name);
 }
 
 //Filter option: adding string to filter list
@@ -1117,24 +1040,14 @@ int OptionsWindow::addStringToFilterList(QString cur_text)
 
 void OptionsWindow::on_textChanged(QString text) //cf_find_feeds text changed event
 {
-    QSqlQuery query;
+    boost::ptr_vector<QString> tmp;
+    db.getCollectFeedsThatContainingText(text, &tmp);
 
     collect_feeds->clear();
-    query.prepare( "SELECT * FROM collect_feeds" );
 
-    if( !query.exec() )
-    {
-        qDebug()<<"Some error, when trying to read from \'site_name' table...";
-        return;
-    }
-
-    while( query.next() )
-    {
-        QString name;
-        name = query.value( 1 ).toByteArray().data();
-        if (name.contains(text))
-            addStringToWatchList(name);
-    }
+    boost::ptr_vector<QString>::iterator it;
+    for (it = tmp.begin(); it!=tmp.end(); ++it)
+        addStringToWatchList(*it);
 }
 
 int OptionsWindow::cf_label_search_width()

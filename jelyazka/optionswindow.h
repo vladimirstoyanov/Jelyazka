@@ -32,6 +32,7 @@
 #include "sitestruct.h"
 #include "viewwindow.h"
 #include "net.h"
+#include "db.h"
 
 namespace Ui {
 class OptionsWindow;
@@ -65,6 +66,7 @@ private slots:
     void on_textChanged(QString text);
 
 private:
+    DB db;
     Ui::OptionsWindow *ui;
     SiteStruct *site_struct;
     QListWidget *collect_feeds;

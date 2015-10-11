@@ -23,16 +23,10 @@ SiteStruct::SiteStruct(QObject *parent)
 {
     first_load = false;
     isAddOption = true;
-    //aw->show();
 
     network_proxy = NULL;
 
-    //open db
-    sqliteDataBase = QSqlDatabase::addDatabase("QSQLITE");
-    sqliteDataBase.setDatabaseName("sites.db3");
-    sqliteDataBase.open();
-
-    loadStrctureFromDB();
+    db.loadStrctureFromDB (&s_struct);
 
     mutex = new QMutex();
     tp = new QThreadPool(this);
@@ -51,32 +45,6 @@ SiteStruct::~SiteStruct()
     delete mutex;
     if (network_proxy!=NULL)
         delete network_proxy;
-}
-
-void SiteStruct::loadStrctureFromDB()
-{
-    QSqlQuery query;
-
-    createTables();
-
-    //get all rss feeds urls
-    query.prepare( "SELECT * FROM favorite_feeds" );
-
-    if( !query.exec() )
-    {
-        qDebug()<<"Some error, when trying to read from \'favorite_feeds\' table...";
-        return;
-    }
-
-    while( query.next() )
-    {
-        RSSData *rssData = new RSSData();
-        rssData->setSiteName(query.value( 1 ).toByteArray().data());
-        rssData->setURL(query.value( 2 ).toByteArray().data());
-        rssData->setType("RSS");
-        rssData->setVersion(query.value(3).toByteArray().data());
-        s_struct.push_back(rssData);
-    }
 }
 
 void SiteStruct::synchronizeData(int struct_index, QString content)
@@ -295,6 +263,7 @@ void SiteStruct::emitAnimateWindow()
     emit showAnimateWindow(data_for_animatewindow);
 }
 
+/*
 void SiteStruct::createTables()
 {
     //"collec_feeds" table
@@ -365,6 +334,7 @@ void SiteStruct::createTables()
         }
     }
 }
+*/
 
 //Get articles from rss source
 int SiteStruct::getArticlesForIndexRSS(QString content,uint struct_index)
