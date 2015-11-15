@@ -416,13 +416,13 @@ void ViewWindow::refreshFeed()
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QString content="";
 
-    Net net;
+    HTTP http;
     if (site_struct->s_struct.size()<=current_site_index || current_site_index<0 || site_struct->s_struct.size() == 0)
     {
         QApplication::restoreOverrideCursor();
         return;
     }
-    if (!net.getQuery(site_struct->s_struct[current_site_index].getURL(),content))
+    if (!http.getQuery(site_struct->s_struct[current_site_index].getURL(),content))
     {
         site_struct->synchronizeData(current_site_index, content);
         if (site_struct->s_struct[current_site_index].getArticlesSize()<=current_article_index)

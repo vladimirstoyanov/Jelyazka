@@ -27,7 +27,7 @@
 #include <string>
 #include <QString>
 #include <QMutex>
-#include "net.h"
+#include "http.h"
 #include <QFile>
 #include <QTextStream>
 #include <QMessageBox>

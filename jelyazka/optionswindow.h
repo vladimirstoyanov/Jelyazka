@@ -31,7 +31,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "sitestruct.h"
 #include "viewwindow.h"
-#include "net.h"
+#include "http.h"
 #include "db.h"
 
 namespace Ui {

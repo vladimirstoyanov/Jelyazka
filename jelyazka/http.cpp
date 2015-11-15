@@ -1,5 +1,5 @@
 /*
-    net.cpp
+    HTTP.cpp
     Jelyazka RSS/RDF reader
     Copyright (C) 2014 Vladimir Stoyanov
     
@@ -16,18 +16,18 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "net.h"
+#include "http.h"
 
-Net::Net()
+HTTP::HTTP()
 {
     url_option =0;
 }
-Net::~Net()
+HTTP::~HTTP()
 {
 }
 
 //http get query
-int Net::getQuery(QString url, QString &content ,int &type)
+int HTTP::getQuery(QString url, QString &content ,int &type)
 {
     QTcpSocket socket;
     QString query_string="";
@@ -110,7 +110,7 @@ int Net::getQuery(QString url, QString &content ,int &type)
 }
 
 //http get query method with proxy argument
-int Net::getQuery(QString url, QString &content, QNetworkProxy *network_proxy)
+int HTTP::getQuery(QString url, QString &content, QNetworkProxy *network_proxy)
 {
     QTcpSocket socket;
     QString query_string="";
@@ -182,7 +182,7 @@ int Net::getQuery(QString url, QString &content, QNetworkProxy *network_proxy)
 }
 
 
-int Net::reconnect(QString url, QString &content, QTcpSocket &socket)
+int HTTP::reconnect(QString url, QString &content, QTcpSocket &socket)
 {
     QString query_string="";
     content = "";
@@ -210,7 +210,7 @@ int Net::reconnect(QString url, QString &content, QTcpSocket &socket)
     return 0;
 }
 
-void Net::queryPartAndURL(QString &url, QString &query_part)
+void HTTP::queryPartAndURL(QString &url, QString &query_part)
 {
     CSearch cs;
     QString tmp_url="";
@@ -230,7 +230,7 @@ void Net::queryPartAndURL(QString &url, QString &query_part)
     url=tmp_url;
 }
 
-bool Net::checkInTheBeginning(QString url, QString http)
+bool HTTP::checkInTheBeginning(QString url, QString http)
 {
     int n = url.length();
     int n1 = http.length();
@@ -247,7 +247,7 @@ bool Net::checkInTheBeginning(QString url, QString http)
 }
 
 //check the middle of url for substring
-bool Net::checkInMiddle(QString url, QString substring, int begin_index) //0 - contain substring, 1- not contain
+bool HTTP::checkInMiddle(QString url, QString substring, int begin_index) //0 - contain substring, 1- not contain
 {
 
     int n = url.length();
@@ -268,7 +268,7 @@ bool Net::checkInMiddle(QString url, QString substring, int begin_index) //0 - c
     return 1;
 }
 
-void Net::checkAndChangeURL2(QString &url)
+void HTTP::checkAndChangeURL2(QString &url)
 {
     int index=0;
     QString url_tmp = url;
@@ -284,7 +284,7 @@ void Net::checkAndChangeURL2(QString &url)
         url += url_tmp[index];
 }
 
-bool Net::checkForProtocol(QString url, int &index_after_protocol, QString &protocol)
+bool HTTP::checkForProtocol(QString url, int &index_after_protocol, QString &protocol)
 {
     protocol = "";
     index_after_protocol = 0;
@@ -306,7 +306,7 @@ bool Net::checkForProtocol(QString url, int &index_after_protocol, QString &prot
     return 1;
 }
 
-bool Net::checkForProtocol(QString url, QString &protocol)
+bool HTTP::checkForProtocol(QString url, QString &protocol)
 {
     protocol = "";
     for (int i=0; i<url.length(); i++)
@@ -325,7 +325,7 @@ bool Net::checkForProtocol(QString url, QString &protocol)
     return 1;
 }
 
-bool Net::checkForProtocol(QString url, int &index)
+bool HTTP::checkForProtocol(QString url, int &index)
 {
     index =0;
     for (int i=0; i<url.length(); i++)
@@ -345,7 +345,7 @@ bool Net::checkForProtocol(QString url, int &index)
     return 1;
 }
 
-bool Net::checkForProtocol(QString url)
+bool HTTP::checkForProtocol(QString url)
 {
     for (int i=0; i<url.length(); i++)
     {
@@ -361,7 +361,7 @@ bool Net::checkForProtocol(QString url)
     return 1;
 }
 
-bool Net::checkResponse(QString content, QString &response_num)
+bool HTTP::checkResponse(QString content, QString &response_num)
 {
     int size_string = content.length();
     if (size_string<6) //HTTP/<num version>
@@ -393,12 +393,12 @@ bool Net::checkResponse(QString content, QString &response_num)
     return 0;
 }
 
-void Net::addSubStringAtBeginning(QString &url, QString substring)
+void HTTP::addSubStringAtBeginning(QString &url, QString substring)
 {
     url = substring + url;
 }
 
-void Net::removeSubString(QString &url, QString substring)
+void HTTP::removeSubString(QString &url, QString substring)
 {
     CSearch cs;
     QString newURL="";
@@ -416,7 +416,7 @@ void Net::removeSubString(QString &url, QString substring)
     url = newURL;
 }
 
-void Net::ChangeUrl(QString &url, int option)
+void HTTP::ChangeUrl(QString &url, int option)
 {
     switch(option)
     {
@@ -443,7 +443,7 @@ void Net::ChangeUrl(QString &url, int option)
 }
 
 //return: 1 (html), 2 (xml), 0 (ignore url)
-int Net::isHTMLorXML(QString content)
+int HTTP::isHTMLorXML(QString content)
 {
     CSearch cs;
     int index=0, n = content.length();
@@ -468,7 +468,7 @@ int Net::isHTMLorXML(QString content)
     return 0; //ignore url
 }
 
-void Net::getCorrectURL(QString content, QString &url)
+void HTTP::getCorrectURL(QString content, QString &url)
 {
     CSearch cs;
     int i=0;
@@ -492,7 +492,7 @@ void Net::getCorrectURL(QString content, QString &url)
     url = url_tmp;
 }
 
-void Net::addOrRemoveWWW(QString &url)
+void HTTP::addOrRemoveWWW(QString &url)
 {
     QString url_tmp = "";
     CSearch cs;

@@ -7,13 +7,14 @@ the custom button doesn't change it state (it is looke like the cursor is in it)
 - the resize icon doesn't dissapear sometimes;
 - sometimes in 'description view' any symbols doesn't encoded properly;
 - ToolTips doens't appear when 'animatewindow' is appearing.
-- 'mailto' urls are recoring too;
+- 'mailto' urls are recording too;
 
 =============Tasks==================
 - integrate youtube;
 - integrate facebook;
 - integrate twitter;
-- adding image to 'description view';
+- add date to the feed article; 
+- add content of image tag in .xml to 'description view';
 - get the icon of RSS feed and make it appear in 'animatewindow';
 - pause button in searching;
 - history of RSS feeds;

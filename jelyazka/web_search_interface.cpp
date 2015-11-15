@@ -18,7 +18,7 @@
 */
 #include "web_search_interface.h"
 #include "ui_web_search_interface.h"
-#include "net.h"
+#include "http.h"
 #include "search.h"
 #include "rssarticle.h"
 #include <QDebug>

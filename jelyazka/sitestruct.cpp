@@ -194,7 +194,7 @@ void SiteStruct::findSiteDataRSS2(int &index, QString content, RSSArticle &ar)//
 
 void SiteStruct::run() //runnning another thread (synchronize data for n time)
 {
-    Net net;
+    HTTP http;
     QString content;
 
     mutex->lock();
@@ -213,7 +213,7 @@ void SiteStruct::run() //runnning another thread (synchronize data for n time)
         return;
 
     content = "";
-    if (net.getQuery(s_struct.at(index).getURL(),content))
+    if (http.getQuery(s_struct.at(index).getURL(),content))
     {
         qDebug()<<s_struct.at(index).getURL() + ": http get query has been failed!";
         mutex->lock();

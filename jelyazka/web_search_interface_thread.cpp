@@ -17,7 +17,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "web_search_interface_thread.h"
-#include "net.h"
+#include "http.h"
 
 WebSearchInterfaceThread::WebSearchInterfaceThread() :
     QRunnable()
@@ -36,11 +36,11 @@ WebSearchInterfaceThread::~WebSearchInterfaceThread()
 
 bool WebSearchInterfaceThread::setUrlRoot(QString url)
 {
-    Net n;
+    HTTP http;
     CSearch cs;
 
     QString query_part="";
-    n.queryPartAndURL(url,query_part);
+    http.queryPartAndURL(url,query_part);
     int index = 0;
     cs.search_Before(url, "www.", &index);
 
@@ -68,7 +68,7 @@ void WebSearchInterfaceThread::run()
 
     CSearch cs;
     QString html;
-    Net n;
+    HTTP http;
 
     mutex->lock();
     if (l_url.size() == 0)
@@ -85,7 +85,7 @@ void WebSearchInterfaceThread::run()
 
     int type = 0;
 
-    if (n.getQuery(*url, html, type)) //if can't connect
+    if (http.getQuery(*url, html, type)) //if can't connect
     {
             mutex->lock();
             if(checkFinish())

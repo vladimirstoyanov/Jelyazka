@@ -31,7 +31,7 @@ RefreshFeedsData::~RefreshFeedsData()
 
 void RefreshFeedsData::run() //refresh feeds
 {
-    Net net;
+    HTTP http;
     QString content;
 
     while (1)
@@ -56,7 +56,7 @@ void RefreshFeedsData::run() //refresh feeds
                 break;
             }
             QString url = site_struct->s_struct[i].getURL();
-            if (net.getQuery(url,content))
+            if (http.getQuery(url,content))
             {
                 qDebug()<<"Fail to connect: "<<url;
                 continue;

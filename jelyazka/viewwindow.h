@@ -27,7 +27,7 @@
 #include <QLabel>
 #include "sitestruct.h"
 #include "search.h"
-#include "net.h"
+#include "http.h"
 #include <QMouseEvent>
 #include <QEvent>
 #include "web_search_interface.h"
