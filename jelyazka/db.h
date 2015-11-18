@@ -4,13 +4,14 @@
 #include <QtSql/QtSql>
 #include "rssdata.h"
 #include <boost/ptr_container/ptr_vector.hpp>
+#include "data.h"
 
 class DB
 {
 public:
     DB();
     void createTables();
-    void loadStrctureFromDB(boost::ptr_vector<RSSData> *s_struct);
+    void loadStrctureFromDB(Data *data);
     void getFavoriteFeeds(boost::ptr_vector<QString> *l_old_view_feed);
     void removeDataFromRSSTable(QString site_name, bool all_data);
 

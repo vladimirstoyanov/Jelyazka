@@ -46,18 +46,20 @@ MainWindow::MainWindow(InitWindow *init_window)
     connect(init_window,SIGNAL(Done()),this,SLOT(onDone()));
 
     //initialize site_struct class
-    s_struct = new SiteStruct();
+    data = new Data();
+    s_struct = new SiteStruct(data);
     s_struct->setAutoDelete(false);
 
+
     //initialize viewwindow class
-    view_window = new ViewWindow(0,s_struct);
-    rfd = new RefreshFeedsData(0,s_struct);
+    view_window = new ViewWindow(0,s_struct,data);
+    rfd = new RefreshFeedsData(0,s_struct, data);
 
     //load data
-    init_window->setSignal(s_struct);
+    init_window->setSignal(s_struct, data);
 
     //set thread signal
-    aw->setSignal(s_struct);
+    aw->setSignal(s_struct,data);
 
     //init About window
     about_gui = new About();
@@ -82,6 +84,8 @@ MainWindow::~MainWindow()
         delete view_window;
     if (aw!=NULL)
         delete aw;
+    if (data!=NULL)
+        delete data;
 
     delete about_gui;
 }
@@ -157,7 +161,7 @@ void MainWindow::onDone()
     trayIcon->show();
     view_window->show();
     rfd->start();
-    for (uint i=0; i<s_struct->s_struct.size(); i++)
+    for (uint i=0; i<data->size(); i++)
       s_struct->data_for_animatewindow+="<index=" + QString::number(i) + ">";
     s_struct->emitAnimateWindow();
 }

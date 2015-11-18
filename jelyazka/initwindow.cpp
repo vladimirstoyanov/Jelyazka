@@ -53,18 +53,19 @@ InitWindow::~InitWindow()
 }
 
 //load RSS feeds in thread pool
-void InitWindow::setSignal(SiteStruct *s_struct)
+void InitWindow::setSignal(SiteStruct *s_struct, Data *data_tmp)
 {
+    data = data_tmp;
     site_struct = s_struct;
     connect(s_struct,SIGNAL(loadRSS(QString,QString)),this,SLOT(onLoadRss(QString,QString)));
     int i=0;
 
-    while (i<site_struct->s_struct.size())
+    while (i<data->size())
     {
         tp->start(site_struct);
         i++;
     }
-    if (site_struct->s_struct.size()==0)
+    if (data->size()==0)
     {
         site_struct->first_load = true;
         this->hide();

@@ -22,17 +22,19 @@
 #include <QThread>
 #include <QMutex>
 #include "sitestruct.h"
+#include "data.h"
 
 class RefreshFeedsData : public QThread
 {
     Q_OBJECT
 public:
-    explicit RefreshFeedsData(QObject *parent = 0, SiteStruct *ss=0);
+    explicit RefreshFeedsData(QObject *parent = 0, SiteStruct *ss=0, Data *data_tmp=0);
     ~RefreshFeedsData();
 
     void run();
 private:
     SiteStruct *site_struct;
+    Data *data;
 
 signals:
 

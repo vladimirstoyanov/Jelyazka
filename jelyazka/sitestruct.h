@@ -39,8 +39,10 @@
 #include "rssdata.h"
 #include "rssarticle.h"
 #include "db.h"
+#include "data.h"
+#include <limits.h>
 
-#define INT_SIZE 2147483646
+//#define INT_SIZE 2147483646
 
 class CAnimateWindow;
 
@@ -60,10 +62,10 @@ public:
     QWaitCondition condition_tread;
     QWaitCondition condition_view;
     
-    SiteStruct();
+    SiteStruct(Data *data_tmp);
     ~SiteStruct();
 
-    boost::ptr_vector<RSSData> s_struct; //vector with all rss data
+    //boost::ptr_vector<RSSData> s_struct; //vector with all rss data
 
     RSSData * initStruct(QString site_name, QString type, QString url);
     void synchronizeData(int site_index, QString content);
@@ -92,6 +94,7 @@ private:
     QThreadPool *tp;
     int refresh_time_feeds;
     DB db;
+    Data *data;
 
     void loadOptions();
     void findSiteDataRSS(int &index, QString content, RSSArticle &ar); //QString &title, QString &link, QString &text);

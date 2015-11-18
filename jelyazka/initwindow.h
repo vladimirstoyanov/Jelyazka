@@ -24,6 +24,7 @@
 #include <QImage>
 #include <QThreadPool>
 #include "sitestruct.h"
+#include "data.h"
 
 namespace Ui {
 class InitWindow;
@@ -36,7 +37,7 @@ class InitWindow : public QWidget
 public:
     explicit InitWindow(QWidget *parent = 0);
     ~InitWindow();
-    void setSignal (SiteStruct *s_struct);
+    void setSignal (SiteStruct *s_struct, Data *data_tmp);
 
 private:
     Ui::InitWindow *ui;
@@ -44,6 +45,7 @@ private:
     QImage *init_img;
     SiteStruct *site_struct;
     QThreadPool *tp;
+    Data *data;
 
 public slots:
     void onLoadRss(QString name, QString url);

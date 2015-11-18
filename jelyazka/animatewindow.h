@@ -27,6 +27,7 @@
 #include <QShowEvent>
 #include <QList>
 #include <QDesktopWidget>
+#include "data.h"
 
 namespace Ui {
 class CAnimateWindow;
@@ -44,7 +45,7 @@ public:
     explicit CAnimateWindow(QWidget *parent = 0);
     ~CAnimateWindow();
 
-    void setSignal(SiteStruct *s_struct);
+    void setSignal(SiteStruct *data , Data *data_tmp);
 
 public slots:
     void onShowAnimateWindow(QString);
@@ -59,6 +60,7 @@ private:
     SiteStruct *site_struct;
     bool mouse_clicked; //if mouse clicked on this window, mouse_clicked = true, otherwise mouse_clicked = false;
     bool isXchanged; //'X' button image has been changed, then isXchanged = true, otherwise isXchanged = false;
+    Data *data;
 
     void getDesktopResolution(int& horizontal, int& vertical);
     int getTaskBarHeight();

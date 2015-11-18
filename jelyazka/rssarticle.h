@@ -12,15 +12,18 @@ public:
     QString getTitle();
     QString getLink();
     QString getText();
-    //set
-    void setTitle(QString title);
-    void setLink(QString link);
-    void setText(QString text);
+    QString getDate();
 
+    //set
+    void setTitle(QString title_);
+    void setLink(QString link_);
+    void setText(QString text_);
+    void setDate(QString date_);
 private:
     QString title;
     QString link;
     QString text;
+    QString date;
 };
 
 #endif // RSSARTICLE_H

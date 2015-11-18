@@ -20,11 +20,14 @@
 #include "ui_optionswindow.h"
 #include <QDebug>
 
-OptionsWindow::OptionsWindow(QWidget *parent, SiteStruct *ss, ViewWindow *view_window) :
+OptionsWindow::OptionsWindow(QWidget *parent, SiteStruct *ss, ViewWindow *view_window, Data *data_tmp) :
     QWidget(parent),
     ui(new Ui::OptionsWindow)
 {
     ui->setupUi(this);
+
+
+    data = data_tmp;
 
     options_type = 1;
 
@@ -298,9 +301,9 @@ void OptionsWindow::rssTableUpdate()
 
             insertRowToRSSTable(view_feeds->item(i)->text(), url, version);
             isAddedToView = true;
-            site_struct->s_struct.push_back(site_struct->initStruct(view_feeds->item(i)->text(),"RSS",url));
-            site_struct->s_struct[site_struct->s_struct.size()-1].setIsRead(false);
-            site_struct->s_struct[site_struct->s_struct.size()-1].setVersion(version);
+            data->push_back(site_struct->initStruct(view_feeds->item(i)->text(),"RSS",url));
+            data->at(data->size()-1)->setIsRead(false);
+            data->at(data->size()-1)->setVersion(version);
             tp->start(site_struct);
         }
         if (!isAddedToView)
@@ -311,8 +314,8 @@ void OptionsWindow::rssTableUpdate()
     //remove all data from 'rss' table
     if (view_feeds->count() == 0)
     {
-        while (site_struct->s_struct.size()>0)
-            site_struct->s_struct.erase(site_struct->s_struct.begin());
+        while (data->size()>0)
+            data->erase(0);
         removeDataFromRSSTable("", 1);
     }
 
@@ -338,9 +341,9 @@ void OptionsWindow::rssTableUpdate()
                 QString url, version;
                 findAndReturnURLAndVersion(view_feeds->item(i)->text(),url,version);
                 insertRowToRSSTable(view_feeds->item(i)->text(), url, version);
-                site_struct->s_struct.push_back(site_struct->initStruct(view_feeds->item(i)->text(),"RSS",url));
-                site_struct->s_struct[site_struct->s_struct.size()-1].setIsRead(false);
-                site_struct->s_struct[site_struct->s_struct.size()-1].setVersion(version);
+                data->push_back(site_struct->initStruct(view_feeds->item(i)->text(),"RSS",url));
+                data->at(data->size()-1)->setIsRead(false);
+                data->at(data->size()-1)->setVersion(version);
                 isAddedToView = true;
                 tp->start(site_struct);
             }
@@ -349,7 +352,7 @@ void OptionsWindow::rssTableUpdate()
 
     QList<bool> l_item_indexes_from_site_struct;
     //init l_item_indexes_from_site_struct;
-    for (uint i=0; i<site_struct->s_struct.size(); i++)
+    for (uint i=0; i<data->size(); i++)
         l_item_indexes_from_site_struct.push_back(1);
 
     //remove old items
@@ -357,10 +360,10 @@ void OptionsWindow::rssTableUpdate()
         if (l_items_for_remove[i] == 0)
         {
             removeDataFromRSSTable(l_old_view_feed[i],0);
-            for (uint j=0; j<site_struct->s_struct.size(); j++)
+            for (uint j=0; j<data->size(); j++)
             {
                 //qDebug()<<"COMPARING "<<l_old_view_feed[i]<<" WITH: "<<site_struct->s_struct[j].site_name;
-                if (l_old_view_feed[i] == site_struct->s_struct[j].getSiteName())
+                if (l_old_view_feed[i] == data->at(j)->getSiteName())
                 {
                     l_item_indexes_from_site_struct[j] = 0;
                     break;

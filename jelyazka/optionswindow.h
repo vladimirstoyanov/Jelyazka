@@ -33,6 +33,7 @@
 #include "viewwindow.h"
 #include "http.h"
 #include "db.h"
+#include "data.h"
 
 namespace Ui {
 class OptionsWindow;
@@ -45,7 +46,7 @@ class OptionsWindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit OptionsWindow(QWidget *parent = 0, SiteStruct *ss=0, ViewWindow *view_window=0);
+    explicit OptionsWindow(QWidget *parent = 0, SiteStruct *ss=0, ViewWindow *view_window=0, Data *data_tmp = 0);
     ~OptionsWindow();
 
 public slots:
@@ -69,6 +70,7 @@ private:
     DB db;
     Ui::OptionsWindow *ui;
     SiteStruct *site_struct;
+    Data *data;
     QListWidget *collect_feeds;
     QListWidget *view_feeds;
     boost::ptr_vector<QString> l_old_collect_feed;

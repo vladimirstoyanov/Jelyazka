@@ -90,7 +90,7 @@ void DB::createTables()
     //closeDB();
 }
 
-void DB::loadStrctureFromDB(boost::ptr_vector<RSSData> *s_struct)
+void DB::loadStrctureFromDB(Data *data)
 {
     //open data base
     //openDB();
@@ -115,7 +115,7 @@ void DB::loadStrctureFromDB(boost::ptr_vector<RSSData> *s_struct)
         rssData->setURL(query.value( 2 ).toByteArray().data());
         rssData->setType("RSS");
         rssData->setVersion(query.value(3).toByteArray().data());
-        s_struct->push_back(rssData);
+        data->push_back(rssData);
     }
     //close data base
     //closeDB();

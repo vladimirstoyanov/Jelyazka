@@ -35,6 +35,7 @@
 #include "initwindow.h"
 #include "refreshfeedsdata.h"
 #include "about.h"
+#include "data.h"
 
 namespace Ui {
 class MainWindow;
@@ -58,6 +59,7 @@ private:
     ViewWindow *view_window;
     CAnimateWindow *aw;
     SiteStruct *s_struct;
+    Data *data;
     RefreshFeedsData *rfd;
     About *about_gui;
 

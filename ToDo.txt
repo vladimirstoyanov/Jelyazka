@@ -8,6 +8,7 @@ the custom button doesn't change it state (it is looke like the cursor is in it)
 - sometimes in 'description view' any symbols doesn't encoded properly;
 - ToolTips doens't appear when 'animatewindow' is appearing.
 - 'mailto' urls are recording too;
+- it appear link of combobox in main window; (everytime when the new rss feed is added)
 
 =============Tasks==================
 - integrate youtube;

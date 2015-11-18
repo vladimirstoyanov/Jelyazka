@@ -39,6 +39,7 @@
 #include "help.h"
 #include "db.h"
 #include "rssarticle.h"
+#include "data.h"
 
 namespace Ui {
 class ViewWindow;
@@ -54,7 +55,7 @@ class ViewWindow : public QWidget
 public:
     QList<QString> l_filters;
 
-    explicit ViewWindow(QWidget *parent = 0, SiteStruct *tmp_site_struct=NULL);
+    explicit ViewWindow(QWidget *parent = 0, SiteStruct *tmp_site_struct=NULL, Data *data_tmp=NULL);
     ~ViewWindow();
 
     void initDataInComboBoxFromStructure();
@@ -106,6 +107,7 @@ private:
     QPoint curPoint;
     QPoint movePointPos;
     QPoint resizePoint;
+    Data *data;
 
     void initDataInComboBox();
     void addToCombobox(QString str);

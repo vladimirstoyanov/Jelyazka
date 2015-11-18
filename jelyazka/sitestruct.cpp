@@ -18,15 +18,16 @@
 */
 #include "sitestruct.h"
 
-SiteStruct::SiteStruct()
+SiteStruct::SiteStruct(Data *data_tmp)
     : QRunnable()
 {
+    data = data_tmp;
     first_load = false;
     isAddOption = true;
 
     network_proxy = NULL;
 
-    db.loadStrctureFromDB (&s_struct);
+    db.loadStrctureFromDB (data);
 
     mutex = new QMutex();
     tp = new QThreadPool(this);
@@ -52,12 +53,12 @@ void SiteStruct::synchronizeData(int struct_index, QString content)
 
     QList <RSSArticle> tmp_struct;
 
-    if (s_struct.size()<=struct_index)
+    if (data->size()<=struct_index)
         return;
 
-    if (s_struct[struct_index].getArticlesSize()==0) //if articles list is empty
+    if (data->at(struct_index)->getArticlesSize()==0) //if articles list is empty
     {
-        if(s_struct[struct_index].getVersion() == "2005")
+        if(data->at(struct_index)->getVersion() == "2005")
             getArticlesForIndexRSS2(content,struct_index);
         else
             getArticlesForIndexRSS(content,struct_index);
@@ -65,14 +66,14 @@ void SiteStruct::synchronizeData(int struct_index, QString content)
     }
 
     RSSArticle ar;
-    if(s_struct[struct_index].getVersion() == "2005")
+    if(data->at(struct_index)->getVersion() == "2005")
          findSiteDataRSS2(index, content, ar);
     else
         findSiteDataRSS(index, content,  ar);
-    while (ar.getLink() != s_struct[struct_index].articleAt(0).getLink() && index!=-1) //synchronize
+    while (ar.getLink() != data->at(struct_index)->articleAt(0).getLink() && index!=-1) //synchronize
     {
         tmp_struct.push_back(ar);
-        if(s_struct[struct_index].getVersion() == "2005")
+        if(data->at(struct_index)->getVersion() == "2005")
             findSiteDataRSS2(index,content, ar);
         else
             findSiteDataRSS(index, content, ar);
@@ -89,9 +90,9 @@ void SiteStruct::synchronizeData(int struct_index, QString content)
     //adding new data
     for (int i=0; i<tmp_struct.size(); i++)
     {
-        if (INT_SIZE<=s_struct.at(struct_index).getArticlesSize())
-            s_struct.at(struct_index).eraseArticleAt(s_struct.at(struct_index).getArticlesSize()-1);
-        s_struct.at(struct_index).articlesPushFront(tmp_struct[i]);
+        if (INT_MAX<=data->at(struct_index)->getArticlesSize())
+            data->at(struct_index)->eraseArticleAt(data->at(struct_index)->getArticlesSize()-1);
+        data->at(struct_index)->articlesPushFront(tmp_struct[i]);
     }
 
 }
@@ -199,12 +200,12 @@ void SiteStruct::run() //runnning another thread (synchronize data for n time)
 
     mutex->lock();
     int index=-1;
-    for (uint i=0; i<s_struct.size(); i++)
+    for (uint i=0; i<data->size(); i++)
     {
-        if (!s_struct.at(i).getIsRead())
+        if (!data->at(i)->getIsRead())
         {
             index = i;
-            s_struct.at(i).setIsRead(true);// = true;
+            data->at(i)->setIsRead(true);// = true;
             break;
         }
     }
@@ -213,11 +214,11 @@ void SiteStruct::run() //runnning another thread (synchronize data for n time)
         return;
 
     content = "";
-    if (http.getQuery(s_struct.at(index).getURL(),content))
+    if (http.getQuery(data->at(index)->getURL(),content))
     {
-        qDebug()<<s_struct.at(index).getURL() + ": http get query has been failed!";
+        qDebug()<<data->at(index)->getURL() + ": http get query has been failed!";
         mutex->lock();
-        s_struct.at(index).setIsLoaded(true); //= true;
+        data->at(index)->setIsLoaded(true); //= true;
         if (!checkIsLoaded())
         {
             mutex->unlock();
@@ -228,12 +229,12 @@ void SiteStruct::run() //runnning another thread (synchronize data for n time)
     }
     mutex->lock();
     if (first_load == 0)
-        emit loadRSS(s_struct.at(index).getSiteName(), s_struct.at(index).getURL());
+        emit loadRSS(data->at(index)->getSiteName(), data->at(index)->getURL());
     if (isAddOption == 0)
-        emit Finish(s_struct[index].getSiteName(), 0);
+        emit Finish(data->at(index)->getSiteName(), 0);
     synchronizeData(index,content);
-    qDebug()<<"index:" + QString::number(index) + "url:" + s_struct[index].getURL() + " count:"  + QString::number(s_struct[index].getArticlesSize());
-    s_struct[index].setIsLoaded(true);// = true;
+    qDebug()<<"index:" + QString::number(index) + "url:" + data->at(index)->getURL() + " count:"  + QString::number(data->at(index)->getArticlesSize());
+    data->at(index)->setIsLoaded(true);// = true;
     checkIsLoaded();
     mutex->unlock();
 }
@@ -302,14 +303,14 @@ int SiteStruct::getArticlesForIndexRSS(QString content,uint struct_index)
         art.setText(text);
         art.setTitle(title);
 
-        if (INT_SIZE <= s_struct[struct_index].getArticlesSize()) //prevent int overflow
+        if (INT_MAX <= data->at(struct_index)->getArticlesSize()) //prevent int overflow
         {
-            s_struct[struct_index].eraseArticleAt(s_struct[struct_index].getArticlesSize()-1);
-            s_struct[struct_index].articlesPushFront(art);
+            data->at(struct_index)->eraseArticleAt(data->at(struct_index)->getArticlesSize()-1);
+            data->at(struct_index)->articlesPushFront(art);
             continue;
         }
 
-        s_struct[struct_index].articlesPushBack(art);
+        data->at(struct_index)->articlesPushBack(art);
     }
     return 0;
 }
@@ -353,14 +354,14 @@ int SiteStruct::getArticlesForIndexRSS2(QString content,uint struct_index)
         art.setText(text);
         art.setTitle(title);
 
-        if (INT_SIZE <= s_struct[struct_index].getArticlesSize()) //prevent int overflow
+        if (INT_MAX <= data->at(struct_index)->getArticlesSize()) //prevent int overflow
         {
-            s_struct[struct_index].eraseArticleAt(s_struct[struct_index].getArticlesSize()-1);
-            s_struct[struct_index].articlesPushFront(art);
+            data->at(struct_index)->eraseArticleAt(data->at(struct_index)->getArticlesSize()-1);
+            data->at(struct_index)->articlesPushFront(art);
             continue;
         }
 
-        s_struct[struct_index].articlesPushBack(art);
+        data->at(struct_index)->articlesPushBack(art);
 
     }
     return 0;
@@ -564,19 +565,19 @@ int SiteStruct::checkIsLoaded()
 {
     uint count = 0;
 
-    for (uint i = 0; i< s_struct.size(); i++)
-        if (s_struct[i].getIsLoaded())
+    for (uint i = 0; i< data->size(); i++)
+        if (data->at(i)->getIsLoaded())
             count++;
 
 
-    if (count == s_struct.size() && first_load == false)
+    if (count == data->size() && first_load == false)
     {
         first_load = true;
         emit loadRSS("","");
         return 0;
     }
 
-    if (count == s_struct.size() && isAddOption == false)
+    if (count == data->size() && isAddOption == false)
     {
         emit Finish("", true);
         isAddOption = true;

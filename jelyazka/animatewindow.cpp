@@ -129,20 +129,20 @@ void CAnimateWindow::mousePressEvent ( QMouseEvent * e )
         this->hide();
 }
 
-void CAnimateWindow::onShowAnimateWindow(QString data)
+void CAnimateWindow::onShowAnimateWindow(QString data_str)
 {
     QString html_source="";
-    if (data== "")
+    if (data_str== "")
         return;
 
-    QList<int> indexes = getIndexes(data);
+    QList<int> indexes = getIndexes(data_str);
     if (indexes.size() == 0)
         return;
 
     for (int i=0; i<indexes.size(); i++)
-        if (site_struct->s_struct.size()>indexes[i])
-            if (site_struct->s_struct[indexes[i]].getArticlesSize()>0)
-                html_source+="<a href = \""+site_struct->s_struct[indexes[i]].articleAt(0).getLink() + "\" style=\"color: #000000\">"+site_struct->s_struct[indexes[i]].getSiteName() +": " + site_struct->s_struct[indexes[i]].articleAt(0).getTitle()+ "</a><br><hr>";
+        if (data->size()>indexes[i])
+            if (data->at(indexes[i])->getArticlesSize()>0)
+                html_source+="<a href = \""+data->at(indexes[i])->articleAt(0).getLink() + "\" style=\"color: #000000\">"+data->at(indexes[i])->getSiteName() +": " + data->at(indexes[i])->articleAt(0).getTitle()+ "</a><br><hr>";
 
     //Add links
     ui->textBrowser->setHtml(html_source);
@@ -162,9 +162,9 @@ void CAnimateWindow::on_animation_finished2()
 }
 
 //Get indexes from data string
-QList<int> CAnimateWindow::getIndexes(QString data)
+QList<int> CAnimateWindow::getIndexes(QString data_str)
 {
-    QStringList split = data.split("<index=");
+    QStringList split = data_str.split("<index=");
     QList<int> indexes;
 
     if (split.size() == 0)
@@ -177,7 +177,7 @@ QList<int> CAnimateWindow::getIndexes(QString data)
         {
             tmp_str.remove(tmp_str.length()-1, 1);
             int index = tmp_str.toInt();
-            if (index>site_struct->s_struct.size() || index < 0)
+            if (index>data->size() || index < 0)
                 continue;
             indexes.append(index);
         }
@@ -186,9 +186,10 @@ QList<int> CAnimateWindow::getIndexes(QString data)
 }
 
 //make connection to SiteStruct instance.
-void CAnimateWindow::setSignal(SiteStruct *s_struct)
+void CAnimateWindow::setSignal(SiteStruct *s_struct, Data *data_tmp)
 {
     site_struct = s_struct;
+    data = data_tmp;
     connect(s_struct,SIGNAL(showAnimateWindow(QString)),this,SLOT(onShowAnimateWindow(QString)));
 }
 

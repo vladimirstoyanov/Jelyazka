@@ -23,11 +23,12 @@
 #include "rssarticle.h"
 #include <QDebug>
 
-WebSearchInterface::WebSearchInterface(QWidget *parent, SiteStruct *tmp_site_struct, ViewWindow *view_window) :
+WebSearchInterface::WebSearchInterface(QWidget *parent, SiteStruct *tmp_site_struct, ViewWindow *view_window, Data *data_tmp) :
     QWidget(parent),
     ui(new Ui::WebSearchInterface)
 {
     ui->setupUi(this);
+    data = data_tmp;
 
     this->setMinimumHeight(200);
     this->setMinimumWidth(350);
@@ -162,8 +163,8 @@ int WebSearchInterface::checkSiteStructForExistingURL(QString url)
     if (site_struct == NULL)
         return 1;
 
-    for (uint i=0; i<site_struct->s_struct.size(); i++)
-        if (url == site_struct->s_struct[i].getURL())
+    for (uint i=0; i<data->size(); i++)
+        if (url == data->at(i)->getURL())
             return 1;
 
     return 0;
@@ -296,7 +297,7 @@ void WebSearchInterface::onFoundRSS(int type, QString name, QString url, QString
             name = change_name(name); //make unique name
         treeInsert(tn, name);
 
-        if (INT_SIZE<=old_names.size())
+        if (INT_MAX<=old_names.size())
             return;
 
         old_names.push_back(new QString(name));
@@ -406,15 +407,15 @@ void WebSearchInterface::on_pushButton_2_clicked() //add RSS feeds button
         db.insertIntoCollectFeeds(feeds_struct_tmp_iterator->getSiteName(), feeds_struct_tmp_iterator->getURL(),version);
         db.insertIntoFavoriteFeeds(feeds_struct_tmp_iterator->getSiteName(), feeds_struct_tmp_iterator->getURL(), version);
 
-        if (INT_SIZE<=site_struct->s_struct.size()) //prevent int overflow
+        if (INT_MAX<=data->size()) //prevent int overflow
         {
-            QMessageBox::critical(0,"Error","Size of RSS feeds must be less than from " + QString::number(INT_SIZE) + "! Please remove any RSS feeds!");
+            QMessageBox::critical(0,"Error","Size of RSS feeds must be less than from " + QString::number(INT_MAX) + "! Please remove any RSS feeds!");
             break;
         }
 
         //add to 'site_struct'
-        site_struct->s_struct.push_back(site_struct->initStruct(feeds_struct_tmp_iterator->getURL(),"RSS",feeds_struct_tmp_iterator->getURL()));
-        site_struct->s_struct[site_struct->s_struct.size()-1].setVersion(version);
+        data->push_back(site_struct->initStruct(feeds_struct_tmp_iterator->getSiteName(),"RSS",feeds_struct_tmp_iterator->getURL()));
+        data->at(data->size()-1)->setVersion(version);
 
         //adding data (titles, links, descriptions)
         RSSArticle art;
@@ -424,7 +425,7 @@ void WebSearchInterface::on_pushButton_2_clicked() //add RSS feeds button
             art.setLink(feeds_struct_tmp_iterator->articleAt(i).getLink());
             art.setText(feeds_struct_tmp_iterator->articleAt(i).getText());
 
-            site_struct->s_struct[site_struct->s_struct.size()-1].articlesPushBack(art);
+            data->at(data->size()-1)->articlesPushBack(art);
         }
     }
 
@@ -493,7 +494,7 @@ int WebSearchInterface::getArticlesForIndexRSS(QString content, QString rss_name
 
         site_struct->getDescription(item_b_index, item_e_index, description, content);
 
-        if (INT_SIZE <= rd->getArticlesSize()) //prevent int overflow
+        if (INT_MAX <= rd->getArticlesSize()) //prevent int overflow
             break;
 
         f.setLink(link);
@@ -502,7 +503,7 @@ int WebSearchInterface::getArticlesForIndexRSS(QString content, QString rss_name
         rd->articlesPushBack(f);
     }
 
-    if (INT_SIZE<=feeds_struct_tmp.size())
+    if (INT_MAX<=feeds_struct_tmp.size())
         return 1;
 
     feeds_struct_tmp.push_back(rd);
@@ -546,7 +547,7 @@ int WebSearchInterface::getArticlesForIndexRSS2(QString content, QString rss_nam
         site_struct->convert_string(link, true);
         site_struct->getContent(item_b_index, item_e_index, desctiption, content);
 
-        if (INT_SIZE <= rd->getArticlesSize()) //prevent int overflow
+        if (INT_MAX <= rd->getArticlesSize()) //prevent int overflow
             break;
 
         f.setLink(link);
@@ -555,7 +556,7 @@ int WebSearchInterface::getArticlesForIndexRSS2(QString content, QString rss_nam
         rd->articlesPushBack(f);
     }
 
-    if (INT_SIZE<=feeds_struct_tmp.size()) //prevent int overflow
+    if (INT_MAX<=feeds_struct_tmp.size()) //prevent int overflow
         return 1;
 
     feeds_struct_tmp.push_back(rd);

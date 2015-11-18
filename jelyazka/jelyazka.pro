@@ -32,7 +32,9 @@ SOURCES += main.cpp\
     db.cpp \
     rssdata.cpp \
     rssarticle.cpp \
-    http.cpp
+    http.cpp \
+    parserss.cpp \
+    data.cpp
 
 HEADERS  += mainwindow.h \
     sitestruct.h \
@@ -50,7 +52,9 @@ HEADERS  += mainwindow.h \
     db.h \
     rssdata.h \
     rssarticle.h \
-    http.h
+    http.h \
+    parserss.h \
+    data.h
 
 FORMS    += mainwindow.ui \
     viewwindow.ui \

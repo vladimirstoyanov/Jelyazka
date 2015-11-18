@@ -19,10 +19,11 @@
 #include "refreshfeedsdata.h"
 #include <QDebug>
 
-RefreshFeedsData::RefreshFeedsData(QObject *parent, SiteStruct *ss) :
+RefreshFeedsData::RefreshFeedsData(QObject *parent, SiteStruct *ss, Data *data_tmp) :
     QThread(parent)
 {
     site_struct = ss;
+    data = data_tmp;
 }
 
 RefreshFeedsData::~RefreshFeedsData()
@@ -42,7 +43,7 @@ void RefreshFeedsData::run() //refresh feeds
         qDebug()<<"run():After sleep...";
 
         site_struct->data_for_animatewindow = "";
-        int n = site_struct->s_struct.size();
+        int n = data->size();
 
 
         for (int i=0; i<n; i++)
@@ -50,12 +51,12 @@ void RefreshFeedsData::run() //refresh feeds
             content="";
             qDebug()<<"Trying to refresh in RefreshFeedsData, index: " + QString::number(i);
 
-            if (site_struct->s_struct.size()<=i)
+            if (data->size()<=i)
             {
                 qDebug()<<"site_struct->s_struct.size()<=i";
                 break;
             }
-            QString url = site_struct->s_struct[i].getURL();
+            QString url = data->at(i)->getURL();
             if (http.getQuery(url,content))
             {
                 qDebug()<<"Fail to connect: "<<url;
@@ -64,7 +65,7 @@ void RefreshFeedsData::run() //refresh feeds
 
             qDebug()<<"Download data in RefreshFeedsData, index: " + QString::number(i);
 
-            if (site_struct->s_struct.size()<=i)
+            if (data->size()<=i)
             {
                 qDebug()<<"site_struct->s_struct.size()<=i";
                 break;

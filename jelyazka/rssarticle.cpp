@@ -21,6 +21,11 @@ QString RSSArticle::getText()
     return text;
 }
 
+QString RSSArticle::getDate()
+{
+    return date;
+}
+
 //set
 void RSSArticle::setTitle(QString title_tmp)
 {
@@ -35,4 +40,9 @@ void RSSArticle::setLink(QString link_tmp)
 void RSSArticle::setText(QString text_tmp)
 {
     text = text_tmp;
+}
+
+void RSSArticle::setDate(QString date_)
+{
+    date = date;
 }

@@ -44,6 +44,8 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "rssarticle.h"
 #include "rssdata.h"
+#include "data.h"
+#include <limits.h>
 
 namespace Ui {
 class WebSearchInterface;
@@ -56,7 +58,7 @@ class WebSearchInterface : public QWidget
     Q_OBJECT
 
 public:
-    explicit WebSearchInterface(QWidget *parent = 0, SiteStruct *tmp_site_struct=NULL, ViewWindow *view_window=NULL);
+    explicit WebSearchInterface(QWidget *parent = 0, SiteStruct *tmp_site_struct=NULL, ViewWindow *view_window=NULL, Data *data_tmp = NULL);
     ~WebSearchInterface();
     WebSearchInterfaceThread *mThread;
 
@@ -84,6 +86,7 @@ private:
     bool userEdit;
     bool programEdit;
     DB db;
+    Data *data;
 
     struct TreeNode {
        QString item;

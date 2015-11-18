@@ -22,12 +22,13 @@
 #include <QStyle>
 
 
-ViewWindow::ViewWindow(QWidget *parent, SiteStruct *tmp_site_struct):
+ViewWindow::ViewWindow(QWidget *parent, SiteStruct *tmp_site_struct, Data *data_tmp):
     QWidget(parent),
     ui(new Ui::ViewWindow)
 {
     ui->setupUi(this);
 
+    data = data_tmp;
     //make window without frames
     this->setWindowFlags( Qt::FramelessWindowHint);
 
@@ -42,9 +43,9 @@ ViewWindow::ViewWindow(QWidget *parent, SiteStruct *tmp_site_struct):
     help_gui = new Help();
 
     site_struct = tmp_site_struct;
-    wsi = new WebSearchInterface (0, site_struct, this);
+    wsi = new WebSearchInterface (0, site_struct, this, data);
 
-    ow = new OptionsWindow(0,site_struct, this);
+    ow = new OptionsWindow(0,site_struct, this, data);
     connect(site_struct,SIGNAL(Finish(QString, bool)),ow,SLOT(onFinish(QString, bool)));
 
     isXchanged = 0;
@@ -174,9 +175,9 @@ void ViewWindow::initTextBrowser()
 
     //find index of ui->comboBox->currentText() in 's_struct' structure
     int index=-1;
-    for (uint i=0; i<site_struct->s_struct.size(); i++)
+    for (uint i=0; i<data->size(); i++)
     {
-        if (site_struct->s_struct[i].getSiteName()==cur_text)
+        if (data->at(i)->getSiteName()==cur_text)
         {
             index = i;
             break;
@@ -200,7 +201,7 @@ void ViewWindow::onUpdate(QList<bool> l_items_for_remove)
     for (int i=l_items_for_remove.size()-1; i>=0; i--)
     {
         if (l_items_for_remove[i]==0)
-            site_struct->s_struct.erase(site_struct->s_struct.begin() + i);
+            data->erase(i);
     }
 
     initDataInComboBoxFromStructure();
@@ -212,8 +213,11 @@ void ViewWindow::initDataInComboBoxFromStructure()
 {
     ui->comboBox->clear();
 
-    for (uint i=0; i<site_struct->s_struct.size(); i++)
-        addToCombobox(site_struct->s_struct[i].getSiteName());
+    for (int i=0; i<data->size(); i++)
+    {
+        //QString site_name = data->at(i)->getSiteName();
+        addToCombobox(data->at(i)->getSiteName());
+    }
 }
 
 void ViewWindow::addToCombobox(QString str)
@@ -227,18 +231,18 @@ void ViewWindow::addToCombobox(QString str)
 
 int ViewWindow::showArticle(int struct_index, int article_index)
 {
-    if (struct_index>=site_struct->s_struct.size()||struct_index<0)
+    if (struct_index>=data->size()||struct_index<0)
     {
          //qDebug()<<"show article first if.";
         return 0;
     }
-    if (site_struct->s_struct[struct_index].getArticlesSize() == 0)
+    if (data->at(struct_index)->getArticlesSize() == 0)
     {
         //qDebug()<<"show article second if.";
         ui->textBrowser->setHtml("");
         return 0;
     }
-    if (article_index>=site_struct->s_struct[struct_index].getArticlesSize()||article_index<0)
+    if (article_index>=data->at(struct_index)->getArticlesSize()||article_index<0)
     {
         if (!show_flag)
             ui->textBrowser->setHtml("");
@@ -246,7 +250,7 @@ int ViewWindow::showArticle(int struct_index, int article_index)
         return 0;
     }
 
-    QString title_tmp = site_struct->s_struct[struct_index].articleAt(article_index).getTitle(),text_tmp = site_struct->s_struct[struct_index].articleAt(article_index).getText();
+    QString title_tmp = data->at(struct_index)->articleAt(article_index).getTitle(),text_tmp = data->at(struct_index)->articleAt(article_index).getText();
     if (!checkForFilters(title_tmp, text_tmp))
     {
         show_flag = false;
@@ -256,7 +260,7 @@ int ViewWindow::showArticle(int struct_index, int article_index)
     }
     show_flag = true;
 
-    ui->textBrowser->setHtml(QString("<h2>%1</h2>\nLink: <a href=\"%2\">%2</a><br><br>%3").arg(title_tmp,site_struct->s_struct[struct_index].articleAt(article_index).getLink(),text_tmp));
+    ui->textBrowser->setHtml(QString("<h2>%1</h2>\nLink: <a href=\"%2\">%2</a><br><br>%3").arg(title_tmp,data->at(struct_index)->articleAt(article_index).getLink(),text_tmp));
 
     return 1;
 }
@@ -417,21 +421,22 @@ void ViewWindow::refreshFeed()
     QString content="";
 
     HTTP http;
-    if (site_struct->s_struct.size()<=current_site_index || current_site_index<0 || site_struct->s_struct.size() == 0)
+    if (data->size()<=current_site_index || current_site_index<0 || data->size() == 0)
     {
         QApplication::restoreOverrideCursor();
         return;
     }
-    if (!http.getQuery(site_struct->s_struct[current_site_index].getURL(),content))
+    if (!http.getQuery(data->at(current_site_index)->getURL(),content))
     {
         site_struct->synchronizeData(current_site_index, content);
-        if (site_struct->s_struct[current_site_index].getArticlesSize()<=current_article_index)
+        if (data->at(current_site_index)->getArticlesSize()<=current_article_index)
             current_article_index = 0;
         showArticle(current_site_index,current_article_index);
 
     }
     QApplication::restoreOverrideCursor();
 }
+
 void ViewWindow::mouseDblClicked(QMouseEvent * mouseEvent)
 {
     if (mouseEvent -> button() == Qt::LeftButton) {
