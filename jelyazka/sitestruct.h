@@ -77,7 +77,7 @@ public:
     bool getEnabledNotificationWindow(){return enabled_notification_window;}
     void emitAnimateWindow();
     int getTextBetweenIndexes(int item_b_index, int item_e_index, QString begin_text, QString end_text, QString &text, QString content);
-    int getDescription(int item_b_index, int item_e_index, QString &description, QString content);
+    //int getDescription(int item_b_index, int item_e_index, QString &description, QString content);
     QString convert_entitie(QString entitie);
     void convert_string (QString &str, bool link);
     QString returnURL(QString source, int index);
@@ -98,10 +98,10 @@ private:
     ParseRSS *parseRSS;
 
     void loadOptions();
-    void findSiteDataRSS(int &index, QString content, RSSArticle &ar); //QString &title, QString &link, QString &text);
-    void findSiteDataRSS2(int &index, QString content, RSSArticle &ar); // QString &title, QString &link, QString &text);
-    int getArticlesForIndexRSS(QString content,uint struct_index);
-    int getArticlesForIndexRSS2(QString content,uint struct_index);
+    //void findSiteDataRSS(int &index, QString content, RSSArticle &ar); //QString &title, QString &link, QString &text);
+    //void findSiteDataRSS2(int &index, QString content, RSSArticle &ar); // QString &title, QString &link, QString &text);
+    //int getArticlesForIndexRSS(QString content,uint struct_index);
+    //int getArticlesForIndexRSS2(QString content,uint struct_index);
     int checkIsLoaded();
 };
 

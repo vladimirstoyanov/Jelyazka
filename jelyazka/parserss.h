@@ -15,10 +15,10 @@ public:
     //site struct
     int getTextBetweenIndexes(int item_b_index, int item_e_index, QString begin_text, QString end_text, QString &text, QString content);
     int getDescription(int item_b_index, int item_e_index, QString &description, QString content);
-    void findSiteDataRSS(int &index, QString content, RSSArticle &ar); //QString &title, QString &link, QString &text);
-    void findSiteDataRSS2(int &index, QString content, RSSArticle &ar); // QString &title, QString &link, QString &text);
-    int getArticlesFromRSSContent(QString content, RSSData *data);
-    int getArticlesFromRDFContent(QString content, RSSData *data);
+    void findFeedDataRSS(int &index, QString content, RSSArticle &ar); //+
+    void findFeedDataRDF(int &index, QString content, RSSArticle &ar); //+
+    int getArticlesFromRSSContent(QString content, RSSData *data); //+
+    int getArticlesFromRDFContent(QString content, RSSData *data); //+
     void convert_string (QString &str, bool link);
     QString returnURL(QString source, int index);
     int getContent(int item_b_index, int item_e_index, QString &description, QString content);

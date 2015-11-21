@@ -60,24 +60,25 @@ void SiteStruct::synchronizeData(int struct_index, QString content)
     if (data->at(struct_index)->getArticlesSize()==0) //if articles list is empty
     {
         if(data->at(struct_index)->getVersion() == "2005")
-            getArticlesForIndexRSS2(content,struct_index);
+            parseRSS->getArticlesFromRDFContent(content,  data->at(struct_index));
         else
-            getArticlesForIndexRSS(content,struct_index);
+            parseRSS->getArticlesFromRSSContent(content,  data->at(struct_index));
+
         return;
     }
 
     RSSArticle ar;
     if(data->at(struct_index)->getVersion() == "2005")
-         findSiteDataRSS2(index, content, ar);
+        parseRSS->findFeedDataRDF(index,content,ar);//findSiteDataRSS2(index, content, ar);
     else
-        findSiteDataRSS(index, content,  ar);
+        parseRSS->findFeedDataRSS(index, content,  ar);
     while (ar.getLink() != data->at(struct_index)->articleAt(0).getLink() && index!=-1) //synchronize
     {
         tmp_struct.push_back(ar);
         if(data->at(struct_index)->getVersion() == "2005")
-            findSiteDataRSS2(index,content, ar);
+            parseRSS->findFeedDataRDF(index,content, ar);
         else
-            findSiteDataRSS(index, content, ar);
+            parseRSS->findFeedDataRSS(index, content, ar);
     }
 
     if (tmp_struct.size()==0)
@@ -96,102 +97,6 @@ void SiteStruct::synchronizeData(int struct_index, QString content)
         data->at(struct_index)->articlesPushFront(tmp_struct[i]);
     }
 
-}
-
-void SiteStruct::findSiteDataRSS(int &index, QString content, RSSArticle &ar) //QString &title, QString &link, QString &text)
-{
-    int item_b_index=index, item_e_index=index;
-    CSearch cs;
-    int n = content.length();
-
-    while (1)
-    {
-         cs.search_After(content,"<item", &item_b_index);
-         if (item_b_index == -1) // if not found <item
-         {
-             index = -1;
-             return;
-         }
-
-         item_e_index = item_b_index;
-         cs.search_Before(content,"</item", &item_e_index);
-
-         if (item_e_index == -1)
-         {
-             index = -1;
-             return;
-         }
-
-         if (item_b_index<n)
-         {
-             if (content[item_b_index] == 's') //if found <items tag
-                 continue;
-         }
-         index = item_e_index;
-         break;
-    }
-
-    index = item_e_index;
-    QString title, link, text;
-
-    if(getTextBetweenIndexes(item_b_index, item_e_index, "<title>", "</title>", title, content))
-         return;
-    convert_string(title, false);
-    if (getTextBetweenIndexes(item_b_index, item_e_index, "<link>", "</link>", link,content))
-         return;
-    convert_string(link, true);
-    getDescription(item_b_index, item_e_index, text, content);
-
-    ar.setLink(link);
-    ar.setText(text);
-    ar.setTitle(title);
-}
-
-void SiteStruct::findSiteDataRSS2(int &index, QString content, RSSArticle &ar)// QString &title, QString &link, QString &text)
-{
-    int item_b_index=index, item_e_index=index;
-    CSearch cs;
-
-     while (1)
-     {
-         cs.search_After(content,"<entry", &item_b_index);
-         if (item_b_index == -1) // if not found <item
-         {
-             index = -1;
-             return;
-         }
-
-         item_e_index = item_b_index;
-         cs.search_Before(content,"</entry", &item_e_index);
-
-         if (item_e_index == -1)
-         {
-             index = -1;
-             return;
-         }
-
-         index = item_e_index;
-         break;
-     }
-
-     index = item_e_index;
-     QString title, link, text;
-
-     if(getTextBetweenIndexes(item_b_index, item_e_index, "<title", "</title>", title, content))
-         return;
-     convert_string(title, false);
-     int index_link = item_b_index;
-     cs.search_Before(content, "<link", &index_link);
-     if (index_link == -1 || index_link>item_e_index)
-         return;
-     link = returnURL(content, index_link);
-     convert_string(link, true);
-
-     getContent(item_b_index, item_e_index, text, content);
-
-     ar.setLink(link);
-     ar.setText(text);
-     ar.setTitle(title);
 }
 
 void SiteStruct::run() //runnning another thread (synchronize data for n time)
@@ -264,116 +169,6 @@ void SiteStruct::emitAnimateWindow()
     emit showAnimateWindow(data_for_animatewindow);
 }
 
-//Get articles from rss source
-int SiteStruct::getArticlesForIndexRSS(QString content,uint struct_index)
-{
-    parseRSS->getArticlesFromRSSContent(content,  data->at(struct_index));
-
-    /*
-    int item_b_index=0, item_e_index=0;
-    CSearch cs;
-    int n = content.length();
-
-    while(1)
-    {
-        cs.search_After(content,"<item", &item_b_index);
-        if (item_b_index == -1)
-            break;
-
-        item_e_index = item_b_index;
-        cs.search_Before(content,"</item", &item_e_index);
-
-        if (item_e_index == -1)
-            break;
-
-        if (item_b_index<n)
-        {
-            if (content[item_b_index] == 's') //if found <items tag
-                continue;
-        }
-
-        QString title, link, text;
-        if(getTextBetweenIndexes(item_b_index, item_e_index, "<title>", "</title>", title, content))
-            break;
-        convert_string(title, false);
-        if (getTextBetweenIndexes(item_b_index, item_e_index, "<link>", "</link>", link,content))
-            break;
-
-        convert_string(link, true);
-        getDescription(item_b_index, item_e_index, text, content);
-
-        RSSArticle art;
-        art.setLink(link);
-        art.setText(text);
-        art.setTitle(title);
-
-        if (INT_MAX <= data->at(struct_index)->getArticlesSize()) //prevent int overflow
-        {
-            data->at(struct_index)->eraseArticleAt(data->at(struct_index)->getArticlesSize()-1);
-            data->at(struct_index)->articlesPushFront(art);
-            continue;
-        }
-
-        data->at(struct_index)->articlesPushBack(art);
-    }
-    */
-    return 0;
-}
-
-//Get articles from rdf xml
-int SiteStruct::getArticlesForIndexRSS2(QString content,uint struct_index)
-{
-    parseRSS->getArticlesFromRDFContent(content,  data->at(struct_index));
-    /*
-    int item_b_index=0, item_e_index=0;
-    CSearch cs;
-    //int n = content.length();
-
-    while(1)
-    {
-        cs.search_After(content,"<entry", &item_b_index);
-        if (item_b_index == -1)
-            break;
-
-        item_e_index = item_b_index;
-        cs.search_Before(content,"</entry", &item_e_index);
-
-        if (item_e_index == -1)
-            break;
-
-        QString title, link, text;
-
-        if(getTextBetweenIndexes(item_b_index, item_e_index, "<title", "</title>", title, content))
-            break;
-
-        convert_string(title, false);
-
-        int index_link = item_b_index;
-        cs.search_Before(content, "<link", &index_link);
-        if (index_link == -1 || index_link>item_e_index)
-            break;
-        link = returnURL(content, index_link);
-        convert_string(link, true);
-        getContent(item_b_index, item_e_index, text, content);
-
-        RSSArticle art;
-        art.setLink(link);
-        art.setText(text);
-        art.setTitle(title);
-
-        if (INT_MAX <= data->at(struct_index)->getArticlesSize()) //prevent int overflow
-        {
-            data->at(struct_index)->eraseArticleAt(data->at(struct_index)->getArticlesSize()-1);
-            data->at(struct_index)->articlesPushFront(art);
-            continue;
-        }
-
-        data->at(struct_index)->articlesPushBack(art);
-
-    }
-    */
-    return 0;
-}
 
 int SiteStruct::getTextBetweenIndexes(int item_b_index, int item_e_index, QString begin_text, QString end_text, QString &text, QString content)
 {
@@ -410,83 +205,6 @@ int SiteStruct::getTextBetweenIndexes(int item_b_index, int item_e_index, QStrin
 
     return 0;
 
-}
-
-int SiteStruct::getDescription(int item_b_index, int item_e_index, QString &description, QString content)
-{
-    CSearch cs;
-    int tag_b_index, tag_e_index;
-
-    tag_b_index =item_b_index;
-    cs.search_After(content,"<description>", &tag_b_index);
-
-    if (tag_b_index == -1)
-        return 1;
-    if (tag_b_index<item_b_index || tag_b_index > item_e_index)
-        return 1;
-
-    tag_e_index = tag_b_index;
-    cs.search_Before(content, "</description>", &tag_e_index);
-
-    if (tag_e_index == -1)
-        return 1;
-    if (tag_e_index<item_b_index || tag_e_index > item_e_index)
-        return 1;
-
-
-    description = "";
-    bool cdata = false;
-    for (int i=tag_b_index; i <tag_e_index; i++)
-    {
-        if (content[i]=='&' && i+3 < tag_e_index)
-        {
-            if (content[i+1] == 'a' && content[i+2] == 'm' && content[i+3] == 'p')
-            {
-                description+='&';
-                i+=5;
-            }
-            if(content[i+1] == 'l' && content[i+2]=='t' && content[i+3] == ';')
-            {
-                int index_tmp = i;
-                cs.search_After(content,"&gt;",&index_tmp);
-                if (index_tmp == -1)
-                    return 1;
-                if (index_tmp <= tag_e_index)
-                    i = index_tmp-1;
-                continue;
-            }
-        }
-        if (cdata && content[i]=='[')
-            continue;
-        if (cdata && content[i] == ']')
-        {
-            if (i+2>=item_e_index)
-                break;
-            if (content[i+1] == ']' && content[i+2] == '>')
-            {
-                cdata = false;
-                i+=2;
-            }
-            continue;
-        }
-        if (content[i] == '<')
-        {
-            if (item_e_index<=i+9)
-            {
-                description+=content[i];
-                continue;
-            }
-            //<![CDATA["
-            if (content[i+1] == '!' && content[i+2] == '[' && content[i+3] == 'C' && content[i+4] == 'D' && content[i+5] == 'A' && content[i+6] == 'T' && content[i+7] == 'A' && content[i+8] == '[')
-            {
-                i+=8;
-                cdata = true;
-                continue;
-            }
-        }
-        description+=content[i];
-    }
-    return 0;
 }
 
 int SiteStruct::getContent(int item_b_index, int item_e_index, QString &description, QString content)
