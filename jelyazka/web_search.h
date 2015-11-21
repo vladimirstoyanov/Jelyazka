@@ -37,13 +37,11 @@
 #include <QCloseEvent>
 #include <QThreadPool>
 #include "logger.h"
-#include "web_search_interface_thread.h"
+#include "web_search_thread.h"
 #include "sitestruct.h"
 #include "viewwindow.h"
 #include <boost/ptr_container/ptr_list.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
-#include "rssarticle.h"
-#include "rssdata.h"
 #include "data.h"
 #include "parserss.h"
 #include <limits.h>

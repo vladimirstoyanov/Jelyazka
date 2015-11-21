@@ -22,8 +22,6 @@ SOURCES += main.cpp\
     search.cpp \
     animatewindow.cpp \
     logger.cpp \
-    web_search_interface.cpp \
-    web_search_interface_thread.cpp \
     initwindow.cpp \
     optionswindow.cpp \
     refreshfeedsdata.cpp \
@@ -34,7 +32,9 @@ SOURCES += main.cpp\
     rssarticle.cpp \
     http.cpp \
     parserss.cpp \
-    data.cpp
+    data.cpp \
+    web_search.cpp \
+    web_search_thread.cpp
 
 HEADERS  += mainwindow.h \
     sitestruct.h \
@@ -42,8 +42,6 @@ HEADERS  += mainwindow.h \
     search.h \
     animatewindow.h \
     logger.h \
-    web_search_interface.h \
-    web_search_interface_thread.h \
     initwindow.h \
     optionswindow.h \
     refreshfeedsdata.h \
@@ -54,7 +52,9 @@ HEADERS  += mainwindow.h \
     rssarticle.h \
     http.h \
     parserss.h \
-    data.h
+    data.h \
+    web_search.h \
+    web_search_thread.h
 
 FORMS    += mainwindow.ui \
     viewwindow.ui \

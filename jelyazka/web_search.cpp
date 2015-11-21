@@ -16,11 +16,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "web_search_interface.h"
+#include "web_search.h"
 #include "ui_web_search_interface.h"
 #include "http.h"
 #include "search.h"
-#include "rssarticle.h"
 #include <QDebug>
 
 WebSearchInterface::WebSearchInterface(QWidget *parent, SiteStruct *tmp_site_struct, ViewWindow *view_window, Data *data_tmp) :

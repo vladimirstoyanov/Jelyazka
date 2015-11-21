@@ -9,7 +9,6 @@ the custom button doesn't change it state (it is looke like the cursor is in it)
 - ToolTips doens't appear when 'animatewindow' is appearing.
 - 'mailto' urls are recording too;
 - it appear link of combobox in main window; (everytime when the new rss feed is added)
-- I have added only slashdot, but in 'Store RSS feeds' in option is appearing feed from Dnevnik.bg
 
 =============Tasks==================
 - ParseRSS, instead site_struct functions;

@@ -6,7 +6,7 @@
 #include <limits.h>
 #include "rssarticle.h"
 
-class RSSData
+class RSSData: public RSSArticle
 {
 public:
     RSSData();

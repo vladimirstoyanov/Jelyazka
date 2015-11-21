@@ -5,7 +5,7 @@
 #include "rssdata.h"
 #include "rssarticle.h"
 
-class Data
+class Data: public RSSData
 {
 public:
     Data();

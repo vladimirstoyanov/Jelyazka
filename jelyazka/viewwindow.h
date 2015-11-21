@@ -30,7 +30,7 @@
 #include "http.h"
 #include <QMouseEvent>
 #include <QEvent>
-#include "web_search_interface.h"
+#include "web_search.h"
 #include <QPainter>
 #include "optionswindow.h"
 #include <qsizegrip.h>
@@ -38,7 +38,7 @@
 #include <QList>
 #include "help.h"
 #include "db.h"
-#include "rssarticle.h"
+//#include "rssarticle.h"
 #include "data.h"
 
 namespace Ui {

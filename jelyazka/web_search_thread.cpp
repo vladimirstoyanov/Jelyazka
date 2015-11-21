@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "web_search_interface_thread.h"
+#include "web_search_thread.h"
 #include "http.h"
 
 WebSearchInterfaceThread::WebSearchInterfaceThread() :

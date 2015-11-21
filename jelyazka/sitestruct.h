@@ -36,8 +36,6 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <QWaitCondition>
 #include <QTextCodec>
-#include "rssdata.h"
-#include "rssarticle.h"
 #include "db.h"
 #include "data.h"
 #include <limits.h>
@@ -76,12 +74,6 @@ public:
     void setProxySettings();
     bool getEnabledNotificationWindow(){return enabled_notification_window;}
     void emitAnimateWindow();
-    //int getTextBetweenIndexes(int item_b_index, int item_e_index, QString begin_text, QString end_text, QString &text, QString content);
-    //int getDescription(int item_b_index, int item_e_index, QString &description, QString content);
-    //QString convert_entitie(QString entitie);
-    //void convert_string (QString &str, bool link);
-    //QString returnURL(QString source, int index);
-    //int getContent(int item_b_index, int item_e_index, QString &description, QString content);
 
 signals:
     void showAnimateWindow(QString data); //anitate window signal
@@ -98,10 +90,6 @@ private:
     ParseRSS *parseRSS;
 
     void loadOptions();
-    //void findSiteDataRSS(int &index, QString content, RSSArticle &ar); //QString &title, QString &link, QString &text);
-    //void findSiteDataRSS2(int &index, QString content, RSSArticle &ar); // QString &title, QString &link, QString &text);
-    //int getArticlesForIndexRSS(QString content,uint struct_index);
-    //int getArticlesForIndexRSS2(QString content,uint struct_index);
     int checkIsLoaded();
 };
 
