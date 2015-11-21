@@ -1,14 +1,13 @@
 =============Bugs=====================
-- Proxy settings doesn't working;
+- Proxy settings don't work;
 - After update 'favorite rss list' sometimes the program crashes;
 - When the cursor is at some custom button from main window and after that move fast the cursor, then
 the custom button doesn't change it state (it is looke like the cursor is in it);
-- the resize icon doesn't dissapear sometimes;
+- the resize cursor icon doesn't dissapear sometimes;
 - sometimes in 'description view' any symbols doesn't encoded properly;
-- ToolTips doens't appear when 'animatewindow' is appearing.
+- ToolTips doens't appear when 'animatewindow' has appeared.
 - 'mailto' urls are recording too;
-- it appear link of combobox in main window; (everytime when the new rss feed is added)
-- slashdot rss feed doesn't has "pubData tag;
+- There isn't "pubData" tag in slashdot rss xml source ;
 
 =============Futures==================
 - re-design of 'x', 'o', '-' buttons
@@ -16,9 +15,9 @@ the custom button doesn't change it state (it is looke like the cursor is in it)
 - integrate youtube;
 - integrate facebook;
 - integrate twitter; 
-- add image tag to 'description view';
+- add a image to 'description view';
 - get the icon of RSS feed and make it to appear in 'animatewindow';
-- pause button in searching;
+- pause button at searching;
 - history of RSS feeds;
-- understanding JavaScript in 'a href' tags;
+- underst JavaScript in 'a href' tags;
 
