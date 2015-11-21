@@ -41,8 +41,8 @@
 #include "db.h"
 #include "data.h"
 #include <limits.h>
+#include "parserss.h"
 
-//#define INT_SIZE 2147483646
 
 class CAnimateWindow;
 
@@ -95,6 +95,7 @@ private:
     int refresh_time_feeds;
     DB db;
     Data *data;
+    ParseRSS *parseRSS;
 
     void loadOptions();
     void findSiteDataRSS(int &index, QString content, RSSArticle &ar); //QString &title, QString &link, QString &text);

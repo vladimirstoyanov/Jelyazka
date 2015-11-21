@@ -29,6 +29,7 @@ WebSearchInterface::WebSearchInterface(QWidget *parent, SiteStruct *tmp_site_str
 {
     ui->setupUi(this);
     data = data_tmp;
+    parseRSS = new ParseRSS(data);
 
     this->setMinimumHeight(200);
     this->setMinimumWidth(350);
@@ -302,10 +303,24 @@ void WebSearchInterface::onFoundRSS(int type, QString name, QString url, QString
 
         old_names.push_back(new QString(name));
 
+        RSSData *rd = new RSSData();
+        rd->setSiteName(name);
+        rd->setURL(url);
+
+
         if (!version)
-            getArticlesForIndexRSS(web_source, name,url,encoding);
+        {
+            rd->setVersion(0);
+            rd->setEncoding(encoding);
+            parseRSS->getArticlesFromRSSContent(web_source, rd);
+        }
         else
-            getArticlesForIndexRSS2(web_source, name,url);
+        {
+            rd->setVersion("2005");
+            parseRSS->getArticlesFromRDFContent(web_source, rd);
+        }
+
+        feeds_struct_tmp.push_back(rd);
 
         int row_count = model->rowCount();
         model->setRowCount(row_count+1);
@@ -448,121 +463,6 @@ void WebSearchInterface::on_pushButton_2_clicked() //add RSS feeds button
     this->close();
 }
 
-//get articles from rss source
-int WebSearchInterface::getArticlesForIndexRSS(QString content, QString rss_name, QString rss_link, QString encoding)
-{
-    int item_b_index=0, item_e_index=0;
-    CSearch cs;
-    int n = content.length();
-
-
-    RSSData *rd = new RSSData();
-    rd->setSiteName(rss_name);
-    rd->setURL(rss_link);
-    rd->setVersion(0);
-    rd->setEncoding(encoding);
-
-    while(1)
-    {
-        RSSArticle f;
-        cs.search_After(content,"<item", &item_b_index);
-        if (item_b_index == -1)
-            break;
-
-        item_e_index = item_b_index;
-        cs.search_Before(content,"</item", &item_e_index);
-
-        if (item_e_index == -1)
-            break;
-
-        if (item_b_index<n)
-        {
-            if (content[item_b_index] == 's') //if found <items tag
-                continue;
-        }
-
-        QString title, link, description;
-        if(site_struct->getTextBetweenIndexes(item_b_index, item_e_index, "<title>", "</title>", title, content))
-            break;
-
-        site_struct->convert_string(title, false);
-
-        if (site_struct->getTextBetweenIndexes(item_b_index, item_e_index, "<link>", "</link>", link,content))
-            break;
-
-        site_struct->convert_string(link, true);
-
-        site_struct->getDescription(item_b_index, item_e_index, description, content);
-
-        if (INT_MAX <= rd->getArticlesSize()) //prevent int overflow
-            break;
-
-        f.setLink(link);
-        f.setTitle(title);
-        f.setText(description);
-        rd->articlesPushBack(f);
-    }
-
-    if (INT_MAX<=feeds_struct_tmp.size())
-        return 1;
-
-    feeds_struct_tmp.push_back(rd);
-
-    return 0;
-}
-
-//get articles from rdf source
-int WebSearchInterface::getArticlesForIndexRSS2(QString content, QString rss_name, QString rss_link)
-{
-    int item_b_index=0, item_e_index=0;
-    CSearch cs;
-
-    RSSData *rd = new RSSData();
-    rd->setSiteName(rss_name);
-    rd->setURL(rss_link);
-    rd->setVersion("2005");
-
-    while(1)
-    {
-        RSSArticle f;
-        cs.search_After(content,"<entry", &item_b_index);
-        if (item_b_index == -1)
-            break;
-
-        item_e_index = item_b_index;
-        cs.search_Before(content,"</entry", &item_e_index);
-
-        if (item_e_index == -1)
-            break;
-
-        QString title, link, desctiption;
-        if(site_struct->getTextBetweenIndexes(item_b_index, item_e_index, "<title", "</title>", title, content))
-            break;
-        site_struct->convert_string(title, false);
-        int index_link = item_b_index;
-        cs.search_Before(content, "<link", &index_link);
-        if (index_link == -1 || index_link>item_e_index)
-            break;
-        link = site_struct->returnURL(content, index_link);
-        site_struct->convert_string(link, true);
-        site_struct->getContent(item_b_index, item_e_index, desctiption, content);
-
-        if (INT_MAX <= rd->getArticlesSize()) //prevent int overflow
-            break;
-
-        f.setLink(link);
-        f.setTitle(title);
-        f.setText(desctiption);
-        rd->articlesPushBack(f);
-    }
-
-    if (INT_MAX<=feeds_struct_tmp.size()) //prevent int overflow
-        return 1;
-
-    feeds_struct_tmp.push_back(rd);
-
-    return 0;
-}
 
 int WebSearchInterface::isFeedChecked(QString url, int &index)
 {

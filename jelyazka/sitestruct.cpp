@@ -22,6 +22,7 @@ SiteStruct::SiteStruct(Data *data_tmp)
     : QRunnable()
 {
     data = data_tmp;
+    parseRSS = new ParseRSS(data);
     first_load = false;
     isAddOption = true;
 
@@ -266,6 +267,9 @@ void SiteStruct::emitAnimateWindow()
 //Get articles from rss source
 int SiteStruct::getArticlesForIndexRSS(QString content,uint struct_index)
 {
+    parseRSS->getArticlesFromRSSContent(content,  data->at(struct_index));
+
+    /*
     int item_b_index=0, item_e_index=0;
     CSearch cs;
     int n = content.length();
@@ -312,12 +316,15 @@ int SiteStruct::getArticlesForIndexRSS(QString content,uint struct_index)
 
         data->at(struct_index)->articlesPushBack(art);
     }
+    */
     return 0;
 }
 
 //Get articles from rdf xml
 int SiteStruct::getArticlesForIndexRSS2(QString content,uint struct_index)
 {
+    parseRSS->getArticlesFromRDFContent(content,  data->at(struct_index));
+    /*
     int item_b_index=0, item_e_index=0;
     CSearch cs;
     //int n = content.length();
@@ -364,6 +371,7 @@ int SiteStruct::getArticlesForIndexRSS2(QString content,uint struct_index)
         data->at(struct_index)->articlesPushBack(art);
 
     }
+    */
     return 0;
 }
 

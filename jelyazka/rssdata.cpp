@@ -57,14 +57,28 @@ void RSSData::eraseArticleAt(unsigned int index)
     articles.erase(articles.begin() + index);
 }
 
-void RSSData::articlesPushFront(RSSArticle ar)
+void RSSData::articlesPushFront(RSSArticle article)
 {
-    articles.push_front(ar);
+    if (INT_MAX <= getArticlesSize()) //prevent int overflow
+    {
+        eraseArticleAt(getArticlesSize()-1);
+        articlesPushFront(article);
+        return;
+    }
+
+    articles.push_front(article);
 }
 
-void RSSData::articlesPushBack(RSSArticle ar)
+void RSSData::articlesPushBack(RSSArticle article)
 {
-    articles.push_back(ar);
+    if (INT_MAX <= getArticlesSize()) //prevent int overflow
+    {
+        eraseArticleAt(getArticlesSize()-1);
+        articlesPushFront(article);
+        return;
+    }
+
+    articles.push_back(article);
 }
 
 //set

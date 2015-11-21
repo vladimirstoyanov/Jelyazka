@@ -17,8 +17,8 @@ public:
     int getDescription(int item_b_index, int item_e_index, QString &description, QString content);
     void findSiteDataRSS(int &index, QString content, RSSArticle &ar); //QString &title, QString &link, QString &text);
     void findSiteDataRSS2(int &index, QString content, RSSArticle &ar); // QString &title, QString &link, QString &text);
-    int getArticlesForIndexRSS(QString content,uint struct_index);
-    int getArticlesForIndexRSS2(QString content,uint struct_index);
+    int getArticlesFromRSSContent(QString content, RSSData *data);
+    int getArticlesFromRDFContent(QString content, RSSData *data);
     void convert_string (QString &str, bool link);
     QString returnURL(QString source, int index);
     int getContent(int item_b_index, int item_e_index, QString &description, QString content);

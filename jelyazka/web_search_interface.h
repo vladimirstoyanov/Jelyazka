@@ -45,6 +45,7 @@
 #include "rssarticle.h"
 #include "rssdata.h"
 #include "data.h"
+#include "parserss.h"
 #include <limits.h>
 
 namespace Ui {
@@ -87,6 +88,7 @@ private:
     bool programEdit;
     DB db;
     Data *data;
+    ParseRSS *parseRSS;
 
     struct TreeNode {
        QString item;
@@ -118,8 +120,6 @@ private:
     void convertBigEndianToLittleEndian(QString &url);
     QString getEncodingFromRSS(QString content);
     void clearSearchCache();
-    int getArticlesForIndexRSS(QString content, QString rss_name, QString rss_link, QString enconding);
-    int getArticlesForIndexRSS2(QString content, QString rss_name, QString rss_link);
     int isFeedChecked(QString url, int &index);
     QString insertName(QString name);
     void buidBinaryTreeFromDBData();

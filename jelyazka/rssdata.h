@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QList>
+#include <limits.h>
 #include "rssarticle.h"
 
 class RSSData

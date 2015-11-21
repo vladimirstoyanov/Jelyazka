@@ -220,7 +220,7 @@ int ParseRSS::getDescription(int item_b_index, int item_e_index, QString &descri
 }
 
 //Get articles from rss source
-int ParseRSS::getArticlesForIndexRSS(QString content,uint struct_index)
+int ParseRSS::getArticlesFromRSSContent(QString content, RSSData *data)
 {
     int item_b_index=0, item_e_index=0;
     CSearch cs;
@@ -259,24 +259,16 @@ int ParseRSS::getArticlesForIndexRSS(QString content,uint struct_index)
         art.setText(text);
         art.setTitle(title);
 
-        if (INT_MAX <= data->at(struct_index)->getArticlesSize()) //prevent int overflow
-        {
-            data->at(struct_index)->eraseArticleAt(data->at(struct_index)->getArticlesSize()-1);
-            data->at(struct_index)->articlesPushFront(art);
-            continue;
-        }
-
-        data->at(struct_index)->articlesPushBack(art);
+        data->articlesPushBack(art);
     }
     return 0;
 }
 
 //Get articles from rdf xml
-int ParseRSS::getArticlesForIndexRSS2(QString content,uint struct_index)
+int ParseRSS::getArticlesFromRDFContent(QString content, RSSData *data)
 {
     int item_b_index=0, item_e_index=0;
     CSearch cs;
-    //int n = content.length();
 
     while(1)
     {
@@ -306,19 +298,12 @@ int ParseRSS::getArticlesForIndexRSS2(QString content,uint struct_index)
         getContent(item_b_index, item_e_index, text, content);
 
         RSSArticle art;
+
         art.setLink(link);
         art.setText(text);
         art.setTitle(title);
 
-        if (INT_MAX <= data->at(struct_index)->getArticlesSize()) //prevent int overflow
-        {
-            data->at(struct_index)->eraseArticleAt(data->at(struct_index)->getArticlesSize()-1);
-            data->at(struct_index)->articlesPushFront(art);
-            continue;
-        }
-
-        data->at(struct_index)->articlesPushBack(art);
-
+        data->articlesPushBack(art);
     }
     return 0;
 }
