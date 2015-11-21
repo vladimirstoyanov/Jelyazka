@@ -250,7 +250,8 @@ int ViewWindow::showArticle(int struct_index, int article_index)
         return 0;
     }
 
-    QString title_tmp = data->at(struct_index)->articleAt(article_index).getTitle(),text_tmp = data->at(struct_index)->articleAt(article_index).getText();
+    QString title_tmp = data->at(struct_index)->articleAt(article_index).getTitle(),text_tmp = data->at(struct_index)->articleAt(article_index).getText(), date_tmp = "";
+
     if (!checkForFilters(title_tmp, text_tmp))
     {
         show_flag = false;
@@ -260,7 +261,12 @@ int ViewWindow::showArticle(int struct_index, int article_index)
     }
     show_flag = true;
 
-    ui->textBrowser->setHtml(QString("<h2>%1</h2>\nLink: <a href=\"%2\">%2</a><br><br>%3").arg(title_tmp,data->at(struct_index)->articleAt(article_index).getLink(),text_tmp));
+    //date
+    if (data->at(struct_index)->articleAt(article_index).getDate()!="")
+        date_tmp = "Date: " + data->at(struct_index)->articleAt(article_index).getDate();
+
+
+    ui->textBrowser->setHtml(QString("<h2>%1</h2><i>%2</i><br>Link: <a href=\"%3\">%3</a><br><br>%4").arg(title_tmp,date_tmp,data->at(struct_index)->articleAt(article_index).getLink(),text_tmp));
 
     return 1;
 }

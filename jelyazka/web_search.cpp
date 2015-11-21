@@ -438,6 +438,7 @@ void WebSearchInterface::on_pushButton_2_clicked() //add RSS feeds button
             art.setTitle(feeds_struct_tmp_iterator->articleAt(i).getTitle());
             art.setLink(feeds_struct_tmp_iterator->articleAt(i).getLink());
             art.setText(feeds_struct_tmp_iterator->articleAt(i).getText());
+            art.setDate(feeds_struct_tmp_iterator->articleAt(i).getDate());
 
             data->at(data->size()-1)->articlesPushBack(art);
         }

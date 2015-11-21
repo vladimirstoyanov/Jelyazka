@@ -41,7 +41,7 @@ void ParseRSS::findFeedDataRSS(int &index, QString content, RSSArticle &ar)
     }
 
     index = item_e_index;
-    QString title, link, text;
+    QString title, link, text, date;
 
     if(getTextBetweenIndexes(item_b_index, item_e_index, "<title>", "</title>", title, content))
          return;
@@ -51,9 +51,13 @@ void ParseRSS::findFeedDataRSS(int &index, QString content, RSSArticle &ar)
     convert_string(link, true);
     getDescription(item_b_index, item_e_index, text, content);
 
+    //get date if exist
+    getTextBetweenIndexes(item_b_index, item_e_index, "<pubDate", "</pubDate>", date, content);
+
     ar.setLink(link);
     ar.setText(text);
     ar.setTitle(title);
+    ar.setDate(date);
 }
 
 void ParseRSS::findFeedDataRDF(int &index, QString content, RSSArticle &ar)
@@ -84,7 +88,7 @@ void ParseRSS::findFeedDataRDF(int &index, QString content, RSSArticle &ar)
      }
 
      index = item_e_index;
-     QString title, link, text;
+     QString title, link, text, date;
 
      if(getTextBetweenIndexes(item_b_index, item_e_index, "<title", "</title>", title, content))
          return;
@@ -98,9 +102,13 @@ void ParseRSS::findFeedDataRDF(int &index, QString content, RSSArticle &ar)
 
      getContent(item_b_index, item_e_index, text, content);
 
+     //get date if exist
+     getTextBetweenIndexes(item_b_index, item_e_index, "<pubDate", "</pubDate>", date, content);
+
      ar.setLink(link);
      ar.setText(text);
      ar.setTitle(title);
+     ar.setDate(date);
 }
 
 
@@ -220,7 +228,7 @@ int ParseRSS::getDescription(int item_b_index, int item_e_index, QString &descri
 }
 
 //Get articles from rss source
-int ParseRSS::getArticlesFromRSSContent(QString content, RSSData *data)
+int ParseRSS::getArticlesFromRSSContent(QString content, RSSData *rssData)
 {
     int item_b_index=0, item_e_index=0;
     CSearch cs;
@@ -244,7 +252,7 @@ int ParseRSS::getArticlesFromRSSContent(QString content, RSSData *data)
                 continue;
         }
 
-        QString title, link, text;
+        QString title, link, text, date;
         if(getTextBetweenIndexes(item_b_index, item_e_index, "<title>", "</title>", title, content))
             break;
         convert_string(title, false);
@@ -254,18 +262,22 @@ int ParseRSS::getArticlesFromRSSContent(QString content, RSSData *data)
         convert_string(link, true);
         getDescription(item_b_index, item_e_index, text, content);
 
+        //get date if exist
+        getTextBetweenIndexes(item_b_index, item_e_index, "<pubDate", "</pubDate>", date, content);
+
         RSSArticle art;
         art.setLink(link);
         art.setText(text);
         art.setTitle(title);
+        art.setDate(date);
 
-        data->articlesPushBack(art);
+        rssData->articlesPushBack(art);
     }
     return 0;
 }
 
 //Get articles from rdf xml
-int ParseRSS::getArticlesFromRDFContent(QString content, RSSData *data)
+int ParseRSS::getArticlesFromRDFContent(QString content, RSSData *rssData)
 {
     int item_b_index=0, item_e_index=0;
     CSearch cs;
@@ -282,7 +294,7 @@ int ParseRSS::getArticlesFromRDFContent(QString content, RSSData *data)
         if (item_e_index == -1)
             break;
 
-        QString title, link, text;
+        QString title, link, text, date;
 
         if(getTextBetweenIndexes(item_b_index, item_e_index, "<title", "</title>", title, content))
             break;
@@ -297,13 +309,17 @@ int ParseRSS::getArticlesFromRDFContent(QString content, RSSData *data)
         convert_string(link, true);
         getContent(item_b_index, item_e_index, text, content);
 
+        //get date if exist
+        getTextBetweenIndexes(item_b_index, item_e_index, "<pubDate", "</pubDate>", date, content);
+
         RSSArticle art;
 
         art.setLink(link);
         art.setText(text);
         art.setTitle(title);
+        art.setDate(date);
 
-        data->articlesPushBack(art);
+        rssData->articlesPushBack(art);
     }
     return 0;
 }

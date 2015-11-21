@@ -44,5 +44,5 @@ void RSSArticle::setText(QString text_tmp)
 
 void RSSArticle::setDate(QString date_)
 {
-    date = date;
+    date = date_;
 }
