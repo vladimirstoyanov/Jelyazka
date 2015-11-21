@@ -7,7 +7,7 @@ ParseRSS::ParseRSS(Data *data_tmp)
 
 
 
-void ParseRSS::findFeedDataRSS(int &index, QString content, RSSArticle &ar) //QString &title, QString &link, QString &text)
+void ParseRSS::findFeedDataRSS(int &index, QString content, RSSArticle &ar)
 {
     int item_b_index=index, item_e_index=index;
     CSearch cs;
@@ -56,7 +56,7 @@ void ParseRSS::findFeedDataRSS(int &index, QString content, RSSArticle &ar) //QS
     ar.setTitle(title);
 }
 
-void ParseRSS::findFeedDataRDF(int &index, QString content, RSSArticle &ar)// QString &title, QString &link, QString &text)
+void ParseRSS::findFeedDataRDF(int &index, QString content, RSSArticle &ar)
 {
     int item_b_index=index, item_e_index=index;
     CSearch cs;

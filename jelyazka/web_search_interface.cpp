@@ -293,7 +293,7 @@ void WebSearchInterface::onFoundRSS(int type, QString name, QString url, QString
         if (checkExistingURL(url))
             return;
         userEdit = false;
-        site_struct->convert_string(name, false);
+        parseRSS->convert_string(name, false);
         while(treeContains(tn,name))
             name = change_name(name); //make unique name
         treeInsert(tn, name);

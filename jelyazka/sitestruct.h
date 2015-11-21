@@ -76,12 +76,12 @@ public:
     void setProxySettings();
     bool getEnabledNotificationWindow(){return enabled_notification_window;}
     void emitAnimateWindow();
-    int getTextBetweenIndexes(int item_b_index, int item_e_index, QString begin_text, QString end_text, QString &text, QString content);
+    //int getTextBetweenIndexes(int item_b_index, int item_e_index, QString begin_text, QString end_text, QString &text, QString content);
     //int getDescription(int item_b_index, int item_e_index, QString &description, QString content);
-    QString convert_entitie(QString entitie);
-    void convert_string (QString &str, bool link);
-    QString returnURL(QString source, int index);
-    int getContent(int item_b_index, int item_e_index, QString &description, QString content);
+    //QString convert_entitie(QString entitie);
+    //void convert_string (QString &str, bool link);
+    //QString returnURL(QString source, int index);
+    //int getContent(int item_b_index, int item_e_index, QString &description, QString content);
 
 signals:
     void showAnimateWindow(QString data); //anitate window signal
