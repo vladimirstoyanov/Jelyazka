@@ -16,9 +16,9 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "sitestruct.h"
+#include "rssthread.h"
 
-SiteStruct::SiteStruct(Data *data_tmp)
+RSSThread::RSSThread(Data *data_tmp)
     : QRunnable()
 {
     data = data_tmp;
@@ -41,14 +41,14 @@ SiteStruct::SiteStruct(Data *data_tmp)
     data_for_animatewindow = "";
 }
 
-SiteStruct::~SiteStruct()
+RSSThread::~RSSThread()
 {
     delete mutex;
     if (network_proxy!=NULL)
         delete network_proxy;
 }
 
-void SiteStruct::synchronizeData(int struct_index, QString content)
+void RSSThread::synchronizeData(int struct_index, QString content)
 {
     int index = 0;
 
@@ -99,7 +99,7 @@ void SiteStruct::synchronizeData(int struct_index, QString content)
 
 }
 
-void SiteStruct::run() //runnning another thread (synchronize data for n time)
+void RSSThread::run() //runnning another thread (synchronize data for n time)
 {
     HTTP http;
     QString content;
@@ -145,7 +145,7 @@ void SiteStruct::run() //runnning another thread (synchronize data for n time)
     mutex->unlock();
 }
 
-void SiteStruct::setProxySettings()
+void RSSThread::setProxySettings()
 {
     if (network_proxy!=NULL)
         delete network_proxy;
@@ -164,12 +164,12 @@ void SiteStruct::setProxySettings()
     QNetworkProxy::setApplicationProxy(*network_proxy);
 }
 
-void SiteStruct::emitAnimateWindow()
+void RSSThread::emitAnimateWindow()
 {
     emit showAnimateWindow(data_for_animatewindow);
 }
 
-int SiteStruct::checkIsLoaded()
+int RSSThread::checkIsLoaded()
 {
     uint count = 0;
 
@@ -194,7 +194,7 @@ int SiteStruct::checkIsLoaded()
     return 1;
 }
 
-RSSData * SiteStruct::initStruct(QString site_name, QString type, QString url)
+RSSData * RSSThread::initStruct(QString site_name, QString type, QString url)
 {
     RSSData *s = new RSSData();
 
@@ -205,7 +205,7 @@ RSSData * SiteStruct::initStruct(QString site_name, QString type, QString url)
     return s;
 }
 
-void SiteStruct::loadOptions()
+void RSSThread::loadOptions()
 {
     QFile file("../resources/Options");
     if(!file.open(QIODevice::ReadOnly)) {

@@ -17,7 +17,6 @@ INCLUDEPATH += D:/boost_1_55_0/ #The path to the Boost libraries.
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    sitestruct.cpp \
     viewwindow.cpp \
     search.cpp \
     animatewindow.cpp \
@@ -34,10 +33,10 @@ SOURCES += main.cpp\
     parserss.cpp \
     data.cpp \
     web_search.cpp \
-    web_search_thread.cpp
+    web_search_thread.cpp \
+    rssthread.cpp
 
 HEADERS  += mainwindow.h \
-    sitestruct.h \
     viewwindow.h \
     search.h \
     animatewindow.h \
@@ -54,7 +53,8 @@ HEADERS  += mainwindow.h \
     parserss.h \
     data.h \
     web_search.h \
-    web_search_thread.h
+    web_search_thread.h \
+    rssthread.h
 
 FORMS    += mainwindow.ui \
     viewwindow.ui \

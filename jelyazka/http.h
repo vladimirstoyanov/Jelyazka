@@ -25,7 +25,7 @@
 #include <QTextCodec>
 #include <QDebug>
 #include <QNetworkProxy>
-#include "sitestruct.h"
+#include "rssthread.h"
 #include "search.h"
 
 class HTTP

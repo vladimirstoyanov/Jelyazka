@@ -53,7 +53,7 @@ InitWindow::~InitWindow()
 }
 
 //load RSS feeds in thread pool
-void InitWindow::setSignal(SiteStruct *s_struct, Data *data_tmp)
+void InitWindow::setSignal(RSSThread *s_struct, Data *data_tmp)
 {
     data = data_tmp;
     site_struct = s_struct;

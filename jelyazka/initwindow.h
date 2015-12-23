@@ -23,7 +23,7 @@
 #include <QLabel>
 #include <QImage>
 #include <QThreadPool>
-#include "sitestruct.h"
+#include "rssthread.h"
 #include "data.h"
 
 namespace Ui {
@@ -37,13 +37,13 @@ class InitWindow : public QWidget
 public:
     explicit InitWindow(QWidget *parent = 0);
     ~InitWindow();
-    void setSignal (SiteStruct *s_struct, Data *data_tmp);
+    void setSignal (RSSThread *s_struct, Data *data_tmp);
 
 private:
     Ui::InitWindow *ui;
     QLabel *imageInitLabel;
     QImage *init_img;
-    SiteStruct *site_struct;
+    RSSThread *site_struct;
     QThreadPool *tp;
     Data *data;
 

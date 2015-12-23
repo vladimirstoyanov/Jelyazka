@@ -29,7 +29,7 @@
 #include <QMenu>
 #include <QCloseEvent>
 
-#include "sitestruct.h"
+#include "rssthread.h"
 #include "viewwindow.h"
 #include "animatewindow.h"
 #include "initwindow.h"
@@ -58,7 +58,7 @@ private:
     QAction *view;
     ViewWindow *view_window;
     CAnimateWindow *aw;
-    SiteStruct *s_struct;
+    RSSThread *s_struct;
     Data *data;
     RefreshFeedsData *rfd;
     About *about_gui;

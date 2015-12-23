@@ -47,7 +47,7 @@ MainWindow::MainWindow(InitWindow *init_window)
 
     //initialize site_struct class
     data = new Data();
-    s_struct = new SiteStruct(data);
+    s_struct = new RSSThread(data);
     s_struct->setAutoDelete(false);
 
 

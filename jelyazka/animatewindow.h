@@ -19,7 +19,7 @@
 #ifndef ANIMATEWINDOW_H
 #define ANIMATEWINDOW_H
 
-#include "sitestruct.h"
+#include "rssthread.h"
 #include <QPropertyAnimation>
 #include <QLabel>
 #include <QMouseEvent>
@@ -33,7 +33,7 @@ namespace Ui {
 class CAnimateWindow;
 }
 
-class SiteStruct;
+class RSSThread;
 
 class CAnimateWindow : public QWidget
 {
@@ -45,7 +45,7 @@ public:
     explicit CAnimateWindow(QWidget *parent = 0);
     ~CAnimateWindow();
 
-    void setSignal(SiteStruct *data , Data *data_tmp);
+    void setSignal(RSSThread *data , Data *data_tmp);
 
 public slots:
     void onShowAnimateWindow(QString);
@@ -57,7 +57,7 @@ private:
     QLabel *imageLabel;
     QImage close_button_img;
     Ui::CAnimateWindow *ui;
-    SiteStruct *site_struct;
+    RSSThread *site_struct;
     bool mouse_clicked; //if mouse clicked on this window, mouse_clicked = true, otherwise mouse_clicked = false;
     bool isXchanged; //'X' button image has been changed, then isXchanged = true, otherwise isXchanged = false;
     Data *data;

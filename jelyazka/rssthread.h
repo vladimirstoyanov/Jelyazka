@@ -1,5 +1,5 @@
 /*
-    sitestruct.h
+    rssthread.h
     Jelyazka RSS/RDF reader
     Copyright (C) 2014 Vladimir Stoyanov
     
@@ -16,8 +16,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef SITESTRUCT_H
-#define SITESTRUCT_H
+#ifndef RSSTHREAD_H
+#define RSSTHREAD_H
 
 #include "animatewindow.h"
 #include <QtCore>
@@ -44,7 +44,7 @@
 
 class CAnimateWindow;
 
-class SiteStruct : public QObject, public QRunnable
+class RSSThread : public QObject, public QRunnable
 {
     Q_OBJECT
 public:
@@ -60,8 +60,8 @@ public:
     QWaitCondition condition_tread;
     QWaitCondition condition_view;
     
-    SiteStruct(Data *data_tmp);
-    ~SiteStruct();
+    RSSThread(Data *data_tmp);
+    ~RSSThread();
 
     //boost::ptr_vector<RSSData> s_struct; //vector with all rss data
 
@@ -93,4 +93,4 @@ private:
     int checkIsLoaded();
 };
 
-#endif // SITESTRUCT_H
+#endif // RSSTHREAD_H

@@ -38,7 +38,7 @@
 #include <QThreadPool>
 #include "logger.h"
 #include "web_search_thread.h"
-#include "sitestruct.h"
+#include "rssthread.h"
 #include "viewwindow.h"
 #include <boost/ptr_container/ptr_list.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -57,7 +57,7 @@ class WebSearchInterface : public QWidget
     Q_OBJECT
 
 public:
-    explicit WebSearchInterface(QWidget *parent = 0, SiteStruct *tmp_site_struct=NULL, ViewWindow *view_window=NULL, Data *data_tmp = NULL);
+    explicit WebSearchInterface(QWidget *parent = 0, RSSThread *tmp_site_struct=NULL, ViewWindow *view_window=NULL, Data *data_tmp = NULL);
     ~WebSearchInterface();
     WebSearchInterfaceThread *mThread;
 
@@ -78,7 +78,7 @@ private:
     Ui::WebSearchInterface *ui;
     QStandardItemModel *model;
     QGridLayout *grid;
-    SiteStruct *site_struct;
+    RSSThread *site_struct;
     ViewWindow *vw;
     QThreadPool *tp;
     QThreadPool *tp2;
@@ -114,7 +114,7 @@ private:
     void closeEvent(QCloseEvent *);
     void paintRows();
     int checkExistingURL(QString url);
-    int checkSiteStructForExistingURL(QString url);
+    int checkForExistingURL(QString url);
     void convertBigEndianToLittleEndian(QString &url);
     QString getEncodingFromRSS(QString content);
     void clearSearchCache();

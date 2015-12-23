@@ -29,7 +29,7 @@
 #include <QSpinBox>
 #include <QLineEdit>
 #include <boost/ptr_container/ptr_vector.hpp>
-#include "sitestruct.h"
+#include "rssthread.h"
 #include "viewwindow.h"
 #include "http.h"
 #include "db.h"
@@ -46,7 +46,7 @@ class OptionsWindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit OptionsWindow(QWidget *parent = 0, SiteStruct *ss=0, ViewWindow *view_window=0, Data *data_tmp = 0);
+    explicit OptionsWindow(QWidget *parent = 0, RSSThread *ss=0, ViewWindow *view_window=0, Data *data_tmp = 0);
     ~OptionsWindow();
 
 public slots:
@@ -69,7 +69,7 @@ private slots:
 private:
     DB db;
     Ui::OptionsWindow *ui;
-    SiteStruct *site_struct;
+    RSSThread *site_struct;
     Data *data;
     QListWidget *collect_feeds;
     QListWidget *view_feeds;

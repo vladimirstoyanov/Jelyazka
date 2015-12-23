@@ -22,7 +22,7 @@
 #include "search.h"
 #include <QDebug>
 
-WebSearchInterface::WebSearchInterface(QWidget *parent, SiteStruct *tmp_site_struct, ViewWindow *view_window, Data *data_tmp) :
+WebSearchInterface::WebSearchInterface(QWidget *parent, RSSThread *tmp_site_struct, ViewWindow *view_window, Data *data_tmp) :
     QWidget(parent),
     ui(new Ui::WebSearchInterface)
 {
@@ -158,7 +158,7 @@ int WebSearchInterface::checkExistingURL(QString url)
     return 0;
 }
 
-int WebSearchInterface::checkSiteStructForExistingURL(QString url)
+int WebSearchInterface::checkForExistingURL(QString url)
 {
     if (site_struct == NULL)
         return 1;

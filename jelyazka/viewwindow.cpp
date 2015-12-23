@@ -22,7 +22,7 @@
 #include <QStyle>
 
 
-ViewWindow::ViewWindow(QWidget *parent, SiteStruct *tmp_site_struct, Data *data_tmp):
+ViewWindow::ViewWindow(QWidget *parent, RSSThread *tmp_site_struct, Data *data_tmp):
     QWidget(parent),
     ui(new Ui::ViewWindow)
 {

@@ -11,7 +11,7 @@ DB::DB()
 }
 
 
-/////////sitestruct.h
+/////////rssthread.h
 ///
 void DB::createTables()
 {

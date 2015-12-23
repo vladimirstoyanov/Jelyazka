@@ -185,8 +185,8 @@ QList<int> CAnimateWindow::getIndexes(QString data_str)
     return indexes;
 }
 
-//make connection to SiteStruct instance.
-void CAnimateWindow::setSignal(SiteStruct *s_struct, Data *data_tmp)
+//make connection to RSSThread instance.
+void CAnimateWindow::setSignal(RSSThread *s_struct, Data *data_tmp)
 {
     site_struct = s_struct;
     data = data_tmp;

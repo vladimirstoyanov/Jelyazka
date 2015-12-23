@@ -25,7 +25,7 @@
 #include <QShowEvent>
 #include <QResizeEvent>
 #include <QLabel>
-#include "sitestruct.h"
+#include "rssthread.h"
 #include "search.h"
 #include "http.h"
 #include <QMouseEvent>
@@ -55,7 +55,7 @@ class ViewWindow : public QWidget
 public:
     QList<QString> l_filters;
 
-    explicit ViewWindow(QWidget *parent = 0, SiteStruct *tmp_site_struct=NULL, Data *data_tmp=NULL);
+    explicit ViewWindow(QWidget *parent = 0, RSSThread *tmp_site_struct=NULL, Data *data_tmp=NULL);
     ~ViewWindow();
 
     void initDataInComboBoxFromStructure();
@@ -72,7 +72,7 @@ private:
     ulong current_site_index;
     ulong current_article_index;
     Ui::ViewWindow *ui;
-    SiteStruct *site_struct;
+    RSSThread *site_struct;
     QLabel *imageAddRSSLabel;
     QImage add_rss_button_img;
     QLabel *imageOptionsLabel;

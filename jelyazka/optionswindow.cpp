@@ -20,7 +20,7 @@
 #include "ui_optionswindow.h"
 #include <QDebug>
 
-OptionsWindow::OptionsWindow(QWidget *parent, SiteStruct *ss, ViewWindow *view_window, Data *data_tmp) :
+OptionsWindow::OptionsWindow(QWidget *parent, RSSThread *ss, ViewWindow *view_window, Data *data_tmp) :
     QWidget(parent),
     ui(new Ui::OptionsWindow)
 {

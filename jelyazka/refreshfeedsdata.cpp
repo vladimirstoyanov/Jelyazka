@@ -19,7 +19,7 @@
 #include "refreshfeedsdata.h"
 #include <QDebug>
 
-RefreshFeedsData::RefreshFeedsData(QObject *parent, SiteStruct *ss, Data *data_tmp) :
+RefreshFeedsData::RefreshFeedsData(QObject *parent, RSSThread *ss, Data *data_tmp) :
     QThread(parent)
 {
     site_struct = ss;
