@@ -53,6 +53,7 @@ public:
     QNetworkProxy *network_proxy;
     bool enabled_proxy_connection;
     bool enabled_notification_window;
+    bool enabled_filters;
     bool busy;
     QString proxy_url;
     QString proxy_port;

@@ -1,4 +1,7 @@
 =============Bugs=====================
+- 'Options' can't be changed;
+- When add 2 filter strings and save them, after that delete one of them and save again, when open 'Filters', there are two filter strings; 
+
 - Proxy settings doesn't working; + 
 - After update 'favorite rss list' sometimes the program crashes;
 - When the cursor is at some custom button from main window and after that move fast the cursor, then
@@ -10,7 +13,12 @@ the custom button doesn't change it state (it is looke like the cursor is in it)
 - There isn't "pubData" tag in slashdot rss feed; +
 
 =============Features==================
+- refactoring load/save options;
+- refactoring options menu: make abstraction, polymorphism for different options
+- refactoring options menu: make folder;
+
 - enable/disable filtering
+
 - re-design of 'x', 'o', '-' buttons +
 - skins;
 - integrate youtube;

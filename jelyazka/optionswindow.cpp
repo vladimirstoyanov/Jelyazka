@@ -569,7 +569,7 @@ void OptionsWindow::loadOptions()
         te_proxy_port->setEnabled(true);
     }
     else
-        QMessageBox::critical(0, "Error!", "Wrong value about \'Notification window\' from a \'Options\' file!");
+        QMessageBox::critical(0, "Error!", "Wrong value about \'Notification window\' from \'Options\' file!");
 
     //load proxy server address
     line = in.readLine();
@@ -624,6 +624,45 @@ void OptionsWindow::loadOptions()
 
     te_proxy_port->setText(str_tmp);
 
+
+
+    // enable/disable proxy connection option
+    line = in.readLine();
+
+    if (line.length()<17)
+    {
+        QMessageBox::critical(0, "Error!", "Can't read information about check for filters from \'Options\' file!");
+        file.close();
+        return;
+    }
+    if (line[16] != ' ')
+    {
+        QMessageBox::critical(0, "Error!", "Can't read information about check for filters from \'Options\' file!");
+        file.close();
+        return;
+    }
+
+    if (line[17]=='0')
+    {
+        cb_enable_filtering->setChecked(false);
+        pb_add_filter->setEnabled(false);
+        te_add_filter->setEnabled(false);
+        lw_filter_list->setEnabled(false);
+        l_filter_list->setEnabled(false);
+        pb_remove_filter->setEnabled(false);
+    }
+    else if (line[17] == '1')
+    {
+        cb_enable_filtering->setChecked(true);
+        pb_add_filter->setEnabled(true);
+        te_add_filter->setEnabled(true);
+        lw_filter_list->setEnabled(true);
+        l_filter_list->setEnabled(true);
+        pb_remove_filter->setEnabled(true);
+    }
+    else
+        QMessageBox::critical(0, "Error!", "Wrong value about \'Filter window\' from \'Options\' file!");
+
     file.close();
 }
 
@@ -633,9 +672,10 @@ void OptionsWindow::saveOptions()
     QFile file("../resouce/Options");
     file.open(QIODevice::WriteOnly);
     QTextStream out(&file);
+
+    //notifications
     out << "Refresh time: " << QString::number(sb_refresh_time->value()) <<'\n';
     site_struct->setRefreshTime(sb_refresh_time->value());
-
     if (cb_enable_notification->isChecked())
     {
         out << "Notification window: 1\n";
@@ -647,6 +687,7 @@ void OptionsWindow::saveOptions()
         site_struct->setEnableNotificationWindow(0);
     }
 
+    //proxy
     if (cb_enable_proxy->isChecked())
     {
         out << "Enabled Proxy: 1\n";
@@ -662,6 +703,19 @@ void OptionsWindow::saveOptions()
     site_struct->proxy_url = te_proxy_url->toPlainText();
     out<<"Proxy Port: "<< te_proxy_port->toPlainText()<<"\n";
     site_struct->proxy_port = te_proxy_port->toPlainText();
+
+
+    //filters
+    if (cb_enable_filtering->isChecked())
+    {
+        out << "Enabled Filters: 1\n";
+        site_struct->enabled_filters = 1;
+    }
+    else
+    {
+        out << "Enabled Filters: 0\n";
+        site_struct->enabled_filters = 0;
+    }
 
     file.close();
 }
@@ -893,6 +947,26 @@ void OptionsWindow::on_cb_enable_proxy_clicked(bool state)
         l_proxy_port->setEnabled(false);
         te_proxy_url->setEnabled(false);
         te_proxy_port->setEnabled(false);
+    }
+}
+
+void OptionsWindow::on_cb_enable_filtering_clicked(bool state)
+{
+    if (state)
+    {
+        pb_add_filter->setEnabled(true);
+        te_add_filter->setEnabled(true);
+        lw_filter_list->setEnabled(true);
+        l_filter_list->setEnabled(true);
+        pb_remove_filter->setEnabled(true);
+    }
+    else
+    {
+        pb_add_filter->setEnabled(false);
+        te_add_filter->setEnabled(false);
+        lw_filter_list->setEnabled(false);
+        l_filter_list->setEnabled(false);
+        pb_remove_filter->setEnabled(false);
     }
 }
 
