@@ -134,20 +134,26 @@ OptionsWindow::OptionsWindow(QWidget *parent, RSSThread *ss, ViewWindow *view_wi
     lw_filter_list = new QListWidget(this);
     l_filter_list = new QLabel(this);
     pb_remove_filter = new QPushButton(this);
+    cb_enable_filtering = new QCheckBox(this);
 
-    pb_add_filter->setGeometry(ui->treeWidget->width()+10,5,pb_add_filter->width(), pb_add_filter->height());
-    te_add_filter->setGeometry(pb_add_filter->x() + pb_add_filter->width() + 5,5,this->width() - (pb_add_filter->x() + pb_add_filter->width() + 10), te_add_filter->height());
+    cb_enable_filtering->setGeometry(ui->treeWidget->width() + 10,5,cb_enable_filtering->width()+50, cb_enable_filtering->height());
+    pb_add_filter->setGeometry(cb_enable_filtering->x(),cb_enable_filtering->y()+cb_enable_filtering->height() + 5,pb_add_filter->width(), pb_add_filter->height());
+    te_add_filter->setGeometry(pb_add_filter->x() + pb_add_filter->width() + 5,pb_add_filter->y(),this->width() - (pb_add_filter->x() + pb_add_filter->width() + 10), te_add_filter->height());
     l_filter_list->setGeometry(te_add_filter->x(), te_add_filter->y() + te_add_filter->height() + 5, l_filter_list->width(), l_filter_list->height());
     lw_filter_list->setGeometry(te_add_filter->x(), l_filter_list->y()+l_filter_list->height()+5, this->width() - (l_filter_list->x()+5), this->height() - (l_filter_list->y()+ l_filter_list->height()+15+ ui->OK_Button->height()));
     pb_remove_filter->setGeometry(ui->treeWidget->width()+10, lw_filter_list->y(), pb_remove_filter->width(), pb_remove_filter->height());
 
+    cb_enable_filtering->setChecked(false);
+    cb_enable_filtering->setText("Enable filtering");
     pb_add_filter->setText("Add");
     pb_remove_filter->setText("Remove");
     l_filter_list->setText("Filter List:");
 
+    connect(cb_enable_filtering, SIGNAL(clicked(bool)), this, SLOT(on_cb_enable_filtering_clicked(bool)));
     connect(pb_add_filter, SIGNAL(clicked()), this, SLOT(on_pb_add_filter_clicked()));
     connect(pb_remove_filter, SIGNAL(clicked()), this, SLOT(on_pb_remove_filter()));
 
+    cb_enable_filtering->hide();
     pb_add_filter->hide();
     te_add_filter->hide();
     lw_filter_list->hide();
@@ -170,6 +176,7 @@ OptionsWindow::~OptionsWindow()
     delete te_proxy_url;
     delete te_proxy_port;
     delete cb_enable_proxy;
+    delete cb_enable_filtering;
     delete pb_add_filter;
     delete te_add_filter;
     delete lw_filter_list;
@@ -738,6 +745,7 @@ void OptionsWindow::resizeEvent(QResizeEvent *event)
     }
     else if (options_type == 2)
     {
+
         te_add_filter->setGeometry(pb_add_filter->x() + pb_add_filter->width() + 5,5,this->width() - (pb_add_filter->x() + pb_add_filter->width() + 10), te_add_filter->height());
         lw_filter_list->setGeometry(te_add_filter->x(), l_filter_list->y()+l_filter_list->height()+5, this->width() - (l_filter_list->x()+5), this->height() - (l_filter_list->y()+ l_filter_list->height()+15+ ui->OK_Button->height()));
     }
@@ -842,125 +850,31 @@ void OptionsWindow::on_treeWidget_clicked(const QModelIndex &index)
 
     if (t == "Collection feeds")
     {
-        options_type = 1;
-        int width = (this->width() - (25 + ui->treeWidget->width() + ui->pushButton->width()))/2;
-        collect_feeds->setGeometry(ui->treeWidget->x() + ui->treeWidget->width()  + 5, cf_find_feed->height()+10, width, this->height()-(20 +cf_find_feed->height() + ui->OK_Button->height()));
-        ui->pushButton_3->setGeometry(collect_feeds->x(), collect_feeds->y() + collect_feeds->height() + 5,  ui->pushButton_3->width(), ui->pushButton_3->height());
-        cf_label_search->setGeometry(ui->treeWidget->x() + ui->treeWidget->width()  + 5, 5, 50, cf_label_search->height());
-        cf_find_feed->setGeometry(cf_label_search->x() + cf_label_search_width()+5, 5,width - (cf_label_search_width() + 5) , cf_find_feed->height());
-        ui->pushButton->setGeometry(collect_feeds->x()+ collect_feeds->width() +  5, (ui->pushButton_3->height()+10) + (collect_feeds->height()/2 - ( ui->pushButton->height() + ui->pushButton_2->height() + 10)/2),ui->pushButton->width(), ui->pushButton->height());
-        ui->pushButton_2->setGeometry(ui->pushButton->x(), ui->pushButton->y() + ui->pushButton->height()+10, ui->pushButton_2->width(), ui->pushButton_2->height());
-        view_feeds->setGeometry(ui->pushButton->x() + ui->pushButton->width() + 5,cf_find_feed->height()+10 ,width, this->height()-(20 +cf_find_feed->height() + ui->OK_Button->height()));
-
-        collect_feeds->show();
-        ui->pushButton->show();
-        ui->pushButton_2->show();
-        ui->pushButton_3->show();
-        view_feeds->show();
-        cf_find_feed->show();
-        cf_label_search->show();
-
-        sb_refresh_time->hide();
-        l_refresh_time->hide();
-        cb_enable_notification->hide();
-
-        cb_enable_proxy->hide();
-        l_proxy_url->hide();
-        l_proxy_port->hide();
-        te_proxy_url->hide();
-        te_proxy_port->hide();
-
-        pb_add_filter->hide();
-        te_add_filter->hide();
-        lw_filter_list->hide();
-        l_filter_list->hide();
-        pb_remove_filter->hide();
+        showCollectionFeeds();
+        hideNotifications();
+        hideProxyConnection();
+        hideFilters();
     }
     else if (t == "Filters")
     {
-        pb_add_filter->show();
-        te_add_filter->show();
-        lw_filter_list->show();
-        l_filter_list->show();
-        pb_remove_filter->show();
-
-        options_type = 2;
-        collect_feeds->hide();
-        ui->pushButton->hide();
-        ui->pushButton_2->hide();
-        ui->pushButton_3->hide();
-        view_feeds->hide();
-        cf_find_feed->hide();
-        cf_label_search->hide();
-
-        sb_refresh_time->hide();
-        l_refresh_time->hide();
-        cb_enable_notification->hide();
-
-        cb_enable_proxy->hide();
-        l_proxy_url->hide();
-        l_proxy_port->hide();
-        te_proxy_url->hide();
-        te_proxy_port->hide();
-
+        showFilters();
+        hideCollectionFeeds();
+        hideNotifications();
+        hideProxyConnection();
     }
     else if (t == "Notifications")
     {
-        options_type = 3;
-
-        sb_refresh_time->show();
-        l_refresh_time->show();
-        cb_enable_notification->show();
-
-        collect_feeds->hide();
-        ui->pushButton->hide();
-        ui->pushButton_2->hide();
-        ui->pushButton_3->hide();
-        view_feeds->hide();
-        cf_find_feed->hide();
-        cf_label_search->hide();
-
-        cb_enable_proxy->hide();
-        l_proxy_url->hide();
-        l_proxy_port->hide();
-        te_proxy_url->hide();
-        te_proxy_port->hide();
-
-
-        pb_add_filter->hide();
-        te_add_filter->hide();
-        lw_filter_list->hide();
-        l_filter_list->hide();
-        pb_remove_filter->hide();
+        showNotifications();
+        hideCollectionFeeds();
+        hideProxyConnection();
+        hideFilters();
     }
     else if (t == "Proxy connection")
     {
-
-        cb_enable_proxy->show();
-        l_proxy_url->show();
-        l_proxy_port->show();
-        te_proxy_url->show();
-        te_proxy_port->show();
-
-        options_type = 4;
-        collect_feeds->hide();
-        ui->pushButton->hide();
-        ui->pushButton_2->hide();
-        ui->pushButton_3->hide();
-        view_feeds->hide();
-        cf_find_feed->hide();
-        cf_label_search->hide();
-
-        sb_refresh_time->hide();
-        l_refresh_time->hide();
-        cb_enable_notification->hide();
-
-
-        pb_add_filter->hide();
-        te_add_filter->hide();
-        lw_filter_list->hide();
-        l_filter_list->hide();
-        pb_remove_filter->hide();
+        showProxyConnection();
+        hideCollectionFeeds();
+        hideNotifications();
+        hideFilters();
     }
 }
 
@@ -1060,3 +974,97 @@ int OptionsWindow::cf_label_search_width()
 
     return rect.width();
 }
+
+//show widgets
+void OptionsWindow::showCollectionFeeds()
+{
+    options_type = 1;
+    int width = (this->width() - (25 + ui->treeWidget->width() + ui->pushButton->width()))/2;
+    collect_feeds->setGeometry(ui->treeWidget->x() + ui->treeWidget->width()  + 5, cf_find_feed->height()+10, width, this->height()-(20 +cf_find_feed->height() + ui->OK_Button->height()));
+    ui->pushButton_3->setGeometry(collect_feeds->x(), collect_feeds->y() + collect_feeds->height() + 5,  ui->pushButton_3->width(), ui->pushButton_3->height());
+    cf_label_search->setGeometry(ui->treeWidget->x() + ui->treeWidget->width()  + 5, 5, 50, cf_label_search->height());
+    cf_find_feed->setGeometry(cf_label_search->x() + cf_label_search_width()+5, 5,width - (cf_label_search_width() + 5) , cf_find_feed->height());
+    ui->pushButton->setGeometry(collect_feeds->x()+ collect_feeds->width() +  5, (ui->pushButton_3->height()+10) + (collect_feeds->height()/2 - ( ui->pushButton->height() + ui->pushButton_2->height() + 10)/2),ui->pushButton->width(), ui->pushButton->height());
+    ui->pushButton_2->setGeometry(ui->pushButton->x(), ui->pushButton->y() + ui->pushButton->height()+10, ui->pushButton_2->width(), ui->pushButton_2->height());
+    view_feeds->setGeometry(ui->pushButton->x() + ui->pushButton->width() + 5,cf_find_feed->height()+10 ,width, this->height()-(20 +cf_find_feed->height() + ui->OK_Button->height()));
+
+    collect_feeds->show();
+    ui->pushButton->show();
+    ui->pushButton_2->show();
+    ui->pushButton_3->show();
+    view_feeds->show();
+    cf_find_feed->show();
+    cf_label_search->show();
+
+}
+
+void OptionsWindow::showFilters()
+{
+    cb_enable_filtering->show();
+    pb_add_filter->show();
+    te_add_filter->show();
+    lw_filter_list->show();
+    l_filter_list->show();
+    pb_remove_filter->show();
+
+    options_type = 2;
+}
+
+void OptionsWindow::showNotifications()
+{
+    options_type = 3;
+
+    sb_refresh_time->show();
+    l_refresh_time->show();
+    cb_enable_notification->show();
+}
+
+void OptionsWindow::showProxyConnection()
+{
+    options_type = 4;
+
+    cb_enable_proxy->show();
+    l_proxy_url->show();
+    l_proxy_port->show();
+    te_proxy_url->show();
+    te_proxy_port->show();
+}
+
+//hide widgets
+void OptionsWindow::hideCollectionFeeds()
+{
+    collect_feeds->hide();
+    ui->pushButton->hide();
+    ui->pushButton_2->hide();
+    ui->pushButton_3->hide();
+    view_feeds->hide();
+    cf_find_feed->hide();
+    cf_label_search->hide();
+}
+
+void OptionsWindow::hideFilters()
+{
+    cb_enable_filtering->hide();
+    pb_add_filter->hide();
+    te_add_filter->hide();
+    lw_filter_list->hide();
+    l_filter_list->hide();
+    pb_remove_filter->hide();
+}
+
+void OptionsWindow::hideNotifications()
+{
+    sb_refresh_time->hide();
+    l_refresh_time->hide();
+    cb_enable_notification->hide();
+}
+void OptionsWindow::hideProxyConnection()
+{
+
+    cb_enable_proxy->hide();
+    l_proxy_url->hide();
+    l_proxy_port->hide();
+    te_proxy_url->hide();
+    te_proxy_port->hide();
+}
+

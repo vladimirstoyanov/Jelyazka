@@ -102,8 +102,22 @@ private:
     QListWidget *lw_filter_list;
     QLabel *l_filter_list;
     QPushButton *pb_remove_filter;
+    QCheckBox *cb_enable_filtering;
+
 
     void showEvent(QShowEvent *);
+
+    //show widgets
+    void showCollectionFeeds();
+    void showFilters();
+    void showNotifications();
+    void showProxyConnection();
+    //hide widgets
+    void hideCollectionFeeds();
+    void hideFilters();
+    void hideNotifications();
+    void hideProxyConnection();
+
     void resizeEvent(QResizeEvent *event);
     void addItem(QString name);
     void fillCollectListView();
