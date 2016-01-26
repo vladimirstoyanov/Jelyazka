@@ -22,7 +22,7 @@ SOURCES += main.cpp\
     animatewindow.cpp \
     logger.cpp \
     initwindow.cpp \
-    optionswindow.cpp \
+    Options/optionswindow.cpp \
     refreshfeedsdata.cpp \
     help.cpp \
     about.cpp \
@@ -42,7 +42,7 @@ HEADERS  += mainwindow.h \
     animatewindow.h \
     logger.h \
     initwindow.h \
-    optionswindow.h \
+    Options/optionswindow.h \
     refreshfeedsdata.h \
     help.h \
     about.h \
