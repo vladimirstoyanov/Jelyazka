@@ -28,7 +28,7 @@ public:
     void getCollectFeeds(boost::ptr_vector<QString> *l_old_collect_feed);
     void getFilterList(boost::ptr_vector<QString> *l_old_filters);
     void insertRowToFiltersTable(QString filter_name);
-    void removeDataFromFilters(QString filter_name, bool all_data);
+    void removeDataFromFilters();
     void removeDataFromCollectFeeds(QString site_name);
     void getCollectFeedsThatContainingText(QString text, boost::ptr_vector<QString> *l_favorite_rss); //cf_find_feeds text changed event
 

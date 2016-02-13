@@ -408,72 +408,15 @@ void OptionsWindow::findAndReturnURLAndVersion(QString site_name, QString &url, 
 
 void OptionsWindow::updateFiltersTable()
 {
-    bool changes = false;
-    QList<QString> l_items_for_remove;
-    if (l_old_filters.size()==0)
-    {
-        for (int i=0;  i<lw_filter_list->count(); i++)
-        {
-            insertRowToFiltersTable(lw_filter_list->item(i)->text());
-            vw->l_filters.append(lw_filter_list->item(i)->text());
-            changes = true;
-        }
+     vw->l_filters.clear();
+     db.removeDataFromFilters(); //delete all old filters data
 
-        if (changes)
-            vw->initTextBrowser();
-
-        return;
-    }
-
-    //remove entire data from 'filters' table
-    if (lw_filter_list->count() == 0)
-    {
-        if (l_old_filters.size()>0)
-        {
-            removeDataFromFilters("", true);
-            l_old_filters.clear();
-            changes = true;
-        }
-        if (changes)
-        {
-            vw->l_filters.clear();
-            vw->initTextBrowser();
-        }
-        return;
-    }
-
-    //init l_items_for_remove
-    for(uint i=0; i<l_old_filters.size(); i++)
-        l_items_for_remove.push_back(0);
-
-    vw->l_filters.clear();
-    for (int i=0;  i<lw_filter_list->count(); i++)
-    {
-        for (uint j = 0; j<l_old_filters.size(); j++)
-        {
-            if (lw_filter_list->item(i)->text() == l_old_filters[j])
-            {
-                l_items_for_remove[j] = 1;
-                break;
-            }
-            if (l_old_filters.size()-1 == j)
-            {
-                insertRowToFiltersTable(lw_filter_list->item(i)->text());
-                changes = true;
-            }
-        }
-        vw->l_filters.append(lw_filter_list->item(i)->text());
-    }
-
-    //remove old items
-    for (int i=0; i<l_items_for_remove.size(); i++)
-        if (l_items_for_remove[i] == 0)
-        {
-            removeDataFromFilters(l_old_filters[i], false);
-            changes = true;
-        }
-    if (changes)
-        vw->initTextBrowser();
+     for (int i=0;  i<lw_filter_list->count(); i++)
+     {
+         insertRowToFiltersTable(lw_filter_list->item(i)->text());
+         vw->l_filters.append(lw_filter_list->item(i)->text());
+     }
+     vw->initTextBrowser();
 }
 
 
@@ -997,11 +940,6 @@ void OptionsWindow::on_pb_remove_filter()
 void OptionsWindow::insertRowToFiltersTable(QString filter_name)
 {
     db.insertRowToFiltersTable(filter_name);
-}
-
-void OptionsWindow::removeDataFromFilters(QString filter_name, bool all_data)
-{
-    db.removeDataFromFilters(filter_name, all_data);
 }
 
 void OptionsWindow::removeDataFromCollectFeeds(QString site_name)

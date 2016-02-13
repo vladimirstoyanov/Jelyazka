@@ -32,7 +32,7 @@
 #include <QEvent>
 #include "web_search.h"
 #include <QPainter>
-#include "optionswindow.h"
+#include "Options/optionswindow.h"
 #include <qsizegrip.h>
 #include <QStringList>
 #include <QList>

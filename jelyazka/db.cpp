@@ -327,14 +327,12 @@ void DB::insertRowToFiltersTable(QString filter_name)
     }
 }
 
-void DB::removeDataFromFilters(QString filter_name, bool all_data)
+void DB::removeDataFromFilters()
 {
     QSqlQuery qry;
 
-    if (all_data)
-        qry.prepare("delete from filters");
-    else
-        qry.prepare(QString("delete from filters where name=\"%1\"").arg(filter_name));
+    qry.prepare("delete from filters");
+
     if (!qry.exec())
         qDebug()<<"DB::removeDataFromFilters(QString filter_name, bool all_data) fail:" + qry.lastError().text();
 }
