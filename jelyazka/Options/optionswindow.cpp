@@ -308,7 +308,7 @@ void OptionsWindow::rssTableUpdate()
 
             insertRowToRSSTable(view_feeds->item(i)->text(), url, version);
             isAddedToView = true;
-            data->push_back(site_struct->initStruct(view_feeds->item(i)->text(),"RSS",url));
+            data->pushBack(site_struct->initStruct(view_feeds->item(i)->text(),"RSS",url));
             data->at(data->size()-1)->setIsRead(false);
             data->at(data->size()-1)->setVersion(version);
             tp->start(site_struct);
@@ -348,7 +348,7 @@ void OptionsWindow::rssTableUpdate()
                 QString url, version;
                 findAndReturnURLAndVersion(view_feeds->item(i)->text(),url,version);
                 insertRowToRSSTable(view_feeds->item(i)->text(), url, version);
-                data->push_back(site_struct->initStruct(view_feeds->item(i)->text(),"RSS",url));
+                data->pushBack(site_struct->initStruct(view_feeds->item(i)->text(),"RSS",url));
                 data->at(data->size()-1)->setIsRead(false);
                 data->at(data->size()-1)->setVersion(version);
                 isAddedToView = true;

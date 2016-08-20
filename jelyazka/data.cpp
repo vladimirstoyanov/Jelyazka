@@ -7,23 +7,23 @@ Data::Data()
 
 RSSData*Data::at(int index)
 {
-    if (s_struct.size()<=index)
-        qDebug()<<"Data::at s_struct.size()<=index "<<index;
-    return &s_struct[index];
+    if (rss_data_vector_.size()<=index)
+        qDebug()<<"Data::at rss_data_vector_.size()<=index "<<index;
+    return &rss_data_vector_[index];
 }
 
-void Data::push_back(RSSData *rssData)
+void Data::pushBack(RSSData *rss_data)
 {
-    s_struct.push_back(rssData);
+    rss_data_vector_.push_back(rss_data);
 }
 
 void Data::erase(int index)
 {
-    s_struct.erase(s_struct.begin() + index);
+    rss_data_vector_.erase(rss_data_vector_.begin() + index);
 }
 
  boost::ptr_vector<RSSData>::size_type Data::size()
 {
-    return s_struct.size();
+    return rss_data_vector_.size();
 }
 

@@ -11,11 +11,10 @@ public:
     Data();
     RSSData *at(int index);
     boost::ptr_vector<RSSData>::size_type size();
-    void push_back(RSSData *rssData);
+    void pushBack(RSSData *rss_data);
     void erase(int index);
 private:
-     boost::ptr_vector<RSSData> s_struct;
-
+     boost::ptr_vector<RSSData> rss_data_vector_;
 };
 
 #endif // DATA_H

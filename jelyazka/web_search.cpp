@@ -428,7 +428,7 @@ void WebSearchInterface::on_pushButton_2_clicked() //add RSS feeds button
         }
 
         //add to 'site_struct'
-        data->push_back(site_struct->initStruct(feeds_struct_tmp_iterator->getSiteName(),"RSS",feeds_struct_tmp_iterator->getURL()));
+        data->pushBack(site_struct->initStruct(feeds_struct_tmp_iterator->getSiteName(),"RSS",feeds_struct_tmp_iterator->getURL()));
         data->at(data->size()-1)->setVersion(version);
 
         //adding data (titles, links, descriptions)

@@ -115,7 +115,7 @@ void DB::loadStrctureFromDB(Data *data)
         rssData->setURL(query.value( 2 ).toByteArray().data());
         rssData->setType("RSS");
         rssData->setVersion(query.value(3).toByteArray().data());
-        data->push_back(rssData);
+        data->pushBack(rssData);
     }
     //close data base
     //closeDB();
