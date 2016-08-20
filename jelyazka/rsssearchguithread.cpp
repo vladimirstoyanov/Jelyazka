@@ -1,5 +1,5 @@
 /*
-    web_search_interface_thread.cpp
+    rsssearchguithread.cpp
     Jelyazka RSS/RDF reader
     Copyright (C) 2014 Vladimir Stoyanov
     
@@ -16,17 +16,17 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "web_search_thread.h"
+#include "rsssearchthread.h"
 #include "http.h"
 
-WebSearchInterfaceThread::WebSearchInterfaceThread() :
+RSSSearchGUIThread::RSSSearchGUIThread() :
     QRunnable()
 {
     stop_thread = false;
     mutex = new QMutex();
 }
 
-WebSearchInterfaceThread::~WebSearchInterfaceThread()
+RSSSearchGUIThread::~RSSSearchGUIThread()
 {
     if  (l_url.size()>0)
         l_url.clear();
@@ -34,7 +34,7 @@ WebSearchInterfaceThread::~WebSearchInterfaceThread()
     delete mutex;
 }
 
-bool WebSearchInterfaceThread::setUrlRoot(QString url)
+bool RSSSearchGUIThread::setUrlRoot(QString url)
 {
     HTTP http;
     Search cs;
@@ -46,20 +46,20 @@ bool WebSearchInterfaceThread::setUrlRoot(QString url)
 
     if (index == 0) //remove 'www.'
     {
-        url_root="";
+        url_root_="";
         for (int i=4; i<url.length(); i++)
-            url_root+=url[i];
+            url_root_+=url[i];
     }
     else
-        url_root = url;
+        url_root_ = url;
 
-    if (url_root == "")
+    if (url_root_ == "")
         return 0;
 
     return 1;
 }
 
-void WebSearchInterfaceThread::run()
+void RSSSearchGUIThread::run()
 {
     if (stop_thread)
     {
@@ -152,11 +152,11 @@ void WebSearchInterfaceThread::run()
 
                 mutex->lock();
 
-                buildUrl(url_root, *url, return_url);
+                buildUrl(url_root_, *url, return_url);
                 if (return_url == "") // if fail to build url
                 {
 
-                    log.write(*url  + "\n","ignore.txt");
+                    log_.write(*url  + "\n","ignore.txt");
                     mutex->unlock();
                     continue;
 
@@ -165,7 +165,7 @@ void WebSearchInterfaceThread::run()
                 if (!findUrlDB(return_url))
                 {
 
-                     log.write(return_url, "log.txt");
+                     log_.write(return_url, "log.txt");
                      QString *url_tmp = new QString(return_url);
                      l_url2.push_back(url_tmp);
                      if (return_url.length()>2047)
@@ -190,7 +190,7 @@ void WebSearchInterfaceThread::run()
 }
 
 //get url from html_source after index
-void WebSearchInterfaceThread::getUrl (QString html_source, int &index, QString &return_url)
+void RSSSearchGUIThread::getUrl (QString html_source, int &index, QString &return_url)
 {
     return_url ="";
     while(index< html_source.length() && html_source[index]!='\"') //vol
@@ -213,7 +213,7 @@ void WebSearchInterfaceThread::getUrl (QString html_source, int &index, QString 
 }
 
 //Build full url name
-void WebSearchInterfaceThread::buildUrl (QString url_root, QString url, QString &return_url)
+void RSSSearchGUIThread::buildUrl (QString url_root, QString url, QString &return_url)
 {
     Search cs;
     return_url = "";
@@ -272,7 +272,7 @@ void WebSearchInterfaceThread::buildUrl (QString url_root, QString url, QString 
         fixProtocol(return_url);
 }
 
-int WebSearchInterfaceThread::fixProtocol(QString &url)
+int RSSSearchGUIThread::fixProtocol(QString &url)
 {
     Search cs;
     int index = 0;
@@ -291,7 +291,7 @@ int WebSearchInterfaceThread::fixProtocol(QString &url)
     return 1;
 }
 
-int WebSearchInterfaceThread::checkForRss(QString source, QString &title, int &version)
+int RSSSearchGUIThread::checkForRss(QString source, QString &title, int &version)
 {
     Search cs;
     QString begin="<?xml";
@@ -356,7 +356,7 @@ int WebSearchInterfaceThread::checkForRss(QString source, QString &title, int &v
     return 0;
 }
 
-int WebSearchInterfaceThread::lookForHref(QString source, int &index)
+int RSSSearchGUIThread::lookForHref(QString source, int &index)
 {
     if (index <0)
         return 1;
@@ -389,7 +389,7 @@ int WebSearchInterfaceThread::lookForHref(QString source, int &index)
     return 1;
 }
 
-void WebSearchInterfaceThread::addOrRemoveLastSymbolSlash(QString url, QString *new_url)
+void RSSSearchGUIThread::addOrRemoveLastSymbolSlash(QString url, QString *new_url)
 {
     if (url[url.length()-1]!='/')
         *new_url = url + '/';
@@ -403,7 +403,7 @@ void WebSearchInterfaceThread::addOrRemoveLastSymbolSlash(QString url, QString *
 
 //i1 - index before root_url
 //i - index after '://'
-int WebSearchInterfaceThread::checkForRootURL(QString url, int i, int i1)
+int RSSSearchGUIThread::checkForRootURL(QString url, int i, int i1)
 {
     if (i==-1)
         i=0;
@@ -414,22 +414,22 @@ int WebSearchInterfaceThread::checkForRootURL(QString url, int i, int i1)
     return 1;
 }
 
-int WebSearchInterfaceThread::insertUrlDB(QString url)//+
+int RSSSearchGUIThread::insertUrlDB(QString url)//+
 {
-    return db.insertIntoAllURLs(url);
+    return data_base_.insertIntoAllURLs(url);
 }
 
-int WebSearchInterfaceThread::findUrlDB(QString url)
+int RSSSearchGUIThread::findUrlDB(QString url)
 {
-    return db.selectURLFromAllURLs(url);
+    return data_base_.selectURLFromAllURLs(url);
 }
 
-int WebSearchInterfaceThread::deleteAllFrom_all_url_table() //delete all_url table
+int RSSSearchGUIThread::deleteAllFrom_all_url_table() //delete all_url table
 {
-    return db.deleteAllFromAllURL();
+    return data_base_.deleteAllFromAllURL();
 }
 
-QString WebSearchInterfaceThread::getEncodingFromRSS(QString content) //+
+QString RSSSearchGUIThread::getEncodingFromRSS(QString content) //+
 {
     Search cs;
     QString encoding="";
@@ -460,7 +460,7 @@ QString WebSearchInterfaceThread::getEncodingFromRSS(QString content) //+
     return encoding;
 }
 
-int WebSearchInterfaceThread::checkFinish()
+int RSSSearchGUIThread::checkFinish()
 {
     int count = 0;
     for (int i = 0; i<l_flags.size(); i++)

@@ -1,5 +1,5 @@
 /*
-    web_search_interface_thread.h
+    rsssearchthread.h
     Jelyazka RSS/RDF reader
     Copyright (C) 2014 Vladimir Stoyanov
     
@@ -29,7 +29,7 @@
 #include "logger.h"
 #include "database.h"
 
-class WebSearchInterfaceThread : public QObject, public QRunnable
+class RSSSearchGUIThread : public QObject, public QRunnable
 {
     Q_OBJECT
 public:
@@ -38,9 +38,9 @@ public:
     QList<int> l_flags;
 
 
-    explicit WebSearchInterfaceThread();
+    explicit RSSSearchGUIThread();
 
-    ~WebSearchInterfaceThread();
+    ~RSSSearchGUIThread();
     void run();
     QMutex *mutex;
 
@@ -61,9 +61,9 @@ public:
     int fixProtocol(QString &url);
 
 private:
-    Logger log;
-    QString url_root;
-    DataBase db;
+    Logger log_;
+    QString url_root_;
+    DataBase data_base_;
     QString getEncodingFromRSS(QString content);
     void allURLVariants(QString url);
     void addOrRemoveWWW(QString url, QString *new_url);

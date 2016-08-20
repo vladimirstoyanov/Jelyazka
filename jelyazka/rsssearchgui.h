@@ -1,5 +1,5 @@
 /*
-    web_search_interface.h
+    rsssearchgui.h
     Jelyazka RSS/RDF reader
     Copyright (C) 2014 Vladimir Stoyanov
     
@@ -37,7 +37,7 @@
 #include <QCloseEvent>
 #include <QThreadPool>
 #include "logger.h"
-#include "web_search_thread.h"
+#include "rsssearchthread.h"
 #include "rssthread.h"
 #include "viewwindow.h"
 #include <boost/ptr_container/ptr_list.hpp>
@@ -47,19 +47,19 @@
 #include <limits.h>
 
 namespace Ui {
-class WebSearchInterface;
+class RSSSearchGUI;
 }
 
 class ViewWindow;
 
-class WebSearchInterface : public QWidget
+class RSSSearchGUI : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit WebSearchInterface(QWidget *parent = 0, RSSThread *tmp_site_struct=NULL, ViewWindow *view_window=NULL, Data *data_tmp = NULL);
-    ~WebSearchInterface();
-    WebSearchInterfaceThread *mThread;
+    explicit RSSSearchGUI(QWidget *parent = 0, RSSThread *rss_thread=NULL, ViewWindow *view_window=NULL, Data *data = NULL);
+    ~RSSSearchGUI();
+    RSSSearchGUIThread *mThread;
 
 public slots:
     //void onAddRss(QString name, bool finish);
@@ -75,34 +75,35 @@ public slots:
     void onEndOfUrls();
 
 private:
-    Ui::WebSearchInterface *ui;
-    QStandardItemModel *model;
-    QGridLayout *grid;
-    RSSThread *site_struct;
-    ViewWindow *vw;
-    QThreadPool *tp;
-    QThreadPool *tp2;
-    bool userEdit;
-    bool programEdit;
-    DataBase db;
-    Data *data;
-    ParseRSS *parseRSS;
+    Ui::RSSSearchGUI *ui_;
+    QStandardItemModel *model_;
+    QGridLayout *grid_;
+    RSSThread *rss_thread_;
+    ViewWindow *view_window_;
+    QThreadPool *thread_pool_;
+    QThreadPool *thread_pool_2;
+    bool user_edit_;
+    bool program_edit_;
+    DataBase data_base_;
+    Data *data_;
+    ParseRSS *parse_rss_;
 
+    //ToDo: replace tree with std::map
     struct TreeNode {
-       QString item;
-       TreeNode *left;
-       TreeNode *right;
+       QString item_;
+       TreeNode *left_;
+       TreeNode *right_;
        TreeNode(QString str = "") {
-          item = str;
-          left = NULL;
-          right = NULL;
+          item_ = str;
+          left_ = NULL;
+          right_ = NULL;
        }
     };
-    TreeNode *tn;
+    TreeNode *tree_node_;
     typedef TreeNode treenode;
 
-    boost::ptr_list<RSSData> feeds_struct_tmp;
-    boost::ptr_vector<QString> old_names;
+    boost::ptr_list<RSSData> feeds_struct_tmp_;
+    boost::ptr_vector<QString> old_names_;
 
     void treeInsert(TreeNode *&root, QString newItem);
     bool treeContains( TreeNode *root, QString item );

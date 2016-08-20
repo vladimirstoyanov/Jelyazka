@@ -1,5 +1,5 @@
 /*
-    sitestruct.cpp
+    rssthread.cpp
     Jelyazka RSS/RDF reader
     Copyright (C) 2014 Vladimir Stoyanov
     

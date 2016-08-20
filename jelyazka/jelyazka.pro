@@ -30,11 +30,11 @@ SOURCES += main.cpp\
     http.cpp \
     parserss.cpp \
     data.cpp \
-    web_search.cpp \
-    web_search_thread.cpp \
     rssthread.cpp \
     notificationwindow.cpp \
-    database.cpp
+    database.cpp \
+    rsssearchgui.cpp \
+    rsssearchguithread.cpp
 
 HEADERS  += mainwindow.h \
     viewwindow.h \
@@ -50,17 +50,17 @@ HEADERS  += mainwindow.h \
     http.h \
     parserss.h \
     data.h \
-    web_search.h \
-    web_search_thread.h \
     rssthread.h \
     notificationwindow.h \
-    database.h
+    database.h \
+    rsssearchgui.h \
+    rsssearchthread.h
 
 FORMS    += mainwindow.ui \
     viewwindow.ui \
-    web_search_interface.ui \
     initwindow.ui \
     optionswindow.ui \
     help.ui \
     about.ui \
-    notificationwindow.ui
+    notificationwindow.ui \
+    rsssearchgui.ui

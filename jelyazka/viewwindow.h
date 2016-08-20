@@ -30,7 +30,7 @@
 #include "http.h"
 #include <QMouseEvent>
 #include <QEvent>
-#include "web_search.h"
+#include "rsssearchgui.h"
 #include <QPainter>
 #include "Options/optionswindow.h"
 #include <qsizegrip.h>
@@ -45,7 +45,7 @@ namespace Ui {
 class ViewWindow;
 }
 
-class WebSearchInterface;
+class RSSSearchGUI;
 class OptionsWindow;
 
 class ViewWindow : public QWidget
@@ -87,7 +87,7 @@ private:
     QImage minimize_button_image_;
     QLabel *image_maximize_label_;
     QImage maximize_button_image_;
-    WebSearchInterface *wsi_;
+    RSSSearchGUI *wsi_;
     OptionsWindow *ow_;
     //QSizeGrip *size_grip;
     QRect old_size_;

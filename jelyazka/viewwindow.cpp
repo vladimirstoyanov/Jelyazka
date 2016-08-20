@@ -43,7 +43,7 @@ ViewWindow::ViewWindow(QWidget *parent, RSSThread *rss_thread, Data *data):
     help_gui_ = new Help();
 
     rss_thread_ = rss_thread;
-    wsi_ = new WebSearchInterface (0, rss_thread_, this, data_);
+    wsi_ = new RSSSearchGUI (0, rss_thread_, this, data_);
 
     ow_ = new OptionsWindow(0,rss_thread_, this, data_);
     connect(rss_thread_,SIGNAL(Finish(QString, bool)),ow_,SLOT(onFinish(QString, bool)));
