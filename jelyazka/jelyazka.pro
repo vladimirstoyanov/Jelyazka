@@ -25,7 +25,6 @@ SOURCES += main.cpp\
     refreshfeedsdata.cpp \
     help.cpp \
     about.cpp \
-    db.cpp \
     rssdata.cpp \
     rssarticle.cpp \
     http.cpp \
@@ -34,7 +33,8 @@ SOURCES += main.cpp\
     web_search.cpp \
     web_search_thread.cpp \
     rssthread.cpp \
-    notificationwindow.cpp
+    notificationwindow.cpp \
+    database.cpp
 
 HEADERS  += mainwindow.h \
     viewwindow.h \
@@ -45,7 +45,6 @@ HEADERS  += mainwindow.h \
     refreshfeedsdata.h \
     help.h \
     about.h \
-    db.h \
     rssdata.h \
     rssarticle.h \
     http.h \
@@ -54,7 +53,8 @@ HEADERS  += mainwindow.h \
     web_search.h \
     web_search_thread.h \
     rssthread.h \
-    notificationwindow.h
+    notificationwindow.h \
+    database.h
 
 FORMS    += mainwindow.ui \
     viewwindow.ui \

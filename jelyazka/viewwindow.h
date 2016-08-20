@@ -96,7 +96,7 @@ private:
     bool resizing;
     bool minimize;
     bool close;
-    DB db;
+    DataBase db;
     int width;
     int height;
     bool isXchanged;

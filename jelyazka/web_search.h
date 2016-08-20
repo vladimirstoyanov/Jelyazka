@@ -84,7 +84,7 @@ private:
     QThreadPool *tp2;
     bool userEdit;
     bool programEdit;
-    DB db;
+    DataBase db;
     Data *data;
     ParseRSS *parseRSS;
 

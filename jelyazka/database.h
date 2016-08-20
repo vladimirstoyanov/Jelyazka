@@ -6,10 +6,10 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "data.h"
 
-class DB
+class DataBase
 {
 public:
-    DB();
+    DataBase();
     void createTables();
     void loadStrctureFromDB(Data *data);
     void getFavoriteFeeds(boost::ptr_vector<QString> *l_old_view_feed);

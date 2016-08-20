@@ -63,7 +63,7 @@ public:
 private:
     Logger log;
     QString url_root;
-    DB db;
+    DataBase db;
     QString getEncodingFromRSS(QString content);
     void allURLVariants(QString url);
     void addOrRemoveWWW(QString url, QString *new_url);

@@ -68,7 +68,7 @@ private slots:
     void on_textChanged(QString text);
 
 private:
-    DB db;
+    DataBase db;
     Ui::OptionsWindow *ui;
     RSSThread *site_struct;
     Data *data;

@@ -86,7 +86,7 @@ private:
     bool first_flag;
     QThreadPool *tp;
     int refresh_time_feeds;
-    DB db;
+    DataBase db;
     Data *data;
     ParseRSS *parseRSS;
 

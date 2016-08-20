@@ -1,6 +1,6 @@
-#include "db.h"
+#include "database.h"
 
-DB::DB()
+DataBase::DataBase()
 {
     //open db
     sqliteDataBase = QSqlDatabase::addDatabase("QSQLITE");
@@ -13,7 +13,7 @@ DB::DB()
 
 /////////rssthread.h
 ///
-void DB::createTables()
+void DataBase::createTables()
 {
     //open data base
     //openDB();
@@ -90,7 +90,7 @@ void DB::createTables()
     //closeDB();
 }
 
-void DB::loadStrctureFromDB(Data *data)
+void DataBase::loadStrctureFromDB(Data *data)
 {
     //open data base
     //openDB();
@@ -121,7 +121,7 @@ void DB::loadStrctureFromDB(Data *data)
     //closeDB();
 }
 
-void DB::openDB()
+void DataBase::openDB()
 {
     //open db
     sqliteDataBase = QSqlDatabase::addDatabase("QSQLITE");
@@ -129,7 +129,7 @@ void DB::openDB()
     sqliteDataBase.open();
 }
 
-void DB::closeDB()
+void DataBase::closeDB()
 {
    sqliteDataBase.close();
 }
@@ -140,7 +140,7 @@ void DB::closeDB()
 ////////options.cpp
 ///
 //fill view_feeds (QListWidget var)
-void DB::getFavoriteFeeds(boost::ptr_vector<QString> *l_old_view_feed)
+void DataBase::getFavoriteFeeds(boost::ptr_vector<QString> *l_old_view_feed)
 {
     QSqlQuery query;
 
@@ -164,7 +164,7 @@ void DB::getFavoriteFeeds(boost::ptr_vector<QString> *l_old_view_feed)
 
 //remove site_name data from 'rss' table in 'sites.db3'. If all_data == 1,
 //then remove all data from 'rss' table
-void DB::removeDataFromRSSTable(QString site_name, bool all_data)
+void DataBase::removeDataFromRSSTable(QString site_name, bool all_data)
 {
 
     QSqlQuery qry;
@@ -183,7 +183,7 @@ void DB::removeDataFromRSSTable(QString site_name, bool all_data)
 }
 
 //insert row to 'rss' DB table
-void DB::insertIntoFavoriteFeeds(QString name, QString url, QString version)
+void DataBase::insertIntoFavoriteFeeds(QString name, QString url, QString version)
 {
     QSqlQuery qry;
 
@@ -194,7 +194,7 @@ void DB::insertIntoFavoriteFeeds(QString name, QString url, QString version)
     }
 }
 
-void DB::insertIntoCollectFeeds(QString name, QString url, QString version)
+void DataBase::insertIntoCollectFeeds(QString name, QString url, QString version)
 {
     QSqlQuery qry;
 
@@ -205,7 +205,7 @@ void DB::insertIntoCollectFeeds(QString name, QString url, QString version)
     }
 }
 
-int DB::insertIntoAllURLs(QString url)
+int DataBase::insertIntoAllURLs(QString url)
 {
     QSqlQuery query;
 
@@ -219,7 +219,7 @@ int DB::insertIntoAllURLs(QString url)
 }
 
 //from site_name, return url and version
-void DB::findAndReturnURLAndVersion(QString site_name, QString &url, QString &version)
+void DataBase::findAndReturnURLAndVersion(QString site_name, QString &url, QString &version)
 {
     QSqlQuery query;
     url = "";
@@ -243,7 +243,7 @@ void DB::findAndReturnURLAndVersion(QString site_name, QString &url, QString &ve
     }
 }
 
-int DB::selectURLFromAllURLs(QString url)
+int DataBase::selectURLFromAllURLs(QString url)
 {
         QSqlQuery query;
 
@@ -259,7 +259,7 @@ int DB::selectURLFromAllURLs(QString url)
         return 0;
 }
 
-int DB::deleteAllFromAllURL()
+int DataBase::deleteAllFromAllURL()
 {
     QSqlQuery query;
     query.prepare("delete from all_urls");
@@ -270,7 +270,7 @@ int DB::deleteAllFromAllURL()
 }
 
 
-void DB::getCollectFeeds(boost::ptr_vector<QString> *l_old_collect_feed)
+void DataBase::getCollectFeeds(boost::ptr_vector<QString> *l_old_collect_feed)
 {
     QSqlQuery query;
 
@@ -291,7 +291,7 @@ void DB::getCollectFeeds(boost::ptr_vector<QString> *l_old_collect_feed)
     }
 }
 
-void DB::getFilterList(boost::ptr_vector<QString> *l_old_filters)
+void DataBase::getFilterList(boost::ptr_vector<QString> *l_old_filters)
 {
     QSqlQuery query;
 
@@ -316,7 +316,7 @@ void DB::getFilterList(boost::ptr_vector<QString> *l_old_filters)
 }
 
 
-void DB::insertRowToFiltersTable(QString filter_name)
+void DataBase::insertRowToFiltersTable(QString filter_name)
 {
     QSqlQuery qry;
 
@@ -327,7 +327,7 @@ void DB::insertRowToFiltersTable(QString filter_name)
     }
 }
 
-void DB::removeDataFromFilters()
+void DataBase::removeDataFromFilters()
 {
     QSqlQuery qry;
 
@@ -337,7 +337,7 @@ void DB::removeDataFromFilters()
         qDebug()<<"DB::removeDataFromFilters(QString filter_name, bool all_data) fail:" + qry.lastError().text();
 }
 
-void DB::removeDataFromCollectFeeds(QString site_name)
+void DataBase::removeDataFromCollectFeeds(QString site_name)
 {
     QSqlQuery qry;
 
@@ -346,7 +346,7 @@ void DB::removeDataFromCollectFeeds(QString site_name)
         qDebug()<<"DB::removeDataFromCollectFeeds(QString site_name) fail delete from collect_feeds where filter... " + qry.lastError().text();
 }
 
-void DB::getCollectFeedsThatContainingText(QString text, boost::ptr_vector<QString> *l_favorite_rss) //cf_find_feeds text changed event
+void DataBase::getCollectFeedsThatContainingText(QString text, boost::ptr_vector<QString> *l_favorite_rss) //cf_find_feeds text changed event
 {
     QSqlQuery query;
 
