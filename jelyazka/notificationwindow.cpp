@@ -155,14 +155,14 @@ void NotificationWindow::onShowAnimateWindow(QString data_str)
     this->show();
 }
 
-void NotificationWindow::on_animation_finished()
+void NotificationWindow::onShowAnimationFinished()
 {
     delay(5);
     if (!mouse_clicked_)
         hideWindowAnimation(); //window hiding animation
 }
 
-void NotificationWindow::on_animation_finished2()
+void NotificationWindow::onHideAnimationFinished()
 {
     this->hide();
 }

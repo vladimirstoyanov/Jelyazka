@@ -47,8 +47,8 @@ public:
 
 public slots:
     void onShowAnimateWindow(QString);
-    void on_animation_finished();
-    void on_animation_finished2();
+    void onShowAnimationFinished();
+    void onHideAnimationFinished();
 
 
 private:
