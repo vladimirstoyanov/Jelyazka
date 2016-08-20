@@ -22,36 +22,30 @@
 #include "mainwindow.h"
 #include <vector>
 
-MainWindow::MainWindow(InitWindow *init_window)
-{
-    //init class pointers
-    tray_icon_=NULL;
-    tray_icon_menu_=NULL;
-    about_ = NULL;
-    close_ = NULL;
-    view_ = NULL;
-    rss_thread_=NULL;
-    view_window_=NULL;
-    notification_window_=NULL;
+MainWindow::MainWindow(InitWindow *init_window):
+    tray_icon_(NULL),
+    tray_icon_menu_(NULL),
+    about_(NULL),
+    close_(NULL),
+    view_(NULL),
+    rss_thread_(NULL),
+    view_window_(NULL),
+    about_gui_(new About()),
+    notification_window_ (new NotificationWindow()),
+    data_ (new Data())
 
+{
     //creating system tray icon
     createActions();
     createTrayIcon();
     setIcon();
 
-    //init animate window
-    notification_window_ = new NotificationWindow();
-
-    //when init window done its work emit Done funtion
+    //when initialize window is finished, then call onDone funtion
     connect(init_window,SIGNAL(Done()),this,SLOT(onDone()));
 
-    //initialize site_struct class
-    data_ = new Data();
-    rss_thread_ = new RSSThread(data_);
+    rss_thread_  = new RSSThread(data_);
     rss_thread_->setAutoDelete(false);
 
-
-    //initialize viewwindow class
     view_window_ = new ViewWindow(0, rss_thread_,data_);
     refresh_feed_data_ = new RefreshFeedsData(0, rss_thread_, data_);
 
@@ -60,9 +54,6 @@ MainWindow::MainWindow(InitWindow *init_window)
 
     //set thread signal
     notification_window_->setSignal(rss_thread_, data_);
-
-    //init About window
-    about_gui_ = new About();
 
     this->hide();
 }

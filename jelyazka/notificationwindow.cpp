@@ -22,21 +22,23 @@
 
 NotificationWindow::NotificationWindow(QWidget *parent) :
     QWidget(parent),
-    ui_(new Ui::NotificationWindow)
+    ui_(new Ui::NotificationWindow),
+    image_label_(NULL),
+    rss_thread_(NULL),
+    show_window_animation_ (new QPropertyAnimation(this, "geometry")),
+    hide_window_animation_ (new QPropertyAnimation(this, "geometry")),
+    is_mouse_clicked_ (false),
+    is_X_changed_(true)
+
 {
     ui_->setupUi(this);
-    show_window_animation_ = NULL;
-    image_label_ = NULL;
-    
+
+    //makes the window without frames
 	#ifdef _WIN32
 		setWindowFlags( Qt::FramelessWindowHint | windowFlags() | Qt::Tool);
 	#else
 		setWindowFlags( Qt::FramelessWindowHint | Qt::Tool);
 	#endif
-    //make window without frames
-    
-
-    rss_thread_=NULL;
     
     //image of 'X' button load
     LoadImage_();
@@ -49,17 +51,11 @@ NotificationWindow::NotificationWindow(QWidget *parent) :
     ui_->textBrowser->setOpenLinks(1);
     ui_->textBrowser->setOpenExternalLinks(1);
 
-    show_window_animation_ = new QPropertyAnimation(this, "geometry");
-    hide_window_animation_ = new QPropertyAnimation(this, "geometry");
-
     connect (show_window_animation_, SIGNAL(finished()), this, SLOT(on_animation_finished()));
     connect (hide_window_animation_, SIGNAL(finished()), this, SLOT(on_animation_finished2()));
 
-    is_mouse_clicked_ = false;
-
     qApp->installEventFilter(this);
 
-    is_X_changed_ = 1;
 }
 
 NotificationWindow::~NotificationWindow()

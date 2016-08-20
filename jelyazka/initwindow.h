@@ -41,10 +41,10 @@ public:
 
 private:
     Ui::InitWindow *ui_;
+    QThreadPool *thread_pool_;
     QLabel *image_init_label_;
     QImage *init_image_;
     RSSThread *rss_thread_;
-    QThreadPool *thread_pool_;
     Data *data_;
 
 public slots:

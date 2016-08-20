@@ -22,10 +22,15 @@
 
 InitWindow::InitWindow(QWidget *parent) :
     QWidget(parent),
-    ui_(new Ui::InitWindow)
+    ui_(new Ui::InitWindow),
+    thread_pool_(new QThreadPool(this)),
+    image_init_label_ (new QLabel(this)),
+    init_image_ (new QImage("../resources/jelyazka_02_end.png")),
+    rss_thread_(NULL),
+    data_(NULL)
+
 {
     ui_->setupUi(this);
-    thread_pool_ = new QThreadPool(this);
 
     ui_->label->setGeometry(5,260,250,40);
     ui_->label->setStyleSheet("QLabel { color : white; }");
@@ -36,8 +41,6 @@ InitWindow::InitWindow(QWidget *parent) :
     this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center()); //move the window to the center of the screen
     this->setStyleSheet("background-color:black;");
 
-    image_init_label_ = new QLabel(this);
-    init_image_  = new QImage("../resources/jelyazka_02_end.png");
     image_init_label_->setPixmap(QPixmap::fromImage(*init_image_));
     image_init_label_->setGeometry(QRect(0,0,300,300));
     image_init_label_->show();
