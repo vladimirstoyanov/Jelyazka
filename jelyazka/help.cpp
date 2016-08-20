@@ -24,30 +24,31 @@
 
 Help::Help(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::Help)
+    ui_(new Ui::Help)
 {
-    ui->setupUi(this);
+    ui_->setupUi(this);
 
-    //with bottom 2 lines, clicked link in textBrowser widget, open default web browser and load the link 
-    ui->textBrowser->setOpenLinks(1);
-    ui->textBrowser->setOpenExternalLinks(1);
+    //with bottom 2 lines, when clicks on a link in textBrowser widget,
+    //it opens default web browser and loading the link
+    ui_->textBrowser->setOpenLinks(1);
+    ui_->textBrowser->setOpenExternalLinks(1);
 }
 
 Help::~Help()
 {
-    delete ui;
+    delete ui_;
 }
 
 void Help::showEvent(QShowEvent *)
 {
-    ui->textBrowser->setGeometry(5,5,this->width()-10, this->height()-10);
+    ui_->textBrowser->setGeometry(5,5,this->width()-10, this->height()-10);
     this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
     loadHelp();
 }
 
 void Help::resizeEvent(QResizeEvent *event)
 {
-    ui->textBrowser->setGeometry(5,5,this->width()-10, this->height()-10);
+    ui_->textBrowser->setGeometry(5,5,this->width()-10, this->height()-10);
 }
 
 void Help::loadHelp()
@@ -67,5 +68,5 @@ void Help::loadHelp()
 
     file.close();
 
-    ui->textBrowser->setHtml(html_source);
+    ui_->textBrowser->setHtml(html_source);
 }

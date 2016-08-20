@@ -35,7 +35,7 @@ public:
     ~Help();
 
 private:
-    Ui::Help *ui;
+    Ui::Help *ui_;
     void showEvent(QShowEvent *);
     void resizeEvent(QResizeEvent *event);
     void loadHelp();
