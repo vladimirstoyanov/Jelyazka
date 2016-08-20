@@ -40,7 +40,7 @@ About::~About()
 }
 
 //'OK' button has been clicked
-void About::on_pushButton_clicked()
+void About::OKButtonClicked()
 {
     this->close();
 }

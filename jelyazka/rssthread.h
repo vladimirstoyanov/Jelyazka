@@ -19,7 +19,7 @@
 #ifndef RSSTHREAD_H
 #define RSSTHREAD_H
 
-#include "animatewindow.h"
+#include "notificationwindow.h"
 #include <QtCore>
 #include <QThreadPool>
 #include <QDebug>
@@ -42,7 +42,7 @@
 #include "parserss.h"
 
 
-class CAnimateWindow;
+class AnimateWindow;
 
 class RSSThread : public QObject, public QRunnable
 {

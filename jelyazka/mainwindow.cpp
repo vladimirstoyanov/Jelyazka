@@ -32,7 +32,7 @@ MainWindow::MainWindow(InitWindow *init_window)
     view = NULL;
     s_struct=NULL;
     view_window=NULL;
-    aw=NULL;
+    notification_window_=NULL;
 
     //creating system tray icon
     createActions();
@@ -40,7 +40,7 @@ MainWindow::MainWindow(InitWindow *init_window)
     setIcon();
 
     //init animate window
-    aw = new CAnimateWindow();
+    notification_window_ = new NotificationWindow();
 
     //when init window done its work emit Done funtion
     connect(init_window,SIGNAL(Done()),this,SLOT(onDone()));
@@ -59,7 +59,7 @@ MainWindow::MainWindow(InitWindow *init_window)
     init_window->setSignal(s_struct, data);
 
     //set thread signal
-    aw->setSignal(s_struct,data);
+    notification_window_->setSignal(s_struct,data);
 
     //init About window
     about_gui = new About();
@@ -82,8 +82,8 @@ MainWindow::~MainWindow()
     s_struct->deleteLater();
     if (view_window!=NULL)
         delete view_window;
-    if (aw!=NULL)
-        delete aw;
+    if (notification_window_!=NULL)
+        delete notification_window_;
     if (data!=NULL)
         delete data;
 

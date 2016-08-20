@@ -34,7 +34,7 @@ public:
     ~About();
 
 private slots:
-    void on_pushButton_clicked(); //'OK' button
+    void OKButtonClicked(); //'OK' button
 
 private:
     Ui::About *ui;

@@ -19,7 +19,6 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     viewwindow.cpp \
     search.cpp \
-    animatewindow.cpp \
     logger.cpp \
     initwindow.cpp \
     Options/optionswindow.cpp \
@@ -34,12 +33,12 @@ SOURCES += main.cpp\
     data.cpp \
     web_search.cpp \
     web_search_thread.cpp \
-    rssthread.cpp
+    rssthread.cpp \
+    notificationwindow.cpp
 
 HEADERS  += mainwindow.h \
     viewwindow.h \
     search.h \
-    animatewindow.h \
     logger.h \
     initwindow.h \
     Options/optionswindow.h \
@@ -54,13 +53,14 @@ HEADERS  += mainwindow.h \
     data.h \
     web_search.h \
     web_search_thread.h \
-    rssthread.h
+    rssthread.h \
+    notificationwindow.h
 
 FORMS    += mainwindow.ui \
     viewwindow.ui \
-    animatewindow.ui \
     web_search_interface.ui \
     initwindow.ui \
     optionswindow.ui \
     help.ui \
-    about.ui
+    about.ui \
+    notificationwindow.ui

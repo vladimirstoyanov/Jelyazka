@@ -31,7 +31,7 @@
 
 #include "rssthread.h"
 #include "viewwindow.h"
-#include "animatewindow.h"
+#include "notificationwindow.h"
 #include "initwindow.h"
 #include "refreshfeedsdata.h"
 #include "about.h"
@@ -57,7 +57,7 @@ private:
     QAction *close;
     QAction *view;
     ViewWindow *view_window;
-    CAnimateWindow *aw;
+    NotificationWindow *notification_window_;
     RSSThread *s_struct;
     Data *data;
     RefreshFeedsData *rfd;
