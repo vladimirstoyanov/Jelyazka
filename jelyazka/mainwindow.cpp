@@ -25,13 +25,13 @@
 MainWindow::MainWindow(InitWindow *init_window)
 {
     //init class pointers
-    trayIcon=NULL;
-    trayIconMenu=NULL;
-    about = NULL;
-    close = NULL;
-    view = NULL;
-    s_struct=NULL;
-    view_window=NULL;
+    tray_icon_=NULL;
+    tray_icon_menu_=NULL;
+    about_ = NULL;
+    close_ = NULL;
+    view_ = NULL;
+    rss_thread_=NULL;
+    view_window_=NULL;
     notification_window_=NULL;
 
     //creating system tray icon
@@ -46,87 +46,87 @@ MainWindow::MainWindow(InitWindow *init_window)
     connect(init_window,SIGNAL(Done()),this,SLOT(onDone()));
 
     //initialize site_struct class
-    data = new Data();
-    s_struct = new RSSThread(data);
-    s_struct->setAutoDelete(false);
+    data_ = new Data();
+    rss_thread_ = new RSSThread(data_);
+    rss_thread_->setAutoDelete(false);
 
 
     //initialize viewwindow class
-    view_window = new ViewWindow(0,s_struct,data);
-    rfd = new RefreshFeedsData(0,s_struct, data);
+    view_window_ = new ViewWindow(0, rss_thread_,data_);
+    refresh_feed_data_ = new RefreshFeedsData(0, rss_thread_, data_);
 
     //load data
-    init_window->setSignal(s_struct, data);
+    init_window->setSignal(rss_thread_, data_);
 
     //set thread signal
-    notification_window_->setSignal(s_struct,data);
+    notification_window_->setSignal(rss_thread_, data_);
 
     //init About window
-    about_gui = new About();
+    about_gui_ = new About();
 
     this->hide();
 }
 
 MainWindow::~MainWindow()
 {
-    if (trayIcon!=NULL)
-        delete trayIcon;
-    if (trayIconMenu!=NULL)
-        delete trayIconMenu;
-    if (about!=NULL)
-        delete about;
-    if (close!=NULL)
-        delete close;
-    if (view!=NULL)
-        delete view;
-    s_struct->deleteLater();
-    if (view_window!=NULL)
-        delete view_window;
+    if (tray_icon_!=NULL)
+        delete tray_icon_;
+    if (tray_icon_menu_!=NULL)
+        delete tray_icon_menu_;
+    if (about_!=NULL)
+        delete about_;
+    if (close_!=NULL)
+        delete close_;
+    if (view_!=NULL)
+        delete view_;
+    rss_thread_->deleteLater();
+    if (view_window_!=NULL)
+        delete view_window_;
     if (notification_window_!=NULL)
         delete notification_window_;
-    if (data!=NULL)
-        delete data;
+    if (data_!=NULL)
+        delete data_;
 
-    delete about_gui;
+    delete about_gui_;
 }
 void MainWindow::viewWindow()
 {
-    view_window->show();
+    view_window_->show();
 }
 
 void MainWindow::showAbout()
 {
-    about_gui->show();
+    about_gui_->show();
 }
 
 void MainWindow::createActions()
 {
-    view = new QAction(tr("&Open Jelyazka"), this);
-    connect(view, SIGNAL(triggered()), this, SLOT(viewWindow()));
+    view_ = new QAction(tr("&Open Jelyazka"), this);
+    connect(view_, SIGNAL(triggered()), this, SLOT(viewWindow()));
 
-    about = new QAction(tr("&About"), this);
-    connect(about, SIGNAL(triggered()), this, SLOT(showAbout()));
+    about_ = new QAction(tr("&About"), this);
+    connect(about_, SIGNAL(triggered()), this, SLOT(showAbout()));
 
-    close = new QAction(tr("&Quit"), this);
-    connect(close, SIGNAL(triggered()), qApp, SLOT(quit()));
+    close_ = new QAction(tr("&Quit"), this);
+    connect(close_, SIGNAL(triggered()), qApp, SLOT(quit()));
 }
 void MainWindow::createTrayIcon()
 {
-    trayIconMenu = new QMenu(this);
+    tray_icon_menu_ = new QMenu(this);
 
-    trayIconMenu->addAction(view);
-    trayIconMenu->addSeparator();
-    trayIconMenu->addAction(about);
-    trayIconMenu->addSeparator();
-    trayIconMenu->addAction(close);
+    tray_icon_menu_->addAction(view_);
+    tray_icon_menu_->addSeparator();
+    tray_icon_menu_->addAction(about_);
+    tray_icon_menu_->addSeparator();
+    tray_icon_menu_->addAction(close_);
 
 
-    trayIcon = new QSystemTrayIcon(this);
-    trayIcon->setContextMenu(trayIconMenu);
+    tray_icon_ = new QSystemTrayIcon(this);
+    tray_icon_->setContextMenu(tray_icon_menu_);
 
 
     connect(
-            trayIcon,
+            tray_icon_,
             SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this,
             SLOT(trayIconClicked(QSystemTrayIcon::ActivationReason))
@@ -135,19 +135,19 @@ void MainWindow::createTrayIcon()
 
 void MainWindow::setIcon()
 {
-    trayIcon->setIcon(QIcon("../resources/Jelyazka_icon.png"));
+    tray_icon_->setIcon(QIcon("../resources/Jelyazka_icon.png"));
 }
 
 void MainWindow::trayIconClicked(QSystemTrayIcon::ActivationReason reason)
 {
     if(reason == QSystemTrayIcon::Trigger)
-        view_window->show();
+        view_window_->show();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (trayIcon->isVisible()) {
-        trayIcon->showMessage(tr("Still here!!!"),
+    if (tray_icon_->isVisible()) {
+        tray_icon_->showMessage(tr("Still here!!!"),
         tr("This application is still running. To quit please click this icon and select Quit"));
         hide();
 
@@ -158,12 +158,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::onDone()
 {
-    trayIcon->show();
-    view_window->show();
-    rfd->start();
-    for (uint i=0; i<data->size(); i++)
-      s_struct->data_for_animatewindow+="<index=" + QString::number(i) + ">";
-    s_struct->emitAnimateWindow();
+    tray_icon_->show();
+    view_window_->show();
+    refresh_feed_data_->start();
+    for (uint i=0; i<data_->size(); i++)
+      rss_thread_->data_for_animatewindow+="<index=" + QString::number(i) + ">";
+    rss_thread_->emitAnimateWindow();
 }
 
 #endif

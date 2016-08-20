@@ -50,18 +50,18 @@ public:
     ~MainWindow();
     
 private:
-    Ui::MainWindow *ui;
-    QSystemTrayIcon *trayIcon;
-    QMenu *trayIconMenu;
-    QAction *about;
-    QAction *close;
-    QAction *view;
-    ViewWindow *view_window;
+    Ui::MainWindow *ui_;
+    QSystemTrayIcon *tray_icon_;
+    QMenu *tray_icon_menu_;
+    QAction *about_;
+    QAction *close_;
+    QAction *view_;
+    ViewWindow *view_window_;
     NotificationWindow *notification_window_;
-    RSSThread *s_struct;
-    Data *data;
-    RefreshFeedsData *rfd;
-    About *about_gui;
+    RSSThread *rss_thread_;
+    Data *data_;
+    RefreshFeedsData *refresh_feed_data_;
+    About *about_gui_;
 
     void createActions();
     void createTrayIcon();
