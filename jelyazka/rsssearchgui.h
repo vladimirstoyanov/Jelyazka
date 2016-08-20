@@ -82,8 +82,8 @@ private:
     ViewWindow *view_window_;
     QThreadPool *thread_pool_;
     QThreadPool *thread_pool_2;
-    bool user_edit_;
-    bool program_edit_;
+    bool is_user_edit_;
+    bool is_program_edit_;
     DataBase data_base_;
     Data *data_;
     ParseRSS *parse_rss_;

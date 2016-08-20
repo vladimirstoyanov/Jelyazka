@@ -73,8 +73,8 @@ RSSSearchGUI::RSSSearchGUI(QWidget *parent, RSSThread *rss_thread, ViewWindow *v
     connect(model_, SIGNAL(itemChanged(QStandardItem*)), this, SLOT(on_modelItemChanged(QStandardItem*)));
 
     ui_->label->setText("");
-    user_edit_ = true;
-    program_edit_ = false;
+    is_user_edit_ = true;
+    is_program_edit_ = false;
 }
 
 RSSSearchGUI::~RSSSearchGUI()
@@ -291,7 +291,7 @@ void RSSSearchGUI::onFoundRSS(int type, QString name, QString url, QString encod
 
         if (checkExistingURL(url))
             return;
-        user_edit_ = false;
+        is_user_edit_ = false;
         parse_rss_->convert_string(name, false);
         while(treeContains(tree_node_,name))
             name = change_name(name); //make unique name
@@ -342,7 +342,7 @@ void RSSSearchGUI::onFoundRSS(int type, QString name, QString url, QString encod
 
         ui_->tableView->scrollToBottom();
         ui_->tableView->resizeColumnToContents(0);
-        user_edit_ = true;
+        is_user_edit_ = true;
 
     }
     if (type == 1)
@@ -587,7 +587,7 @@ QString RSSSearchGUI::change_name(QString name)
 void RSSSearchGUI::on_modelItemChanged(QStandardItem*item)
 {
     bool in_if=false;
-    if (item->column() == 0 && user_edit_ && !program_edit_)
+    if (item->column() == 0 && is_user_edit_ && !is_program_edit_)
     {
         //check name and make unique
         QString name  = item->text();
@@ -600,13 +600,13 @@ void RSSSearchGUI::on_modelItemChanged(QStandardItem*item)
 
         if (name != item->text())
         {
-            program_edit_ = true;
+            is_program_edit_ = true;
             in_if = true;
             model_->setData(model_->index(item->row(),0),name); //set new name
         }
     }
-    if (program_edit_ && !in_if)
-        program_edit_ = false;
+    if (is_program_edit_ && !in_if)
+        is_program_edit_ = false;
 }
 QString RSSSearchGUI::insertName(QString name)
 {

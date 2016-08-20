@@ -58,7 +58,7 @@ private:
     QImage close_button_image_;
     Ui::NotificationWindow *ui_;
     RSSThread *rss_thread_;
-    bool mouse_clicked_; //if mouse clicked on this window, mouse_clicked = true, otherwise mouse_clicked = false;
+    bool is_mouse_clicked_; //if mouse clicked on this window, mouse_clicked = true, otherwise mouse_clicked = false;
     bool is_X_changed_; //'X' button image has been changed, then isXchanged = true, otherwise isXchanged = false;
     Data *data_;
 

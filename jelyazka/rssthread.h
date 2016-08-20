@@ -95,7 +95,7 @@ signals:
 
 private:
     QMutex *mutex_; //using for threads
-    bool first_flag_;
+    bool is_first_flag_;
     QThreadPool *thread_pool_;
     int refresh_time_feeds_;
     DataBase data_base_;

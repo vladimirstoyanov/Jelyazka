@@ -55,7 +55,7 @@ NotificationWindow::NotificationWindow(QWidget *parent) :
     connect (show_window_animation_, SIGNAL(finished()), this, SLOT(on_animation_finished()));
     connect (hide_window_animation_, SIGNAL(finished()), this, SLOT(on_animation_finished2()));
 
-    mouse_clicked_ = false;
+    is_mouse_clicked_ = false;
 
     qApp->installEventFilter(this);
 
@@ -98,7 +98,7 @@ void NotificationWindow::showWindowAnimation()
     show_window_animation_->setStartValue(QRect(width-this->width(),height,this->width(),this->height()));
     show_window_animation_->setEndValue(QRect(width-this->width(),height - this->height(),this->width(),this->height()));
     show_window_animation_->start();
-    mouse_clicked_ = false;
+    is_mouse_clicked_ = false;
 }
 
 //Hide window animation
@@ -158,7 +158,7 @@ void NotificationWindow::onShowAnimateWindow(QString data_str)
 void NotificationWindow::onShowAnimationFinished()
 {
     delay(5);
-    if (!mouse_clicked_)
+    if (!is_mouse_clicked_)
         hideWindowAnimation(); //window hiding animation
 }
 
@@ -214,7 +214,7 @@ bool NotificationWindow::eventFilter(QObject *o, QEvent *event)
     if (event->type() == QEvent::MouseButtonPress)
     {
         if (o->objectName() == "CAnimateWindowWindow")
-            mouse_clicked_ = true;
+            is_mouse_clicked_ = true;
     }
 
     if (event->type() == QEvent::MouseMove && o->objectName() == "CAnimateWindowWindow")

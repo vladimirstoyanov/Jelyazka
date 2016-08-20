@@ -36,7 +36,7 @@ ViewWindow::ViewWindow(QWidget *parent, RSSThread *rss_thread, Data *data):
     this->setMinimumHeight(200);
     this->setMinimumWidth(350);
 
-    resizing_ = false;
+    is_resizing_ = false;
 
     initFilters();
 
@@ -51,8 +51,8 @@ ViewWindow::ViewWindow(QWidget *parent, RSSThread *rss_thread, Data *data):
     is_X_changed_ = 0;
     is_minimize_changed_=0;
     is_maximize_changed_=0;
-    flag_maximized_ = 0;
-    press_released_ = 0;
+    is_flag_maximized_ = 0;
+    is_press_released_ = 0;
 
     qApp->installEventFilter(this);
 
@@ -146,8 +146,8 @@ ViewWindow::ViewWindow(QWidget *parent, RSSThread *rss_thread, Data *data):
 	#ifdef _WIN32
         image_add_rss_label_->setToolTipDuration(5000);
 	#endif
-    minimize_ = 0;
-    close_ = 0;
+    is_minimize_ = 0;
+    is_close_ = 0;
 
 }
 
@@ -244,7 +244,7 @@ int ViewWindow::showArticle(int struct_index, int article_index)
     }
     if (article_index>=data_->at(struct_index)->getArticlesSize()||article_index<0)
     {
-        if (!show_flag_)
+        if (!is_show_flag_)
             ui_->textBrowser->setHtml("");
          //qDebug()<<"show article third if.";
         return 0;
@@ -256,12 +256,12 @@ int ViewWindow::showArticle(int struct_index, int article_index)
 
     if (!checkForFilters(title_tmp, text_tmp))
     {
-        show_flag_ = false;
+        is_show_flag_ = false;
         showArticle(struct_index,article_index+1);
 
         return 0;
     }
-    show_flag_ = true;
+    is_show_flag_ = true;
 
     //date
     if (data_->at(struct_index)->articleAt(article_index).getDate()!="")
@@ -306,10 +306,10 @@ void ViewWindow::closeEvent(QCloseEvent *event)
 }
 void ViewWindow::showEvent(QShowEvent *)
 {
-    if (minimize_ || close_)
+    if (is_minimize_ || is_close_)
     {
-        minimize_ =0;
-        close_ = 0;
+        is_minimize_ =0;
+        is_close_ = 0;
         return;
     }
 
@@ -341,92 +341,92 @@ void ViewWindow::mouseButtonPressed(QPoint p , QObject *o)
 {
     if (ui_->comboBox->geometry().contains(p))
     {
-        resizing_ = 0;
-        press_released_ = 0;
+        is_resizing_ = 0;
+        is_press_released_ = 0;
     }
     else if (ui_->pushButton->geometry().contains(p))
     {
-        resizing_ = 0;
-        press_released_ = 0;
+        is_resizing_ = 0;
+        is_press_released_ = 0;
     }
     else if (ui_->pushButton_2->geometry().contains(p))
     {
-        resizing_ = 0;
-        press_released_ = 0;
+        is_resizing_ = 0;
+        is_press_released_ = 0;
     }
     else if (image_add_rss_label_->geometry().contains(p))
     {
-        resizing_ = 0;
-        press_released_ = 0;
+        is_resizing_ = 0;
+        is_press_released_ = 0;
         wsi_->show();
     }
     else if (image_refresh_label_->geometry().contains(p))
     {
-        resizing_ = 0;
-        press_released_ = 0;
+        is_resizing_ = 0;
+        is_press_released_ = 0;
         refreshFeed();
     }
     else if (image_help_label_->geometry().contains(p))
     {
-        resizing_ = 0;
-        press_released_ = 0;
+        is_resizing_ = 0;
+        is_press_released_ = 0;
         help_gui_->show();
     }
     else if (image_options_label_->geometry().contains(p))
     {
-        resizing_ = 0;
-        press_released_ = 0;
+        is_resizing_ = 0;
+        is_press_released_ = 0;
         ow_->show();
     }
     else if (ui_->textBrowser->geometry().contains(p))
     {
-        resizing_ = 0;
-        press_released_ = 0;
+        is_resizing_ = 0;
+        is_press_released_ = 0;
     }
     else if (image_X_label_->geometry().contains(p))
     {
 
-        resizing_ = 0;
-        press_released_ = 0;
-        close_ = 1;
+        is_resizing_ = 0;
+        is_press_released_ = 0;
+        is_close_ = 1;
         this->hide();
 
         //e->ignore();
     }
     else if (image_maximize_label_->geometry().contains(p))
     {
-        resizing_ = 0;
-        press_released_ = 0;
-        if (!flag_maximized_)
+        is_resizing_ = 0;
+        is_press_released_ = 0;
+        if (!is_flag_maximized_)
         {
             //old_size = this->geometry();
             this->showMaximized();
-            flag_maximized_ = 1;
+            is_flag_maximized_ = 1;
         }
         else
         {
             this->showNormal();
-            flag_maximized_ = 0;
+            is_flag_maximized_ = 0;
         }
     }
     else if (image_minimize_label_->geometry().contains(p))
     {
-        resizing_ = 0;
-        press_released_ = 0;
-        minimize_ = 1;
+        is_resizing_ = 0;
+        is_press_released_ = 0;
+        is_minimize_ = 1;
         this->showMinimized();
     }
     else if (mouseInGrip(p) && o->objectName() == "ViewWindow")
     {
-        press_released_ = 0;
-        resizing_ = 1;
+        is_press_released_ = 0;
+        is_resizing_ = 1;
         resize_point_ = p;
     }
     else
     {
         if (o->objectName() == "ViewWindow")
-            press_released_ = 1;
-        resizing_ = 0;
+            is_press_released_ = 1;
+        is_resizing_ = 0;
     }
 }
 void ViewWindow::refreshFeed()
@@ -454,17 +454,17 @@ void ViewWindow::refreshFeed()
 void ViewWindow::mouseDblClicked(QMouseEvent * mouseEvent)
 {
     if (mouseEvent -> button() == Qt::LeftButton) {
-        if (!flag_maximized_)
+        if (!is_flag_maximized_)
         {
             this->showMaximized();
-            flag_maximized_ = 1;
+            is_flag_maximized_ = 1;
         }
         else
         {
             this->showNormal();
-            flag_maximized_ = 0;
+            is_flag_maximized_ = 0;
         }
-        press_released_ = 0;
+        is_press_released_ = 0;
     }
 
 }
@@ -511,7 +511,7 @@ void ViewWindow::mouseMove(QPoint p, QMouseEvent *e, QObject *o)
     {
         QApplication::setOverrideCursor(QCursor(Qt::SizeFDiagCursor));
     }
-    else if (resizing_)
+    else if (is_resizing_)
     {
         QPoint delta = p - resize_point_;
         resize_point_ = p;
@@ -557,7 +557,7 @@ void ViewWindow::mouseMove(QPoint p, QMouseEvent *e, QObject *o)
         QApplication::restoreOverrideCursor();
     else if (ui_->pushButton_2->geometry().contains(p))
         QApplication::restoreOverrideCursor();
-    else if (press_released_ && o->objectName() == "ViewWindow" && !flag_maximized_)
+    else if (is_press_released_ && o->objectName() == "ViewWindow" && !is_flag_maximized_)
     {
         QApplication::restoreOverrideCursor();
         move(e->globalX()-cur_point_.x(),e->globalY()-cur_point_.y());
@@ -571,7 +571,7 @@ bool ViewWindow::eventFilter(QObject *o, QEvent *event)
 {
     QPoint p = this->mapFromGlobal(QCursor::pos());
 
-    if (event->type() == QEvent::MouseButtonDblClick && o->objectName() == "ViewWindow" && press_released_)
+    if (event->type() == QEvent::MouseButtonDblClick && o->objectName() == "ViewWindow" && is_press_released_)
     {
         QMouseEvent * mouseEvent = static_cast <QMouseEvent *> (event);
         mouseDblClicked(mouseEvent);
@@ -586,8 +586,8 @@ bool ViewWindow::eventFilter(QObject *o, QEvent *event)
 
     if (event->type() == QEvent::MouseButtonRelease)
     {
-        press_released_ = 0;
-        resizing_ = 0;
+        is_press_released_ = 0;
+        is_resizing_ = 0;
         resize_point_ = p;
     }
 
