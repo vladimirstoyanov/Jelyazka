@@ -20,13 +20,13 @@
 #define SEARCH_H
 #include <QString>
 
-class CSearch {
+class Search {
     public:
-        CSearch();
-        ~CSearch();
+        Search();
+        ~Search();
 
-        void search_Before(QString text, QString subtext, int *index);
-        void search_After(QString text, QString subtext, int *index);
+        void searchBefore(QString text, QString subtext, int *index);
+        void searchAfter(QString text, QString subtext, int *index);
 };
 
 #endif // SEARCH_H

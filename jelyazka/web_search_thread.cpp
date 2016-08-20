@@ -37,12 +37,12 @@ WebSearchInterfaceThread::~WebSearchInterfaceThread()
 bool WebSearchInterfaceThread::setUrlRoot(QString url)
 {
     HTTP http;
-    CSearch cs;
+    Search cs;
 
     QString query_part="";
     http.queryPartAndURL(url,query_part);
     int index = 0;
-    cs.search_Before(url, "www.", &index);
+    cs.searchBefore(url, "www.", &index);
 
     if (index == 0) //remove 'www.'
     {
@@ -66,7 +66,7 @@ void WebSearchInterfaceThread::run()
         return;
     }
 
-    CSearch cs;
+    Search cs;
     QString html;
     HTTP http;
 
@@ -138,10 +138,10 @@ void WebSearchInterfaceThread::run()
             }
 
             //log.write("!!!cs.Search_After(&html, \"<a \",&index);");
-            cs.search_After(html, "<a ",&index); //search for links
+            cs.searchAfter(html, "<a ",&index); //search for links
 
             while (lookForHref(html,index) && index!=-1)
-                cs.search_After(html, "<a ",&index); //in case in tag 'a' haven't 'href'
+                cs.searchAfter(html, "<a ",&index); //in case in tag 'a' haven't 'href'
 
 
 
@@ -215,7 +215,7 @@ void WebSearchInterfaceThread::getUrl (QString html_source, int &index, QString 
 //Build full url name
 void WebSearchInterfaceThread::buildUrl (QString url_root, QString url, QString &return_url)
 {
-    CSearch cs;
+    Search cs;
     return_url = "";
 
     for (int i=0; i<url.length(); i++)
@@ -238,8 +238,8 @@ void WebSearchInterfaceThread::buildUrl (QString url_root, QString url, QString 
 
 
     int ret  = 0, ret1 = 0;
-    cs.search_Before(return_url,url_root, &ret); //search for root_url
-    cs.search_After(return_url,"://", &ret1); //search for protocol
+    cs.searchBefore(return_url,url_root, &ret); //search for root_url
+    cs.searchAfter(return_url,"://", &ret1); //search for protocol
     if (ret == -1 && ret1 == -1  && return_url.length()>0)
     {
         if (url_root[url_root.length()-1] == '/' && return_url[0]!='/')
@@ -274,10 +274,10 @@ void WebSearchInterfaceThread::buildUrl (QString url_root, QString url, QString 
 
 int WebSearchInterfaceThread::fixProtocol(QString &url)
 {
-    CSearch cs;
+    Search cs;
     int index = 0;
 
-    cs.search_Before(url, "http://", &index);
+    cs.searchBefore(url, "http://", &index);
 
     if (index == -1 || index == 0)
         return 0;
@@ -293,7 +293,7 @@ int WebSearchInterfaceThread::fixProtocol(QString &url)
 
 int WebSearchInterfaceThread::checkForRss(QString source, QString &title, int &version)
 {
-    CSearch cs;
+    Search cs;
     QString begin="<?xml";
     //Logger log;
 
@@ -303,10 +303,10 @@ int WebSearchInterfaceThread::checkForRss(QString source, QString &title, int &v
         return 1;
     }
     int i=0, j=0, r=0, f=0;
-    cs.search_After(source, "<?xml", &i);
-    cs.search_After(source, "<rss", &j);
-    cs.search_After(source, "<rdf", &r);
-    cs.search_After(source, "<feed", &f);
+    cs.searchAfter(source, "<?xml", &i);
+    cs.searchAfter(source, "<rss", &j);
+    cs.searchAfter(source, "<rdf", &r);
+    cs.searchAfter(source, "<feed", &f);
 
     if (i==0 || (j==-1 && r==-1 && f ==-1) || (j!=-1 && i>j) || (r!=-1 && i>r) || (f!=-1 && i>f))
         return 1;
@@ -316,7 +316,7 @@ int WebSearchInterfaceThread::checkForRss(QString source, QString &title, int &v
 
     //get rss title
     i=0;
-    cs.search_After(source, "<title>", &i);
+    cs.searchAfter(source, "<title>", &i);
     if (i==-1)
     {
         //log.write("CheckForRss funtion: can't find <title>");
@@ -431,21 +431,21 @@ int WebSearchInterfaceThread::deleteAllFrom_all_url_table() //delete all_url tab
 
 QString WebSearchInterfaceThread::getEncodingFromRSS(QString content) //+
 {
-    CSearch cs;
+    Search cs;
     QString encoding="";
     int index1=0, index2=0;
 
-    cs.search_After(content,"<?xml", &index1);
+    cs.searchAfter(content,"<?xml", &index1);
 
     if (index1 == -1)
         return "";
 
-    cs.search_Before(content, "?>", &index2);
+    cs.searchBefore(content, "?>", &index2);
 
     if (index2 == -1)
         return "";
 
-    cs.search_After(content, "encoding=", &index1);
+    cs.searchAfter(content, "encoding=", &index1);
 
     if (index1 == -1 || index1>index2)
         return "";

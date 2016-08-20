@@ -483,13 +483,13 @@ void OptionsWindow::findAndReturnURLAndVersion(QString site_name, QString &url, 
 
 void OptionsWindow::updateFiltersTable()
 {
-     view_window_->l_filters.clear();
+     view_window_->filters_qlist.clear();
      data_base_.removeDataFromFilters(); //delete all old filters data
 
      for (int i=0;  i<lw_filter_list_->count(); i++)
      {
          insertRowToFiltersTable(lw_filter_list_->item(i)->text());
-         view_window_->l_filters.append(lw_filter_list_->item(i)->text());
+         view_window_->filters_qlist.append(lw_filter_list_->item(i)->text());
      }
      view_window_->initTextBrowser();
 }

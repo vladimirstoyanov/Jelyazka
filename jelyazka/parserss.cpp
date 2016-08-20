@@ -10,12 +10,12 @@ ParseRSS::ParseRSS(Data *data_tmp)
 void ParseRSS::findFeedDataRSS(int &index, QString content, RSSArticle &ar)
 {
     int item_b_index=index, item_e_index=index;
-    CSearch cs;
+    Search cs;
     int n = content.length();
 
     while (1)
     {
-         cs.search_After(content,"<item", &item_b_index);
+         cs.searchAfter(content,"<item", &item_b_index);
          if (item_b_index == -1) // if not found <item
          {
              index = -1;
@@ -23,7 +23,7 @@ void ParseRSS::findFeedDataRSS(int &index, QString content, RSSArticle &ar)
          }
 
          item_e_index = item_b_index;
-         cs.search_Before(content,"</item", &item_e_index);
+         cs.searchBefore(content,"</item", &item_e_index);
 
          if (item_e_index == -1)
          {
@@ -63,11 +63,11 @@ void ParseRSS::findFeedDataRSS(int &index, QString content, RSSArticle &ar)
 void ParseRSS::findFeedDataRDF(int &index, QString content, RSSArticle &ar)
 {
     int item_b_index=index, item_e_index=index;
-    CSearch cs;
+    Search cs;
 
      while (1)
      {
-         cs.search_After(content,"<entry", &item_b_index);
+         cs.searchAfter(content,"<entry", &item_b_index);
          if (item_b_index == -1) // if not found <item
          {
              index = -1;
@@ -75,7 +75,7 @@ void ParseRSS::findFeedDataRDF(int &index, QString content, RSSArticle &ar)
          }
 
          item_e_index = item_b_index;
-         cs.search_Before(content,"</entry", &item_e_index);
+         cs.searchBefore(content,"</entry", &item_e_index);
 
          if (item_e_index == -1)
          {
@@ -94,7 +94,7 @@ void ParseRSS::findFeedDataRDF(int &index, QString content, RSSArticle &ar)
          return;
      convert_string(title, false);
      int index_link = item_b_index;
-     cs.search_Before(content, "<link", &index_link);
+     cs.searchBefore(content, "<link", &index_link);
      if (index_link == -1 || index_link>item_e_index)
          return;
      link = returnURL(content, index_link);
@@ -115,11 +115,11 @@ void ParseRSS::findFeedDataRDF(int &index, QString content, RSSArticle &ar)
 
 int ParseRSS::getTextBetweenIndexes(int item_b_index, int item_e_index, QString begin_text, QString end_text, QString &text, QString content)
 {
-    CSearch cs;
+    Search cs;
     int tag_b_index, tag_e_index;
 
     tag_b_index =item_b_index;
-    cs.search_After(content,begin_text, &tag_b_index);
+    cs.searchAfter(content,begin_text, &tag_b_index);
 
     if (tag_b_index == -1)
         return 1;
@@ -127,7 +127,7 @@ int ParseRSS::getTextBetweenIndexes(int item_b_index, int item_e_index, QString 
         return 1;
 
     tag_e_index = tag_b_index;
-    cs.search_Before(content, end_text, &tag_e_index);
+    cs.searchBefore(content, end_text, &tag_e_index);
 
     if (tag_e_index == -1)
         return 1;
@@ -152,11 +152,11 @@ int ParseRSS::getTextBetweenIndexes(int item_b_index, int item_e_index, QString 
 
 int ParseRSS::getDescription(int item_b_index, int item_e_index, QString &description, QString content)
 {
-    CSearch cs;
+    Search cs;
     int tag_b_index, tag_e_index;
 
     tag_b_index =item_b_index;
-    cs.search_After(content,"<description>", &tag_b_index);
+    cs.searchAfter(content,"<description>", &tag_b_index);
 
     if (tag_b_index == -1)
         return 1;
@@ -164,7 +164,7 @@ int ParseRSS::getDescription(int item_b_index, int item_e_index, QString &descri
         return 1;
 
     tag_e_index = tag_b_index;
-    cs.search_Before(content, "</description>", &tag_e_index);
+    cs.searchBefore(content, "</description>", &tag_e_index);
 
     if (tag_e_index == -1)
         return 1;
@@ -186,7 +186,7 @@ int ParseRSS::getDescription(int item_b_index, int item_e_index, QString &descri
             if(content[i+1] == 'l' && content[i+2]=='t' && content[i+3] == ';')
             {
                 int index_tmp = i;
-                cs.search_After(content,"&gt;",&index_tmp);
+                cs.searchAfter(content,"&gt;",&index_tmp);
                 if (index_tmp == -1)
                     return 1;
                 if (index_tmp <= tag_e_index)
@@ -231,17 +231,17 @@ int ParseRSS::getDescription(int item_b_index, int item_e_index, QString &descri
 int ParseRSS::getArticlesFromRSSContent(QString content, RSSData *rssData)
 {
     int item_b_index=0, item_e_index=0;
-    CSearch cs;
+    Search cs;
     int n = content.length();
 
     while(1)
     {
-        cs.search_After(content,"<item", &item_b_index);
+        cs.searchAfter(content,"<item", &item_b_index);
         if (item_b_index == -1)
             break;
 
         item_e_index = item_b_index;
-        cs.search_Before(content,"</item", &item_e_index);
+        cs.searchBefore(content,"</item", &item_e_index);
 
         if (item_e_index == -1)
             break;
@@ -280,16 +280,16 @@ int ParseRSS::getArticlesFromRSSContent(QString content, RSSData *rssData)
 int ParseRSS::getArticlesFromRDFContent(QString content, RSSData *rssData)
 {
     int item_b_index=0, item_e_index=0;
-    CSearch cs;
+    Search cs;
 
     while(1)
     {
-        cs.search_After(content,"<entry", &item_b_index);
+        cs.searchAfter(content,"<entry", &item_b_index);
         if (item_b_index == -1)
             break;
 
         item_e_index = item_b_index;
-        cs.search_Before(content,"</entry", &item_e_index);
+        cs.searchBefore(content,"</entry", &item_e_index);
 
         if (item_e_index == -1)
             break;
@@ -302,7 +302,7 @@ int ParseRSS::getArticlesFromRDFContent(QString content, RSSData *rssData)
         convert_string(title, false);
 
         int index_link = item_b_index;
-        cs.search_Before(content, "<link", &index_link);
+        cs.searchBefore(content, "<link", &index_link);
         if (index_link == -1 || index_link>item_e_index)
             break;
         link = returnURL(content, index_link);
@@ -415,11 +415,11 @@ QString ParseRSS::returnURL(QString source, int index)
 
 int ParseRSS::getContent(int item_b_index, int item_e_index, QString &description, QString content)
 {
-    CSearch cs;
+    Search cs;
     int tag_b_index, tag_e_index;
 
     tag_b_index =item_b_index;
-    cs.search_After(content,"<content", &tag_b_index);
+    cs.searchAfter(content,"<content", &tag_b_index);
 
     if (tag_b_index == -1)
         return 1;
@@ -427,7 +427,7 @@ int ParseRSS::getContent(int item_b_index, int item_e_index, QString &descriptio
         return 1;
 
     tag_e_index = tag_b_index;
-    cs.search_Before(content, "</content>", &tag_e_index);
+    cs.searchBefore(content, "</content>", &tag_e_index);
 
     if (tag_e_index == -1)
         return 1;
@@ -452,7 +452,7 @@ int ParseRSS::getContent(int item_b_index, int item_e_index, QString &descriptio
             if(content[i+1] == 'l' && content[i+2]=='t' && content[i+3] == ';')
             {
                 int index_tmp = i;
-                cs.search_After(content,"&gt;",&index_tmp);
+                cs.searchAfter(content,"&gt;",&index_tmp);
                 if (index_tmp == -1)
                     return 1;
                 if (index_tmp <= tag_e_index)

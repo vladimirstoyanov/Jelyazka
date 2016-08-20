@@ -212,10 +212,10 @@ int HTTP::reconnect(QString url, QString &content, QTcpSocket &socket)
 
 void HTTP::queryPartAndURL(QString &url, QString &query_part)
 {
-    CSearch cs;
+    Search cs;
     QString tmp_url="";
     int i=0;
-    cs.search_After(url,"://",&i);
+    cs.searchAfter(url,"://",&i);
     if (i==-1)
         i=0;
     for (; i<url.length(); i++)
@@ -400,11 +400,11 @@ void HTTP::addSubStringAtBeginning(QString &url, QString substring)
 
 void HTTP::removeSubString(QString &url, QString substring)
 {
-    CSearch cs;
+    Search cs;
     QString newURL="";
     int index=0;
     int i;
-    cs.search_Before(url, substring, &index);
+    cs.searchBefore(url, substring, &index);
 
     for (i=0; i<index; i++)
         newURL+=url[i];
@@ -445,10 +445,10 @@ void HTTP::ChangeUrl(QString &url, int option)
 //return: 1 (html), 2 (xml), 0 (ignore url)
 int HTTP::isHTMLorXML(QString content)
 {
-    CSearch cs;
+    Search cs;
     int index=0, n = content.length();
     QString content_type="";
-    cs.search_After(content, "Content-Type:", &index);
+    cs.searchAfter(content, "Content-Type:", &index);
 
     if (index==-1 || index >= n)
         return 0;
@@ -470,11 +470,11 @@ int HTTP::isHTMLorXML(QString content)
 
 void HTTP::getCorrectURL(QString content, QString &url)
 {
-    CSearch cs;
+    Search cs;
     int i=0;
     QString url_tmp = "";
 
-    cs.search_After(content, "Location:",&i);
+    cs.searchAfter(content, "Location:",&i);
 
     if (i==-1)
         return;
@@ -495,10 +495,10 @@ void HTTP::getCorrectURL(QString content, QString &url)
 void HTTP::addOrRemoveWWW(QString &url)
 {
     QString url_tmp = "";
-    CSearch cs;
+    Search cs;
     int index = 0;
 
-    cs.search_After(url, "://", &index);
+    cs.searchAfter(url, "://", &index);
 
     if (index==-1)
         index = 0;

@@ -53,9 +53,9 @@ class ViewWindow : public QWidget
     Q_OBJECT
     
 public:
-    QList<QString> l_filters;
+    QList<QString> filters_qlist; //ToDo: move it to the private section
 
-    explicit ViewWindow(QWidget *parent = 0, RSSThread *tmp_site_struct=NULL, Data *data_tmp=NULL);
+    explicit ViewWindow(QWidget *parent = 0, RSSThread *rss_thread=NULL, Data *data=NULL);
     ~ViewWindow();
 
     void initDataInComboBoxFromStructure();
@@ -69,45 +69,45 @@ private slots:
     void on_comboBox_currentIndexChanged(const QString &arg1);
 
 private:
-    ulong current_site_index;
-    ulong current_article_index;
-    Ui::ViewWindow *ui;
-    RSSThread *site_struct;
-    QLabel *imageAddRSSLabel;
-    QImage add_rss_button_img;
-    QLabel *imageOptionsLabel;
-    QImage options_button_img;
-    QLabel *imageRefreshLabel;
-    QImage refresh_button_img;
-    QLabel *imageHelpLabel;
-    QImage help_button_img;
-    QLabel *imageXLabel;
-    QImage x_button_img;
-    QLabel *imageMinimizeLabel;
-    QImage minimize_button_img;
-    QLabel *imageMaximizeLabel;
-    QImage maximize_button_img;
-    WebSearchInterface *wsi;
-    OptionsWindow *ow;
+    ulong current_site_index_;
+    ulong current_article_index_;
+    Ui::ViewWindow *ui_;
+    RSSThread *rss_thread_;
+    QLabel *image_add_rss_label_;
+    QImage add_rss_button_image_;
+    QLabel *image_options_label_;
+    QImage options_button_image_;
+    QLabel *image_refresh_label_;
+    QImage refresh_button_image_;
+    QLabel *image_help_label_;
+    QImage help_button_image_;
+    QLabel *image_X_label_;
+    QImage x_button_image_;
+    QLabel *image_minimize_label_;
+    QImage minimize_button_image_;
+    QLabel *image_maximize_label_;
+    QImage maximize_button_image_;
+    WebSearchInterface *wsi_;
+    OptionsWindow *ow_;
     //QSizeGrip *size_grip;
-    QRect old_size;
-    Help *help_gui;
-    bool show_flag;
-    bool resizing;
-    bool minimize;
-    bool close;
-    DataBase db;
-    int width;
-    int height;
-    bool isXchanged;
-    bool isMinimizechanged;
-    bool isMaximizechanged;
-    bool flagMaximized;
-    bool pressReleased;
-    QPoint curPoint;
-    QPoint movePointPos;
-    QPoint resizePoint;
-    Data *data;
+    QRect old_size_;
+    Help *help_gui_;
+    bool show_flag_;
+    bool resizing_;
+    bool minimize_;
+    bool close_;
+    DataBase data_base;
+    int width_;
+    int height_;
+    bool is_X_changed_;
+    bool is_minimize_changed_;
+    bool is_maximize_changed_;
+    bool flag_maximized_;
+    bool press_released_;
+    QPoint cur_point_;
+    QPoint move_point_pos_;
+    QPoint resize_point_;
+    Data *data_;
 
     void initDataInComboBox();
     void addToCombobox(QString str);

@@ -23,14 +23,14 @@
 #include <string>
 #include <vector>
 
-CSearch::CSearch()
+Search::Search()
 {
 }
-CSearch::~CSearch()
+Search::~Search()
 {
 }
 
-void CSearch::search_Before(QString text, QString subtext, int *index)
+void Search::searchBefore(QString text, QString subtext, int *index)
 {
     std::vector<int> T(subtext.length() + 1, -1);
 
@@ -63,7 +63,7 @@ void CSearch::search_Before(QString text, QString subtext, int *index)
 
     *index = -1;
 }
-void CSearch::search_After(QString text, QString subtext, int *index)
+void Search::searchAfter(QString text, QString subtext, int *index)
 {
     std::vector<int> T(subtext.length() + 1, -1);
 
