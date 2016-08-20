@@ -20,7 +20,7 @@
 
 HTTP::HTTP()
 {
-    url_option =0;
+    url_option_ =0;
 }
 HTTP::~HTTP()
 {
@@ -32,7 +32,7 @@ int HTTP::getQuery(QString url, QString &content ,int &type)
     QTcpSocket socket;
     QString query_string="";
 
-    url_option=1;
+    url_option_=1;
     checkAndChangeURL2(url);
 
     queryPartAndURL(url,query_string);
@@ -115,7 +115,7 @@ int HTTP::getQuery(QString url, QString &content, QNetworkProxy *network_proxy)
     QTcpSocket socket;
     QString query_string="";
 
-    url_option=1;
+    url_option_=1;
     checkAndChangeURL2(url);
 
     queryPartAndURL(url,query_string);
@@ -421,23 +421,23 @@ void HTTP::ChangeUrl(QString &url, int option)
     switch(option)
     {
     case 1:
-        url_option =1;
+        url_option_ =1;
         checkAndChangeURL2(url);
         break;
     case 2:
-        url_option=2;
+        url_option_=2;
         addSubStringAtBeginning(url,"www.");
         break;
     case 3:
-        url_option=3;
+        url_option_=3;
         addSubStringAtBeginning(url,"http://");
         break;
     case 4:
-        url_option=4;
+        url_option_=4;
         removeSubString(url,"www.");
         break;
     default:
-        url_option = 0;
+        url_option_ = 0;
         break;
     }
 }

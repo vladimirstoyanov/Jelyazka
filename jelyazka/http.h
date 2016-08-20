@@ -55,7 +55,7 @@ public:
 
     void addOrRemoveWWW(QString &url);
 private:
-    int url_option;
+    int url_option_;
 };
 
 #endif // HTTP_H

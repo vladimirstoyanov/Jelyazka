@@ -22,66 +22,66 @@
 
 InitWindow::InitWindow(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::InitWindow)
+    ui_(new Ui::InitWindow)
 {
-    ui->setupUi(this);
-    tp = new QThreadPool(this);
+    ui_->setupUi(this);
+    thread_pool_ = new QThreadPool(this);
 
-    ui->label->setGeometry(5,260,250,40);
-    ui->label->setStyleSheet("QLabel { color : white; }");
-    ui->label->setText("");
+    ui_->label->setGeometry(5,260,250,40);
+    ui_->label->setStyleSheet("QLabel { color : white; }");
+    ui_->label->setText("");
 
     this->setWindowFlags( Qt::FramelessWindowHint);
     this->setGeometry(30,100,300,300);
     this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center()); //move the window to the center of the screen
     this->setStyleSheet("background-color:black;");
 
-    imageInitLabel = new QLabel(this);
-    init_img  = new QImage("../resources/jelyazka_02_end.png");
-    imageInitLabel->setPixmap(QPixmap::fromImage(*init_img));
-    imageInitLabel->setGeometry(QRect(0,0,300,300));
-    imageInitLabel->show();
-    imageInitLabel->lower();
+    image_init_label_ = new QLabel(this);
+    init_image_  = new QImage("../resources/jelyazka_02_end.png");
+    image_init_label_->setPixmap(QPixmap::fromImage(*init_image_));
+    image_init_label_->setGeometry(QRect(0,0,300,300));
+    image_init_label_->show();
+    image_init_label_->lower();
 }
 
 InitWindow::~InitWindow()
 {
-    delete ui;
-    delete init_img;
-    delete imageInitLabel;
-    delete tp;
+    delete ui_;
+    delete init_image_;
+    delete image_init_label_;
+    delete thread_pool_;
 }
 
 //load RSS feeds in thread pool
-void InitWindow::setSignal(RSSThread *s_struct, Data *data_tmp)
+void InitWindow::setSignal(RSSThread *rss_thread, Data *data)
 {
-    data = data_tmp;
-    site_struct = s_struct;
-    connect(s_struct,SIGNAL(loadRSS(QString,QString)),this,SLOT(onLoadRss(QString,QString)));
+    data_ = data;
+    rss_thread_ = rss_thread;
+    connect(rss_thread_,SIGNAL(loadRSS(QString,QString)),this,SLOT(onLoadRss(QString,QString)));
     int i=0;
 
-    while (i<data->size())
+    while (i<data_->size())
     {
-        tp->start(site_struct);
+        thread_pool_->start(rss_thread_);
         i++;
     }
-    if (data->size()==0)
+    if (data_->size()==0)
     {
-        site_struct->first_load = true;
+        rss_thread_->first_load = true;
         this->hide();
         emit Done();
     }
-    site_struct->setAutoDelete(true);
+    rss_thread_->setAutoDelete(true);
 }
 void InitWindow::onLoadRss(QString name, QString url)
 {
     if (url == "" && name == "") //if loading RSS feeds finish
     {
-        site_struct->first_load = true;
+        rss_thread_->first_load = true;
         this->hide();
         emit Done();
         return;
     }
 
-    ui->label->setText("Loading: " + name);
+    ui_->label->setText("Loading: " + name);
 }

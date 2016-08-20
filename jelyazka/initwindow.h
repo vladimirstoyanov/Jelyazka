@@ -37,15 +37,15 @@ class InitWindow : public QWidget
 public:
     explicit InitWindow(QWidget *parent = 0);
     ~InitWindow();
-    void setSignal (RSSThread *s_struct, Data *data_tmp);
+    void setSignal (RSSThread *rss_thread, Data *data);
 
 private:
-    Ui::InitWindow *ui;
-    QLabel *imageInitLabel;
-    QImage *init_img;
-    RSSThread *site_struct;
-    QThreadPool *tp;
-    Data *data;
+    Ui::InitWindow *ui_;
+    QLabel *image_init_label_;
+    QImage *init_image_;
+    RSSThread *rss_thread_;
+    QThreadPool *thread_pool_;
+    Data *data_;
 
 public slots:
     void onLoadRss(QString name, QString url);
