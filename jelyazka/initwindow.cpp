@@ -58,13 +58,10 @@ void InitWindow::setSignal(RSSThread *rss_thread, Data *data)
     data_ = data;
     rss_thread_ = rss_thread;
     connect(rss_thread_,SIGNAL(loadRSS(QString,QString)),this,SLOT(onLoadRss(QString,QString)));
-    int i=0;
 
-    while (i<data_->size())
-    {
+    for (unsigned int i=0; i<data_->size(); i++)
         thread_pool_->start(rss_thread_);
-        i++;
-    }
+
     if (data_->size()==0)
     {
         rss_thread_->first_load_ = true;

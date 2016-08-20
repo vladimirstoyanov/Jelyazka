@@ -45,7 +45,7 @@ ViewWindow::ViewWindow(QWidget *parent, RSSThread *rss_thread, Data *data):
     rss_thread_ = rss_thread;
     wsi_ = new RSSSearchGUI (0, rss_thread_, this, data_);
 
-    ow_ = new OptionsWindow(0,rss_thread_, this, data_);
+    ow_ = new OptionsWindow(0,rss_thread_, data_);
     connect(rss_thread_,SIGNAL(Finish(QString, bool)),ow_,SLOT(onFinish(QString, bool)));
 
     is_X_changed_ = 0;
@@ -213,7 +213,7 @@ void ViewWindow::initDataInComboBoxFromStructure()
 {
     ui_->comboBox->clear();
 
-    for (int i=0; i<data_->size(); i++)
+    for (unsigned int i=0; i<data_->size(); i++)
     {
         //QString site_name = data->at(i)->getSiteName();
         addToCombobox(data_->at(i)->getSiteName());

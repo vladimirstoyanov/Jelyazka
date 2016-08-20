@@ -433,7 +433,7 @@ void RSSSearchGUI::on_pushButton_2_clicked() //add RSS feeds button
 
         //adding data_ (titles, links, descriptions)
         RSSArticle art;
-        for (int i=0; i<feeds_struct_tmp_iterator->getArticlesSize(); i++)
+        for (unsigned int i=0; i<feeds_struct_tmp_iterator->getArticlesSize(); i++)
         {
             art.setTitle(feeds_struct_tmp_iterator->articleAt(i).getTitle());
             art.setLink(feeds_struct_tmp_iterator->articleAt(i).getLink());

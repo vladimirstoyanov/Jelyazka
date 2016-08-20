@@ -46,7 +46,7 @@ class OptionsWindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit OptionsWindow(QWidget *parent = 0, RSSThread *rss_thread=0, ViewWindow *view=0, Data *data = 0);
+    explicit OptionsWindow(QWidget *parent = 0, RSSThread *rss_thread=0, Data *data = 0);
     ~OptionsWindow();
 
 public slots:

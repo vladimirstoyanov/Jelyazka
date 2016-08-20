@@ -9,7 +9,7 @@ class Data: public RSSData
 {
 public:
     Data();
-    RSSData *at(int index);
+    RSSData *at(unsigned int index);
     boost::ptr_vector<RSSData>::size_type size();
     void pushBack(RSSData *rss_data);
     void erase(int index);

@@ -20,7 +20,7 @@
 #include "ui_optionswindow.h"
 #include <QDebug>
 
-OptionsWindow::OptionsWindow(QWidget *parent, RSSThread *rss_thread, ViewWindow *view, Data *data) :
+OptionsWindow::OptionsWindow(QWidget *parent, RSSThread *rss_thread, Data *data) :
     QWidget(parent),
     ui_(new Ui::OptionsWindow)
 {

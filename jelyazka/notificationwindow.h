@@ -65,7 +65,7 @@ private:
 
     void getDesktopResolution(int& horizontal, int& vertical);
     int getTaskBarHeight();
-    QList<int> getIndexes(QString data);
+    QList<unsigned int> getIndexes(QString data);
 
     void showWindowAnimation();
     void hideWindowAnimation();

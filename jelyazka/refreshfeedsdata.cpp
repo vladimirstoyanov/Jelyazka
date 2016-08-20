@@ -46,7 +46,7 @@ void RefreshFeedsData::run() //refresh feeds
         int n = data_->size();
 
 
-        for (int i=0; i<n; i++)
+        for (unsigned int i=0; i<n; i++)
         {
             content="";
             qDebug()<<"Trying to refresh in RefreshFeedsData, index: " + QString::number(i);

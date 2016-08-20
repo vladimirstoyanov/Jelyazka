@@ -135,7 +135,7 @@ void NotificationWindow::onShowAnimateWindow(QString data_str)
     if (data_str== "")
         return;
 
-    QList<int> indexes = getIndexes(data_str);
+    QList<unsigned int> indexes = getIndexes(data_str);
     if (indexes.size() == 0)
         return;
 
@@ -168,15 +168,15 @@ void NotificationWindow::onHideAnimationFinished()
 }
 
 //Get indexes from data string
-QList<int> NotificationWindow::getIndexes(QString data_str)
+QList<unsigned int> NotificationWindow::getIndexes(QString data_str)
 {
     QStringList split = data_str.split("<index=");
-    QList<int> indexes;
+    QList<unsigned int> indexes;
 
     if (split.size() == 0)
         return indexes;
 
-    for (int i=0;i<split.size(); i++)
+    for (unsigned int i=0; i<split.size(); i++)
     {
         QString tmp_str = split.at(i);
         if (tmp_str.length() > 0)

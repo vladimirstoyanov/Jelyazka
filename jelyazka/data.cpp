@@ -5,10 +5,14 @@ Data::Data()
 
 }
 
-RSSData*Data::at(int index)
+RSSData*Data::at(unsigned int index)
 {
     if (rss_data_vector_.size()<=index)
+    {
         qDebug()<<"Data::at rss_data_vector_.size()<=index "<<index;
+        //prevent crash
+        return &rss_data_vector_[0];
+    }
     return &rss_data_vector_[index];
 }
 
