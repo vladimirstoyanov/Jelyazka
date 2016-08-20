@@ -37,7 +37,7 @@
 #include <QStringList>
 #include <QList>
 #include "help.h"
-#include "db.h"
+#include "database.h"
 //#include "rssarticle.h"
 #include "data.h"
 

@@ -27,7 +27,7 @@
 #include <QList>
 #include <boost/ptr_container/ptr_list.hpp>
 #include "logger.h"
-#include "db.h"
+#include "database.h"
 
 class WebSearchInterfaceThread : public QObject, public QRunnable
 {

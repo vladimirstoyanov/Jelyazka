@@ -23,8 +23,6 @@ public:
     int selectURLFromAllURLs(QString);
     int deleteAllFromAllURL();
 
-
-
     void getCollectFeeds(boost::ptr_vector<QString> *l_old_collect_feed);
     void getFilterList(boost::ptr_vector<QString> *l_old_filters);
     void insertRowToFiltersTable(QString filter_name);
@@ -33,12 +31,14 @@ public:
     void getCollectFeedsThatContainingText(QString text, boost::ptr_vector<QString> *l_favorite_rss); //cf_find_feeds text changed event
 
 private:
-    QSqlDatabase sqliteDataBase;
+    QSqlDatabase q_sql_data_base_;
 
     void openDB();
     void closeDB();
-
-
+    void createCollectFeedsTable();
+    void createAllURLTable();
+    void createFavoriteFeedsTable();
+    void createFiltersTable();
 };
 
 #endif // DB_H

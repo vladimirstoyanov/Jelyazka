@@ -32,7 +32,7 @@
 #include "rssthread.h"
 #include "viewwindow.h"
 #include "http.h"
-#include "db.h"
+#include "database.h"
 #include "data.h"
 
 namespace Ui {

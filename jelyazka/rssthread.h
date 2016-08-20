@@ -36,7 +36,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <QWaitCondition>
 #include <QTextCodec>
-#include "db.h"
+#include "database.h"
 #include "data.h"
 #include <limits.h>
 #include "parserss.h"

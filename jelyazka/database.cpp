@@ -3,91 +3,19 @@
 DataBase::DataBase()
 {
     //open db
-    sqliteDataBase = QSqlDatabase::addDatabase("QSQLITE");
-    sqliteDataBase.setDatabaseName("sites.db3");
-    sqliteDataBase.open();
+    q_sql_data_base_ = QSqlDatabase::addDatabase("QSQLITE");
+    q_sql_data_base_.setDatabaseName("sites.db3");
+    q_sql_data_base_.open();
 
     //loadStrctureFromDB();
 }
 
-
-/////////rssthread.h
-///
 void DataBase::createTables()
 {
-    //open data base
-    //openDB();
-
-    //"collec_feeds" table
-    if (!sqliteDataBase.tables().contains(QLatin1String("collect_feeds"))) //if hasn't 'collect_feeds' table
-    {
-        //create 'collect_feeds'table
-        if (sqliteDataBase.isOpen())
-        {
-                QSqlQuery query;
-                if (!query.exec("create table collect_feeds "
-                          "(id integer PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, "
-                          "name varchar, "
-                          "url varchar, "
-                          "version integer)"))
-                {
-                    qDebug()<<"Can't create table: collect_feeds";
-                }
-        }
-    }
-
-    //"all_urls" table
-    if (!sqliteDataBase.tables().contains(QLatin1String("all_urls"))) //if hasn't 'all_urls' table
-    {
-        //create 'collect_feeds' table
-        if (sqliteDataBase.isOpen())
-        {
-                QSqlQuery query;
-                if (!query.exec("create table all_urls "
-                          "(id integer PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, "
-                          "url varchar)"))
-                {
-                    qDebug()<<"Can't create table: all_urls";
-                }
-        }
-    }
-
-    //"rss" table
-    if (!sqliteDataBase.tables().contains(QLatin1String("favorite_feeds"))) //if hasn't 'rss' table
-    {
-        //create 'rss'table
-        if (sqliteDataBase.isOpen())
-        {
-                QSqlQuery query;
-                if (!query.exec("create table favorite_feeds "
-                          "(id integer PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, "
-                          "name varchar, "
-                          "url varchar, "
-                          "version integer)"))
-                {
-                     qDebug()<<"Can't create table: rss";
-                }
-        }
-    }
-
-    //"filter" table
-    if (!sqliteDataBase.tables().contains(QLatin1String("filters"))) //if hasn't 'rss' table
-    {
-        //create 'rss' table
-        if (sqliteDataBase.isOpen())
-        {
-                QSqlQuery query;
-                if (!query.exec("create table filters "
-                          "(id integer PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, "
-                          "filter varchar)"))
-                {
-                     qDebug()<<"Can't create table: filters";
-                }
-        }
-    }
-
-    //close data base
-    //closeDB();
+    createCollectFeedsTable();
+    createAllURLTable();
+    createFavoriteFeedsTable();
+    createFiltersTable();
 }
 
 void DataBase::loadStrctureFromDB(Data *data)
@@ -124,21 +52,16 @@ void DataBase::loadStrctureFromDB(Data *data)
 void DataBase::openDB()
 {
     //open db
-    sqliteDataBase = QSqlDatabase::addDatabase("QSQLITE");
-    sqliteDataBase.setDatabaseName("sites.db3");
-    sqliteDataBase.open();
+    q_sql_data_base_ = QSqlDatabase::addDatabase("QSQLITE");
+    q_sql_data_base_.setDatabaseName("sites.db3");
+    q_sql_data_base_.open();
 }
 
 void DataBase::closeDB()
 {
-   sqliteDataBase.close();
+   q_sql_data_base_.close();
 }
 
-
-
-
-////////options.cpp
-///
 //fill view_feeds (QListWidget var)
 void DataBase::getFavoriteFeeds(boost::ptr_vector<QString> *l_old_view_feed)
 {
@@ -167,41 +90,41 @@ void DataBase::getFavoriteFeeds(boost::ptr_vector<QString> *l_old_view_feed)
 void DataBase::removeDataFromRSSTable(QString site_name, bool all_data)
 {
 
-    QSqlQuery qry;
+    QSqlQuery query;
 
     if (all_data)
     {
-        qry.prepare("delete from favorite_feeds");
-        if (!qry.exec())
-            qDebug()<<"Fail:" + qry.lastError().text();
+        query.prepare("delete from favorite_feeds");
+        if (!query.exec())
+            qDebug()<<"Fail:" + query.lastError().text();
         return;
     }
 
-    qry.prepare(QString("delete from favorite_feeds where name=\'%1\'").arg(site_name));
-    if (!qry.exec())
-        qDebug()<<"Fail:" + qry.lastError().text();
+    query.prepare(QString("delete from favorite_feeds where name=\'%1\'").arg(site_name));
+    if (!query.exec())
+        qDebug()<<"Fail:" + query.lastError().text();
 }
 
 //insert row to 'rss' DB table
 void DataBase::insertIntoFavoriteFeeds(QString name, QString url, QString version)
 {
-    QSqlQuery qry;
+    QSqlQuery query;
 
-    qry.prepare("insert into favorite_feeds (name, url, version) values (\'"+ name+"\',\'" + url+ "\',\'" + version + "\')");
-    if (!qry.exec())
+    query.prepare("insert into favorite_feeds (name, url, version) values (\'"+ name+"\',\'" + url+ "\',\'" + version + "\')");
+    if (!query.exec())
     {
-        qDebug()<<"Fail:" + qry.lastError().text();
+        qDebug()<<"Fail:" + query.lastError().text();
     }
 }
 
 void DataBase::insertIntoCollectFeeds(QString name, QString url, QString version)
 {
-    QSqlQuery qry;
+    QSqlQuery query;
 
-    qry.prepare("insert into collect_feeds (name, url, version) values (\'"+ name+"\',\'" + url+ "\',\'" + version + "\')");
-    if (!qry.exec())
+    query.prepare("insert into collect_feeds (name, url, version) values (\'"+ name+"\',\'" + url+ "\',\'" + version + "\')");
+    if (!query.exec())
     {
-        qDebug()<<"Fail:" + qry.lastError().text();
+        qDebug()<<"Fail:" + query.lastError().text();
     }
 }
 
@@ -225,7 +148,7 @@ void DataBase::findAndReturnURLAndVersion(QString site_name, QString &url, QStri
     url = "";
     version="";
 
-    if (sqliteDataBase.isOpen())
+    if (q_sql_data_base_.isOpen())
     {
         query.prepare(QString("SELECT * FROM collect_feeds WHERE name=\"%1\"").arg(site_name));
         if (!query.exec())
@@ -318,32 +241,32 @@ void DataBase::getFilterList(boost::ptr_vector<QString> *l_old_filters)
 
 void DataBase::insertRowToFiltersTable(QString filter_name)
 {
-    QSqlQuery qry;
+    QSqlQuery query;
 
-    qry.prepare("insert into filters (filter) values (\'"+ filter_name+"\')");
-    if (!qry.exec())
+    query.prepare("insert into filters (filter) values (\'"+ filter_name+"\')");
+    if (!query.exec())
     {
-        qDebug()<<"DB::insertRowToFiltersTable(QString filter_name) fail:" + qry.lastError().text();
+        qDebug()<<"DB::insertRowToFiltersTable(QString filter_name) fail:" + query.lastError().text();
     }
 }
 
 void DataBase::removeDataFromFilters()
 {
-    QSqlQuery qry;
+    QSqlQuery query;
 
-    qry.prepare("delete from filters");
+    query.prepare("delete from filters");
 
-    if (!qry.exec())
-        qDebug()<<"DB::removeDataFromFilters(QString filter_name, bool all_data) fail:" + qry.lastError().text();
+    if (!query.exec())
+        qDebug()<<"DB::removeDataFromFilters(QString filter_name, bool all_data) fail:" + query.lastError().text();
 }
 
 void DataBase::removeDataFromCollectFeeds(QString site_name)
 {
-    QSqlQuery qry;
+    QSqlQuery query;
 
-    qry.prepare(QString("delete from collect_feeds where name=\"%1\"").arg(site_name));
-    if (!qry.exec())
-        qDebug()<<"DB::removeDataFromCollectFeeds(QString site_name) fail delete from collect_feeds where filter... " + qry.lastError().text();
+    query.prepare(QString("delete from collect_feeds where name=\"%1\"").arg(site_name));
+    if (!query.exec())
+        qDebug()<<"DB::removeDataFromCollectFeeds(QString site_name) fail delete from collect_feeds where filter... " + query.lastError().text();
 }
 
 void DataBase::getCollectFeedsThatContainingText(QString text, boost::ptr_vector<QString> *l_favorite_rss) //cf_find_feeds text changed event
@@ -363,5 +286,84 @@ void DataBase::getCollectFeedsThatContainingText(QString text, boost::ptr_vector
         QString *name = new QString(query.value( 1 ).toByteArray().data());
         if (name->contains(text))
             l_favorite_rss->push_back(name);
+    }
+}
+
+
+void DataBase::createCollectFeedsTable()
+{
+    if (!q_sql_data_base_.tables().contains(QLatin1String("collect_feeds"))) //if there isn't 'collect_feeds' table
+    {
+        //create 'collect_feeds'table
+        if (q_sql_data_base_.isOpen())
+        {
+                QSqlQuery query;
+                if (!query.exec("create table collect_feeds "
+                          "(id integer PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, "
+                          "name varchar, "
+                          "url varchar, "
+                          "version integer)"))
+                {
+                    qDebug()<<"Can't create table: collect_feeds";
+                }
+        }
+    }
+}
+
+void DataBase::createAllURLTable()
+{
+
+    //"all_urls" table
+    if (!q_sql_data_base_.tables().contains(QLatin1String("all_urls"))) //if there isn't 'all_urls' table
+    {
+        //create 'collect_feeds' table
+        if (q_sql_data_base_.isOpen())
+        {
+                QSqlQuery query;
+                if (!query.exec("create table all_urls "
+                          "(id integer PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, "
+                          "url varchar)"))
+                {
+                    qDebug()<<"Can't create table: all_urls";
+                }
+        }
+    }
+}
+
+void DataBase::createFavoriteFeedsTable()
+{
+    if (!q_sql_data_base_.tables().contains(QLatin1String("favorite_feeds"))) //if there isn't 'rss' table
+    {
+        //create 'rss'table
+        if (q_sql_data_base_.isOpen())
+        {
+                QSqlQuery query;
+                if (!query.exec("create table favorite_feeds "
+                          "(id integer PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, "
+                          "name varchar, "
+                          "url varchar, "
+                          "version integer)"))
+                {
+                     qDebug()<<"Can't create table: rss";
+                }
+        }
+    }
+}
+
+void DataBase::createFiltersTable()
+{
+    if (!q_sql_data_base_.tables().contains(QLatin1String("filters"))) //if there isn't 'rss' table
+    {
+        //create 'rss' table
+        if (q_sql_data_base_.isOpen())
+        {
+                QSqlQuery query;
+                if (!query.exec("create table filters "
+                          "(id integer PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, "
+                          "filter varchar)"))
+                {
+                     qDebug()<<"Can't create table: filters";
+                }
+        }
     }
 }
