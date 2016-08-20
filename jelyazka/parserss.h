@@ -23,7 +23,7 @@ private:
     QString returnURL(QString source, int index);
     int getContent(int item_b_index, int item_e_index, QString &description, QString content);
     QString convert_entitie(QString entitie);
-    Data *data;
+    Data *data_;
 };
 
 #endif // PARSERSS_H

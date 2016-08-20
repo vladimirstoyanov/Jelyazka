@@ -15,15 +15,15 @@ public:
     QString getDate();
 
     //set
-    void setTitle(QString title_);
-    void setLink(QString link_);
-    void setText(QString text_);
-    void setDate(QString date_);
+    void setTitle(QString title);
+    void setLink(QString link);
+    void setText(QString text);
+    void setDate(QString date);
 private:
-    QString title;
-    QString link;
-    QString text;
-    QString date;
+    QString title_;
+    QString link_;
+    QString text_;
+    QString date_;
 };
 
 #endif // RSSARTICLE_H

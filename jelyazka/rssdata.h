@@ -22,8 +22,8 @@ public:
     size_t getArticlesSize();
     RSSArticle articleAt(unsigned int index);
     void eraseArticleAt(unsigned int index);
-    void articlesPushFront(RSSArticle ar);
-    void articlesPushBack(RSSArticle ar);
+    void articlesPushFront(RSSArticle rss_article);
+    void articlesPushBack(RSSArticle rss_article);
 
     //set
     void setType(QString type);
@@ -35,15 +35,15 @@ public:
     void setIsLoaded(bool isLoaded);
 
 private:
-    QString type;
-    QString site_name;
-    QString url;
-    QString encoding;
-    QString version;
-    bool isRead;
-    bool isLoaded;
+    QString type_;
+    QString site_name_;
+    QString url_;
+    QString encoding_;
+    QString version_;
+    bool is_read_;
+    bool is_loaded_;
     //boost::ptr_list<article> articles; //new
-    QList<RSSArticle> articles;
+    QList<RSSArticle> rss_article_list_;
 
 };
 

@@ -28,13 +28,13 @@ class RefreshFeedsData : public QThread
 {
     Q_OBJECT
 public:
-    explicit RefreshFeedsData(QObject *parent = 0, RSSThread *ss=0, Data *data_tmp=0);
+    explicit RefreshFeedsData(QObject *parent = 0, RSSThread *rss_thread=0, Data *data=0);
     ~RefreshFeedsData();
 
     void run();
 private:
-    RSSThread *site_struct;
-    Data *data;
+    RSSThread *rss_thread_;
+    Data *data_;
 
 signals:
 

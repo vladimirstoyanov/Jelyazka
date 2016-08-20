@@ -48,20 +48,20 @@ class RSSThread : public QObject, public QRunnable
 {
     Q_OBJECT
 public:
-    bool first_load;
-    bool isAddOption;
-    QNetworkProxy *network_proxy;
-    bool enabled_proxy_connection;
-    bool enabled_notification_window;
-    bool enabled_filters;
-    bool busy;
-    QString proxy_url;
-    QString proxy_port;
-    QString data_for_animatewindow;
-    QWaitCondition condition_tread;
-    QWaitCondition condition_view;
+    bool first_load_;
+    bool is_add_option_;
+    QNetworkProxy *network_proxy_;
+    bool enabled_proxy_connection_;
+    bool enabled_notification_window_;
+    bool enabled_filters_;
+    bool busy_;
+    QString proxy_url_;
+    QString proxy_port_;
+    QString data_for_animatewindow_;
+    QWaitCondition condition_tread_;
+    QWaitCondition condition_view_;
     
-    RSSThread(Data *data_tmp);
+    RSSThread(Data *data);
     ~RSSThread();
 
     //boost::ptr_vector<RSSData> s_struct; //vector with all rss data
@@ -69,11 +69,23 @@ public:
     RSSData * initStruct(QString site_name, QString type, QString url);
     void synchronizeData(int site_index, QString content);
     void run (); //function exec when thread start
-    int getRefreshTime(){return refresh_time_feeds;}
-    void setRefreshTime(int refresh_time_feeds_tmp){refresh_time_feeds = refresh_time_feeds_tmp;}
-    void setEnableNotificationWindow(bool enabled_notification_window_tmp){enabled_notification_window = enabled_notification_window_tmp;}
+    int getRefreshTime()
+    {
+        return refresh_time_feeds_;
+    }
+    void setRefreshTime(int refresh_time_feeds)
+    {
+        refresh_time_feeds_ = refresh_time_feeds;
+    }
+    void setEnableNotificationWindow(bool enabled_notification_window)
+    {
+        enabled_notification_window_ = enabled_notification_window;
+    }
     void setProxySettings();
-    bool getEnabledNotificationWindow(){return enabled_notification_window;}
+    bool getEnabledNotificationWindow()
+    {
+        return enabled_notification_window_;
+    }
     void emitAnimateWindow();
 
 signals:
@@ -82,13 +94,13 @@ signals:
     void Finish(QString name, bool finish); //signal to option, when add rss feeds from 'collect' to 'view'
 
 private:
-    QMutex *mutex; //using for threads
-    bool first_flag;
-    QThreadPool *tp;
-    int refresh_time_feeds;
-    DataBase db;
-    Data *data;
-    ParseRSS *parseRSS;
+    QMutex *mutex_; //using for threads
+    bool first_flag_;
+    QThreadPool *thread_pool_;
+    int refresh_time_feeds_;
+    DataBase data_base_;
+    Data *data_;
+    ParseRSS *parse_rss_;
 
     void loadOptions();
     int checkIsLoaded();

@@ -19,11 +19,11 @@
 #include "refreshfeedsdata.h"
 #include <QDebug>
 
-RefreshFeedsData::RefreshFeedsData(QObject *parent, RSSThread *ss, Data *data_tmp) :
+RefreshFeedsData::RefreshFeedsData(QObject *parent, RSSThread *rss_thread, Data *data) :
     QThread(parent)
 {
-    site_struct = ss;
-    data = data_tmp;
+    rss_thread_ = rss_thread;
+    data_ = data;
 }
 
 RefreshFeedsData::~RefreshFeedsData()
@@ -38,12 +38,12 @@ void RefreshFeedsData::run() //refresh feeds
     while (1)
     {
         qDebug()<<"run():Before sleep...";
-        int t = site_struct->getRefreshTime();
+        int t = rss_thread_->getRefreshTime();
         msleep(t*60000);
         qDebug()<<"run():After sleep...";
 
-        site_struct->data_for_animatewindow = "";
-        int n = data->size();
+        rss_thread_->data_for_animatewindow_ = "";
+        int n = data_->size();
 
 
         for (int i=0; i<n; i++)
@@ -51,12 +51,12 @@ void RefreshFeedsData::run() //refresh feeds
             content="";
             qDebug()<<"Trying to refresh in RefreshFeedsData, index: " + QString::number(i);
 
-            if (data->size()<=i)
+            if (data_->size()<=i)
             {
                 qDebug()<<"site_struct->s_struct.size()<=i";
                 break;
             }
-            QString url = data->at(i)->getURL();
+            QString url = data_->at(i)->getURL();
             if (http.getQuery(url,content))
             {
                 qDebug()<<"Fail to connect: "<<url;
@@ -65,18 +65,18 @@ void RefreshFeedsData::run() //refresh feeds
 
             qDebug()<<"Download data in RefreshFeedsData, index: " + QString::number(i);
 
-            if (data->size()<=i)
+            if (data_->size()<=i)
             {
                 qDebug()<<"site_struct->s_struct.size()<=i";
                 break;
             }
-            site_struct->synchronizeData(i,content);
+            rss_thread_->synchronizeData(i,content);
             qDebug()<<"Synchronize data in RefreshFeedsData, index: " + QString::number(i);
         }
-        if (site_struct->getEnabledNotificationWindow())
+        if (rss_thread_->getEnabledNotificationWindow())
         {
             qDebug()<<"Emit animate window";
-            site_struct->emitAnimateWindow();
+            rss_thread_->emitAnimateWindow();
         }
     }
     exec();

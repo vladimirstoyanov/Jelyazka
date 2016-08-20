@@ -67,7 +67,7 @@ void InitWindow::setSignal(RSSThread *rss_thread, Data *data)
     }
     if (data_->size()==0)
     {
-        rss_thread_->first_load = true;
+        rss_thread_->first_load_ = true;
         this->hide();
         emit Done();
     }
@@ -77,7 +77,7 @@ void InitWindow::onLoadRss(QString name, QString url)
 {
     if (url == "" && name == "") //if loading RSS feeds finish
     {
-        rss_thread_->first_load = true;
+        rss_thread_->first_load_ = true;
         this->hide();
         emit Done();
         return;

@@ -162,7 +162,7 @@ void MainWindow::onDone()
     view_window_->show();
     refresh_feed_data_->start();
     for (uint i=0; i<data_->size(); i++)
-      rss_thread_->data_for_animatewindow+="<index=" + QString::number(i) + ">";
+      rss_thread_->data_for_animatewindow_+="<index=" + QString::number(i) + ">";
     rss_thread_->emitAnimateWindow();
 }
 

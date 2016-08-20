@@ -18,34 +18,34 @@
 */
 #include "rssthread.h"
 
-RSSThread::RSSThread(Data *data_tmp)
+RSSThread::RSSThread(Data *data)
     : QRunnable()
 {
-    data = data_tmp;
-    parseRSS = new ParseRSS(data);
-    first_load = false;
-    isAddOption = true;
+    data_ = data;
+    parse_rss_ = new ParseRSS(data);
+    first_load_ = false;
+    is_add_option_ = true;
 
-    network_proxy = NULL;
+    network_proxy_ = NULL;
 
-    db.loadStrctureFromDB (data);
+    data_base_.loadStrctureFromDB (data);
 
-    mutex = new QMutex();
-    tp = new QThreadPool(this);
-    tp->setMaxThreadCount(5);
+    mutex_ = new QMutex();
+    thread_pool_ = new QThreadPool(this);
+    thread_pool_->setMaxThreadCount(5);
 
     loadOptions();
     setProxySettings();
 
-    busy = false;
-    data_for_animatewindow = "";
+    busy_ = false;
+    data_for_animatewindow_ = "";
 }
 
 RSSThread::~RSSThread()
 {
-    delete mutex;
-    if (network_proxy!=NULL)
-        delete network_proxy;
+    delete mutex_;
+    if (network_proxy_!=NULL)
+        delete network_proxy_;
 }
 
 void RSSThread::synchronizeData(int struct_index, QString content)
@@ -54,47 +54,47 @@ void RSSThread::synchronizeData(int struct_index, QString content)
 
     QList <RSSArticle> tmp_struct;
 
-    if (data->size()<=struct_index)
+    if (data_->size()<=struct_index)
         return;
 
-    if (data->at(struct_index)->getArticlesSize()==0) //if articles list is empty
+    if (data_->at(struct_index)->getArticlesSize()==0) //if articles list is empty
     {
-        if(data->at(struct_index)->getVersion() == "2005")
-            parseRSS->getArticlesFromRDFContent(content,  data->at(struct_index));
+        if(data_->at(struct_index)->getVersion() == "2005")
+            parse_rss_->getArticlesFromRDFContent(content,  data_->at(struct_index));
         else
-            parseRSS->getArticlesFromRSSContent(content,  data->at(struct_index));
+            parse_rss_->getArticlesFromRSSContent(content,  data_->at(struct_index));
 
         return;
     }
 
     RSSArticle ar;
-    if(data->at(struct_index)->getVersion() == "2005")
-        parseRSS->findFeedDataRDF(index,content,ar);//findSiteDataRSS2(index, content, ar);
+    if(data_->at(struct_index)->getVersion() == "2005")
+        parse_rss_->findFeedDataRDF(index,content,ar);//findSiteDataRSS2(index, content, ar);
     else
-        parseRSS->findFeedDataRSS(index, content,  ar);
-    while (ar.getLink() != data->at(struct_index)->articleAt(0).getLink() && index!=-1) //synchronize
+        parse_rss_->findFeedDataRSS(index, content,  ar);
+    while (ar.getLink() != data_->at(struct_index)->articleAt(0).getLink() && index!=-1) //synchronize
     {
         tmp_struct.push_back(ar);
-        if(data->at(struct_index)->getVersion() == "2005")
-            parseRSS->findFeedDataRDF(index,content, ar);
+        if(data_->at(struct_index)->getVersion() == "2005")
+            parse_rss_->findFeedDataRDF(index,content, ar);
         else
-            parseRSS->findFeedDataRSS(index, content, ar);
+            parse_rss_->findFeedDataRSS(index, content, ar);
     }
 
     if (tmp_struct.size()==0)
         return;
 
-    if (tmp_struct.size()>0 && enabled_notification_window)
+    if (tmp_struct.size()>0 && enabled_notification_window_)
     {
-       data_for_animatewindow += "<index=" + QString::number(struct_index) + ">";
+       data_for_animatewindow_ += "<index=" + QString::number(struct_index) + ">";
     }
 
     //adding new data
     for (int i=0; i<tmp_struct.size(); i++)
     {
-        if (INT_MAX<=data->at(struct_index)->getArticlesSize())
-            data->at(struct_index)->eraseArticleAt(data->at(struct_index)->getArticlesSize()-1);
-        data->at(struct_index)->articlesPushFront(tmp_struct[i]);
+        if (INT_MAX<=data_->at(struct_index)->getArticlesSize())
+            data_->at(struct_index)->eraseArticleAt(data_->at(struct_index)->getArticlesSize()-1);
+        data_->at(struct_index)->articlesPushFront(tmp_struct[i]);
     }
 
 }
@@ -104,91 +104,91 @@ void RSSThread::run() //runnning another thread (synchronize data for n time)
     HTTP http;
     QString content;
 
-    mutex->lock();
+    mutex_->lock();
     int index=-1;
-    for (uint i=0; i<data->size(); i++)
+    for (uint i=0; i<data_->size(); i++)
     {
-        if (!data->at(i)->getIsRead())
+        if (!data_->at(i)->getIsRead())
         {
             index = i;
-            data->at(i)->setIsRead(true);// = true;
+            data_->at(i)->setIsRead(true);// = true;
             break;
         }
     }
-    mutex->unlock();
+    mutex_->unlock();
     if (index == -1)
         return;
 
     content = "";
-    if (http.getQuery(data->at(index)->getURL(),content))
+    if (http.getQuery(data_->at(index)->getURL(),content))
     {
-        qDebug()<<data->at(index)->getURL() + ": http get query has been failed!";
-        mutex->lock();
-        data->at(index)->setIsLoaded(true); //= true;
+        qDebug()<<data_->at(index)->getURL() + ": http get query has been failed!";
+        mutex_->lock();
+        data_->at(index)->setIsLoaded(true); //= true;
         if (!checkIsLoaded())
         {
-            mutex->unlock();
+            mutex_->unlock();
             return;
         }
-        mutex->unlock();
+        mutex_->unlock();
         return;
     }
-    mutex->lock();
-    if (first_load == 0)
-        emit loadRSS(data->at(index)->getSiteName(), data->at(index)->getURL());
-    if (isAddOption == 0)
-        emit Finish(data->at(index)->getSiteName(), 0);
-    synchronizeData(index,content);
-    qDebug()<<"index:" + QString::number(index) + "url:" + data->at(index)->getURL() + " count:"  + QString::number(data->at(index)->getArticlesSize());
-    data->at(index)->setIsLoaded(true);// = true;
+    mutex_->lock();
+    if (first_load_ == 0)
+        emit loadRSS(data_->at(index)->getSiteName(), data_->at(index)->getURL());
+    if (is_add_option_ == 0)
+        emit Finish(data_->at(index)->getSiteName(), 0);
+    synchronizeData(index, content);
+    qDebug()<<"index:" + QString::number(index) + "url:" + data_->at(index)->getURL() + " count:"  + QString::number(data_->at(index)->getArticlesSize());
+    data_->at(index)->setIsLoaded(true);// = true;
     checkIsLoaded();
-    mutex->unlock();
+    mutex_->unlock();
 }
 
 void RSSThread::setProxySettings()
 {
-    if (network_proxy!=NULL)
-        delete network_proxy;
+    if (network_proxy_!=NULL)
+        delete network_proxy_;
 
-    if (!enabled_proxy_connection)
+    if (!enabled_proxy_connection_)
         return;
 
-    int port = proxy_port.toInt();
-    if (proxy_url == "" || port<1 || port>65536)
+    int port = proxy_port_.toInt();
+    if (proxy_url_ == "" || port<1 || port>65536)
         return;
 
-    network_proxy = new QNetworkProxy();
-    network_proxy->setType(QNetworkProxy::HttpProxy);
-    network_proxy->setHostName(proxy_url);
-    network_proxy->setPort(port);
-    QNetworkProxy::setApplicationProxy(*network_proxy);
+    network_proxy_ = new QNetworkProxy();
+    network_proxy_->setType(QNetworkProxy::HttpProxy);
+    network_proxy_->setHostName(proxy_url_);
+    network_proxy_->setPort(port);
+    QNetworkProxy::setApplicationProxy(*network_proxy_);
 }
 
 void RSSThread::emitAnimateWindow()
 {
-    emit showAnimateWindow(data_for_animatewindow);
+    emit showAnimateWindow(data_for_animatewindow_);
 }
 
 int RSSThread::checkIsLoaded()
 {
     uint count = 0;
 
-    for (uint i = 0; i< data->size(); i++)
-        if (data->at(i)->getIsLoaded())
+    for (uint i = 0; i< data_->size(); i++)
+        if (data_->at(i)->getIsLoaded())
             count++;
 
 
-    if (count == data->size() && first_load == false)
+    if (count == data_->size() && first_load_ == false)
     {
-        first_load = true;
+        first_load_ = true;
         emit loadRSS("","");
         return 0;
     }
 
-    if (count == data->size() && isAddOption == false)
+    if (count == data_->size() && is_add_option_ == false)
     {
         emit Finish("", true);
-        isAddOption = true;
+        is_add_option_ = true;
         return 0;
     }
     return 1;
@@ -237,7 +237,7 @@ void RSSThread::loadOptions()
         i++;
     }
     i = what.toInt();
-    refresh_time_feeds = i;
+    refresh_time_feeds_ = i;
 
     line = in.readLine();
 
@@ -255,9 +255,9 @@ void RSSThread::loadOptions()
     }
 
     if (line[21]=='0')
-        enabled_notification_window = false;
+        enabled_notification_window_ = false;
     else if (line[21] == '1')
-        enabled_notification_window = true;
+        enabled_notification_window_ = true;
     else
         QMessageBox::critical(0, "Error!", "Wrong value about \'Notification window\' from a \'Options\' file!");
 
@@ -278,9 +278,9 @@ void RSSThread::loadOptions()
     }
 
     if (line[15]=='0')
-        enabled_proxy_connection = false;
+        enabled_proxy_connection_ = false;
     else if (line[15] == '1')
-        enabled_proxy_connection = true;
+        enabled_proxy_connection_ = true;
     else
         QMessageBox::critical(0, "Error!", "Wrong value about \'Notification window\' from a \'Options\' file!");
 
@@ -307,7 +307,7 @@ void RSSThread::loadOptions()
         i++;
     }
 
-    proxy_url = str_tmp;
+    proxy_url_ = str_tmp;
 
     //laod proxy port information
     line = in.readLine();
@@ -330,7 +330,7 @@ void RSSThread::loadOptions()
         i++;
     }
 
-    proxy_port = str_tmp;
+    proxy_port_ = str_tmp;
 
     file.close();
 }

@@ -46,7 +46,7 @@ class OptionsWindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit OptionsWindow(QWidget *parent = 0, RSSThread *ss=0, ViewWindow *view_window=0, Data *data_tmp = 0);
+    explicit OptionsWindow(QWidget *parent = 0, RSSThread *rss_thread=0, ViewWindow *view=0, Data *data = 0);
     ~OptionsWindow();
 
 public slots:
@@ -68,42 +68,42 @@ private slots:
     void on_textChanged(QString text);
 
 private:
-    DataBase db;
-    Ui::OptionsWindow *ui;
-    RSSThread *site_struct;
-    Data *data;
-    QListWidget *collect_feeds;
-    QListWidget *view_feeds;
-    boost::ptr_vector<QString> l_old_collect_feed;
-    boost::ptr_vector<QString> l_old_view_feed;
-    boost::ptr_vector<QString> l_old_filters;
-    int options_type;
-    QThreadPool *tp;
-    QList<bool> l_items_for_remove;
-    ViewWindow *vw;
-    QLabel *download_feed_status;
+    DataBase data_base_;
+    Ui::OptionsWindow *ui_;
+    RSSThread *rss_thread_;
+    Data *data_;
+    QListWidget *collect_feeds_;
+    QListWidget *view_feeds_;
+    boost::ptr_vector<QString> l_old_collect_feed_;
+    boost::ptr_vector<QString> l_old_view_feed_;
+    boost::ptr_vector<QString> l_old_filters_;
+    int options_type_;
+    QThreadPool *thread_pool_;
+    QList<bool> l_items_for_remove_;
+    ViewWindow *view_window_;
+    QLabel *download_feed_status_;
 
-    QLineEdit *cf_find_feed;
-    QLabel *cf_label_search;
+    QLineEdit *cf_find_feed_;
+    QLabel *cf_label_search_;
 
     //QTextEdit *te_refresh_time;
-    QLabel *l_refresh_time;
-    QCheckBox *cb_enable_notification;
-    QSpinBox *sb_refresh_time;
+    QLabel *l_refresh_time_;
+    QCheckBox *cb_enable_notification_;
+    QSpinBox *sb_refresh_time_;
 
-    QLabel *l_proxy_url;
-    QLabel *l_proxy_port;
-    QTextEdit *te_proxy_url;
-    QTextEdit *te_proxy_port;
-    QCheckBox *cb_enable_proxy;
+    QLabel *l_proxy_url_;
+    QLabel *l_proxy_port_;
+    QTextEdit *te_proxy_url_;
+    QTextEdit *te_proxy_port_;
+    QCheckBox *cb_enable_proxy_;
 
     //filter options widgets
-    QPushButton *pb_add_filter;
-    QTextEdit *te_add_filter;
-    QListWidget *lw_filter_list;
-    QLabel *l_filter_list;
-    QPushButton *pb_remove_filter;
-    QCheckBox *cb_enable_filtering;
+    QPushButton *pb_add_filter_;
+    QTextEdit *te_add_filter_;
+    QListWidget *lw_filter_list_;
+    QLabel *l_filter_list_;
+    QPushButton *pb_remove_filter_;
+    QCheckBox *cb_enable_filtering_;
 
 
     void showEvent(QShowEvent *);

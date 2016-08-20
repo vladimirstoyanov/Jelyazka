@@ -9,110 +9,110 @@ RSSData::RSSData()
 //get
 QString RSSData::getType ()
 {
-    return type;
+    return type_;
 }
 
 QString RSSData::getSiteName()
 {
-    return site_name;
+    return site_name_;
 }
 
 QString RSSData::getURL()
 {
-    return url;
+    return url_;
 }
 
 QString RSSData::getEncoding()
 {
-    return encoding;
+    return encoding_;
 }
 
 QString RSSData::getVersion()
 {
-    return version;
+    return version_;
 }
 
 bool RSSData::getIsRead()
 {
-    return isRead;
+    return is_read_;
 }
 
 bool RSSData::getIsLoaded()
 {
-    return isLoaded;
+    return is_loaded_;
 }
 
 size_t RSSData::getArticlesSize()
 {
-    return articles.size();
+    return rss_article_list_.size();
 }
 
 RSSArticle RSSData::articleAt(unsigned int index)
 {
-    return articles[index];
+    return rss_article_list_[index];
 }
 
 void RSSData::eraseArticleAt(unsigned int index)
 {
-    articles.erase(articles.begin() + index);
+    rss_article_list_.erase(rss_article_list_.begin() + index);
 }
 
-void RSSData::articlesPushFront(RSSArticle article)
+void RSSData::articlesPushFront(RSSArticle rss_article)
 {
     if (INT_MAX <= getArticlesSize()) //prevent int overflow
     {
         eraseArticleAt(getArticlesSize()-1);
-        articlesPushFront(article);
+        articlesPushFront(rss_article);
         return;
     }
 
-    articles.push_front(article);
+    rss_article_list_.push_front(rss_article);
 }
 
-void RSSData::articlesPushBack(RSSArticle article)
+void RSSData::articlesPushBack(RSSArticle rss_article)
 {
     if (INT_MAX <= getArticlesSize()) //prevent int overflow
     {
         eraseArticleAt(getArticlesSize()-1);
-        articlesPushFront(article);
+        articlesPushFront(rss_article);
         return;
     }
 
-    articles.push_back(article);
+    rss_article_list_.push_back(rss_article);
 }
 
 //set
-void RSSData::setType(QString type_tmp)
+void RSSData::setType(QString type)
 {
-    type = type_tmp;
+    type_ = type;
 }
 
-void RSSData::setSiteName(QString site_name_tmp)
+void RSSData::setSiteName(QString site_name)
 {
-    site_name = site_name_tmp;
+    site_name_ = site_name;
 }
 
-void RSSData::setURL(QString url_tmp)
+void RSSData::setURL(QString url)
 {
-    url = url_tmp;
+    url_ = url;
 }
 
-void RSSData::setEncoding(QString enconding_tmp)
+void RSSData::setEncoding(QString enconding)
 {
-    encoding = enconding_tmp;
+    encoding_ = enconding;
 }
 
 void RSSData::setVersion(QString version_tmp)
 {
-    version = version_tmp;
+    version_ = version_tmp;
 }
 
-void RSSData::setIsRead(bool isRead_tmp)
+void RSSData::setIsRead(bool is_read)
 {
-    isRead = isRead_tmp;
+    is_read_ = is_read;
 }
 
-void RSSData::setIsLoaded(bool isLoaded_tmp)
+void RSSData::setIsLoaded(bool is_loaded)
 {
-    isLoaded = isLoaded_tmp;
+    is_loaded_ = is_loaded;
 }

@@ -8,41 +8,41 @@ RSSArticle::RSSArticle()
 //get
 QString RSSArticle::getTitle()
 {
-    return title;
+    return title_;
 }
 
 QString RSSArticle::getLink()
 {
-    return link;
+    return link_;
 }
 
 QString RSSArticle::getText()
 {
-    return text;
+    return text_;
 }
 
 QString RSSArticle::getDate()
 {
-    return date;
+    return date_;
 }
 
 //set
-void RSSArticle::setTitle(QString title_tmp)
+void RSSArticle::setTitle(QString title)
 {
-    title = title_tmp;
+    title_ = title;
 }
 
-void RSSArticle::setLink(QString link_tmp)
+void RSSArticle::setLink(QString link)
 {
-    link = link_tmp;
+    link_ = link;
 }
 
-void RSSArticle::setText(QString text_tmp)
+void RSSArticle::setText(QString text)
 {
-    text = text_tmp;
+    text_ = text;
 }
 
-void RSSArticle::setDate(QString date_)
+void RSSArticle::setDate(QString date)
 {
-    date = date_;
+    date_ = date;
 }

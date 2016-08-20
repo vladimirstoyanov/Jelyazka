@@ -2,7 +2,7 @@
 
 ParseRSS::ParseRSS(Data *data_tmp)
 {
-        data = data_tmp;
+        data_ = data_tmp;
 }
 
 
