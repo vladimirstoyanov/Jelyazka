@@ -1,27 +1,39 @@
 =============Bugs=====================
-- Proxy settings doesn't working;
-- After update 'favorite rss list' sometimes the program crashes;
-- When the cursor is at some custom button from main window and after that move fast the cursor, then
+1pt Proxy settings doesn't work;
+5pt After update 'favorite rss list' sometimes the program crashes; +
+1pt When the cursor is at some custom button from main window and after that move fast the cursor, then
 the custom button doesn't change it state (it is look like the cursor is in it);
-- the resize icon doesn't dissapear sometimes;
-- sometimes in 'description view' any symbols doesn't encoded properly;
-- ToolTips doens't appear when 'animatewindow' is appearing.
-- ignore 'mailto' urls; 
-- There isn't "pubData" tag in slashdot rss feed; 
+1pt the resize icon doesn't dissapear sometimes;
+3pt sometimes in 'description view' any symbols doesn't encoded properly;
+3pt ToolTips doens't appear when 'animatewindow' is appearing.
+1pt ignore 'mailto' urls; 
+1pt There isn't "pubData" tag in slashdot rss feed;(to show the date of the feed)
 
 =============Features==================
 - refactoring load/save options;
 - refactoring options menu: make abstraction, polymorphism for different options
 - refactoring options menu: make folder;
 - enable/disable filtering
-- re-design of 'x', 'o', '-' buttons +
+- re-design of 'x', 'o', '-' buttons
 - skins;
-- integrate youtube;
-- integrate facebook;
-- integrate twitter; 
-- add image tag to 'description view'; +
+- integrate youtube; +
+- integrate facebook; +
+- integrate twitter; +
+- add image tag to 'description view';
 - get the icon of RSS feed and make it to appear in 'animatewindow';
-- pause button in searching; + 
-- history of RSS feeds;
+- pause button in searching;
+- history of RSS feeds; +
 - understanding JavaScript in 'a href' tags;
+
+
+
+13.12.16
+
+
+=========ToDo=======================
+-Create TrayIcon class that creates and manage the tray icon
+
+
+
+
 

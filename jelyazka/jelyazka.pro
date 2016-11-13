@@ -34,7 +34,8 @@ SOURCES += main.cpp\
     notificationwindow.cpp \
     database.cpp \
     rsssearchgui.cpp \
-    rsssearchguithread.cpp
+    rsssearchguithread.cpp \
+    trayicon.cpp
 
 HEADERS  += mainwindow.h \
     viewwindow.h \
@@ -54,7 +55,8 @@ HEADERS  += mainwindow.h \
     notificationwindow.h \
     database.h \
     rsssearchgui.h \
-    rsssearchthread.h
+    rsssearchthread.h \
+    trayicon.h
 
 FORMS    += mainwindow.ui \
     viewwindow.ui \

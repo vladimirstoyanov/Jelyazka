@@ -16,8 +16,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef MAINWINDOW_CPP
-#define MAINWINDOW_CPP
+
+//create tray icon
+//some initialization (crate viewWindow, refreshFeedsData )
+//make connections between classes
 
 #include "mainwindow.h"
 #include <vector>
@@ -156,5 +158,3 @@ void MainWindow::onDone()
       rss_thread_->data_for_animatewindow_+="<index=" + QString::number(i) + ">";
     rss_thread_->emitAnimateWindow();
 }
-
-#endif
