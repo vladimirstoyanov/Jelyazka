@@ -19,7 +19,7 @@
 #ifndef MAIN_CPP
 #define MAIN_CPP
 
-#include "mainwindow.h"
+#include "initialization.h"
 #include "initwindow.h"
 #include <QApplication>
 
@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 
     InitWindow *iw = new InitWindow();
     iw->show();
-    MainWindow *w = new MainWindow(iw);
+    Initialization *w = new Initialization(iw);
     
     return a.exec();
 }

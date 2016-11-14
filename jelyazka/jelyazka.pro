@@ -16,7 +16,6 @@ INCLUDEPATH += D:/boost_1_60_0/ #The path to the Boost libraries.
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
     viewwindow.cpp \
     search.cpp \
     logger.cpp \
@@ -35,9 +34,10 @@ SOURCES += main.cpp\
     database.cpp \
     rsssearchgui.cpp \
     rsssearchguithread.cpp \
-    trayicon.cpp
+    trayicon.cpp \
+    initialization.cpp
 
-HEADERS  += mainwindow.h \
+HEADERS  += \
     viewwindow.h \
     search.h \
     logger.h \
@@ -56,7 +56,8 @@ HEADERS  += mainwindow.h \
     database.h \
     rsssearchgui.h \
     rsssearchthread.h \
-    trayicon.h
+    trayicon.h \
+    initialization.h
 
 FORMS    += mainwindow.ui \
     viewwindow.ui \

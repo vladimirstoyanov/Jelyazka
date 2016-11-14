@@ -1,5 +1,5 @@
 /*
-    mainwindow.h
+    initialization.h
     Jelyazka RSS/RDF reader
     Copyright (C) 2014 Vladimir Stoyanov
     
@@ -39,19 +39,19 @@
 #include "trayicon.h"
 
 namespace Ui {
-class MainWindow;
+class Initialization;
 }
 
-class MainWindow : public QMainWindow
+class Initialization : public QMainWindow
 {
     Q_OBJECT
     
 public:
-    /*explicit*/ MainWindow(InitWindow *window);
-    ~MainWindow();
+    /*explicit*/ Initialization(InitWindow *window);
+    ~Initialization();
     
 private:
-    Ui::MainWindow *ui_;
+    Ui::Initialization *ui_;
     //QSystemTrayIcon *tray_icon_;
     //QMenu *tray_icon_menu_;
     //QAction *about_;
