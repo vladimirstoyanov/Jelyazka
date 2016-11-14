@@ -15,8 +15,10 @@ class TrayIcon : public QWidget
 {
     Q_OBJECT
 public:
-    explicit TrayIcon(QWidget *parent = 0);
+    explicit TrayIcon(QWidget *parent = 0,  ViewWindow *view_window_=0);
     ~TrayIcon();
+
+    void addIcon();
 
 private:
     QSystemTrayIcon *tray_icon_;
@@ -30,7 +32,7 @@ private:
     void createActions();
     void createTrayIcon();
     void setIcon();
-    void closeEvent(QCloseEvent *); // Overriding the window's close event
+    void closeEvent(QCloseEvent *);
 
 private slots:
     void trayIconClicked(QSystemTrayIcon::ActivationReason);

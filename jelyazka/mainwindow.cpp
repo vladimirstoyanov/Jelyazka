@@ -26,30 +26,31 @@
 
 MainWindow::MainWindow(InitWindow *init_window):
     tray_icon_(NULL),
-    tray_icon_menu_(NULL),
-    about_(NULL),
-    close_(NULL),
-    view_(NULL),
+    //tray_icon_menu_(NULL),
+    //about_(NULL),
+    //close_(NULL),
+    //view_(NULL),
     rss_thread_(NULL),
     view_window_(NULL),
-    about_gui_(new About()),
+    //about_gui_(new About()),
     notification_window_ (new NotificationWindow()),
     data_ (new Data())
 
 {
     //creating system tray icon
-    createActions();
-    createTrayIcon();
-    setIcon();
-
-    //when initialize window is finished, then call onDone funtion
-    connect(init_window,SIGNAL(Done()),this,SLOT(onDone()));
+    //createActions();
+    //createTrayIcon();
+    //setIcon();
 
     rss_thread_  = new RSSThread(data_);
     rss_thread_->setAutoDelete(false);
 
     view_window_ = new ViewWindow(0, rss_thread_,data_);
+    tray_icon_ = new TrayIcon (0, view_window_);
     refresh_feed_data_ = new RefreshFeedsData(0, rss_thread_, data_);
+
+    //when initialize window is finished, then call onDone funtion
+    connect(init_window,SIGNAL(Done()),this,SLOT(onDone()));
 
     //load data
     init_window->setSignal(rss_thread_, data_);
@@ -57,11 +58,17 @@ MainWindow::MainWindow(InitWindow *init_window):
     //set thread signal
     notification_window_->setSignal(rss_thread_, data_);
 
+
+
     this->hide();
 }
 
 MainWindow::~MainWindow()
 {
+    if (tray_icon_!=NULL)
+        delete tray_icon_;
+
+    /*
     if (tray_icon_!=NULL)
         delete tray_icon_;
     if (tray_icon_menu_!=NULL)
@@ -72,6 +79,7 @@ MainWindow::~MainWindow()
         delete close_;
     if (view_!=NULL)
         delete view_;
+    */
     rss_thread_->deleteLater();
     if (view_window_!=NULL)
         delete view_window_;
@@ -80,8 +88,9 @@ MainWindow::~MainWindow()
     if (data_!=NULL)
         delete data_;
 
-    delete about_gui_;
+    //delete about_gui_;
 }
+/*
 void MainWindow::viewWindow()
 {
     view_window_->show();
@@ -148,10 +157,11 @@ void MainWindow::closeEvent(QCloseEvent *event)
         event->ignore(); // Don't let the event propagate to the base class
     }
 }
-
+*/
 void MainWindow::onDone()
 {
-    tray_icon_->show();
+    tray_icon_->addIcon();
+
     view_window_->show();
     refresh_feed_data_->start();
     for (uint i=0; i<data_->size(); i++)

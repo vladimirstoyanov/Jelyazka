@@ -25,8 +25,8 @@ About::About(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->textBrowser->setGeometry(0,0,this->width(), this->height() - (ui->pushButton->height() + 10));
-    ui->pushButton->setGeometry(this->width() - (ui->pushButton->width()+5), this->height() - (ui->pushButton->height()+5), ui->pushButton->width(), ui->pushButton->height());
+    ui->textBrowser->setGeometry(0,0,this->width(), this->height());
+    //ui->pushButton->setGeometry(this->width() - (ui->pushButton->width()+5), this->height() - (ui->pushButton->height()+5), ui->pushButton->width(), ui->pushButton->height());
 
     ui->textBrowser->setHtml("Jelyazka RSS Reader written by Vladimir Stoyanov.<p>e-mail:<a href=\"mailto:vlado_stoyanov@yahoo.com\">vlado_stoyanov@yahoo.com</p>");
 
@@ -42,5 +42,15 @@ About::~About()
 //'OK' button has been clicked
 void About::OKButtonClicked()
 {
-    this->close();
+    this->hide();
+}
+
+void About::closeEvent(QCloseEvent *)
+{
+    this->hide();
+}
+
+void About::showEvent(QShowEvent *)
+{
+
 }

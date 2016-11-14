@@ -20,6 +20,8 @@
 #define ABOUT_H
 
 #include <QWidget>
+#include <QCloseEvent>
+#include <QShowEvent>
 
 namespace Ui {
 class About;
@@ -38,6 +40,9 @@ private slots:
 
 private:
     Ui::About *ui;
+
+    void closeEvent(QCloseEvent *); // Overriding the window's close event
+    void showEvent(QShowEvent *);
 };
 
 #endif // ABOUT_H

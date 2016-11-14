@@ -1,8 +1,13 @@
 #include "trayicon.h"
 
-TrayIcon::TrayIcon(QWidget *parent) : QWidget(parent)
+TrayIcon::TrayIcon(QWidget *parent, ViewWindow *view_window_)
+    : QWidget(parent),
+      view_window_(view_window_),
+      about_gui_(new About())
 {
-
+    createActions();
+    createTrayIcon();
+    setIcon();
 }
 
 TrayIcon::~TrayIcon()
@@ -22,6 +27,12 @@ TrayIcon::~TrayIcon()
 
     delete about_gui_;
 }
+
+void TrayIcon::addIcon()
+{
+    tray_icon_->show();
+}
+
 void TrayIcon::viewWindow()
 {
     view_window_->show();

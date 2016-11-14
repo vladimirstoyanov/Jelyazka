@@ -31,7 +31,8 @@ the custom button doesn't change it state (it is look like the cursor is in it);
 
 
 =========ToDo=======================
--Create TrayIcon class that creates and manage the tray icon
+[- fix close button of "about" window;]
+[-Cre ate TrayIcon class that creates and manage the tray icon]
 
 
 
