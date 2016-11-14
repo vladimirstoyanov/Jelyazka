@@ -22,7 +22,7 @@
 #include "search.h"
 #include <QDebug>
 
-RSSSearchGUI::RSSSearchGUI(QWidget *parent, RSSThread *rss_thread, ViewWindow *view_window, Data *data) :
+RSSSearchGUI::RSSSearchGUI(QWidget *parent, RSSThread *rss_thread, MainWindow *main_window, Data *data) :
     QWidget(parent),
     ui_(new Ui::RSSSearchGUI)
 {
@@ -42,7 +42,7 @@ RSSSearchGUI::RSSSearchGUI(QWidget *parent, RSSThread *rss_thread, ViewWindow *v
     thread_pool_2 = new QThreadPool(this);
     thread_pool_2->setMaxThreadCount(10);
 
-    view_window_ = view_window;
+    main_window_ = main_window;
 
     //init gryd layout
     grid_ = new QGridLayout;
@@ -443,11 +443,11 @@ void RSSSearchGUI::on_pushButton_2_clicked() //add RSS feeds button
             data_->at(data_->size()-1)->articlesPushBack(art);
         }
     }
-    //There is no data in rss_thread_ without below row in ViewWindow
+    //There is no data in rss_thread_ without below row in MainWindow
     rss_thread_->setAutoDelete(true);
 
-    view_window_->initDataInComboBoxFromStructure();
-    view_window_->initTextBrowser();
+    main_window_->initDataInComboBoxFromStructure();
+    main_window_->initTextBrowser();
 
     QApplication::restoreOverrideCursor();
 

@@ -1,8 +1,8 @@
 #include "trayicon.h"
 
-TrayIcon::TrayIcon(QWidget *parent, ViewWindow *view_window_)
+TrayIcon::TrayIcon(QWidget *parent, MainWindow *main_window_)
     : QWidget(parent),
-      view_window_(view_window_),
+      main_window_(main_window_),
       about_gui_(new About())
 {
     createActions();
@@ -20,10 +20,10 @@ TrayIcon::~TrayIcon()
         delete about_;
     if (close_!=NULL)
         delete close_;
-    if (view_!=NULL)
-        delete view_;
-    if (view_window_!=NULL)
-        delete view_window_;
+    if (main_!=NULL)
+        delete main_;
+    if (main_window_!=NULL)
+        delete main_window_;
 
     delete about_gui_;
 }
@@ -33,9 +33,9 @@ void TrayIcon::addIcon()
     tray_icon_->show();
 }
 
-void TrayIcon::viewWindow()
+void TrayIcon::mainWindow()
 {
-    view_window_->show();
+    main_window_->show();
 }
 
 void TrayIcon::showAbout()
@@ -45,8 +45,8 @@ void TrayIcon::showAbout()
 
 void TrayIcon::createActions()
 {
-    view_ = new QAction(tr("&Open Jelyazka"), this);
-    connect(view_, SIGNAL(triggered()), this, SLOT(viewWindow()));
+    main_ = new QAction(tr("&Open Jelyazka"), this);
+    connect(main_, SIGNAL(triggered()), this, SLOT(mainWindow()));
 
     about_ = new QAction(tr("&About"), this);
     connect(about_, SIGNAL(triggered()), this, SLOT(showAbout()));
@@ -58,7 +58,7 @@ void TrayIcon::createTrayIcon()
 {
     tray_icon_menu_ = new QMenu(this);
 
-    tray_icon_menu_->addAction(view_);
+    tray_icon_menu_->addAction(main_);
     tray_icon_menu_->addSeparator();
     tray_icon_menu_->addAction(about_);
     tray_icon_menu_->addSeparator();
@@ -85,7 +85,7 @@ void TrayIcon::setIcon()
 void TrayIcon::trayIconClicked(QSystemTrayIcon::ActivationReason reason)
 {
     if(reason == QSystemTrayIcon::Trigger)
-        view_window_->show();
+        main_window_->show();
 }
 
 void TrayIcon::closeEvent(QCloseEvent *event)

@@ -1,5 +1,5 @@
 /*
-    viewwindow.h
+    mainwindow.h
     Jelyazka RSS/RDF reader
     Copyright (C) 2014 Vladimir Stoyanov
     
@@ -16,8 +16,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef VIEWWINDOW_H
-#define VIEWWINDOW_H
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
 #include <QDesktopWidget>
 #include <QWidget>
@@ -38,25 +38,24 @@
 #include <QList>
 #include "help.h"
 #include "database.h"
-//#include "rssarticle.h"
 #include "data.h"
 
 namespace Ui {
-class ViewWindow;
+class MainWindow;
 }
 
 class RSSSearchGUI;
 class OptionsWindow;
 
-class ViewWindow : public QWidget
+class MainWindow : public QWidget
 {
     Q_OBJECT
     
 public:
     QList<QString> filters_qlist; //ToDo: move it to the private section
 
-    explicit ViewWindow(QWidget *parent = 0, RSSThread *rss_thread=NULL, Data *data=NULL);
-    ~ViewWindow();
+    explicit MainWindow(QWidget *parent = 0, RSSThread *rss_thread=NULL, Data *data=NULL);
+    ~MainWindow();
 
     void initDataInComboBoxFromStructure();
     void initTextBrowser();
@@ -71,7 +70,7 @@ private slots:
 private:
     ulong current_site_index_;
     ulong current_article_index_;
-    Ui::ViewWindow *ui_;
+    Ui::MainWindow *ui_;
     RSSThread *rss_thread_;
     QLabel *image_add_rss_label_;
     QImage add_rss_button_image_;
@@ -112,7 +111,7 @@ private:
     void initDataInComboBox();
     void addToCombobox(QString str);
     int showArticle(int struct_index, int article_index);
-    void closeEvent(QCloseEvent *); // Overriding the window's close event
+    void closeEvent(QCloseEvent *);
     void showEvent(QShowEvent *);
     void resizeEvent(QResizeEvent *event);
     bool eventFilter(QObject *, QEvent *);
@@ -130,4 +129,4 @@ protected:
     void keyPressEvent(QKeyEvent *event);
 };
 
-#endif // VIEWWINDOW_H
+#endif // MainWindow_H

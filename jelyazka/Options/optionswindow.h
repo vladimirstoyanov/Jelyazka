@@ -30,7 +30,7 @@
 #include <QLineEdit>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "rssthread.h"
-#include "viewwindow.h"
+#include "mainwindow.h"
 #include "http.h"
 #include "database.h"
 #include "data.h"
@@ -39,7 +39,7 @@ namespace Ui {
 class OptionsWindow;
 }
 
-class ViewWindow;
+class MainWindow;
 
 class OptionsWindow : public QWidget
 {
@@ -80,7 +80,7 @@ private:
     int options_type_;
     QThreadPool *thread_pool_;
     QList<bool> l_items_for_remove_;
-    ViewWindow *view_window_;
+    MainWindow *main_window_;
     QLabel *download_feed_status_;
 
     QLineEdit *cf_find_feed_;

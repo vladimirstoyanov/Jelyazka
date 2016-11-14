@@ -1,5 +1,5 @@
 /*
-    viewwindow.cpp
+    mainwindow.cpp
     Jelyazka RSS/RDF reader
     Copyright (C) 2014 Vladimir Stoyanov
     
@@ -16,15 +16,15 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "viewwindow.h"
-#include "ui_viewwindow.h"
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
 #include <QDebug>
 #include <QStyle>
 
 
-ViewWindow::ViewWindow(QWidget *parent, RSSThread *rss_thread, Data *data):
+MainWindow::MainWindow(QWidget *parent, RSSThread *rss_thread, Data *data):
     QWidget(parent),
-    ui_(new Ui::ViewWindow)
+    ui_(new Ui::MainWindow)
 {
     ui_->setupUi(this);
 
@@ -151,7 +151,7 @@ ViewWindow::ViewWindow(QWidget *parent, RSSThread *rss_thread, Data *data):
 
 }
 
-ViewWindow::~ViewWindow()
+MainWindow::~MainWindow()
 {
     delete ui_;
     delete image_add_rss_label_;
@@ -167,7 +167,7 @@ ViewWindow::~ViewWindow()
 }
 
 //initialize text browser widget
-void ViewWindow::initTextBrowser()
+void MainWindow::initTextBrowser()
 {
     //get current value form combobox
     QString cur_text= ui_->comboBox->currentText();
@@ -195,7 +195,7 @@ void ViewWindow::initTextBrowser()
     current_site_index_=index;
 }
 
-void ViewWindow::onUpdate(QList<bool> l_items_for_remove)
+void MainWindow::onUpdate(QList<bool> l_items_for_remove)
 {
     //remove unnecessary data from s_struct
     for (int i=l_items_for_remove.size()-1; i>=0; i--)
@@ -209,7 +209,7 @@ void ViewWindow::onUpdate(QList<bool> l_items_for_remove)
 }
 
 //initialize combobox from structure
-void ViewWindow::initDataInComboBoxFromStructure()
+void MainWindow::initDataInComboBoxFromStructure()
 {
     ui_->comboBox->clear();
 
@@ -220,7 +220,7 @@ void ViewWindow::initDataInComboBoxFromStructure()
     }
 }
 
-void ViewWindow::addToCombobox(QString str)
+void MainWindow::addToCombobox(QString str)
 {
     if (str=="")
         return;
@@ -229,7 +229,7 @@ void ViewWindow::addToCombobox(QString str)
     ui_->comboBox->setCurrentIndex (0);
 }
 
-int ViewWindow::showArticle(int struct_index, int article_index)
+int MainWindow::showArticle(int struct_index, int article_index)
 {
     if (struct_index>=data_->size()||struct_index<0)
     {
@@ -279,7 +279,7 @@ int ViewWindow::showArticle(int struct_index, int article_index)
     return 1;
 }
 
-void ViewWindow::on_pushButton_clicked() // button '<'
+void MainWindow::on_pushButton_clicked() // button '<'
 {
     uint current_article_index_tmp = current_article_index_;
     if (current_article_index_tmp!=0)
@@ -288,23 +288,23 @@ void ViewWindow::on_pushButton_clicked() // button '<'
         current_article_index_ = current_article_index_tmp;
 }
 
-void ViewWindow::on_pushButton_2_clicked() // button '>'
+void MainWindow::on_pushButton_2_clicked() // button '>'
 {
     if (showArticle(current_site_index_,current_article_index_+1))
         current_article_index_++;
 }
 
-void ViewWindow::on_comboBox_currentIndexChanged(const QString &arg1) //event when content is changed
+void MainWindow::on_comboBox_currentIndexChanged(const QString &arg1) //event when content is changed
 {
-    qDebug()<<"[ViewWindow::on_comboBox_currentIndexChanged] current RSS:"<<arg1;
+    qDebug()<<"[MainWindow::on_comboBox_currentIndexChanged] current RSS:"<<arg1;
     initTextBrowser();
 }
-void ViewWindow::closeEvent(QCloseEvent *event)
+void MainWindow::closeEvent(QCloseEvent *event)
 {
         this->hide();
         event->ignore(); // Don't let the event propagate to the base class
 }
-void ViewWindow::showEvent(QShowEvent *)
+void MainWindow::showEvent(QShowEvent *)
 {
     if (is_minimize_ || is_close_)
     {
@@ -319,7 +319,7 @@ void ViewWindow::showEvent(QShowEvent *)
     initDataInComboBoxFromStructure();
 }
 
-void ViewWindow::resizeEvent(QResizeEvent *event)
+void MainWindow::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
     QSize window_size = QWidget::size();
@@ -337,7 +337,7 @@ void ViewWindow::resizeEvent(QResizeEvent *event)
     image_maximize_label_->setGeometry(QRect(window_size.width()-66,5,30,30)); //'Maximize' button
 }
 
-void ViewWindow::mouseButtonPressed(QPoint p , QObject *o)
+void MainWindow::mouseButtonPressed(QPoint p , QObject *o)
 {
     if (ui_->comboBox->geometry().contains(p))
     {
@@ -416,7 +416,7 @@ void ViewWindow::mouseButtonPressed(QPoint p , QObject *o)
         is_minimize_ = 1;
         this->showMinimized();
     }
-    else if (mouseInGrip(p) && o->objectName() == "ViewWindow")
+    else if (mouseInGrip(p) && o->objectName() == "MainWindow")
     {
         is_press_released_ = 0;
         is_resizing_ = 1;
@@ -424,12 +424,12 @@ void ViewWindow::mouseButtonPressed(QPoint p , QObject *o)
     }
     else
     {
-        if (o->objectName() == "ViewWindow")
+        if (o->objectName() == "MainWindow")
             is_press_released_ = 1;
         is_resizing_ = 0;
     }
 }
-void ViewWindow::refreshFeed()
+void MainWindow::refreshFeed()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QString content="";
@@ -451,7 +451,7 @@ void ViewWindow::refreshFeed()
     QApplication::restoreOverrideCursor();
 }
 
-void ViewWindow::mouseDblClicked(QMouseEvent * mouseEvent)
+void MainWindow::mouseDblClicked(QMouseEvent * mouseEvent)
 {
     if (mouseEvent -> button() == Qt::LeftButton) {
         if (!is_flag_maximized_)
@@ -468,7 +468,7 @@ void ViewWindow::mouseDblClicked(QMouseEvent * mouseEvent)
     }
 
 }
-void ViewWindow::mouseMove(QPoint p, QMouseEvent *e, QObject *o)
+void MainWindow::mouseMove(QPoint p, QMouseEvent *e, QObject *o)
 {
     this->repaint();
     move_point_pos_ = p;
@@ -507,7 +507,7 @@ void ViewWindow::mouseMove(QPoint p, QMouseEvent *e, QObject *o)
         QApplication::restoreOverrideCursor();
 
     }
-    else if (mouseInGrip(p) && o->objectName() == "ViewWindow")
+    else if (mouseInGrip(p) && o->objectName() == "MainWindow")
     {
         QApplication::setOverrideCursor(QCursor(Qt::SizeFDiagCursor));
     }
@@ -557,7 +557,7 @@ void ViewWindow::mouseMove(QPoint p, QMouseEvent *e, QObject *o)
         QApplication::restoreOverrideCursor();
     else if (ui_->pushButton_2->geometry().contains(p))
         QApplication::restoreOverrideCursor();
-    else if (is_press_released_ && o->objectName() == "ViewWindow" && !is_flag_maximized_)
+    else if (is_press_released_ && o->objectName() == "MainWindow" && !is_flag_maximized_)
     {
         QApplication::restoreOverrideCursor();
         move(e->globalX()-cur_point_.x(),e->globalY()-cur_point_.y());
@@ -567,11 +567,11 @@ void ViewWindow::mouseMove(QPoint p, QMouseEvent *e, QObject *o)
 }
 
 //mouse move, mouse press, mouse release events
-bool ViewWindow::eventFilter(QObject *o, QEvent *event)
+bool MainWindow::eventFilter(QObject *o, QEvent *event)
 {
     QPoint p = this->mapFromGlobal(QCursor::pos());
 
-    if (event->type() == QEvent::MouseButtonDblClick && o->objectName() == "ViewWindow" && is_press_released_)
+    if (event->type() == QEvent::MouseButtonDblClick && o->objectName() == "MainWindow" && is_press_released_)
     {
         QMouseEvent * mouseEvent = static_cast <QMouseEvent *> (event);
         mouseDblClicked(mouseEvent);
@@ -599,7 +599,7 @@ bool ViewWindow::eventFilter(QObject *o, QEvent *event)
     return 0;
 }
 
-void ViewWindow::paintEvent(QPaintEvent *e) //paint backgraund image
+void MainWindow::paintEvent(QPaintEvent *e) //paint backgraund image
 {
    //setAttribute(Qt::WA_OpaquePaintEvent);
    gradientRect(0,0,this->width_, this->height_);
@@ -642,7 +642,7 @@ void ViewWindow::paintEvent(QPaintEvent *e) //paint backgraund image
 
 }
 
-int ViewWindow::checkForFilters(QString &title, QString &article)
+int MainWindow::checkForFilters(QString &title, QString &article)
 {
     if (filters_qlist.size() == 0)
         return 1;
@@ -692,7 +692,7 @@ int ViewWindow::checkForFilters(QString &title, QString &article)
     return 0;
 }
 
-int ViewWindow::checkForFontTag(QString str1)
+int MainWindow::checkForFontTag(QString str1)
 {
     QString font = "</FONT>";
     for (int i=0; i<str1.length(); i++)
@@ -705,7 +705,7 @@ int ViewWindow::checkForFontTag(QString str1)
     return 1;
 }
 
-void ViewWindow::initFilters()
+void MainWindow::initFilters()
 {
     boost::ptr_vector<QString>::iterator it;
     boost::ptr_vector<QString> tmp;
@@ -715,7 +715,7 @@ void ViewWindow::initFilters()
         filters_qlist.append(*it);
 }
 
-void ViewWindow::keyPressEvent(QKeyEvent *event)
+void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     int key = event->key();
     if (key == 16777236) //->
@@ -733,7 +733,7 @@ void ViewWindow::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void ViewWindow::gradientRect(int x, int y, int width, int height)
+void MainWindow::gradientRect(int x, int y, int width, int height)
 {
     QRect myQRect (x,y,width, height);
     QPainter painter(this);
@@ -743,7 +743,7 @@ void ViewWindow::gradientRect(int x, int y, int width, int height)
     gradient.setColorAt(1, Qt::white);
     painter.fillRect(myQRect, gradient);
 }
-bool ViewWindow::mouseInGrip(QPoint mousePos)
+bool MainWindow::mouseInGrip(QPoint mousePos)
 {
     return ((mousePos.x() > (this->width_  - 10))&&  (mousePos.y() > (this->height_ - 10)));
 }

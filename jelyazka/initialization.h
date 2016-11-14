@@ -16,8 +16,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef INITIALIZATION_H
+#define INITIALIZATION_H
 
 #ifdef _WIN32
 #define NOMINMAX
@@ -30,11 +30,10 @@
 #include <QCloseEvent>
 
 #include "rssthread.h"
-#include "viewwindow.h"
+#include "mainwindow.h"
 #include "notificationwindow.h"
 #include "initwindow.h"
 #include "refreshfeedsdata.h"
-//#include "about.h"
 #include "data.h"
 #include "trayicon.h"
 
@@ -52,30 +51,14 @@ public:
     
 private:
     Ui::Initialization *ui_;
-    //QSystemTrayIcon *tray_icon_;
-    //QMenu *tray_icon_menu_;
-    //QAction *about_;
-    //QAction *close_;
-    //QAction *view_;
     TrayIcon * tray_icon_;
-    ViewWindow *view_window_;
+    MainWindow *main_window_;
     NotificationWindow *notification_window_;
     RSSThread *rss_thread_;
     Data *data_;
     RefreshFeedsData *refresh_feed_data_;
-    //About *about_gui_;
-
-    //void createActions();
-    //void createTrayIcon();
-    //void setIcon();
-    //void closeEvent(QCloseEvent *); // Overriding the window's close event
-
 public slots:
     void onDone();
-private slots:
-    //void trayIconClicked(QSystemTrayIcon::ActivationReason);
-    //void viewWindow();
-    //void showAbout();
 };
 
-#endif // MAINWINDOW_H
+#endif // INITIALIZATION_H

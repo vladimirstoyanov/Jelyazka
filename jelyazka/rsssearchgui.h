@@ -39,7 +39,7 @@
 #include "logger.h"
 #include "rsssearchthread.h"
 #include "rssthread.h"
-#include "viewwindow.h"
+#include "mainwindow.h"
 #include <boost/ptr_container/ptr_list.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "data.h"
@@ -50,14 +50,14 @@ namespace Ui {
 class RSSSearchGUI;
 }
 
-class ViewWindow;
+class MainWindow;
 
 class RSSSearchGUI : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit RSSSearchGUI(QWidget *parent = 0, RSSThread *rss_thread=NULL, ViewWindow *view_window=NULL, Data *data = NULL);
+    explicit RSSSearchGUI(QWidget *parent = 0, RSSThread *rss_thread=NULL, MainWindow *main_window=NULL, Data *data = NULL);
     ~RSSSearchGUI();
     RSSSearchGUIThread *mThread;
 
@@ -79,7 +79,7 @@ private:
     QStandardItemModel *model_;
     QGridLayout *grid_;
     RSSThread *rss_thread_;
-    ViewWindow *view_window_;
+    MainWindow *main_window_;
     QThreadPool *thread_pool_;
     QThreadPool *thread_pool_2;
     bool is_user_edit_;

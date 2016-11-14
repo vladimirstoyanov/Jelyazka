@@ -17,9 +17,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//create tray icon
-//some initialization (crate viewWindow, refreshFeedsData )
-//make connections between classes
 
 #include "initialization.h"
 #include <vector>
@@ -27,7 +24,7 @@
 Initialization::Initialization(InitWindow *init_window):
     tray_icon_(NULL),
     rss_thread_(NULL),
-    view_window_(NULL),
+    main_window_(NULL),
     notification_window_ (new NotificationWindow()),
     data_ (new Data())
 
@@ -35,11 +32,11 @@ Initialization::Initialization(InitWindow *init_window):
     rss_thread_  = new RSSThread(data_);
     rss_thread_->setAutoDelete(false);
 
-    view_window_ = new ViewWindow(0, rss_thread_,data_);
-    tray_icon_ = new TrayIcon (0, view_window_);
+    main_window_ = new MainWindow(0, rss_thread_,data_);
+    tray_icon_ = new TrayIcon (0, main_window_);
     refresh_feed_data_ = new RefreshFeedsData(0, rss_thread_, data_);
 
-    //when initialize window is finished, then call onDone funtion
+    //when init_window is finished, then call onDone funtion
     connect(init_window,SIGNAL(Done()),this,SLOT(onDone()));
 
     //load data
@@ -56,8 +53,8 @@ Initialization::~Initialization()
     if (tray_icon_!=NULL)
         delete tray_icon_;
     rss_thread_->deleteLater();
-    if (view_window_!=NULL)
-        delete view_window_;
+    if (main_window_!=NULL)
+        delete main_window_;
     if (notification_window_!=NULL)
         delete notification_window_;
     if (data_!=NULL)
@@ -68,7 +65,7 @@ void Initialization::onDone()
 {
     tray_icon_->addIcon();
 
-    view_window_->show();
+    main_window_->show();
     refresh_feed_data_->start();
     for (uint i=0; i<data_->size(); i++)
       rss_thread_->data_for_animatewindow_+="<index=" + QString::number(i) + ">";

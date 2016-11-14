@@ -7,7 +7,7 @@
 #include <QMenu>
 #include <QCloseEvent>
 
-#include "viewwindow.h"
+#include "mainwindow.h"
 #include "about.h"
 
 
@@ -15,7 +15,7 @@ class TrayIcon : public QWidget
 {
     Q_OBJECT
 public:
-    explicit TrayIcon(QWidget *parent = 0,  ViewWindow *view_window_=0);
+    explicit TrayIcon(QWidget *parent = 0,  MainWindow *main_window_=0);
     ~TrayIcon();
 
     void addIcon();
@@ -25,8 +25,8 @@ private:
     QMenu *tray_icon_menu_;
     QAction *about_;
     QAction *close_;
-    QAction *view_;
-    ViewWindow *view_window_;
+    QAction *main_;
+    MainWindow *main_window_;
     About *about_gui_;
 
     void createActions();
@@ -36,7 +36,7 @@ private:
 
 private slots:
     void trayIconClicked(QSystemTrayIcon::ActivationReason);
-    void viewWindow();
+    void mainWindow();
     void showAbout();
 };
 

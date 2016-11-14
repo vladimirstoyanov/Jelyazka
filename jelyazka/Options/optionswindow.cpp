@@ -31,7 +31,7 @@ OptionsWindow::OptionsWindow(QWidget *parent, RSSThread *rss_thread, Data *data)
 
     options_type_ = 1;
 
-    view_window_ = view_window_;
+    main_window_ = main_window_; //FIXME: what the fuck is this shit?
     rss_thread_ = rss_thread;
 
     ui_->treeWidget->setHeaderLabel("Options");
@@ -265,7 +265,7 @@ void OptionsWindow::onFinish(QString name, bool finish)
 {
     if (finish)
     {
-        view_window_->onUpdate(l_items_for_remove_);
+        main_window_->onUpdate(l_items_for_remove_);
         this->close();
         return;
     }
@@ -458,7 +458,7 @@ void OptionsWindow::rssTableUpdate()
     {
         rss_thread_->is_add_option_ = true;
         this->close();
-        view_window_->onUpdate(l_items_for_remove_);
+        main_window_->onUpdate(l_items_for_remove_);
     }
 }
 
@@ -483,15 +483,15 @@ void OptionsWindow::findAndReturnURLAndVersion(QString site_name, QString &url, 
 
 void OptionsWindow::updateFiltersTable()
 {
-     view_window_->filters_qlist.clear();
+     main_window_->filters_qlist.clear();
      data_base_.removeDataFromFilters(); //delete all old filters data
 
      for (int i=0;  i<lw_filter_list_->count(); i++)
      {
          insertRowToFiltersTable(lw_filter_list_->item(i)->text());
-         view_window_->filters_qlist.append(lw_filter_list_->item(i)->text());
+         main_window_->filters_qlist.append(lw_filter_list_->item(i)->text());
      }
-     view_window_->initTextBrowser();
+     main_window_->initTextBrowser();
 }
 
 

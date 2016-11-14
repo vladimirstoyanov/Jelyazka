@@ -51,8 +51,8 @@ NotificationWindow::NotificationWindow(QWidget *parent) :
     ui_->textBrowser->setOpenLinks(1);
     ui_->textBrowser->setOpenExternalLinks(1);
 
-    connect (show_window_animation_, SIGNAL(finished()), this, SLOT(on_animation_finished()));
-    connect (hide_window_animation_, SIGNAL(finished()), this, SLOT(on_animation_finished2()));
+    connect (show_window_animation_, SIGNAL(finished()), this, SLOT(showWindowAnimation()));
+    connect (hide_window_animation_, SIGNAL(finished()), this, SLOT(hideWindowAnimation()));
 
     qApp->installEventFilter(this);
 
@@ -84,6 +84,7 @@ void NotificationWindow::getDesktopResolution(int& horizontal, int& vertical)
    vertical = desktop.height();
    qDebug()<<"Horizontal/vertical: "<<horizontal<<" "<<vertical;
 }
+
 //Show window animation
 void NotificationWindow::showWindowAnimation()
 {
