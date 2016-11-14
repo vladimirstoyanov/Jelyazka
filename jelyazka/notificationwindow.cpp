@@ -51,8 +51,8 @@ NotificationWindow::NotificationWindow(QWidget *parent) :
     ui_->textBrowser->setOpenLinks(1);
     ui_->textBrowser->setOpenExternalLinks(1);
 
-    connect (show_window_animation_, SIGNAL(finished()), this, SLOT(showWindowAnimation()));
-    connect (hide_window_animation_, SIGNAL(finished()), this, SLOT(hideWindowAnimation()));
+    connect (show_window_animation_, SIGNAL(finished()), this, SLOT(onShowAnimationFinished()));
+    connect (hide_window_animation_, SIGNAL(finished()), this, SLOT(onHideAnimationFinished()));
 
     qApp->installEventFilter(this);
 
