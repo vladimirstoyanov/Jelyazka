@@ -416,7 +416,7 @@ void HTTP::removeSubString(QString &url, QString substring)
     url = newURL;
 }
 
-void HTTP::ChangeUrl(QString &url, int option)
+void HTTP::changeUrl(QString &url, int option)
 {
     switch(option)
     {

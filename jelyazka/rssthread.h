@@ -19,28 +19,29 @@
 #ifndef RSSTHREAD_H
 #define RSSTHREAD_H
 
-#include "notificationwindow.h"
-#include <QtCore>
-#include <QThreadPool>
-#include <QDebug>
-#include <fstream>
-#include <string>
-#include <QString>
-#include <QMutex>
-#include "http.h"
-#include <QFile>
-#include <QTextStream>
-#include <QMessageBox>
-#include <QNetworkProxy>
-#include <QStringList>
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <QWaitCondition>
-#include <QTextCodec>
-#include "database.h"
-#include "data.h"
+#include <fstream>
 #include <limits.h>
-#include "parserss.h"
+#include <string>
 
+#include <QDebug>
+#include <QFile>
+#include <QMessageBox>
+#include <QMutex>
+#include <QNetworkProxy>
+#include <QString>
+#include <QStringList>
+#include <QtCore>
+#include <QTextCodec>
+#include <QTextStream>
+#include <QThreadPool>
+#include <QWaitCondition>
+
+#include "data.h"
+#include "database.h"
+#include "http.h"
+#include "notificationwindow.h"
+#include "parserss.h"
 
 class AnimateWindow;
 
@@ -48,6 +49,7 @@ class RSSThread : public QObject, public QRunnable
 {
     Q_OBJECT
 public:
+    //move the bellow members to private section
     bool first_load_;
     bool is_add_option_;
     QNetworkProxy *network_proxy_;
@@ -62,36 +64,31 @@ public:
     QWaitCondition condition_view_;
     
     RSSThread(Data *data);
-    ~RSSThread();
+    virtual ~RSSThread();
 
-    //boost::ptr_vector<RSSData> s_struct; //vector with all rss data
-
-    RSSData * initStruct(QString site_name, QString type, QString url);
-    void synchronizeData(int site_index, QString content);
-    void run (); //function exec when thread start
-    int getRefreshTime()
-    {
-        return refresh_time_feeds_;
-    }
-    void setRefreshTime(int refresh_time_feeds)
-    {
-        refresh_time_feeds_ = refresh_time_feeds;
-    }
-    void setEnableNotificationWindow(bool enabled_notification_window)
-    {
-        enabled_notification_window_ = enabled_notification_window;
-    }
-    void setProxySettings();
-    bool getEnabledNotificationWindow()
-    {
-        return enabled_notification_window_;
-    }
     void emitAnimateWindow();
+    void setProxySettings();
+    void setRefreshTime(int refresh_time_feeds);
+    void setEnableNotificationWindow(bool enabled_notification_window);
+    void synchronizeData(int site_index, QString content);
+
+public:
+    void run (); //function exec when a thread start
+
+public:
+    bool getEnabledNotificationWindow();
+    int getRefreshTime();
+    RSSData * initStruct(QString site_name, QString type, QString url);
 
 signals:
-    void showAnimateWindow(QString data); //anitate window signal
     void loadRSS(QString name, QString url); //signal load rss feed
+    void showAnimateWindow(QString data); //anitate window signal
+    //ToDO: rename the below funtion
     void Finish(QString name, bool finish); //signal to option, when add rss feeds from 'collect' to 'view'
+
+private:
+    int checkIsLoaded();
+    void loadOptions();
 
 private:
     QMutex *mutex_; //using for threads
@@ -101,9 +98,6 @@ private:
     DataBase data_base_;
     Data *data_;
     ParseRSS *parse_rss_;
-
-    void loadOptions();
-    int checkIsLoaded();
 };
 
 #endif // RSSTHREAD_H

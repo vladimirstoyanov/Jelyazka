@@ -19,6 +19,11 @@
 #ifndef WEB_SEARCH_INTERFACE_H
 #define WEB_SEARCH_INTERFACE_H
 
+#include <boost/ptr_container/ptr_list.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
+#include <limits.h>
+#include <vector>
+
 #include <QtCore>
 #include <QMutex>
 #include <QWidget>
@@ -28,7 +33,6 @@
 #include <QMouseEvent>
 #include <QDebug>
 #include <QMessageBox>
-#include <vector>
 #include <QString>
 #include <QGridLayout>
 #include <QFontMetrics>
@@ -36,15 +40,13 @@
 #include <QSize>
 #include <QCloseEvent>
 #include <QThreadPool>
+
+#include "data.h"
 #include "logger.h"
+#include "mainwindow.h"
+#include "parserss.h"
 #include "rsssearchthread.h"
 #include "rssthread.h"
-#include "mainwindow.h"
-#include <boost/ptr_container/ptr_list.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
-#include "data.h"
-#include "parserss.h"
-#include <limits.h>
 
 namespace Ui {
 class RSSSearchGUI;
@@ -58,21 +60,62 @@ class RSSSearchGUI : public QWidget
 
 public:
     explicit RSSSearchGUI(QWidget *parent = 0, RSSThread *rss_thread=NULL, MainWindow *main_window=NULL, Data *data = NULL);
-    ~RSSSearchGUI();
+    virtual ~RSSSearchGUI();
     RSSSearchGUIThread *mThread;
 
-public slots:
-    //void onAddRss(QString name, bool finish);
+protected:
+    void keyPressEvent(QKeyEvent *event);
+    void showEvent(QShowEvent *);
 
 private slots:
+    void on_modelItemChanged(QStandardItem*);
     void on_pushButton_clicked();
     void on_pushButton_3_clicked();
     void on_pushButton_2_clicked();
-    void on_modelItemChanged(QStandardItem*);
 
 public slots:
     void onFoundRSS(int type, QString name, QString url, QString encoding, QString web_source, int version);
     void onEndOfUrls();
+
+private:
+    void closeEvent(QCloseEvent *);
+
+private:
+    //ToDo: replace tree with std::map
+    struct TreeNode {
+       QString item_;
+       TreeNode *left_;
+       TreeNode *right_;
+       TreeNode(QString str = "") {
+          item_ = str;
+          left_ = NULL;
+          right_ = NULL;
+       }
+    };
+    typedef TreeNode treenode;
+
+private:
+    void buidBinaryTreeFromDBData();
+    void clearSearchCache();
+    void convertBigEndianToLittleEndian(QString &url);
+    void deleteKey(QString key, TreeNode **T);
+    void destroyTree(TreeNode *leaf);
+    void interateSite(QString url_addres/*, vector<QString>&result_urls*/);
+    void paintRows();
+    void returnModifedString(QString &str);
+    void treeInsert(TreeNode *&root, QString newItem);
+    bool treeContains( TreeNode *root, QString item );
+
+private:
+    bool editNode(TreeNode *root, QString item, QString new_item);
+    int checkExistingURL(QString url);
+    int checkForExistingURL(QString url);
+    int countNodes(TreeNode *node);
+    int isFeedChecked(QString url, int &index);
+    treenode* findMin(TreeNode *T);
+    QString change_name(QString name); //ToDo: rename this function
+    QString getEncodingFromRSS(QString content);
+    QString insertName(QString name);
 
 private:
     Ui::RSSSearchGUI *ui_;
@@ -87,48 +130,9 @@ private:
     DataBase data_base_;
     Data *data_;
     ParseRSS *parse_rss_;
-
-    //ToDo: replace tree with std::map
-    struct TreeNode {
-       QString item_;
-       TreeNode *left_;
-       TreeNode *right_;
-       TreeNode(QString str = "") {
-          item_ = str;
-          left_ = NULL;
-          right_ = NULL;
-       }
-    };
     TreeNode *tree_node_;
-    typedef TreeNode treenode;
-
     boost::ptr_list<RSSData> feeds_struct_tmp_;
     boost::ptr_vector<QString> old_names_;
-
-    void treeInsert(TreeNode *&root, QString newItem);
-    bool treeContains( TreeNode *root, QString item );
-    QString change_name(QString name);
-    int countNodes(TreeNode *node);
-    bool editNode(TreeNode *root, QString item, QString new_item);
-    void returnModifedString(QString &str);
-    void interateSite(QString url_addres/*, vector<QString>&result_urls*/);
-    void closeEvent(QCloseEvent *);
-    void paintRows();
-    int checkExistingURL(QString url);
-    int checkForExistingURL(QString url);
-    void convertBigEndianToLittleEndian(QString &url);
-    QString getEncodingFromRSS(QString content);
-    void clearSearchCache();
-    int isFeedChecked(QString url, int &index);
-    QString insertName(QString name);
-    void buidBinaryTreeFromDBData();
-    void deleteKey(QString key, TreeNode **T);
-    treenode* findMin(TreeNode *T);
-    void destroyTree(TreeNode *leaf);
-
-protected:
-    void keyPressEvent(QKeyEvent *event);
-    void showEvent(QShowEvent *);
 };
 
 #endif // WEB_SEARCH_INTERFACE_H

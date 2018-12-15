@@ -1,28 +1,40 @@
 #ifndef PARSERSS_H
 #define PARSERSS_H
 
-#include <QString.h>
 #include <limits.h>
+
+#include <QString.h>
+
+#include "data.h"
 #include "rssarticle.h"
 #include "search.h"
-#include "data.h"
 
 class ParseRSS
 {
 public:
     ParseRSS(Data *data_tmp);
+    //ToDo: create destructor
 
+    void convert_string (QString &str, bool link); //ToDo: rename this function
     void findFeedDataRSS(int &index, QString content, RSSArticle &ar);
     void findFeedDataRDF(int &index, QString content, RSSArticle &ar);
-    int getArticlesFromRSSContent(QString content, RSSData *data);
+
+public:
     int getArticlesFromRDFContent(QString content, RSSData *data);
-    void convert_string (QString &str, bool link);
-private:
-    int getDescription(int item_b_index, int item_e_index, QString &description, QString content);
-    int getTextBetweenIndexes(int item_b_index, int item_e_index, QString begin_text, QString end_text, QString &text, QString content);
-    QString returnURL(QString source, int index);
+    int getArticlesFromRSSContent(QString content, RSSData *data);
     int getContent(int item_b_index, int item_e_index, QString &description, QString content);
-    QString convert_entitie(QString entitie);
+    int getDescription(int item_b_index, int item_e_index, QString &description, QString content);
+    int getTextBetweenIndexes(int item_b_index,
+                              int item_e_index,
+                              QString begin_text,
+                              QString end_text,
+                              QString &text,
+                              QString content);
+
+    QString convert_entitie(QString entitie); //ToDO: rename this function
+    QString returnURL(QString source, int index);
+
+private:
     Data *data_;
 };
 

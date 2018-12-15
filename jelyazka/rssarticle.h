@@ -8,19 +8,19 @@ class RSSArticle
 public:
     RSSArticle();
 
-    //get
+    void setTitle(QString title);
+    void setLink(QString link);
+    void setText(QString text);
+    void setDate(QString date);
+    void setIsMarkedForRemove (bool is_marked_for_remove);
+
+public:
     QString getTitle();
     QString getLink();
     QString getText();
     QString getDate();
     bool getIsMarkedForRemove();
 
-    //set
-    void setTitle(QString title);
-    void setLink(QString link);
-    void setText(QString text);
-    void setDate(QString date);
-    void setIsMarkedForRemove (bool is_marked_for_remove);
 private:
     QString title_;
     QString link_;

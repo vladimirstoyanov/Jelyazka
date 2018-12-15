@@ -19,15 +19,16 @@
 #ifndef ANIMATEWINDOW_H
 #define ANIMATEWINDOW_H
 
-#include "rssthread.h"
-#include <QPropertyAnimation>
-#include <QLabel>
-#include <QMouseEvent>
-#include <QWidget>
-#include <QShowEvent>
-#include <QList>
 #include <QDesktopWidget>
+#include <QLabel>
+#include <QList>
+#include <QMouseEvent>
+#include <QPropertyAnimation>
+#include <QShowEvent>
+#include <QWidget>
+
 #include "data.h"
+#include "rssthread.h"
 
 namespace Ui {
 class NotificationWindow;
@@ -41,17 +42,34 @@ class NotificationWindow : public QWidget
     
 public:
     explicit NotificationWindow(QWidget *parent = 0);
-    ~NotificationWindow();
+    virtual ~NotificationWindow();
 
     void setSignal(RSSThread *rssThread , Data *data);
 
 public slots:
+    void onHideAnimationFinished();
     void onShowAnimateWindow(QString);
     void onShowAnimationFinished();
-    void onHideAnimationFinished();
-
 
 private:
+    bool eventFilter(QObject *, QEvent *);
+    void mousePressEvent( QMouseEvent * e );
+    void paintEvent(QPaintEvent *);
+    void showEvent(QShowEvent *);
+
+private:
+    void delay(int seconds);
+    void getDesktopResolution(int& horizontal, int& vertical);
+    void gradientRect(int x, int y, int width, int height);
+    void hideWindowAnimation();
+    void showWindowAnimation();
+    void LoadImage_(); //ToDo: rename this function
+
+private:
+    int getTaskBarHeight();
+
+private:
+    QList<unsigned int> getIndexes(QString data);
     QPropertyAnimation *show_window_animation_;
     QPropertyAnimation *hide_window_animation_;
     QLabel *image_label_;
@@ -61,23 +79,6 @@ private:
     bool is_mouse_clicked_; //if mouse clicked on this window, mouse_clicked = true, otherwise mouse_clicked = false;
     bool is_X_changed_; //'X' button image has been changed, then isXchanged = true, otherwise isXchanged = false;
     Data *data_;
-
-
-    void getDesktopResolution(int& horizontal, int& vertical);
-    int getTaskBarHeight();
-    QList<unsigned int> getIndexes(QString data);
-
-    void showWindowAnimation();
-    void hideWindowAnimation();
-    void LoadImage_();
-    void mousePressEvent( QMouseEvent * e );
-    void showEvent(QShowEvent *);
-    void delay(int seconds);
-
-    bool eventFilter(QObject *, QEvent *);
-    void paintEvent(QPaintEvent *);
-    void gradientRect(int x, int y, int width, int height);
-
 };
 
 

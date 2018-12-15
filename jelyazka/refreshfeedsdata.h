@@ -21,25 +21,23 @@
 
 #include <QThread>
 #include <QMutex>
-#include "rssthread.h"
+
 #include "data.h"
+#include "rssthread.h"
 
 class RefreshFeedsData : public QThread
 {
     Q_OBJECT
 public:
     explicit RefreshFeedsData(QObject *parent = 0, RSSThread *rss_thread=0, Data *data=0);
-    ~RefreshFeedsData();
+    virtual ~RefreshFeedsData();
 
+public:
     void run();
+
 private:
     RSSThread *rss_thread_;
     Data *data_;
-
-signals:
-
-public slots:
-
 };
 
 #endif // REFRESHFEEDSDATA_H

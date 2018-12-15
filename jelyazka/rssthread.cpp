@@ -334,3 +334,23 @@ void RSSThread::loadOptions()
 
     file.close();
 }
+
+void RSSThread::setRefreshTime(int refresh_time_feeds)
+{
+    this->refresh_time_feeds_ = refresh_time_feeds;
+}
+
+void RSSThread::setEnableNotificationWindow(bool enabled_notification_window)
+{
+    this->enabled_notification_window_ = enabled_notification_window;
+}
+
+bool RSSThread::getEnabledNotificationWindow()
+{
+    return enabled_notification_window_;
+}
+
+int RSSThread::getRefreshTime()
+{
+    return refresh_time_feeds_;
+}

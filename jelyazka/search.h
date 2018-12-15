@@ -18,15 +18,16 @@
 */
 #ifndef SEARCH_H
 #define SEARCH_H
+
 #include <QString>
 
 class Search {
     public:
         Search();
-        ~Search();
+        virtual ~Search();
 
-        void searchBefore(QString text, QString subtext, int *index);
-        void searchAfter(QString text, QString subtext, int *index);
+        void searchAfter(const QString &text, const QString &subtext, int *index);
+        void searchBefore(const QString &text, const QString &subtext, int *index);
 };
 
 #endif // SEARCH_H

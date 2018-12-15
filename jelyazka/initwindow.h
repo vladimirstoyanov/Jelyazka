@@ -19,12 +19,13 @@
 #ifndef INITWINDOW_H
 #define INITWINDOW_H
 
-#include <QWidget>
-#include <QLabel>
 #include <QImage>
+#include <QLabel>
+#include <QWidget>
 #include <QThreadPool>
-#include "rssthread.h"
+
 #include "data.h"
+#include "rssthread.h"
 
 namespace Ui {
 class InitWindow;
@@ -36,8 +37,13 @@ class InitWindow : public QWidget
 
 public:
     explicit InitWindow(QWidget *parent = 0);
-    ~InitWindow();
+    virtual ~InitWindow();
     void setSignal (RSSThread *rss_thread, Data *data);
+
+public slots:
+    void onLoadRss(QString name, QString url);
+signals:
+    void Done();
 
 private:
     Ui::InitWindow *ui_;
@@ -46,11 +52,6 @@ private:
     QImage *init_image_;
     RSSThread *rss_thread_;
     Data *data_;
-
-public slots:
-    void onLoadRss(QString name, QString url);
-signals:
-    void Done();
 };
 
 #endif // INITWINDOW_H

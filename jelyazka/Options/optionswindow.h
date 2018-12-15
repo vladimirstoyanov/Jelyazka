@@ -107,21 +107,6 @@ private:
     int addStringToViewList(QString str);
     int cf_label_search_width(); //ToDo: change the function name
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 private:
     DataBase data_base_;
     Ui::OptionsWindow *ui_;
@@ -159,7 +144,5 @@ private:
     QLabel *l_filter_list_;
     QPushButton *pb_remove_filter_;
     QCheckBox *cb_enable_filtering_;
-
-
 };
 #endif // OPTIONSWINDOW_H

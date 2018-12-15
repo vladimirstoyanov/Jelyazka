@@ -19,8 +19,8 @@
 #ifndef HELP_H
 #define HELP_H
 
-#include <QWidget>
 #include <QDesktopWidget>
+#include <QWidget>
 
 namespace Ui {
 class Help;
@@ -32,13 +32,18 @@ class Help : public QWidget
 
 public:
     explicit Help(QWidget *parent = 0);
-    ~Help();
+    virtual ~Help();
+
+private:
+    void showEvent(QShowEvent *);
+    void resizeEvent(QResizeEvent *event);
+
+private:
+    void loadHelp();
 
 private:
     Ui::Help *ui_;
-    void showEvent(QShowEvent *);
-    void resizeEvent(QResizeEvent *event);
-    void loadHelp();
+
 };
 
 #endif // HELP_H

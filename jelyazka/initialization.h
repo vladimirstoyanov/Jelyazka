@@ -24,17 +24,17 @@
 #include <Windows.h>
 #endif
 
-#include <QMainWindow>
-#include <QSystemTrayIcon>
-#include <QMenu>
 #include <QCloseEvent>
+#include <QMainWindow>
+#include <QMenu>
+#include <QSystemTrayIcon>
 
-#include "rssthread.h"
+#include "data.h"
+#include "initwindow.h"
 #include "mainwindow.h"
 #include "notificationwindow.h"
-#include "initwindow.h"
 #include "refreshfeedsdata.h"
-#include "data.h"
+#include "rssthread.h"
 #include "trayicon.h"
 
 namespace Ui {
@@ -47,8 +47,11 @@ class Initialization : public QMainWindow
     
 public:
     /*explicit*/ Initialization(InitWindow *window);
-    ~Initialization();
-    
+    virtual ~Initialization();
+
+public slots:
+    void onDone();
+
 private:
     Ui::Initialization *ui_;
     TrayIcon * tray_icon_;
@@ -57,8 +60,7 @@ private:
     RSSThread *rss_thread_;
     Data *data_;
     RefreshFeedsData *refresh_feed_data_;
-public slots:
-    void onDone();
+
 };
 
 #endif // INITIALIZATION_H

@@ -19,9 +19,10 @@
 #ifndef __SEARCH_CPP__
 #define __SEARCH_CPP__
 
-#include "search.h"
 #include <string>
 #include <vector>
+
+#include "search.h"
 
 Search::Search()
 {
@@ -30,7 +31,7 @@ Search::~Search()
 {
 }
 
-void Search::searchBefore(QString text, QString subtext, int *index)
+void Search::searchBefore(const QString &text, const QString &subtext, int *index)
 {
     std::vector<int> T(subtext.length() + 1, -1);
 
@@ -63,7 +64,7 @@ void Search::searchBefore(QString text, QString subtext, int *index)
 
     *index = -1;
 }
-void Search::searchAfter(QString text, QString subtext, int *index)
+void Search::searchAfter(const QString &text, const QString &subtext, int *index)
 {
     std::vector<int> T(subtext.length() + 1, -1);
 

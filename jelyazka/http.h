@@ -19,12 +19,14 @@
 #ifndef HTTP_H
 #define HTTP_H
 
-#include <QDialog>
 #include <iostream>
+
+#include <QDebug>
+#include <QDialog>
+#include <QNetworkProxy>
 #include <QTcpSocket>
 #include <QTextCodec>
-#include <QDebug>
-#include <QNetworkProxy>
+
 #include "rssthread.h"
 #include "search.h"
 
@@ -32,12 +34,22 @@ class HTTP
 {
 public:
     HTTP();
-    ~HTTP();
+    virtual ~HTTP();
+
+    void addSubStringAtBeginning(QString &url, QString substring);
+    void addOrRemoveWWW(QString &url); //ToDo: rename this funtion
+    void changeUrl(QString &url, int option);
+    void checkAndChangeURL2(QString &url); //ToDO: rename this function
+    void convertURLToFileName(char *url, char **filename);
+    void getCorrectURL(QString content, QString &url);
+    void queryPartAndURL(QString &url, QString &query_part);
+    void removeSubString(QString &url, QString substring);
+
+public:
     int getQuery(QString url, QString &content, QNetworkProxy *network_proxy=NULL);
     int getQuery(QString url, QString &content, int &type);
-    void convertURLToFileName(char *url, char **filename);
-    void queryPartAndURL(QString &url, QString &query_part);
-    void checkAndChangeURL2(QString &url);
+    int isHTMLorXML(QString content);
+    int reconnect(QString url, QString &content, QTcpSocket &socket);
     bool checkInTheBeginning(QString url, QString http);
     bool checkForProtocol(QString url);
     bool checkForProtocol(QString url, QString &protocol);
@@ -46,14 +58,6 @@ public:
     bool checkInMiddle(QString url, QString substring, int begin_index);
     bool checkResponse(QString content, QString &response_num);
 
-    void addSubStringAtBeginning(QString &url, QString substring);
-    void removeSubString(QString &url, QString substring);
-    void ChangeUrl(QString &url, int option);
-    int reconnect(QString url, QString &content, QTcpSocket &socket);
-    int isHTMLorXML(QString content);
-    void getCorrectURL(QString content, QString &url);
-
-    void addOrRemoveWWW(QString &url);
 private:
     int url_option_;
 };

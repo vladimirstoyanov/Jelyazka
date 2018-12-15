@@ -19,46 +19,49 @@
 #ifndef WEB_SEARCH_INTERFACE_THREAD_H
 #define WEB_SEARCH_INTERFACE_THREAD_H
 
-#include <QThread>
-#include <QMutex>
-#include <QString>
-#include <QRunnable>
-#include <QMutex>
-#include <QList>
 #include <boost/ptr_container/ptr_list.hpp>
-#include "logger.h"
+
+#include <QList>
+#include <QMutex>
+#include <QRunnable>
+#include <QString>
+#include <QThread>
+
 #include "database.h"
+#include "logger.h"
 
 class RSSSearchGUIThread : public QObject, public QRunnable
 {
     Q_OBJECT
 public:
-    boost::ptr_list<QString> l_url;
+    boost::ptr_list<QString> l_url; //ToDO: move to private section
     boost::ptr_list<QString> l_url2;
     QList<int> l_flags;
-
-
-    explicit RSSSearchGUIThread();
-
-    ~RSSSearchGUIThread();
-    void run();
     QMutex *mutex;
-
     bool stop_thread;
 
-    int checkUrl(QString url, QString source);
-    void getUrl (QString html_source, int &index, QString &return_url);
-    int checkListForExistUrl(QString url);
-    void buildUrl (QString url_root, QString url, QString &return_url);
-    int checkForRss(QString source, QString &title, int &version);
-    int lookForHref(QString source, int &index);
+    explicit RSSSearchGUIThread();
+    virtual ~RSSSearchGUIThread();
+
+public:
+    void run();
+
+public:
     void addOrRemoveLastSymbolSlash(QString url, QString *new_url);
-    int checkForRootURL(QString url, int i, int i1);
-    int deleteAllFrom_all_url_table();
-    int insertUrlDB(QString url);
-    int findUrlDB(QString url);
+    void buildUrl (QString url_root, QString url, QString &return_url);
+    void getUrl (QString html_source, int &index, QString &return_url);
+
+public:
     bool setUrlRoot(QString url);
+    int checkForRootURL(QString url, int i, int i1);
+    int checkForRss(QString source, QString &title, int &version);
+    int checkListForExistUrl(QString url);
+    int checkUrl(QString url, QString source);
+    int deleteAllFrom_all_url_table();
     int fixProtocol(QString &url);
+    int findUrlDB(QString url);
+    int insertUrlDB(QString url);
+    int lookForHref(QString source, int &index);
 
 private:
     Logger log_;
@@ -69,13 +72,14 @@ private:
     void addOrRemoveWWW(QString url, QString *new_url);
     int checkFinish();
 
-
-
-signals:
-    void FoundRSS(int type, QString name, QString url, QString encoding, QString web_source, int version);
+signals:  
     void EndOfUrls();
-public slots:
-
+    void FoundRSS(int type,
+                  QString name,
+                  QString url,
+                  QString encoding,
+                  QString web_source,
+                  int version);
 };
 
 #endif // WEB_SEARCH_INTERFACE_THREAD_H
