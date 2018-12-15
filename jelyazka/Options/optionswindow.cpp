@@ -329,6 +329,7 @@ int OptionsWindow::addStringToWatchList(QString cur_text)
 }
 
 //fill view_feeds (QListWidget var)
+//ToDo: rename this method
 void OptionsWindow::fillViewListView()
 {
     boost::ptr_vector<QString> tmp;
@@ -376,11 +377,10 @@ void OptionsWindow::rssTableUpdate()
         //add all data from view_feeds (QListWidget var)
         for (int i=0;  i<view_feeds_->count(); i++)
         {
-            QString url, version;
-            findAndReturnURLAndVersion(view_feeds_->item(i)->text(),url,version);
+            QString url = data_base_.getURLByName(view_feeds_->item(i)->text());
             if (url == "")
                 continue;
-
+            QString version = data_base_.getVersionByName(view_feeds_->item(i)->text());
             insertRowToRSSTable(view_feeds_->item(i)->text(), url, version);
             isAddedToView = true;
             data_->pushBack(rss_thread_->initStruct(view_feeds_->item(i)->text(),"RSS",url));
@@ -418,10 +418,8 @@ void OptionsWindow::rssTableUpdate()
             }
             if (l_old_view_feed_.size()-1 == j)
             {
-
-                //find url and version of site_name
-                QString url, version;
-                findAndReturnURLAndVersion(view_feeds_->item(i)->text(),url,version);
+                QString url = data_base_.getURLByName(view_feeds_->item(i)->text());
+                QString version = data_base_.getVersionByName(view_feeds_->item(i)->text());
                 insertRowToRSSTable(view_feeds_->item(i)->text(), url, version);
                 data_->pushBack(rss_thread_->initStruct(view_feeds_->item(i)->text(),"RSS",url));
                 data_->at(data_->size()-1)->setIsRead(false);
@@ -473,12 +471,6 @@ void OptionsWindow::removeDataFromRSSTable(QString site_name, bool all_data)
 void OptionsWindow::insertRowToRSSTable(QString name, QString url, QString version)
 {
     data_base_.insertIntoFavoriteFeeds(name, url, version);
-}
-
-//from site_name, return url and version
-void OptionsWindow::findAndReturnURLAndVersion(QString site_name, QString &url, QString &version)
-{
-    data_base_.findAndReturnURLAndVersion(site_name, url, version);
 }
 
 void OptionsWindow::updateFiltersTable()
