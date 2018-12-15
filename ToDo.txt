@@ -31,10 +31,10 @@ the custom button doesn't change it state (it is look like the cursor is in it);
 
 
 =========ToDo=======================
-[-rename viewwindow to mainwindow;]
-[-rename mainwindow to initialzation;]
-[- fix close button of "about" window;]
-[-Cre ate TrayIcon class that creates and manage the tray icon]
+- read my twitter wall content with some open source QT application;
+- make 2 icons and tabs for Jelyazka; 1 icon for Twitter; 1 icon for RSS;
+- insert a setting related to a twitter authentication;
+- integrate twitter wall into mainwindow;
 
 
 

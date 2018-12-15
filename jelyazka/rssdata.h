@@ -19,6 +19,7 @@ public:
     QString getVersion();
     bool getIsRead();
     bool getIsLoaded();
+    bool getIsMarkedForRemove();
     size_t getArticlesSize();
     RSSArticle articleAt(unsigned int index);
     void eraseArticleAt(unsigned int index);

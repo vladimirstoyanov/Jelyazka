@@ -49,8 +49,8 @@ MainWindow::MainWindow(QWidget *parent, RSSThread *rss_thread, Data *data):
     connect(rss_thread_,SIGNAL(Finish(QString, bool)),ow_,SLOT(onFinish(QString, bool)));
 
     is_X_changed_ = 0;
-    is_minimize_changed_=0;
-    is_maximize_changed_=0;
+    is_minimize_changed_= 0;
+    is_maximize_changed_= 0;
     is_flag_maximized_ = 0;
     is_press_released_ = 0;
 

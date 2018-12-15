@@ -141,29 +141,46 @@ int DataBase::insertIntoAllURLs(QString url)
     return 1;
 }
 
-//from site_name, return url and version
-void DataBase::findAndReturnURLAndVersion(QString site_name, QString &url, QString &version)
+QString DataBase::getURLByName(const QString &name)
 {
     QSqlQuery query;
-    url = "";
-    version="";
 
     if (q_sql_data_base_.isOpen())
     {
-        query.prepare(QString("SELECT * FROM collect_feeds WHERE name=\"%1\"").arg(site_name));
+        query.prepare(QString("SELECT * FROM collect_feeds WHERE name=\"%1\"").arg(name));
         if (!query.exec())
         {
             qDebug()<<"Fail:" + query.lastError().text();
-            url = "";
-            version = "";
-            return;
+            return "";
         }
         if(query.next())
         {
-            url = query.value( 2 ).toByteArray().data();
-            version = query.value(3).toByteArray().data();
+            return query.value( 2 ).toByteArray().data();
         }
     }
+    qDebug()<<"[DataBase::getURLByName] DB is not opened...";
+    return "";
+}
+
+QString DataBase::getVersionByName(const QString &name)
+{
+    QSqlQuery query;
+
+    if (q_sql_data_base_.isOpen())
+    {
+        query.prepare(QString("SELECT * FROM collect_feeds WHERE name=\"%1\"").arg(name));
+        if (!query.exec())
+        {
+            qDebug()<<"Fail:" + query.lastError().text();
+            return "";
+        }
+        if(query.next())
+        {
+            return query.value( 2 ).toByteArray().data();
+        }
+    }
+    qDebug()<<"[DataBase::getVersionByName] DB is not opened...";
+    return "";
 }
 
 int DataBase::selectURLFromAllURLs(QString url)

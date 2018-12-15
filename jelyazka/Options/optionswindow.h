@@ -135,7 +135,6 @@ private:
     void removeDataFromFilters(QString filter_name, bool all_data);
     int addStringToFilterList(QString cur_text);
     void returnModifedString(QString &str);
-    void findAndReturnURLAndVersion(QString site_name, QString &url, QString &version);
     void updateFiltersTable();
     void loadOptions();
     void saveOptions();

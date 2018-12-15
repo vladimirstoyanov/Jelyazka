@@ -116,3 +116,5 @@ void RSSData::setIsLoaded(bool is_loaded)
 {
     is_loaded_ = is_loaded;
 }
+
+

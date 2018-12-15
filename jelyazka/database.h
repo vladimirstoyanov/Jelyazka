@@ -19,7 +19,8 @@ public:
     void insertIntoCollectFeeds(QString name, QString url, QString version);
     int insertIntoAllURLs(QString);
 
-    void findAndReturnURLAndVersion(QString site_name, QString &url, QString &version);
+    QString getURLByName(const QString &name);
+    QString getVersionByName(const QString &name);
     int selectURLFromAllURLs(QString);
     int deleteAllFromAllURL();
 
