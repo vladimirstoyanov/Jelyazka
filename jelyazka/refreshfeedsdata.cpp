@@ -17,7 +17,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "refreshfeedsdata.h"
-#include <QDebug>
 
 RefreshFeedsData::RefreshFeedsData(QObject *parent, RSSThread *rss_thread, Data *data) :
     QThread(parent)

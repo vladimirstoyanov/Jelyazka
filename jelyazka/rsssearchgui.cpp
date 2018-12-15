@@ -17,10 +17,6 @@
     along with this program.  If not, see <htthread_pool://www.gnu.org/licenses/>.
 */
 #include "rsssearchgui.h"
-#include "ui_rsssearchgui.h"
-#include "http.h"
-#include "search.h"
-#include <QDebug>
 
 RSSSearchGUI::RSSSearchGUI(QWidget *parent, RSSThread *rss_thread, MainWindow *main_window, Data *data) :
     QWidget(parent),

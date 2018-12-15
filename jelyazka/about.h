@@ -23,6 +23,8 @@
 #include <QShowEvent>
 #include <QWidget>
 
+#include "ui_about.h"
+
 namespace Ui {
 class About;
 }

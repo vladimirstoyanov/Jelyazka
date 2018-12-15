@@ -16,11 +16,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 #include "help.h"
-#include "ui_help.h"
-#include <QFile>
-#include <QTextStream>
-#include <QMessageBox>
 
 Help::Help(QWidget *parent) :
     QWidget(parent),

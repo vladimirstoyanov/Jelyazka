@@ -17,8 +17,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "initwindow.h"
-#include "ui_initwindow.h"
-#include <QDesktopWidget>
 
 InitWindow::InitWindow(QWidget *parent) :
     QWidget(parent),

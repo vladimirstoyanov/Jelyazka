@@ -23,12 +23,14 @@
 #include <QLabel>
 #include <QList>
 #include <QMouseEvent>
+#include <QPainter>
 #include <QPropertyAnimation>
 #include <QShowEvent>
 #include <QWidget>
 
 #include "data.h"
 #include "rssthread.h"
+#include "ui_notificationwindow.h"
 
 namespace Ui {
 class NotificationWindow;

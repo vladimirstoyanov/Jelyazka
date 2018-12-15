@@ -19,6 +19,7 @@
 #ifndef INITWINDOW_H
 #define INITWINDOW_H
 
+#include <QDesktopWidget>
 #include <QImage>
 #include <QLabel>
 #include <QWidget>
@@ -26,6 +27,8 @@
 
 #include "data.h"
 #include "rssthread.h"
+#include "ui_initwindow.h"
+
 
 namespace Ui {
 class InitWindow;

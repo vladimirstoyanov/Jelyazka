@@ -19,8 +19,9 @@
 #ifndef REFRESHFEEDSDATA_H
 #define REFRESHFEEDSDATA_H
 
-#include <QThread>
+#include <QDebug>
 #include <QMutex>
+#include <QThread>
 
 #include "data.h"
 #include "rssthread.h"

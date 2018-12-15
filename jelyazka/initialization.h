@@ -24,6 +24,8 @@
 #include <Windows.h>
 #endif
 
+#include <vector>
+
 #include <QCloseEvent>
 #include <QMainWindow>
 #include <QMenu>

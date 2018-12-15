@@ -21,6 +21,7 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <QCheckBox>
+#include <QDebug>
 #include <QLineEdit>
 #include <QListWidget>
 #include <QResizeEvent>
@@ -34,6 +35,7 @@
 #include "mainwindow.h"
 #include "http.h"
 #include "rssthread.h"
+#include "ui_optionswindow.h"
 
 namespace Ui {
 class OptionsWindow;

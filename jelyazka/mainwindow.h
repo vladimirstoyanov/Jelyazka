@@ -21,6 +21,7 @@
 
 #include <qsizegrip.h>
 #include <QCloseEvent>
+#include <QDebug>
 #include <QDesktopWidget>
 #include <QEvent>
 #include <QLabel>
@@ -29,6 +30,7 @@
 #include <QResizeEvent>
 #include <QShowEvent>
 #include <QStringList>
+#include <QStyle>
 #include <QWidget>
 
 #include "data.h"
@@ -39,6 +41,7 @@
 #include "rssthread.h"
 #include "rsssearchgui.h"
 #include "search.h"
+#include "ui_mainwindow.h"
 
 namespace Ui {
 class MainWindow;

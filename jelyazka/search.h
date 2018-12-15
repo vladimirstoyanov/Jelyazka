@@ -19,6 +19,9 @@
 #ifndef SEARCH_H
 #define SEARCH_H
 
+#include <string>
+#include <vector>
+
 #include <QString>
 
 class Search {

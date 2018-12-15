@@ -19,9 +19,10 @@
 #ifndef MAIN_CPP
 #define MAIN_CPP
 
+#include <QApplication>
+
 #include "initialization.h"
 #include "initwindow.h"
-#include <QApplication>
 
 int main(int argc, char *argv[])
 {

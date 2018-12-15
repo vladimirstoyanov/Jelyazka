@@ -17,10 +17,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include <QDebug>
-#include <QStyle>
-
 
 MainWindow::MainWindow(QWidget *parent, RSSThread *rss_thread, Data *data):
     QWidget(parent),

@@ -24,29 +24,32 @@
 #include <limits.h>
 #include <vector>
 
-#include <QtCore>
-#include <QMutex>
-#include <QWidget>
-#include <QStandardItemModel>
-#include <QTableView>
-#include <QResizeEvent>
-#include <QMouseEvent>
+#include <QCloseEvent>
 #include <QDebug>
-#include <QMessageBox>
-#include <QString>
 #include <QGridLayout>
 #include <QFontMetrics>
-#include <QTextCodec>
+#include <QMessageBox>
+#include <QMouseEvent>
+#include <QMutex>
+#include <QWidget>
+#include <QResizeEvent>
 #include <QSize>
-#include <QCloseEvent>
+#include <QStandardItemModel>
+#include <QString>
+#include <QtCore>
+#include <QTableView>
+#include <QTextCodec>
 #include <QThreadPool>
 
 #include "data.h"
+#include "http.h"
 #include "logger.h"
 #include "mainwindow.h"
 #include "parserss.h"
 #include "rsssearchthread.h"
 #include "rssthread.h"
+#include "search.h"
+#include "ui_rsssearchgui.h"
 
 namespace Ui {
 class RSSSearchGUI;

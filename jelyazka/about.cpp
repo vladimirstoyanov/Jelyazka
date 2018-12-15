@@ -17,7 +17,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "about.h"
-#include "ui_about.h"
 
 About::About(QWidget *parent) :
     QWidget(parent),

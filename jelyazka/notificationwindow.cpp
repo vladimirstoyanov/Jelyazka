@@ -17,8 +17,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "notificationwindow.h"
-#include "ui_notificationwindow.h"
-#include <QPainter>
 
 NotificationWindow::NotificationWindow(QWidget *parent) :
     QWidget(parent),

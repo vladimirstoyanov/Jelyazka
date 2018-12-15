@@ -19,9 +19,6 @@
 #ifndef __SEARCH_CPP__
 #define __SEARCH_CPP__
 
-#include <string>
-#include <vector>
-
 #include "search.h"
 
 Search::Search()

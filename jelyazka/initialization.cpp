@@ -19,7 +19,6 @@
 
 
 #include "initialization.h"
-#include <vector>
 
 Initialization::Initialization(InitWindow *init_window):
     tray_icon_(NULL),

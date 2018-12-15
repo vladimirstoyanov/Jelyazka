@@ -1,5 +1,7 @@
-#include "data.h"
 #include <QDebug.h>
+
+#include "data.h"
+
 Data::Data()
 {
 
