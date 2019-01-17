@@ -35,7 +35,7 @@ class About : public QWidget
 
 public:
     explicit About(QWidget *parent = 0);
-    ~About();
+    virtual ~About();
 
 private slots:
     void OKButtonClicked(); //'OK' button
