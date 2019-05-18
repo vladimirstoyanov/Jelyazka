@@ -18,11 +18,12 @@
 */
 #include "refreshfeedsdata.h"
 
-RefreshFeedsData::RefreshFeedsData(QObject *parent, RSSThread *rss_thread, Data *data) :
+RefreshFeedsData::RefreshFeedsData(QObject *parent, std::shared_ptr<RSSThread> rss_thread, std::shared_ptr<Data> data) :
     QThread(parent)
+    , rss_thread_ (rss_thread)
+    , data_  (data)
 {
-    rss_thread_ = rss_thread;
-    data_ = data;
+
 }
 
 RefreshFeedsData::~RefreshFeedsData()

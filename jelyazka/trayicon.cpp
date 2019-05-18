@@ -1,9 +1,9 @@
 #include "trayicon.h"
 
-TrayIcon::TrayIcon(QWidget *parent, MainWindow *main_window_)
+TrayIcon::TrayIcon(QWidget *parent, std::shared_ptr<MainWindow> main_window_)
     : QWidget(parent),
       main_window_(main_window_),
-      about_gui_(new About())
+      about_gui_(std::make_shared<About>())
 {
     createActions();
     createTrayIcon();
@@ -12,20 +12,6 @@ TrayIcon::TrayIcon(QWidget *parent, MainWindow *main_window_)
 
 TrayIcon::~TrayIcon()
 {
-    if (tray_icon_!=NULL)
-        delete tray_icon_;
-    if (tray_icon_menu_!=NULL)
-        delete tray_icon_menu_;
-    if (about_!=NULL)
-        delete about_;
-    if (close_!=NULL)
-        delete close_;
-    if (main_!=NULL)
-        delete main_;
-    if (main_window_!=NULL)
-        delete main_window_;
-
-    delete about_gui_;
 }
 
 void TrayIcon::addIcon()
@@ -45,32 +31,32 @@ void TrayIcon::showAbout()
 
 void TrayIcon::createActions()
 {
-    main_ = new QAction(tr("&Open Jelyazka"), this);
-    connect(main_, SIGNAL(triggered()), this, SLOT(mainWindow()));
+    main_ =std::make_shared<QAction>(tr("&Open Jelyazka"), this);
+    connect(main_.get(), SIGNAL(triggered()), this, SLOT(mainWindow()));
 
-    about_ = new QAction(tr("&About"), this);
-    connect(about_, SIGNAL(triggered()), this, SLOT(showAbout()));
+    about_ = std::make_shared<QAction>(tr("&About"), this);
+    connect(about_.get(), SIGNAL(triggered()), this, SLOT(showAbout()));
 
-    close_ = new QAction(tr("&Quit"), this);
-    connect(close_, SIGNAL(triggered()), qApp, SLOT(quit()));
+    close_ = std::make_shared<QAction>(tr("&Quit"), this);
+    connect(close_.get(), SIGNAL(triggered()), qApp, SLOT(quit()));
 }
 void TrayIcon::createTrayIcon()
 {
-    tray_icon_menu_ = new QMenu(this);
+    tray_icon_menu_ = std::make_shared<QMenu>(this);
 
-    tray_icon_menu_->addAction(main_);
+    tray_icon_menu_->addAction(main_.get());
     tray_icon_menu_->addSeparator();
-    tray_icon_menu_->addAction(about_);
+    tray_icon_menu_->addAction(about_.get());
     tray_icon_menu_->addSeparator();
-    tray_icon_menu_->addAction(close_);
+    tray_icon_menu_->addAction(close_.get());
 
 
-    tray_icon_ = new QSystemTrayIcon(this);
-    tray_icon_->setContextMenu(tray_icon_menu_);
+    tray_icon_ = std::make_shared<QSystemTrayIcon>(this);
+    tray_icon_->setContextMenu(tray_icon_menu_.get());
 
 
     connect(
-            tray_icon_,
+            tray_icon_.get(),
             SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this,
             SLOT(trayIconClicked(QSystemTrayIcon::ActivationReason))

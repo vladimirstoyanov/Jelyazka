@@ -19,6 +19,8 @@
 #ifndef MAIN_CPP
 #define MAIN_CPP
 
+#include <memory>
+
 #include <QApplication>
 
 #include "initialization.h"
@@ -29,9 +31,9 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
 
-    InitWindow *iw = new InitWindow();
+    std::shared_ptr<InitWindow> iw = std::make_shared<InitWindow>();
     iw->show();
-    Initialization *w = new Initialization(iw);
+    std::shared_ptr<Initialization> w = std::make_shared <Initialization>(iw);
     
     return a.exec();
 }

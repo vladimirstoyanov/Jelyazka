@@ -1,11 +1,10 @@
 #include "parserss.h"
 
-ParseRSS::ParseRSS(Data *data_tmp)
+ParseRSS::ParseRSS(std::shared_ptr<Data> data_tmp):
+    data_ (data_tmp)
 {
-        data_ = data_tmp;
+
 }
-
-
 
 void ParseRSS::findFeedDataRSS(int &index, QString content, RSSArticle &ar)
 {
@@ -228,7 +227,7 @@ int ParseRSS::getDescription(int item_b_index, int item_e_index, QString &descri
 }
 
 //Get articles from rss source
-int ParseRSS::getArticlesFromRSSContent(QString content, RSSData *rssData)
+int ParseRSS::getArticlesFromRSSContent(QString content, std::shared_ptr<RSSData> rssData)
 {
     int item_b_index=0, item_e_index=0;
     Search cs;
@@ -277,7 +276,7 @@ int ParseRSS::getArticlesFromRSSContent(QString content, RSSData *rssData)
 }
 
 //Get articles from rdf xml
-int ParseRSS::getArticlesFromRDFContent(QString content, RSSData *rssData)
+int ParseRSS::getArticlesFromRDFContent(QString content, std::shared_ptr<RSSData> rssData)
 {
     int item_b_index=0, item_e_index=0;
     Search cs;

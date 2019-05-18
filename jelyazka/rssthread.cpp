@@ -18,34 +18,27 @@
 */
 #include "rssthread.h"
 
-RSSThread::RSSThread(Data *data)
+RSSThread::RSSThread(std::shared_ptr<Data> data)
     : QRunnable()
+    , data_ (data)
+    , parse_rss_ (std::make_shared<ParseRSS>(data_))
+    , thread_pool_ (std::make_shared<QThreadPool>(this))
+    , first_load_ (false)
+    , is_add_option_ (true)
+    , network_proxy_ (nullptr)
+    , mutex_ (std::make_shared<QMutex>())
+    , busy_ (false)
+    , data_for_animatewindow_ ("")
 {
-    data_ = data;
-    parse_rss_ = new ParseRSS(data);
-    first_load_ = false;
-    is_add_option_ = true;
-
-    network_proxy_ = NULL;
-
     data_base_.loadStrctureFromDB (data);
-
-    mutex_ = new QMutex();
-    thread_pool_ = new QThreadPool(this);
     thread_pool_->setMaxThreadCount(5);
 
     loadOptions();
     setProxySettings();
-
-    busy_ = false;
-    data_for_animatewindow_ = "";
 }
 
 RSSThread::~RSSThread()
 {
-    delete mutex_;
-    if (network_proxy_!=NULL)
-        delete network_proxy_;
 }
 
 void RSSThread::synchronizeData(int struct_index, QString content)
@@ -60,7 +53,9 @@ void RSSThread::synchronizeData(int struct_index, QString content)
     if (data_->at(struct_index)->getArticlesSize()==0) //if articles list is empty
     {
         if(data_->at(struct_index)->getVersion() == "2005")
+        {
             parse_rss_->getArticlesFromRDFContent(content,  data_->at(struct_index));
+        }
         else
             parse_rss_->getArticlesFromRSSContent(content,  data_->at(struct_index));
 
@@ -194,9 +189,9 @@ int RSSThread::checkIsLoaded()
     return 1;
 }
 
-RSSData * RSSThread::initStruct(QString site_name, QString type, QString url)
+std::shared_ptr<RSSData> RSSThread::initStruct(QString site_name, QString type, QString url)
 {
-    RSSData *s = new RSSData();
+    std::shared_ptr<RSSData> s = std::make_shared<RSSData>();
 
     s->setSiteName(site_name);
     s->setType(type);

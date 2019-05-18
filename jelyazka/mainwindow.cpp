@@ -18,13 +18,25 @@
 */
 #include "mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent, RSSThread *rss_thread, Data *data):
-    QWidget(parent),
-    ui_(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent, std::shared_ptr<RSSThread> rss_thread, std::shared_ptr<Data> data):
+    QWidget(parent)
+    , ui_(std::make_shared<Ui::MainWindow> ())
+    , help_gui_ (std::make_shared<Help>())
+    , data_ (data)
+    , rss_thread_ (rss_thread)
+    , wsi_ (std::make_shared<RSSSearchGUI>(nullptr, rss_thread_, std::shared_ptr<MainWindow> (this), data_))
+    , is_resizing_  (false)
+    , ow_ (std::make_shared<OptionsWindow>(nullptr, rss_thread_, data_))
+    , image_add_rss_label_ (std::make_shared<QLabel>(this))
+    , image_options_label_ (std::make_shared<QLabel>(this))
+    , image_refresh_label_  (std::make_shared<QLabel>(this))
+    , image_help_label_ (std::make_shared<QLabel>(this))
+    , image_X_label_ (std::make_shared<QLabel>(this))
+    , image_minimize_label_ (std::make_shared<QLabel>(this))
+    , image_maximize_label_ (std::make_shared<QLabel>(this))
 {
     ui_->setupUi(this);
 
-    data_ = data;
     //make window without frames
     this->setWindowFlags( Qt::FramelessWindowHint);
 
@@ -32,17 +44,9 @@ MainWindow::MainWindow(QWidget *parent, RSSThread *rss_thread, Data *data):
     this->setMinimumHeight(200);
     this->setMinimumWidth(350);
 
-    is_resizing_ = false;
-
     initFilters();
 
-    help_gui_ = new Help();
-
-    rss_thread_ = rss_thread;
-    wsi_ = new RSSSearchGUI (0, rss_thread_, this, data_);
-
-    ow_ = new OptionsWindow(0,rss_thread_, data_);
-    connect(rss_thread_,SIGNAL(Finish(QString, bool)),ow_,SLOT(onFinish(QString, bool)));
+    connect(rss_thread_.get(),SIGNAL(Finish(QString, bool)),ow_.get(),SLOT(onFinish(const QString &, const bool)));
 
     is_X_changed_ = 0;
     is_minimize_changed_= 0;
@@ -57,7 +61,6 @@ MainWindow::MainWindow(QWidget *parent, RSSThread *rss_thread, Data *data):
     ui_->textBrowser->setOpenExternalLinks(1);
 
     //load "Add RSS" image
-    image_add_rss_label_ = new QLabel(this);
     add_rss_button_image_  = QImage("../resources/rss-icon-40x40.png");
     image_add_rss_label_->setPixmap(QPixmap::fromImage(add_rss_button_image_));
     image_add_rss_label_->setGeometry(QRect(5,5,40,40));
@@ -71,7 +74,6 @@ MainWindow::MainWindow(QWidget *parent, RSSThread *rss_thread, Data *data):
 
 
     //laod "Options" image
-    image_options_label_ = new QLabel(this);
     options_button_image_  = QImage("../resources/Black_Settings.png");
     image_options_label_->setPixmap(QPixmap::fromImage(options_button_image_));
     image_options_label_->setGeometry(QRect(50,5,40,40));
@@ -83,7 +85,6 @@ MainWindow::MainWindow(QWidget *parent, RSSThread *rss_thread, Data *data):
 	#endif
 
     //laod "Refresh" image
-    image_refresh_label_ = new QLabel(this);
     refresh_button_image_ = QImage("../resources/refresh.png");
     image_refresh_label_->setPixmap(QPixmap::fromImage(refresh_button_image_));
     image_refresh_label_->setGeometry(QRect(95,5,40,40));
@@ -95,7 +96,6 @@ MainWindow::MainWindow(QWidget *parent, RSSThread *rss_thread, Data *data):
 	#endif
 
     //laod "Help" image
-    image_help_label_ = new QLabel(this);
     help_button_image_  = QImage("../resources/icon40x40help.png");
     image_help_label_->setPixmap(QPixmap::fromImage(help_button_image_));
     image_help_label_->setGeometry(QRect(140,5,40,40));
@@ -111,7 +111,6 @@ MainWindow::MainWindow(QWidget *parent, RSSThread *rss_thread, Data *data):
     height_ = window_size.height();
 
     //laod "X" image
-    image_X_label_ = new QLabel(this);
     x_button_image_  = QImage("../resources/x_button.png");
     image_X_label_->setPixmap(QPixmap::fromImage(x_button_image_));
     image_X_label_->setGeometry(QRect(window_size.width()-35,5,30,30));
@@ -122,7 +121,6 @@ MainWindow::MainWindow(QWidget *parent, RSSThread *rss_thread, Data *data):
 	#endif
 
     //laod "Minimize" image
-    image_minimize_label_ = new QLabel(this);
     minimize_button_image_  = QImage("../resources/minimize_button.png");
     image_minimize_label_->setPixmap(QPixmap::fromImage(minimize_button_image_));
     image_minimize_label_->setGeometry(QRect(window_size.width()-97,5,30,30));
@@ -133,7 +131,6 @@ MainWindow::MainWindow(QWidget *parent, RSSThread *rss_thread, Data *data):
 	#endif
 
     //laod "Maximize" image
-    image_maximize_label_ = new QLabel(this);
     maximize_button_image_  = QImage("../resources/maximize_button.png");
     image_maximize_label_->setPixmap(QPixmap::fromImage(maximize_button_image_));
     image_maximize_label_->setGeometry(QRect(window_size.width()-66,5,30,30));
@@ -149,17 +146,6 @@ MainWindow::MainWindow(QWidget *parent, RSSThread *rss_thread, Data *data):
 
 MainWindow::~MainWindow()
 {
-    delete ui_;
-    delete image_add_rss_label_;
-    delete image_help_label_;
-    delete image_options_label_;
-    delete image_refresh_label_;
-    delete image_X_label_;
-    delete image_minimize_label_;
-    delete image_maximize_label_;
-    delete wsi_;
-    delete help_gui_;
-    //delete size_grip;
 }
 
 //initialize text browser widget
@@ -216,7 +202,7 @@ void MainWindow::initDataInComboBoxFromStructure()
     }
 }
 
-void MainWindow::addToCombobox(QString str)
+void MainWindow::addToCombobox(const QString &str)
 {
     if (str=="")
         return;
@@ -688,7 +674,7 @@ int MainWindow::checkForFilters(QString &title, QString &article)
     return 0;
 }
 
-int MainWindow::checkForFontTag(QString str1)
+int MainWindow::checkForFontTag(const QString &str1)
 {
     QString font = "</FONT>";
     for (int i=0; i<str1.length(); i++)

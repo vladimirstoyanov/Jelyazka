@@ -24,8 +24,8 @@ InitWindow::InitWindow(QWidget *parent) :
     thread_pool_(new QThreadPool(this)),
     image_init_label_ (new QLabel(this)),
     init_image_ (new QImage("../resources/jelyazka_02_end.png")),
-    rss_thread_(NULL),
-    data_(NULL)
+    rss_thread_(nullptr),
+    data_(nullptr)
 
 {
     ui_->setupUi(this);
@@ -47,21 +47,19 @@ InitWindow::InitWindow(QWidget *parent) :
 
 InitWindow::~InitWindow()
 {
-    delete ui_;
-    delete init_image_;
-    delete image_init_label_;
-    delete thread_pool_;
 }
 
 //load RSS feeds in thread pool
-void InitWindow::setSignal(RSSThread *rss_thread, Data *data)
+void InitWindow::setSignal(std::shared_ptr<RSSThread> rss_thread, std::shared_ptr<Data> data)
 {
     data_ = data;
     rss_thread_ = rss_thread;
-    connect(rss_thread_,SIGNAL(loadRSS(QString,QString)),this,SLOT(onLoadRss(QString,QString)));
+    connect(rss_thread_.get(),SIGNAL(loadRSS(QString,QString)),this,SLOT(onLoadRss(QString,QString)));
 
     for (unsigned int i=0; i<data_->size(); i++)
-        thread_pool_->start(rss_thread_);
+    {
+        thread_pool_->start(rss_thread_.get());
+    }
 
     if (data_->size()==0)
     {

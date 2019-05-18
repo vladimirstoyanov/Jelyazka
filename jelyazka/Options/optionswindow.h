@@ -19,7 +19,7 @@
 #ifndef OPTIONSWINDOW_H
 #define OPTIONSWINDOW_H
 
-//#include <boost/ptr_container/ptr_vector.hpp>
+#include <memory>
 #include <vector>
 
 #include <QCheckBox>
@@ -39,8 +39,9 @@
 #include "rssthread.h"
 #include "ui_optionswindow.h"
 
-namespace Ui {
-class OptionsWindow;
+namespace Ui
+{
+    class OptionsWindow;
 }
 
 class MainWindow;
@@ -48,13 +49,16 @@ class MainWindow;
 class OptionsWindow : public QWidget
 {
     Q_OBJECT
-
 public:
-    explicit OptionsWindow(QWidget *parent = 0, RSSThread *rss_thread=0, Data *data = 0);
+    explicit OptionsWindow(
+            QWidget *parent = nullptr
+            , std::shared_ptr<RSSThread> rss_thread = nullptr
+            , std::shared_ptr<Data> data = nullptr);
+
     ~OptionsWindow();
 
 public slots:
-    void onFinish(QString name, bool finish);
+    void onFinish(const QString &name, const bool finish);
 
 private slots:
     //ToDo: rename button names
@@ -69,23 +73,23 @@ private slots:
     void on_cb_enable_filtering_clicked(bool);
     void on_pb_add_filter_clicked();
     void on_pb_remove_filter();
-    void on_textChanged(QString text);
+    void on_textChanged(const QString &text);
 
 private:
      void resizeEvent(QResizeEvent *event);
      void showEvent(QShowEvent *);
 private:
-    void addItem(QString name);
+    void addItem(const QString &name);
     void collect_feedsTableUpdate(); //ToDo: change the funtion name
     void fillCollectListView();
     void fillFilterListView();
     void fillViewListView();
-    void insertRowToRSSTable(QString site_name, QString url, QString version);
-    void insertRowToFiltersTable(QString filter_name);
+    void insertRowToRSSTable(const QString &site_name, const QString &url, const QString &version);
+    void insertRowToFiltersTable(const QString &filter_name);
     void rssTableUpdate();
-    void removeDataFromCollectFeeds(QString site_name);
-    void removeDataFromFilters(QString filter_name, bool all_data);
-    void removeDataFromRSSTable(QString site_name, bool all_data);
+    void removeDataFromCollectFeeds(const QString &site_name);
+    void removeDataFromFilters(const QString &filter_name, const bool all_data);
+    void removeDataFromRSSTable(const QString &site_name, const bool all_data);
     void returnModifedString(QString &str); //ToDo: change the function name
     void updateCollectFeedListView();
     void updateFiltersTable();
@@ -106,47 +110,47 @@ private:
     void showProxyConnection();
 
 private:
-    int addStringToFilterList(QString cur_text);
-    int addStringToWatchList(QString str);
-    int addStringToViewList(QString str);
+    int addStringToFilterList(const QString &cur_text);
+    int addStringToWatchList(const QString &str);
+    int addStringToViewList(const QString &str);
     int cf_label_search_width(); //ToDo: change the function name
 
 private:
     DataBase data_base_;
-    Ui::OptionsWindow *ui_;
-    RSSThread *rss_thread_;
-    Data *data_;
-    QListWidget *collect_feeds_;
-    QListWidget *view_feeds_;
+    std::shared_ptr<Ui::OptionsWindow> ui_;
+    std::shared_ptr<RSSThread> rss_thread_;
+    std::shared_ptr<Data> data_;
+    std::shared_ptr<QListWidget> collect_feeds_;
+    std::shared_ptr<QListWidget> view_feeds_;
     std::vector<QString> l_old_collect_feed_;
     std::vector<QString> l_old_view_feed_;
     std::vector<QString> l_old_filters_;
     int options_type_;
-    QThreadPool *thread_pool_;
+    std::shared_ptr<QThreadPool> thread_pool_;
     QList<bool> l_items_for_remove_;
-    MainWindow *main_window_;
-    QLabel *download_feed_status_;
+    std::shared_ptr<MainWindow> main_window_;
+    std::shared_ptr<QLabel> download_feed_status_;
 
-    QLineEdit *cf_find_feed_;
-    QLabel *cf_label_search_;
+    std::shared_ptr<QLineEdit> cf_find_feed_;
+    std::shared_ptr<QLabel> cf_label_search_;
 
     //QTextEdit *te_refresh_time;
-    QLabel *l_refresh_time_;
-    QCheckBox *cb_enable_notification_;
-    QSpinBox *sb_refresh_time_;
+    std::shared_ptr<QLabel> l_refresh_time_;
+    std::shared_ptr<QCheckBox> cb_enable_notification_;
+    std::shared_ptr<QSpinBox> sb_refresh_time_;
 
-    QLabel *l_proxy_url_;
-    QLabel *l_proxy_port_;
-    QTextEdit *te_proxy_url_;
-    QTextEdit *te_proxy_port_;
-    QCheckBox *cb_enable_proxy_;
+    std::shared_ptr<QLabel> l_proxy_url_;
+    std::shared_ptr<QLabel> l_proxy_port_;
+    std::shared_ptr<QTextEdit> te_proxy_url_;
+    std::shared_ptr<QTextEdit> te_proxy_port_;
+    std::shared_ptr<QCheckBox> cb_enable_proxy_;
 
     //filter options widgets
-    QPushButton *pb_add_filter_;
-    QTextEdit *te_add_filter_;
-    QListWidget *lw_filter_list_;
-    QLabel *l_filter_list_;
-    QPushButton *pb_remove_filter_;
-    QCheckBox *cb_enable_filtering_;
+    std::shared_ptr<QPushButton> pb_add_filter_;
+    std::shared_ptr<QTextEdit> te_add_filter_;
+    std::shared_ptr<QListWidget> lw_filter_list_;
+    std::shared_ptr<QLabel> l_filter_list_;
+    std::shared_ptr<QPushButton> pb_remove_filter_;
+    std::shared_ptr<QCheckBox> cb_enable_filtering_;
 };
 #endif // OPTIONSWINDOW_H

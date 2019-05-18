@@ -21,10 +21,10 @@
 NotificationWindow::NotificationWindow(QWidget *parent) :
     QWidget(parent),
     ui_(new Ui::NotificationWindow),
-    image_label_(NULL),
-    rss_thread_(NULL),
-    show_window_animation_ (new QPropertyAnimation(this, "geometry")),
-    hide_window_animation_ (new QPropertyAnimation(this, "geometry")),
+    image_label_(nullptr),
+    rss_thread_(nullptr),
+    show_window_animation_ (std::make_shared<QPropertyAnimation>(this, "geometry")),
+    hide_window_animation_ (std::make_shared<QPropertyAnimation>(this, "geometry")),
     is_mouse_clicked_ (false),
     is_X_changed_(true)
 
@@ -49,8 +49,8 @@ NotificationWindow::NotificationWindow(QWidget *parent) :
     ui_->textBrowser->setOpenLinks(1);
     ui_->textBrowser->setOpenExternalLinks(1);
 
-    connect (show_window_animation_, SIGNAL(finished()), this, SLOT(onShowAnimationFinished()));
-    connect (hide_window_animation_, SIGNAL(finished()), this, SLOT(onHideAnimationFinished()));
+    connect (show_window_animation_.get(), SIGNAL(finished()), this, SLOT(onShowAnimationFinished()));
+    connect (hide_window_animation_.get(), SIGNAL(finished()), this, SLOT(onHideAnimationFinished()));
 
     qApp->installEventFilter(this);
 
@@ -58,15 +58,8 @@ NotificationWindow::NotificationWindow(QWidget *parent) :
 
 NotificationWindow::~NotificationWindow()
 {
-    if (show_window_animation_!=NULL)
-        delete show_window_animation_;
-    if (hide_window_animation_!=NULL)
-        delete hide_window_animation_;
-    if (image_label_!=NULL)
-        delete image_label_;
-
-    delete ui_;
 }
+
 void NotificationWindow::showEvent(QShowEvent *)
 {
     showWindowAnimation();
@@ -111,7 +104,7 @@ void NotificationWindow::hideWindowAnimation()
 //Load 'X' button image
 void NotificationWindow::LoadImage_()
 {
-   image_label_ = new QLabel(this);
+   image_label_ = std::make_shared<QLabel>(this);
    close_button_image_  = QImage("../resources/x_button.png");
    image_label_->setPixmap(QPixmap::fromImage(close_button_image_));
    image_label_->setGeometry(QRect(this->width()-35,5,30,30));
@@ -187,11 +180,11 @@ QList<unsigned int> NotificationWindow::getIndexes(QString data_str)
 }
 
 //make connection to RSSThread instance.
-void NotificationWindow::setSignal(RSSThread *rssThread, Data *data)
+void NotificationWindow::setSignal(std::shared_ptr<RSSThread> rssThread, std::shared_ptr<Data> data)
 {
     rss_thread_ = rssThread;
     data_ = data;
-    connect(rss_thread_, SIGNAL(showAnimateWindow(QString)), this, SLOT(onShowAnimateWindow(QString)));
+    connect(rss_thread_.get(), SIGNAL(showAnimateWindow(QString)), this, SLOT(onShowAnimateWindow(QString)));
 }
 
 //This method is similar of 'Sleep(mseconds)' function in 'windows.h'

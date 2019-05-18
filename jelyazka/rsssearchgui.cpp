@@ -18,46 +18,51 @@
 */
 #include "rsssearchgui.h"
 
-RSSSearchGUI::RSSSearchGUI(QWidget *parent, RSSThread *rss_thread, MainWindow *main_window, Data *data) :
-    QWidget(parent),
-    ui_(new Ui::RSSSearchGUI)
+RSSSearchGUI::RSSSearchGUI(QWidget *parent, std::shared_ptr<RSSThread> rss_thread, std::shared_ptr<MainWindow> main_window, std::shared_ptr<Data> data) :
+    QWidget(parent)
+    , ui_(std::make_shared<Ui::RSSSearchGUI> ())
+    , data_ (data)
+    , parse_rss_ (std::make_shared<ParseRSS>(data_))
+    , rss_thread_ (rss_thread)
+    , thread_pool_ (std::make_shared<QThreadPool>(this))
+    , model_ (std::make_shared<QStandardItemModel>(0,3,this))
+    , thread_pool_2 (std::make_shared<QThreadPool>(this))
+    , main_window_ (main_window)
+    , grid_ (std::make_shared<QGridLayout> ())
 {
     ui_->setupUi(this);
-    data_ = data;
-    parse_rss_ = new ParseRSS(data_);
+
+
 
     this->setMinimumHeight(200);
     this->setMinimumWidth(350);
 
-    rss_thread_ = rss_thread;
 
-    thread_pool_ = new QThreadPool(this);
+
+
     thread_pool_->setMaxThreadCount(5);
 
-
-    thread_pool_2 = new QThreadPool(this);
     thread_pool_2->setMaxThreadCount(10);
 
-    main_window_ = main_window;
+
 
     //init gryd layout
-    grid_ = new QGridLayout;
     grid_->addWidget(ui_->lineEdit,0,0);
     grid_->addWidget(ui_->pushButton,0,1);
     grid_->addWidget(ui_->tableView,1,0);
     grid_->addWidget(ui_->pushButton_2,3,0);
     grid_->addWidget(ui_->pushButton_3,1,1);
     grid_->addWidget(ui_->label,2,0);
-    this->setLayout(grid_);
+    this->setLayout(grid_.get());
 
     //init QStandardItemModel and set it to ui->tableView (QTableView var)
-    model_ = new QStandardItemModel(0,3,this);
+
     model_->setHorizontalHeaderItem(0, new QStandardItem(QString("Name")));
     model_->setHorizontalHeaderItem(1, new QStandardItem(QString("URL")));
     model_->setHorizontalHeaderItem(2, new QStandardItem(QString("Encoding")));
 
     model_->setHorizontalHeaderItem(3, new QStandardItem(QString("Add to list")));
-    ui_->tableView->setModel(model_);
+    ui_->tableView->setModel(model_.get());
 
     //start thread
     mThread = new RSSSearchGUIThread();
@@ -66,7 +71,7 @@ RSSSearchGUI::RSSSearchGUI(QWidget *parent, RSSThread *rss_thread, MainWindow *m
     connect(mThread, SIGNAL(EndOfUrls()),this, SLOT(onEndOfUrls()));
 
     //init ui->tableView item changed event
-    connect(model_, SIGNAL(itemChanged(QStandardItem*)), this, SLOT(on_modelItemChanged(QStandardItem*)));
+    connect(model_.get(), SIGNAL(itemChanged(QStandardItem*)), this, SLOT(on_modelItemChanged(QStandardItem*)));
 
     ui_->label->setText("");
     is_user_edit_ = true;
@@ -75,13 +80,8 @@ RSSSearchGUI::RSSSearchGUI(QWidget *parent, RSSThread *rss_thread, MainWindow *m
 
 RSSSearchGUI::~RSSSearchGUI()
 {
-    delete ui_;
-    delete model_;
-    delete grid_;
     thread_pool_2->waitForDone();
     mThread->deleteLater();
-    delete thread_pool_;
-    delete thread_pool_2;
 
     if (tree_node_!=NULL)
     {
@@ -298,7 +298,7 @@ void RSSSearchGUI::onFoundRSS(int type, QString name, QString url, QString encod
 
         old_names_.push_back(name);
 
-        RSSData *rd = new RSSData();
+        std::shared_ptr<RSSData> rd = std::make_shared<RSSData>();
         rd->setSiteName(name);
         rd->setURL(url);
 

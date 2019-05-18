@@ -19,9 +19,8 @@
 #ifndef WEB_SEARCH_INTERFACE_H
 #define WEB_SEARCH_INTERFACE_H
 
-//#include <boost/ptr_container/ptr_list.hpp>
-//#include <boost/ptr_container/ptr_vector.hpp>
 #include <limits.h>
+#include <memory>
 #include <vector>
 
 #include <QCloseEvent>
@@ -62,7 +61,7 @@ class RSSSearchGUI : public QWidget
     Q_OBJECT
 
 public:
-    explicit RSSSearchGUI(QWidget *parent = 0, RSSThread *rss_thread=NULL, MainWindow *main_window=NULL, Data *data = NULL);
+    explicit RSSSearchGUI(QWidget *parent = 0, std::shared_ptr<RSSThread> rss_thread=nullptr, std::shared_ptr<MainWindow> main_window=nullptr, std::shared_ptr<Data> data = nullptr);
     virtual ~RSSSearchGUI();
     RSSSearchGUIThread *mThread;
 
@@ -121,20 +120,20 @@ private:
     QString insertName(QString name);
 
 private:
-    Ui::RSSSearchGUI *ui_;
-    QStandardItemModel *model_;
-    QGridLayout *grid_;
-    RSSThread *rss_thread_;
-    MainWindow *main_window_;
-    QThreadPool *thread_pool_;
-    QThreadPool *thread_pool_2;
+    std::shared_ptr<Ui::RSSSearchGUI> ui_;
+    std::shared_ptr<QStandardItemModel> model_;
+    std::shared_ptr<QGridLayout> grid_;
+    std::shared_ptr<RSSThread> rss_thread_;
+    std::shared_ptr<MainWindow> main_window_;
+    std::shared_ptr<QThreadPool> thread_pool_;
+    std::shared_ptr<QThreadPool> thread_pool_2;
     bool is_user_edit_;
     bool is_program_edit_;
     DataBase data_base_;
-    Data *data_;
-    ParseRSS *parse_rss_;
+    std::shared_ptr<Data> data_;
+    std::shared_ptr<ParseRSS> parse_rss_;
     TreeNode *tree_node_;
-    std::vector<RSSData*> feeds_struct_tmp_;
+    std::vector<std::shared_ptr<RSSData>> feeds_struct_tmp_;
     std::vector<QString> old_names_;
 };
 

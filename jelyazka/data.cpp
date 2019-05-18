@@ -7,7 +7,7 @@ Data::Data()
 
 }
 
-RSSData* Data::at(unsigned int index)
+std::shared_ptr<RSSData> Data::at(const unsigned int index)
 {
     //FIXME: unsafe method. If rss_data_vector_ is an empty one, then it will crash
     if (rss_data_vector_.size()<=index)
@@ -19,7 +19,7 @@ RSSData* Data::at(unsigned int index)
     return rss_data_vector_[index];
 }
 
-void Data::pushBack(RSSData *rss_data)
+void Data::pushBack(std::shared_ptr<RSSData> rss_data)
 {
     rss_data_vector_.push_back(rss_data);
 }

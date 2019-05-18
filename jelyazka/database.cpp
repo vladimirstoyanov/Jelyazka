@@ -18,7 +18,7 @@ void DataBase::createTables()
     createFiltersTable();
 }
 
-void DataBase::loadStrctureFromDB(Data *data)
+void DataBase::loadStrctureFromDB(std::shared_ptr<Data> data)
 {
     //open data base
     //openDB();
@@ -38,7 +38,7 @@ void DataBase::loadStrctureFromDB(Data *data)
 
     while( query.next() )
     {
-        RSSData *rssData = new RSSData();
+        std::shared_ptr<RSSData> rssData = std::make_shared<RSSData>();
         rssData->setSiteName(query.value( 1 ).toByteArray().data());
         rssData->setURL(query.value( 2 ).toByteArray().data());
         rssData->setType("RSS");

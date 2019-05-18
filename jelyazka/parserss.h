@@ -2,6 +2,7 @@
 #define PARSERSS_H
 
 #include <limits.h>
+#include <memory>
 
 #include <QString.h>
 
@@ -12,7 +13,7 @@
 class ParseRSS
 {
 public:
-    ParseRSS(Data *data_tmp);
+    ParseRSS(std::shared_ptr<Data> data_tmp);
     //ToDo: create destructor
 
     void convert_string (QString &str, bool link); //ToDo: rename this function
@@ -20,8 +21,8 @@ public:
     void findFeedDataRDF(int &index, QString content, RSSArticle &ar);
 
 public:
-    int getArticlesFromRDFContent(QString content, RSSData *data);
-    int getArticlesFromRSSContent(QString content, RSSData *data);
+    int getArticlesFromRDFContent(QString content, std::shared_ptr<RSSData> data);
+    int getArticlesFromRSSContent(QString content, std::shared_ptr<RSSData> data);
     int getContent(int item_b_index, int item_e_index, QString &description, QString content);
     int getDescription(int item_b_index, int item_e_index, QString &description, QString content);
     int getTextBetweenIndexes(int item_b_index,
@@ -35,7 +36,7 @@ public:
     QString returnURL(QString source, int index);
 
 private:
-    Data *data_;
+    std::shared_ptr<Data> data_;
 };
 
 #endif // PARSERSS_H

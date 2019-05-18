@@ -19,6 +19,8 @@
 #ifndef ANIMATEWINDOW_H
 #define ANIMATEWINDOW_H
 
+#include <memory>
+
 #include <QDesktopWidget>
 #include <QLabel>
 #include <QList>
@@ -32,8 +34,9 @@
 #include "rssthread.h"
 #include "ui_notificationwindow.h"
 
-namespace Ui {
-class NotificationWindow;
+namespace Ui
+{
+    class NotificationWindow;
 }
 
 class RSSThread;
@@ -46,7 +49,7 @@ public:
     explicit NotificationWindow(QWidget *parent = 0);
     virtual ~NotificationWindow();
 
-    void setSignal(RSSThread *rssThread , Data *data);
+    void setSignal(std::shared_ptr<RSSThread> rssThread , std::shared_ptr<Data> data);
 
 public slots:
     void onHideAnimationFinished();
@@ -72,15 +75,15 @@ private:
 
 private:
     QList<unsigned int> getIndexes(QString data);
-    QPropertyAnimation *show_window_animation_;
-    QPropertyAnimation *hide_window_animation_;
-    QLabel *image_label_;
+    std::shared_ptr<QPropertyAnimation> show_window_animation_;
+    std::shared_ptr<QPropertyAnimation> hide_window_animation_;
+    std::shared_ptr<QLabel> image_label_;
     QImage close_button_image_;
-    Ui::NotificationWindow *ui_;
-    RSSThread *rss_thread_;
+    std::shared_ptr<Ui::NotificationWindow> ui_;
+    std::shared_ptr<RSSThread> rss_thread_;
     bool is_mouse_clicked_; //if mouse clicked on this window, mouse_clicked = true, otherwise mouse_clicked = false;
     bool is_X_changed_; //'X' button image has been changed, then isXchanged = true, otherwise isXchanged = false;
-    Data *data_;
+    std::shared_ptr<Data> data_;
 };
 
 

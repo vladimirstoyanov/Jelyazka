@@ -19,9 +19,30 @@
 
 #include "optionswindow.h"
 
-OptionsWindow::OptionsWindow(QWidget *parent, RSSThread *rss_thread, Data *data) :
-    QWidget(parent),
-    ui_(new Ui::OptionsWindow)
+OptionsWindow::OptionsWindow(QWidget *parent, std::shared_ptr<RSSThread> rss_thread, std::shared_ptr<Data> data) :
+    QWidget(parent)
+    , ui_(std::make_shared<Ui::OptionsWindow> ())
+    , data_ (data)
+    , download_feed_status_ (std::make_shared<QLabel>(this))
+    , collect_feeds_ (std::make_shared<QListWidget>(this))
+    , view_feeds_  (std::make_shared<QListWidget>(this))
+    , cf_find_feed_ (std::make_shared<QLineEdit>(this))
+    , cf_label_search_ (std::make_shared<QLabel>(this))
+    , thread_pool_ (std::make_shared<QThreadPool>(this))
+    , sb_refresh_time_ (std::make_shared<QSpinBox> (this))
+    , l_refresh_time_ (std::make_shared<QLabel>(this))
+    , cb_enable_notification_(std::make_shared<QCheckBox>(this))
+    , l_proxy_url_ (std::make_shared<QLabel>(this))
+    , l_proxy_port_ (std::make_shared<QLabel> (this))
+    , te_proxy_url_ (std::make_shared<QTextEdit>(this))
+    , te_proxy_port_ (std::make_shared<QTextEdit>(this))
+    , cb_enable_proxy_ (std::make_shared<QCheckBox>(this))
+    , pb_add_filter_ (std::make_shared<QPushButton>(this))
+    , te_add_filter_ (std::make_shared<QTextEdit>(this))
+    , lw_filter_list_ (std::make_shared<QListWidget>(this))
+    , l_filter_list_ (std::make_shared<QLabel>(this))
+    , pb_remove_filter_ (std::make_shared<QPushButton>(this))
+    , cb_enable_filtering_ (std::make_shared<QCheckBox>(this))
 {
     ui_->setupUi(this);
 
@@ -40,7 +61,7 @@ OptionsWindow::OptionsWindow(QWidget *parent, RSSThread *rss_thread, Data *data)
     addItem("Notifications");
     addItem("Proxy connection");
 
-    download_feed_status_ = new QLabel(this);
+
     download_feed_status_->setGeometry(5,
                                       this->height() - (5+ ui_->OK_Button->height()),
                                       download_feed_status_->width(),
@@ -61,13 +82,10 @@ OptionsWindow::OptionsWindow(QWidget *parent, RSSThread *rss_thread, Data *data)
                                ui_->OK_Button->height());
 
     //Collection feeds controls
-    collect_feeds_ = new QListWidget(this);
-    view_feeds_ = new QListWidget(this);
     collect_feeds_->setSelectionMode(QAbstractItemView::MultiSelection);
     view_feeds_->setSelectionMode(QAbstractItemView::MultiSelection);
-    cf_find_feed_ = new QLineEdit(this);
-    connect(cf_find_feed_,SIGNAL(textChanged(QString)), this, SLOT(on_textChanged(QString)));
-    cf_label_search_ = new QLabel(this);
+
+    connect(cf_find_feed_.get(),SIGNAL(textChanged(QString)), this, SLOT(on_textChanged(QString)));
 
     cf_label_search_->setText("Search");
     ui_->pushButton->setText(">>");
@@ -112,16 +130,12 @@ OptionsWindow::OptionsWindow(QWidget *parent, RSSThread *rss_thread, Data *data)
     cf_find_feed_->show();
     cf_label_search_->show();
 
-    thread_pool_ = new QThreadPool(this);
+
     thread_pool_->setMaxThreadCount(5);
 
-    connect(collect_feeds_, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(on_collect_feeds_DoubleClicked(QListWidgetItem*)));
+    connect(collect_feeds_.get(), SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(on_collect_feeds_DoubleClicked(QListWidgetItem*)));
 
     //notification widgets
-    sb_refresh_time_ = new QSpinBox (this);
-    l_refresh_time_ = new QLabel(this);
-    cb_enable_notification_ = new QCheckBox(this);
-
     l_refresh_time_->setGeometry(ui_->treeWidget->width() + 10,
                                  5,
                                  l_refresh_time_->width()+50,
@@ -145,15 +159,9 @@ OptionsWindow::OptionsWindow(QWidget *parent, RSSThread *rss_thread, Data *data)
     cb_enable_notification_->setChecked(true);
 
     //proxy options
-    l_proxy_url_ = new QLabel(this);
-    l_proxy_port_ = new QLabel (this);
-    te_proxy_url_ = new QTextEdit(this);
-    te_proxy_port_ = new QTextEdit(this);
-    cb_enable_proxy_ = new QCheckBox(this);
-
     cb_enable_proxy_->setChecked(false);
     cb_enable_proxy_->setText("Enable proxy connection");
-    connect(cb_enable_proxy_, SIGNAL(clicked(bool)), this, SLOT(on_cb_enable_proxy_clicked(bool)));
+    connect(cb_enable_proxy_.get(), SIGNAL(clicked(bool)), this, SLOT(on_cb_enable_proxy_clicked(bool)));
     l_proxy_url_->setText("Proxy address:");
     l_proxy_port_->setText("Proxy port:");
 
@@ -185,13 +193,6 @@ OptionsWindow::OptionsWindow(QWidget *parent, RSSThread *rss_thread, Data *data)
     te_proxy_port_->hide();
 
     //filter options widgets
-    pb_add_filter_ = new QPushButton(this);
-    te_add_filter_ = new QTextEdit(this);
-    lw_filter_list_ = new QListWidget(this);
-    l_filter_list_ = new QLabel(this);
-    pb_remove_filter_ = new QPushButton(this);
-    cb_enable_filtering_ = new QCheckBox(this);
-
     cb_enable_filtering_->setGeometry(ui_->treeWidget->width() + 10,
                                       5,
                                       cb_enable_filtering_->width()+50,
@@ -223,9 +224,9 @@ OptionsWindow::OptionsWindow(QWidget *parent, RSSThread *rss_thread, Data *data)
     pb_remove_filter_->setText("Remove");
     l_filter_list_->setText("Filter List:");
 
-    connect(cb_enable_filtering_, SIGNAL(clicked(bool)), this, SLOT(on_cb_enable_filtering_clicked(bool)));
-    connect(pb_add_filter_, SIGNAL(clicked()), this, SLOT(on_pb_add_filter_clicked()));
-    connect(pb_remove_filter_, SIGNAL(clicked()), this, SLOT(on_pb_remove_filter()));
+    connect(cb_enable_filtering_.get(), SIGNAL(clicked(bool)), this, SLOT(on_cb_enable_filtering_clicked(bool)));
+    connect(pb_add_filter_.get(), SIGNAL(clicked()), this, SLOT(on_pb_add_filter_clicked()));
+    connect(pb_remove_filter_.get(), SIGNAL(clicked()), this, SLOT(on_pb_remove_filter()));
 
     cb_enable_filtering_->hide();
     pb_add_filter_->hide();
@@ -237,30 +238,12 @@ OptionsWindow::OptionsWindow(QWidget *parent, RSSThread *rss_thread, Data *data)
 
 OptionsWindow::~OptionsWindow()
 {
-    delete ui_;
-    delete collect_feeds_;
-    delete view_feeds_;
     l_old_collect_feed_.clear();
     l_old_view_feed_.clear();
     l_old_filters_.clear();
-    delete sb_refresh_time_;
-    delete cb_enable_notification_;
-    delete  l_proxy_url_;
-    delete l_proxy_port_;
-    delete te_proxy_url_;
-    delete te_proxy_port_;
-    delete cb_enable_proxy_;
-    delete cb_enable_filtering_;
-    delete pb_add_filter_;
-    delete te_add_filter_;
-    delete lw_filter_list_;
-    delete l_filter_list_;
-    delete pb_remove_filter_;
-    delete cf_find_feed_;
-    delete cf_label_search_;
 }
 
-void OptionsWindow::onFinish(QString name, bool finish)
+void OptionsWindow::onFinish(const QString &name, const bool finish)
 {
     if (finish)
     {
@@ -268,9 +251,9 @@ void OptionsWindow::onFinish(QString name, bool finish)
         this->close();
         return;
     }
-    name = "Downloading: " + name;
-    returnModifedString(name);
-    download_feed_status_->setText(name);
+    QString nameTmp = "Downloading: " + name;
+    returnModifedString(nameTmp);
+    download_feed_status_->setText(nameTmp);
 
 }
 
@@ -300,7 +283,7 @@ void OptionsWindow::returnModifedString(QString &str)
 }
 
 //add item to tree widget
-void OptionsWindow::addItem(QString name)
+void OptionsWindow::addItem(const QString &name)
 {
     QTreeWidgetItem *item = new QTreeWidgetItem();
     item->setText(0,name);
@@ -308,7 +291,7 @@ void OptionsWindow::addItem(QString name)
 }
 
 //add string to collect_feeds (QListWidget var)
-int OptionsWindow::addStringToWatchList(QString cur_text)
+int OptionsWindow::addStringToWatchList(const QString &cur_text)
 {
     int count = collect_feeds_->count(); //get count of listWidget
     if (cur_text=="")
@@ -344,7 +327,7 @@ void OptionsWindow::fillViewListView()
 }
 
 //add string to view_feeds (QListWidget var)
-int OptionsWindow::addStringToViewList(QString cur_text)
+int OptionsWindow::addStringToViewList(const QString &cur_text)
 {
     int count = view_feeds_->count(); //get count of listWidget
     if (cur_text=="")
@@ -384,7 +367,7 @@ void OptionsWindow::rssTableUpdate()
             data_->pushBack(rss_thread_->initStruct(view_feeds_->item(i)->text(),"RSS",url));
             data_->at(data_->size()-1)->setIsRead(false);
             data_->at(data_->size()-1)->setVersion(version);
-            thread_pool_->start(rss_thread_);
+            thread_pool_->start(rss_thread_.get());
         }
         if (!isAddedToView)
             this->close();
@@ -423,7 +406,7 @@ void OptionsWindow::rssTableUpdate()
                 data_->at(data_->size()-1)->setIsRead(false);
                 data_->at(data_->size()-1)->setVersion(version);
                 isAddedToView = true;
-                thread_pool_->start(rss_thread_);
+                thread_pool_->start(rss_thread_.get());
             }
         }
     }
@@ -460,13 +443,13 @@ void OptionsWindow::rssTableUpdate()
 
 //remove site_name data from 'rss' table in 'sites.db3'. If all_data == 1,
 //then remove all data from 'rss' table
-void OptionsWindow::removeDataFromRSSTable(QString site_name, bool all_data)
+void OptionsWindow::removeDataFromRSSTable(const QString &site_name, const bool all_data)
 {
     data_base_.removeDataFromRSSTable(site_name, all_data);
 }
 
 //insert row to 'rss' DB table
-void OptionsWindow::insertRowToRSSTable(QString name, QString url, QString version)
+void OptionsWindow::insertRowToRSSTable(const QString &name, const QString &url, const QString &version)
 {
     data_base_.insertIntoFavoriteFeeds(name, url, version);
 }
@@ -1034,18 +1017,18 @@ void OptionsWindow::on_pb_remove_filter()
     delete l[0];
 }
 
-void OptionsWindow::insertRowToFiltersTable(QString filter_name)
+void OptionsWindow::insertRowToFiltersTable(const QString &filter_name)
 {
     data_base_.insertRowToFiltersTable(filter_name);
 }
 
-void OptionsWindow::removeDataFromCollectFeeds(QString site_name)
+void OptionsWindow::removeDataFromCollectFeeds(const QString &site_name)
 {
     data_base_.removeDataFromCollectFeeds(site_name);
 }
 
 //Filter option: adding string to filter list
-int OptionsWindow::addStringToFilterList(QString cur_text)
+int OptionsWindow::addStringToFilterList(const QString &cur_text)
 {
     int count = lw_filter_list_->count(); //get count of listWidget
     if (cur_text=="")
@@ -1064,7 +1047,7 @@ int OptionsWindow::addStringToFilterList(QString cur_text)
     return 0;
 }
 
-void OptionsWindow::on_textChanged(QString text) //cf_find_feeds text changed event
+void OptionsWindow::on_textChanged(const QString &text) //cf_find_feeds text changed event
 {
     std::vector<QString> tmp;
     data_base_.getCollectFeedsThatContainingText(text, &tmp);

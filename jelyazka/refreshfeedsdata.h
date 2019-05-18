@@ -19,6 +19,8 @@
 #ifndef REFRESHFEEDSDATA_H
 #define REFRESHFEEDSDATA_H
 
+#include <memory>
+
 #include <QDebug>
 #include <QMutex>
 #include <QThread>
@@ -30,15 +32,15 @@ class RefreshFeedsData : public QThread
 {
     Q_OBJECT
 public:
-    explicit RefreshFeedsData(QObject *parent = 0, RSSThread *rss_thread=0, Data *data=0);
+    explicit RefreshFeedsData(QObject *parent = nullptr, std::shared_ptr<RSSThread> rss_thread=nullptr, std::shared_ptr<Data> data=nullptr);
     virtual ~RefreshFeedsData();
 
 public:
     void run();
 
 private:
-    RSSThread *rss_thread_;
-    Data *data_;
+    std::shared_ptr<RSSThread> rss_thread_;
+    std::shared_ptr<Data> data_;
 };
 
 #endif // REFRESHFEEDSDATA_H

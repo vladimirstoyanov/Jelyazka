@@ -22,7 +22,7 @@ public:
     void insertIntoFavoriteFeeds(QString name, QString url, QString version);
     void insertIntoCollectFeeds(QString name, QString url, QString version);
     void insertRowToFiltersTable(QString filter_name);
-    void loadStrctureFromDB(Data *data);
+    void loadStrctureFromDB(std::shared_ptr<Data> data);
     void removeDataFromRSSTable(QString site_name, bool all_data);
     void removeDataFromFilters();
     void removeDataFromCollectFeeds(QString site_name);

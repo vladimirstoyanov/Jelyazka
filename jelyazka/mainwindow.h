@@ -19,6 +19,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <memory>
+
 #include <qsizegrip.h>
 #include <QCloseEvent>
 #include <QDebug>
@@ -43,8 +45,9 @@
 #include "search.h"
 #include "ui_mainwindow.h"
 
-namespace Ui {
-class MainWindow;
+namespace Ui
+{
+    class MainWindow;
 }
 
 class RSSSearchGUI;
@@ -57,7 +60,10 @@ class MainWindow : public QWidget
 public:
     QList<QString> filters_qlist; //ToDo: move it to the private section
 
-    explicit MainWindow(QWidget *parent = 0, RSSThread *rss_thread=NULL, Data *data=NULL);
+    explicit MainWindow(
+            QWidget *parent = 0
+            , std::shared_ptr<RSSThread> rss_thread=nullptr
+            , std::shared_ptr<Data> data=nullptr);
     virtual ~MainWindow();
 
     void initDataInComboBoxFromStructure();
@@ -82,8 +88,8 @@ private:
     bool eventFilter(QObject *, QEvent *);
 
 private:
-    void addToCombobox(QString str);
-    void gradientRect(int x, int y, int width, int height);
+    void addToCombobox(const QString &str);
+    void gradientRect(const int x, const int y, const int width, const int height);
     void initDataInComboBox();
     void initFilters();
     void mouseButtonPressed(QPoint p , QObject *o);
@@ -95,32 +101,31 @@ private:
     bool mouseInGrip(QPoint mousePos);
     int checkForFilters(QString &title, QString &article);
     int showArticle(int struct_index, int article_index);
-    int checkForFontTag(QString str1);
+    int checkForFontTag(const QString &str1);
 
 private:
     ulong current_site_index_;
     ulong current_article_index_;
-    Ui::MainWindow *ui_;
-    RSSThread *rss_thread_;
-    QLabel *image_add_rss_label_;
+    std::shared_ptr<Ui::MainWindow> ui_;
+    std::shared_ptr<RSSThread> rss_thread_;
+    std::shared_ptr<QLabel> image_add_rss_label_;
     QImage add_rss_button_image_;
-    QLabel *image_options_label_;
+    std::shared_ptr<QLabel> image_options_label_;
     QImage options_button_image_;
-    QLabel *image_refresh_label_;
+    std::shared_ptr<QLabel> image_refresh_label_;
     QImage refresh_button_image_;
-    QLabel *image_help_label_;
+    std::shared_ptr<QLabel> image_help_label_;
     QImage help_button_image_;
-    QLabel *image_X_label_;
+    std::shared_ptr<QLabel> image_X_label_;
     QImage x_button_image_;
-    QLabel *image_minimize_label_;
+    std::shared_ptr<QLabel> image_minimize_label_;
     QImage minimize_button_image_;
-    QLabel *image_maximize_label_;
+    std::shared_ptr<QLabel> image_maximize_label_;
     QImage maximize_button_image_;
-    RSSSearchGUI *wsi_;
-    OptionsWindow *ow_;
-    //QSizeGrip *size_grip;
+    std::shared_ptr<RSSSearchGUI> wsi_;
+    std::shared_ptr<OptionsWindow> ow_;
     QRect old_size_;
-    Help *help_gui_;
+    std::shared_ptr<Help> help_gui_;
     bool is_show_flag_;
     bool is_resizing_;
     bool is_minimize_;
@@ -136,7 +141,7 @@ private:
     QPoint cur_point_;
     QPoint move_point_pos_;
     QPoint resize_point_;
-    Data *data_;
+    std::shared_ptr<Data> data_;
 };
 
 #endif // MainWindow_H

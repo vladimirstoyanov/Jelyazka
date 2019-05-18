@@ -23,6 +23,7 @@
 
 #include <fstream>
 #include <limits.h>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -65,7 +66,7 @@ public:
     QWaitCondition condition_tread_;
     QWaitCondition condition_view_;
     
-    RSSThread(Data *data);
+    RSSThread(std::shared_ptr<Data> data);
     virtual ~RSSThread();
 
     void emitAnimateWindow();
@@ -80,7 +81,7 @@ public:
 public:
     bool getEnabledNotificationWindow();
     int getRefreshTime();
-    RSSData * initStruct(QString site_name, QString type, QString url);
+    std::shared_ptr<RSSData>  initStruct(QString site_name, QString type, QString url);
 
 signals:
     void loadRSS(QString name, QString url); //signal load rss feed
@@ -93,13 +94,13 @@ private:
     void loadOptions();
 
 private:
-    QMutex *mutex_; //using for threads
+    std::shared_ptr<QMutex> mutex_; //using for threads
     bool is_first_flag_;
-    QThreadPool *thread_pool_;
+    std::shared_ptr<QThreadPool> thread_pool_;
     int refresh_time_feeds_;
     DataBase data_base_;
-    Data *data_;
-    ParseRSS *parse_rss_;
+    std::shared_ptr<Data> data_;
+    std::shared_ptr<ParseRSS> parse_rss_;
 };
 
 #endif // RSSTHREAD_H

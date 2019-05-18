@@ -20,23 +20,22 @@
 
 #include "initialization.h"
 
-Initialization::Initialization(InitWindow *init_window):
-    tray_icon_(NULL),
-    rss_thread_(NULL),
-    main_window_(NULL),
-    notification_window_ (new NotificationWindow()),
-    data_ (new Data())
-
+Initialization::Initialization(std::shared_ptr<InitWindow> init_window):
+    tray_icon_(nullptr),
+    rss_thread_(nullptr),
+    main_window_(nullptr),
+    notification_window_ (std::make_shared<NotificationWindow>()),
+    data_ (std::make_shared<Data>())
 {
-    rss_thread_  = new RSSThread(data_);
+    rss_thread_  = std::make_shared<RSSThread>(data_);
     rss_thread_->setAutoDelete(false);
 
-    main_window_ = new MainWindow(0, rss_thread_,data_);
-    tray_icon_ = new TrayIcon (0, main_window_);
-    refresh_feed_data_ = new RefreshFeedsData(0, rss_thread_, data_);
+    main_window_ = std::make_shared<MainWindow>(nullptr, rss_thread_, data_);
+    tray_icon_ = std::make_shared<TrayIcon>(nullptr, main_window_);
+    refresh_feed_data_ = std::make_shared<RefreshFeedsData>(nullptr, rss_thread_, data_);
 
     //when init_window is finished, then call onDone funtion
-    connect(init_window,SIGNAL(Done()),this,SLOT(onDone()));
+    connect(init_window.get(),SIGNAL(Done()),this,SLOT(onDone()));
 
     //load data
     init_window->setSignal(rss_thread_, data_);
@@ -49,15 +48,7 @@ Initialization::Initialization(InitWindow *init_window):
 
 Initialization::~Initialization()
 {
-    if (tray_icon_!=NULL)
-        delete tray_icon_;
     rss_thread_->deleteLater();
-    if (main_window_!=NULL)
-        delete main_window_;
-    if (notification_window_!=NULL)
-        delete notification_window_;
-    if (data_!=NULL)
-        delete data_;
 }
 
 void Initialization::onDone()

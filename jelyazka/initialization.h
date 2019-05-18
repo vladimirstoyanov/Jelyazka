@@ -24,6 +24,7 @@
 #include <Windows.h>
 #endif
 
+#include <memory>
 #include <vector>
 
 #include <QCloseEvent>
@@ -39,8 +40,9 @@
 #include "rssthread.h"
 #include "trayicon.h"
 
-namespace Ui {
-class Initialization;
+namespace Ui
+{
+    class Initialization;
 }
 
 class Initialization : public QMainWindow
@@ -48,20 +50,20 @@ class Initialization : public QMainWindow
     Q_OBJECT
     
 public:
-    /*explicit*/ Initialization(InitWindow *window);
+    /*explicit*/ Initialization(std::shared_ptr<InitWindow> window);
     virtual ~Initialization();
 
 public slots:
     void onDone();
 
 private:
-    Ui::Initialization *ui_;
-    TrayIcon * tray_icon_;
-    MainWindow *main_window_;
-    NotificationWindow *notification_window_;
-    RSSThread *rss_thread_;
-    Data *data_;
-    RefreshFeedsData *refresh_feed_data_;
+    std::shared_ptr<Ui::Initialization> ui_;
+    std::shared_ptr<TrayIcon> tray_icon_;
+    std::shared_ptr<MainWindow> main_window_;
+    std::shared_ptr<NotificationWindow> notification_window_;
+    std::shared_ptr<RSSThread> rss_thread_;
+    std::shared_ptr<Data> data_;
+   std::shared_ptr<RefreshFeedsData> refresh_feed_data_;
 
 };
 

@@ -1,6 +1,8 @@
 #ifndef TRAYICON_H
 #define TRAYICON_H
 
+#include <memory>
+
 #include <QCloseEvent>
 #include <QMenu>
 #include <QSystemTrayIcon>
@@ -13,7 +15,7 @@ class TrayIcon : public QWidget
 {
     Q_OBJECT
 public:
-    explicit TrayIcon(QWidget *parent = 0,  MainWindow *main_window_=0);
+    explicit TrayIcon(QWidget *parent = nullptr,  std::shared_ptr<MainWindow> main_window_=nullptr);
     virtual ~TrayIcon();
 
     void addIcon();
@@ -32,13 +34,13 @@ private:
     void setIcon();
 
 private:
-    QSystemTrayIcon *tray_icon_;
-    QMenu *tray_icon_menu_;
-    QAction *about_;
-    QAction *close_;
-    QAction *main_;
-    MainWindow *main_window_;
-    About *about_gui_;
+    std::shared_ptr<QSystemTrayIcon> tray_icon_;
+    std::shared_ptr<QMenu> tray_icon_menu_;
+    std::shared_ptr<QAction> about_;
+    std::shared_ptr<QAction> close_;
+    std::shared_ptr<QAction> main_;
+    std::shared_ptr<MainWindow> main_window_;
+    std::shared_ptr<About> about_gui_;
 };
 
 #endif // TRAYICON_H

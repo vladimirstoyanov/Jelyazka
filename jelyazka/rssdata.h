@@ -44,7 +44,6 @@ private:
     QString version_;
     bool is_read_;
     bool is_loaded_;
-    //boost::ptr_list<article> articles; //new
     QList<RSSArticle> rss_article_list_;
 };
 
