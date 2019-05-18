@@ -17,7 +17,8 @@ CONFIG += c++11
 SOURCES += main.cpp\
     search.cpp \
     logger.cpp \
-    initwindow.cpp \
+    InitWindow/initwindow.cpp \
+    InitWindow/init_window_thread.cpp \
     Options/optionswindow.cpp \
     refreshfeedsdata.cpp \
     help.cpp \
@@ -39,7 +40,8 @@ SOURCES += main.cpp\
 HEADERS  += \
     search.h \
     logger.h \
-    initwindow.h \
+    InitWindow/initwindow.h \
+    InitWindow/init_window_thread.h \
     Options/optionswindow.h \
     refreshfeedsdata.h \
     help.h \

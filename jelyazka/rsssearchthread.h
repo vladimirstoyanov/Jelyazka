@@ -19,7 +19,8 @@
 #ifndef WEB_SEARCH_INTERFACE_THREAD_H
 #define WEB_SEARCH_INTERFACE_THREAD_H
 
-//#include <boost/ptr_container/ptr_list.hpp>
+
+#include <memory>
 
 #include <QList>
 #include <QMutex>
@@ -39,7 +40,7 @@ public:
     std::vector<QString> l_url2;
     //boost::ptr_list<QString> l_url2;
     QList<int> l_flags;
-    QMutex *mutex;
+    std::shared_ptr<QMutex> mutex;
     bool stop_thread;
 
     explicit RSSSearchGUIThread();

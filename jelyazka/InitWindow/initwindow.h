@@ -22,12 +22,14 @@
 #include <memory>
 
 #include <QDesktopWidget>
+#include <QtDebug>
 #include <QImage>
 #include <QLabel>
 #include <QWidget>
 #include <QThreadPool>
 
 #include "data.h"
+#include "init_window_thread.h"
 #include "rssthread.h"
 #include "ui_initwindow.h"
 
@@ -44,20 +46,17 @@ class InitWindow : public QWidget
 public:
     explicit InitWindow(QWidget *parent = nullptr);
     virtual ~InitWindow();
-    void setSignal (std::shared_ptr<RSSThread> rss_thread, std::shared_ptr<Data> data);
-
-public slots:
-    void onLoadRss(QString name, QString url);
-signals:
-    void Done();
 
 private:
     std::shared_ptr<Ui::InitWindow> ui_;
     std::shared_ptr<QThreadPool> thread_pool_;
     std::shared_ptr<QLabel> image_init_label_;
     std::shared_ptr<QImage> init_image_;
-    //std::shared_ptr<RSSThread> rss_thread_;
-    std::shared_ptr<Data> data_;
+    std::shared_ptr<InitWindowThread> init_window_thread_;
+
+private:
+    void loadRSSFeeds();
+    void settingInitWindow();
 };
 
 #endif // INITWINDOW_H

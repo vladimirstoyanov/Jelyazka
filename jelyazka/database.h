@@ -15,7 +15,7 @@ public:
     DataBase();
     //ToDo: create destructor that clears q_sql_data_base_
     void createTables();
-    void getFavoriteFeeds(std::vector<QString> *l_old_view_feed);
+    void getFeeds(std::vector<QString> *l_old_view_feed);
     void getCollectFeeds(std::vector<QString> *l_old_collect_feed);
     void getCollectFeedsThatContainingText(QString text, std::vector<QString> *l_favorite_rss); //cf_find_feeds text changed event
     void getFilterList(std::vector<QString> *l_old_filters);

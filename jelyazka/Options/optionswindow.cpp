@@ -315,7 +315,7 @@ int OptionsWindow::addStringToWatchList(const QString &cur_text)
 void OptionsWindow::fillViewListView()
 {
     std::vector<QString> tmp;
-    data_base_.getFavoriteFeeds(&tmp);
+    data_base_.getFeeds(&tmp);
 
     l_old_view_feed_.clear();
 

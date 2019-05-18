@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 
     std::shared_ptr<InitWindow> iw = std::make_shared<InitWindow>();
     iw->show();
-    std::shared_ptr<Initialization> w = std::make_shared <Initialization>(iw);
+    //std::shared_ptr<Initialization> w = std::make_shared <Initialization>(iw);
     
     return a.exec();
 }

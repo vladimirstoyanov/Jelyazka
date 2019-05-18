@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent, std::shared_ptr<RSSThread> rss_thread, s
     , help_gui_ (std::make_shared<Help>())
     , data_ (data)
     , rss_thread_ (rss_thread)
-    , wsi_ (std::make_shared<RSSSearchGUI>(nullptr, rss_thread_, std::shared_ptr<MainWindow> (this), data_))
+    , wsi_ (std::make_shared<RSSSearchGUI>(nullptr, rss_thread_, this, data_))
     , is_resizing_  (false)
     , ow_ (std::make_shared<OptionsWindow>(nullptr, rss_thread_, data_))
     , image_add_rss_label_ (std::make_shared<QLabel>(this))

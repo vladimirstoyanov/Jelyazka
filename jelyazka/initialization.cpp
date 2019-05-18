@@ -21,9 +21,6 @@
 #include "initialization.h"
 
 Initialization::Initialization(std::shared_ptr<InitWindow> init_window):
-    tray_icon_(nullptr),
-    rss_thread_(nullptr),
-    main_window_(nullptr),
     notification_window_ (std::make_shared<NotificationWindow>()),
     data_ (std::make_shared<Data>())
 {
@@ -38,7 +35,7 @@ Initialization::Initialization(std::shared_ptr<InitWindow> init_window):
     connect(init_window.get(),SIGNAL(Done()),this,SLOT(onDone()));
 
     //load data
-    init_window->setSignal(rss_thread_, data_);
+    //init_window->setSignal(rss_thread_, data_);
 
     //set thread signal
     notification_window_->setSignal(rss_thread_, data_);

@@ -19,15 +19,25 @@
 #include "initwindow.h"
 
 InitWindow::InitWindow(QWidget *parent) :
-    QWidget(parent),
-    ui_(new Ui::InitWindow),
-    thread_pool_(new QThreadPool(this)),
-    image_init_label_ (new QLabel(this)),
-    init_image_ (new QImage("../resources/jelyazka_02_end.png")),
-    rss_thread_(nullptr),
-    data_(nullptr)
-
+    QWidget(parent)
+    , ui_(new Ui::InitWindow)
+    , thread_pool_(std::make_shared <QThreadPool>(this))
+    , image_init_label_ (std::make_shared <QLabel>(this))
+    , init_image_ (std::make_shared<QImage>("../resources/jelyazka_02_end.png"))
+    , init_window_thread_ (std::make_shared<InitWindowThread> ())
 {
+    qDebug()<<__PRETTY_FUNCTION__;
+    settingInitWindow ();
+    loadRSSFeeds();
+}
+
+InitWindow::~InitWindow()
+{
+}
+
+void InitWindow::settingInitWindow()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
     ui_->setupUi(this);
 
     //setting and display "Jelyazka" image to the windows
@@ -46,39 +56,14 @@ InitWindow::InitWindow(QWidget *parent) :
     image_init_label_->lower();
 }
 
-InitWindow::~InitWindow()
+void InitWindow::loadRSSFeeds()
 {
-}
+    qDebug()<<__PRETTY_FUNCTION__;
+    init_window_thread_->loadRssUrls();
+    unsigned int count_urls= init_window_thread_->getFeedsCount();
 
-//load RSS feeds in thread pool
-void InitWindow::setSignal(std::shared_ptr<RSSThread> rss_thread, std::shared_ptr<Data> data)
-{
-    data_ = data;
-    rss_thread_ = rss_thread;
-    connect(rss_thread_.get(),SIGNAL(loadRSS(QString,QString)),this,SLOT(onLoadRss(QString,QString)));
-
-    for (unsigned int i=0; i<data_->size(); i++)
+    for (unsigned int i=0; i<count_urls; i++)
     {
-        thread_pool_->start(rss_thread_.get()); //ToDo: use another thread
+        thread_pool_->start(init_window_thread_.get());
     }
-
-    if (data_->size()==0)
-    {
-        rss_thread_->first_load_ = true;
-        this->hide();
-        emit Done();
-    }
-    rss_thread_->setAutoDelete(true);
-}
-void InitWindow::onLoadRss(QString name, QString url)
-{
-    if (url == "" && name == "") //if loading RSS feeds finish
-    {
-        rss_thread_->first_load_ = true;
-        this->hide();
-        emit Done();
-        return;
-    }
-
-    ui_->label->setText("Loading: " + name);
 }

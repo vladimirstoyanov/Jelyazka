@@ -61,7 +61,7 @@ class RSSSearchGUI : public QWidget
     Q_OBJECT
 
 public:
-    explicit RSSSearchGUI(QWidget *parent = 0, std::shared_ptr<RSSThread> rss_thread=nullptr, std::shared_ptr<MainWindow> main_window=nullptr, std::shared_ptr<Data> data = nullptr);
+    explicit RSSSearchGUI(QWidget *parent = 0, std::shared_ptr<RSSThread> rss_thread=nullptr, MainWindow *main_window=nullptr, std::shared_ptr<Data> data = nullptr);
     virtual ~RSSSearchGUI();
     RSSSearchGUIThread *mThread;
 

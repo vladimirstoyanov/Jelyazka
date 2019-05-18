@@ -18,7 +18,7 @@
 */
 #include "rsssearchgui.h"
 
-RSSSearchGUI::RSSSearchGUI(QWidget *parent, std::shared_ptr<RSSThread> rss_thread, std::shared_ptr<MainWindow> main_window, std::shared_ptr<Data> data) :
+RSSSearchGUI::RSSSearchGUI(QWidget *parent, std::shared_ptr<RSSThread> rss_thread, MainWindow *main_window, std::shared_ptr<Data> data) :
     QWidget(parent)
     , ui_(std::make_shared<Ui::RSSSearchGUI> ())
     , data_ (data)

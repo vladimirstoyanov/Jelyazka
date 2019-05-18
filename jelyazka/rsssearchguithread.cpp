@@ -21,17 +21,19 @@
 
 RSSSearchGUIThread::RSSSearchGUIThread() :
     QRunnable()
+    , mutex (std::shared_ptr<QMutex>())
+    , stop_thread (false)
 {
-    stop_thread = false;
-    mutex = new QMutex();
+
 }
 
 RSSSearchGUIThread::~RSSSearchGUIThread()
 {
     if  (l_url.size()>0)
+    {
         l_url.clear();
+    }
     deleteAllFrom_all_url_table();
-    delete mutex;
 }
 
 bool RSSSearchGUIThread::setUrlRoot(QString url)

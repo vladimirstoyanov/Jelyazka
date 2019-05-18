@@ -7,7 +7,7 @@ DataBase::DataBase()
     q_sql_data_base_.setDatabaseName("sites.db3");
     q_sql_data_base_.open();
 
-    //loadStrctureFromDB();
+    createTables(); //it creates RSS data necessary tables if they don't exist
 }
 
 void DataBase::createTables()
@@ -63,7 +63,7 @@ void DataBase::closeDB()
 }
 
 //fill view_feeds (QListWidget var)
-void DataBase::getFavoriteFeeds(std::vector<QString> *l_old_view_feed)
+void DataBase::getFeeds(std::vector<QString> *l_old_view_feed)
 {
     QSqlQuery query;
 
