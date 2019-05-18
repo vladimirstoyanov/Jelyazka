@@ -226,10 +226,10 @@ void RSSSearchGUI::onEndOfUrls()
     if (mThread->l_url.size()>0)
            qDebug()<<"Logical error: in RSSSearchGUI::onEndOfUrls() if (mThread->l_url.size()>0)";
 
-    boost::ptr_list<QString>::iterator l_url2_itr;
-    for (l_url2_itr = mThread->l_url2.begin(); l_url2_itr!=mThread->l_url2.end(); l_url2_itr++)
+    //std::vector<QString>::iterator l_url2_itr;
+    for (unsigned int i=0; i<mThread->l_url2.size(); i++)
     {
-        QString *tmp = new QString (*l_url2_itr);
+        QString tmp = mThread->l_url2[i];
         mThread->l_url.push_back(tmp);
         mThread->l_flags.push_back(0);
     }
@@ -261,13 +261,13 @@ void RSSSearchGUI::on_pushButton_clicked()
     {
         mThread->stop_thread = false; //if this flag is true, the threads stops
         ui_->pushButton->setText("Stop Searching");
-        QString *url = new QString(ui_->lineEdit->text());
-        convertBigEndianToLittleEndian(*url);
+        QString url = ui_->lineEdit->text();
+        convertBigEndianToLittleEndian(url);
         clearSearchCache();
         mThread->l_url.push_back(url);
-        mThread->insertUrlDB(*url);
+        mThread->insertUrlDB(url);
         mThread->l_flags.push_back(0);
-        if (!mThread->setUrlRoot(*url))
+        if (!mThread->setUrlRoot(url))
         {
             QMessageBox::critical(0,"Error","Invalid URL!");
             return;
@@ -296,7 +296,7 @@ void RSSSearchGUI::onFoundRSS(int type, QString name, QString url, QString encod
         if (INT_MAX<=old_names_.size())
             return;
 
-        old_names_.push_back(new QString(name));
+        old_names_.push_back(name);
 
         RSSData *rd = new RSSData();
         rd->setSiteName(name);
@@ -398,11 +398,10 @@ void RSSSearchGUI::on_pushButton_2_clicked() //add RSS feeds button
     if (feeds_struct_tmp_.size()>0)
         buidBinaryTreeFromDBData();
 
-    boost::ptr_list<RSSData>::iterator feeds_struct_tmp_iterator;
-    for(feeds_struct_tmp_iterator = feeds_struct_tmp_.begin(); feeds_struct_tmp_iterator!=feeds_struct_tmp_.end(); ++feeds_struct_tmp_iterator)
+    for(unsigned int i=0; i<feeds_struct_tmp_.size(); i++)
     {
         int row=0;
-        if (!isFeedChecked(feeds_struct_tmp_iterator->getURL(), row)) //if rss feed is unchecked
+        if (!isFeedChecked(feeds_struct_tmp_[i]->getURL(), row)) //if rss feed is unchecked
             continue;
 
         QModelIndex mi;
@@ -411,11 +410,11 @@ void RSSSearchGUI::on_pushButton_2_clicked() //add RSS feeds button
         mi = model_->index(row,0);
         v=mi.data();
         QString name_tmp = insertName(v.toString());
-        feeds_struct_tmp_iterator->setSiteName(name_tmp);
+        feeds_struct_tmp_[i]->setSiteName(name_tmp);
 
-        QString version = feeds_struct_tmp_iterator->getVersion();
-        data_base_.insertIntoCollectFeeds(feeds_struct_tmp_iterator->getSiteName(), feeds_struct_tmp_iterator->getURL(),version);
-        data_base_.insertIntoFavoriteFeeds(feeds_struct_tmp_iterator->getSiteName(), feeds_struct_tmp_iterator->getURL(), version);
+        QString version = feeds_struct_tmp_[i]->getVersion();
+        data_base_.insertIntoCollectFeeds(feeds_struct_tmp_[i]->getSiteName(), feeds_struct_tmp_[i]->getURL(),version);
+        data_base_.insertIntoFavoriteFeeds(feeds_struct_tmp_[i]->getSiteName(), feeds_struct_tmp_[i]->getURL(), version);
 
         if (INT_MAX<=data_->size()) //prevent int overflow
         {
@@ -424,17 +423,17 @@ void RSSSearchGUI::on_pushButton_2_clicked() //add RSS feeds button
         }
 
         //add to 'rss_thread_'
-        data_->pushBack(rss_thread_->initStruct(feeds_struct_tmp_iterator->getSiteName(),"RSS",feeds_struct_tmp_iterator->getURL()));
+        data_->pushBack(rss_thread_->initStruct(feeds_struct_tmp_[i]->getSiteName(),"RSS",feeds_struct_tmp_[i]->getURL()));
         data_->at(data_->size()-1)->setVersion(version);
 
         //adding data_ (titles, links, descriptions)
         RSSArticle art;
-        for (unsigned int i=0; i<feeds_struct_tmp_iterator->getArticlesSize(); i++)
+        for (unsigned int j=0; i<feeds_struct_tmp_[i]->getArticlesSize(); j++)
         {
-            art.setTitle(feeds_struct_tmp_iterator->articleAt(i).getTitle());
-            art.setLink(feeds_struct_tmp_iterator->articleAt(i).getLink());
-            art.setText(feeds_struct_tmp_iterator->articleAt(i).getText());
-            art.setDate(feeds_struct_tmp_iterator->articleAt(i).getDate());
+            art.setTitle(feeds_struct_tmp_[i]->articleAt(j).getTitle());
+            art.setLink(feeds_struct_tmp_[i]->articleAt(j).getLink());
+            art.setText(feeds_struct_tmp_[i]->articleAt(j).getText());
+            art.setDate(feeds_struct_tmp_[i]->articleAt(j).getDate());
 
             data_->at(data_->size()-1)->articlesPushBack(art);
         }
@@ -623,15 +622,14 @@ void RSSSearchGUI::buidBinaryTreeFromDBData()
     }
     tree_node_ = new TreeNode;
 
-    boost::ptr_vector<QString> tmp;
-    boost::ptr_vector<QString>::iterator it;
+    std::vector<QString> tmp;
     data_base_.getCollectFeeds(&tmp);
 
-    for (it = tmp.begin(); it!=tmp.end(); ++it)
+    for (unsigned int i=0; i<tmp.size(); i++)
     {
-        while(treeContains(tree_node_,*it))
-            *it = change_name(*it); //make unique name
-        treeInsert(tree_node_, *it);
+        while(treeContains(tree_node_, tmp[i]))
+            tmp[i] = change_name(tmp[i]); //make unique name
+        treeInsert(tree_node_, tmp[i]);
     }
 }
 

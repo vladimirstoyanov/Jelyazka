@@ -19,10 +19,12 @@
 #ifndef RSSTHREAD_H
 #define RSSTHREAD_H
 
-#include <boost/ptr_container/ptr_vector.hpp>
+//#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <fstream>
 #include <limits.h>
 #include <string>
+#include <vector>
 
 #include <QDebug>
 #include <QFile>

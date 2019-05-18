@@ -331,16 +331,15 @@ int OptionsWindow::addStringToWatchList(QString cur_text)
 //ToDo: rename this method
 void OptionsWindow::fillViewListView()
 {
-    boost::ptr_vector<QString> tmp;
+    std::vector<QString> tmp;
     data_base_.getFavoriteFeeds(&tmp);
 
     l_old_view_feed_.clear();
 
-    boost::ptr_vector<QString>::iterator it;
-    for (it=tmp.begin(); it!=tmp.end(); ++it)
+    for (unsigned int i=0; i<tmp.size(); i++)
     {
-        view_feeds_->insertItem(view_feeds_->count(), *it);
-        l_old_view_feed_.push_back(new QString(*it));
+        view_feeds_->insertItem(view_feeds_->count(), tmp[i]);
+        l_old_view_feed_.push_back(tmp[i]);
     }
 }
 
@@ -754,33 +753,29 @@ void OptionsWindow::updateCollectFeedListView()
 //fill collect_feed (QListWidget)
 void OptionsWindow::fillCollectListView()
 {
-    boost::ptr_vector<QString>tmp;
+    std::vector<QString>tmp;
     data_base_.getCollectFeeds(&tmp);
 
     l_old_collect_feed_.clear();
 
-    boost::ptr_vector<QString>::iterator it;
-
-    for (it = tmp.begin(); it!=tmp.end(); ++it)
+    for (unsigned int i=0; i<tmp.size(); i++)
     {
-        collect_feeds_->insertItem(collect_feeds_->count(), *it);
-        l_old_collect_feed_.push_back(new QString(*it));
+        collect_feeds_->insertItem(collect_feeds_->count(), tmp[i]);
+        l_old_collect_feed_.push_back(tmp[i]);
     }
 }
 
 void OptionsWindow::fillFilterListView()
 {
-    boost::ptr_vector <QString> tmp;
+    std::vector <QString> tmp;
     data_base_.getFilterList(&tmp);
 
     l_old_filters_.clear();
 
-    boost::ptr_vector <QString>::iterator it;
-
-    for (it = tmp.begin(); it!=tmp.end(); ++it)
+    for (unsigned int i=0; i<tmp.size(); i++)
     {
-        addStringToFilterList(*it);
-        l_old_filters_.push_back(new QString(*it));
+        addStringToFilterList(tmp[i]);
+        l_old_filters_.push_back(tmp[i]);
     }
 }
 
@@ -1071,14 +1066,13 @@ int OptionsWindow::addStringToFilterList(QString cur_text)
 
 void OptionsWindow::on_textChanged(QString text) //cf_find_feeds text changed event
 {
-    boost::ptr_vector<QString> tmp;
+    std::vector<QString> tmp;
     data_base_.getCollectFeedsThatContainingText(text, &tmp);
 
     collect_feeds_->clear();
 
-    boost::ptr_vector<QString>::iterator it;
-    for (it = tmp.begin(); it!=tmp.end(); ++it)
-        addStringToWatchList(*it);
+    for (unsigned int i=0; i<tmp.size(); i++)
+        addStringToWatchList(tmp[i]);
 }
 
 int OptionsWindow::cf_label_search_width()

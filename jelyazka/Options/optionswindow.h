@@ -19,7 +19,9 @@
 #ifndef OPTIONSWINDOW_H
 #define OPTIONSWINDOW_H
 
-#include <boost/ptr_container/ptr_vector.hpp>
+//#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+
 #include <QCheckBox>
 #include <QDebug>
 #include <QLineEdit>
@@ -116,9 +118,9 @@ private:
     Data *data_;
     QListWidget *collect_feeds_;
     QListWidget *view_feeds_;
-    boost::ptr_vector<QString> l_old_collect_feed_;
-    boost::ptr_vector<QString> l_old_view_feed_;
-    boost::ptr_vector<QString> l_old_filters_;
+    std::vector<QString> l_old_collect_feed_;
+    std::vector<QString> l_old_view_feed_;
+    std::vector<QString> l_old_filters_;
     int options_type_;
     QThreadPool *thread_pool_;
     QList<bool> l_items_for_remove_;

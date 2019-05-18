@@ -703,8 +703,8 @@ int MainWindow::checkForFontTag(QString str1)
 
 void MainWindow::initFilters()
 {
-    boost::ptr_vector<QString>::iterator it;
-    boost::ptr_vector<QString> tmp;
+    std::vector<QString>::iterator it;
+    std::vector<QString> tmp;
     data_base.getFilterList(&tmp);
 
     for (it=tmp.begin(); it!=tmp.end(); ++it)

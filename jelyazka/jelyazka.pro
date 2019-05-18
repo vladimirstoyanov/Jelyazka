@@ -12,8 +12,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = jelyazka
 TEMPLATE = app
-INCLUDEPATH += ../resources/boost_1_70_0/ #The path to the Boost libraries.
-
 
 SOURCES += main.cpp\
     search.cpp \

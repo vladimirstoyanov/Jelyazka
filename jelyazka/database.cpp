@@ -63,7 +63,7 @@ void DataBase::closeDB()
 }
 
 //fill view_feeds (QListWidget var)
-void DataBase::getFavoriteFeeds(boost::ptr_vector<QString> *l_old_view_feed)
+void DataBase::getFavoriteFeeds(std::vector<QString> *l_old_view_feed)
 {
     QSqlQuery query;
 
@@ -79,8 +79,8 @@ void DataBase::getFavoriteFeeds(boost::ptr_vector<QString> *l_old_view_feed)
 
     while(query.next())
     {
-        QString *name = new QString;
-        *name = query.value(1).toByteArray().data();
+        QString name;
+        name = query.value(1).toByteArray().data();
         l_old_view_feed->push_back(name);
     }
 }
@@ -210,7 +210,7 @@ int DataBase::deleteAllFromAllURL()
 }
 
 
-void DataBase::getCollectFeeds(boost::ptr_vector<QString> *l_old_collect_feed)
+void DataBase::getCollectFeeds(std::vector<QString> *l_old_collect_feed)
 {
     QSqlQuery query;
 
@@ -225,13 +225,13 @@ void DataBase::getCollectFeeds(boost::ptr_vector<QString> *l_old_collect_feed)
 
     while( query.next() )
     {
-        QString *name = new QString;
-        *name = query.value( 1 ).toByteArray().data();
+        QString name;
+        name = query.value( 1 ).toByteArray().data();
         l_old_collect_feed->push_back(name);
     }
 }
 
-void DataBase::getFilterList(boost::ptr_vector<QString> *l_old_filters)
+void DataBase::getFilterList(std::vector<QString> *l_old_filters)
 {
     QSqlQuery query;
 
@@ -248,8 +248,8 @@ void DataBase::getFilterList(boost::ptr_vector<QString> *l_old_filters)
     //fill with new data
     while( query.next() )
     {
-        QString *filter = new QString;
-        *filter = query.value( 1 ).toByteArray().data();
+        QString filter;
+        filter = query.value( 1 ).toByteArray().data();
         //if (!addStringToFilterList(*filter))
         l_old_filters->push_back(filter);
     }
@@ -286,7 +286,7 @@ void DataBase::removeDataFromCollectFeeds(QString site_name)
         qDebug()<<"DB::removeDataFromCollectFeeds(QString site_name) fail delete from collect_feeds where filter... " + query.lastError().text();
 }
 
-void DataBase::getCollectFeedsThatContainingText(QString text, boost::ptr_vector<QString> *l_favorite_rss) //cf_find_feeds text changed event
+void DataBase::getCollectFeedsThatContainingText(QString text, std::vector<QString> *l_favorite_rss) //cf_find_feeds text changed event
 {
     QSqlQuery query;
 
@@ -300,8 +300,8 @@ void DataBase::getCollectFeedsThatContainingText(QString text, boost::ptr_vector
 
     while( query.next() )
     {
-        QString *name = new QString(query.value( 1 ).toByteArray().data());
-        if (name->contains(text))
+        QString name = query.value( 1 ).toByteArray().data();
+        if (name.contains(text))
             l_favorite_rss->push_back(name);
     }
 }

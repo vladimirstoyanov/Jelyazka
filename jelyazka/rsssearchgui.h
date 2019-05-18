@@ -19,8 +19,8 @@
 #ifndef WEB_SEARCH_INTERFACE_H
 #define WEB_SEARCH_INTERFACE_H
 
-#include <boost/ptr_container/ptr_list.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
+//#include <boost/ptr_container/ptr_list.hpp>
+//#include <boost/ptr_container/ptr_vector.hpp>
 #include <limits.h>
 #include <vector>
 
@@ -134,8 +134,8 @@ private:
     Data *data_;
     ParseRSS *parse_rss_;
     TreeNode *tree_node_;
-    boost::ptr_list<RSSData> feeds_struct_tmp_;
-    boost::ptr_vector<QString> old_names_;
+    std::vector<RSSData*> feeds_struct_tmp_;
+    std::vector<QString> old_names_;
 };
 
 #endif // WEB_SEARCH_INTERFACE_H

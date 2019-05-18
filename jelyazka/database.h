@@ -1,7 +1,9 @@
 #ifndef DB_H
 #define DB_H
 
-#include <boost/ptr_container/ptr_vector.hpp>
+//#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+
 #include <QtSql/QtSql>
 
 #include "data.h"
@@ -13,10 +15,10 @@ public:
     DataBase();
     //ToDo: create destructor that clears q_sql_data_base_
     void createTables();
-    void getFavoriteFeeds(boost::ptr_vector<QString> *l_old_view_feed);
-    void getCollectFeeds(boost::ptr_vector<QString> *l_old_collect_feed);
-    void getCollectFeedsThatContainingText(QString text, boost::ptr_vector<QString> *l_favorite_rss); //cf_find_feeds text changed event
-    void getFilterList(boost::ptr_vector<QString> *l_old_filters);
+    void getFavoriteFeeds(std::vector<QString> *l_old_view_feed);
+    void getCollectFeeds(std::vector<QString> *l_old_collect_feed);
+    void getCollectFeedsThatContainingText(QString text, std::vector<QString> *l_favorite_rss); //cf_find_feeds text changed event
+    void getFilterList(std::vector<QString> *l_old_filters);
     void insertIntoFavoriteFeeds(QString name, QString url, QString version);
     void insertIntoCollectFeeds(QString name, QString url, QString version);
     void insertRowToFiltersTable(QString filter_name);

@@ -166,7 +166,7 @@ void RSSSearchGUIThread::run()
                 {
 
                      log_.write(return_url, "log.txt");
-                     QString *url_tmp = new QString(return_url);
+                     QString url_tmp = return_url;
                      l_url2.push_back(url_tmp);
                      if (return_url.length()>2047)
                          qDebug()<<"Lenght > 2047 !!!";
