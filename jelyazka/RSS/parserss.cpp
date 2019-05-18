@@ -80,11 +80,14 @@ int ParseRSS::checkWebSourceForRSSContent(const QString &web_source, QString &ti
 
 void ParseRSS::getRSSDataByWebSource (const QString &web_source, std::shared_ptr<RSSData> rss_data)
 {
+    qDebug()<<__PRETTY_FUNCTION__;
+
     QString title;
     int version;
 
     if (!checkWebSourceForRSSContent(web_source, title, version)) //found rss
     {
+        qDebug()<<__PRETTY_FUNCTION__<<": something wrong with checkWebSourceForRSSContent!";
         return;
     }
     QString encoding  = getEncodingByWebSource(web_source);

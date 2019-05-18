@@ -4,7 +4,8 @@
 #include <limits.h>
 #include <memory>
 
-#include <QString.h>
+#include <QString>
+#include <QtDebug>
 
 #include "data.h"
 #include "rssarticle.h"
@@ -15,8 +16,8 @@ class ParseRSS
 public:
     ParseRSS(std::shared_ptr<Data> data_tmp); //ToDo: remove this constructor
     ParseRSS();
-    //ToDo: create destructor
 
+    //ToDo: create destructor
     void convert_string (QString &str, const bool link); //ToDo: rename this function
     void findFeedDataRSS(int &index, const QString &content, RSSArticle &ar);
     void findFeedDataRDF(int &index, const QString &content, RSSArticle &ar);
@@ -34,7 +35,7 @@ public:
                                QString &text,
                                const QString &content);
 
-    QString convert_entitie(const QString &entitie); //ToDO: rename this function
+    QString convert_entitie(const QString &entitie); //ToDo: rename this function
     QString returnURL(const QString &source, int index);
 
 private:

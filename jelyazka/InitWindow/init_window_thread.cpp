@@ -39,14 +39,14 @@ void InitWindowThread::loadRssUrls()
     qDebug()<<__PRETTY_FUNCTION__<<" : loading RSS URLs from DB...";
 
     //get all URLs
-    std::vector<QString> url_feeds;
-    data_base_.getFeeds(&url_feeds);
+    std::shared_ptr<Data> feeds = std::make_shared<Data> ();
+    data_base_.loadStrctureFromDB(feeds);
 
-    for (unsigned int i=0; i<url_feeds.size(); ++i)
+    for (unsigned int i=0; i<feeds->size(); ++i)
     {
-        qDebug()<<"URL["<<i<<"] = "<<url_feeds[i];
+        qDebug()<<"URL["<<i<<"] = "<<feeds->at(i)->getURL();
         Feed feed;
-        feed.setFeedUrl(url_feeds[i]);
+        feed.setFeedUrl(feeds->at(i)->getURL());
         feeds_.push_back(feed);
     }
 }
@@ -56,20 +56,23 @@ void InitWindowThread::run()
     qDebug()<<__PRETTY_FUNCTION__;
 
     int index = getFreeFeedIndex ();
-
+    qDebug()<<__PRETTY_FUNCTION__<<": index="<<index;
     if (index<0)
     {
-        //Everyone of the feeds is downloading now or it's downloaded
+        qDebug()<<__PRETTY_FUNCTION__<<": All feeds are downloading now or downloaded!";
         return;
     }
 
     downloadFeed (index);
     if (isDownloadingFinished())
-        ; //ToDo: emit signal to "InitWindow" that the RSS content has been downloaded
+    {
+        qDebug()<<__PRETTY_FUNCTION__<<": It has been downloaded."; //ToDo: emit signal to "InitWindow" that the RSS content has been downloaded
+    }
 }
 
 void InitWindowThread::downloadFeed (const unsigned int index)
 {
+     qDebug()<<__PRETTY_FUNCTION__;
      ParseRSS parserss;
      HTTP http;
      QString web_source;
@@ -78,13 +81,20 @@ void InitWindowThread::downloadFeed (const unsigned int index)
      rss_data->setURL(feeds_[index].getFeedUrl());
 
      //get the web content
-     http.getQuery(feeds_[index].getFeedUrl(),web_source);
+     if (http.getQuery(feeds_[index].getFeedUrl(),web_source))
+     {
+         qDebug()<<__PRETTY_FUNCTION__<<": web content of "<<feeds_[index].getFeedUrl()<<" hasn't download!";
+         feeds_[index].setDownloadState(DOWNLOADED);
+         return;
+     }
+
+     qDebug()<<__PRETTY_FUNCTION__<<": web_source: ";
 
      //pasrse web content to RSSData
      parserss.getRSSDataByWebSource(web_source, rss_data);
+     qDebug()<<__PRETTY_FUNCTION__<<"rss_data->at(0): "<<rss_data->articleAt(0).getText();
 
      //write in data base
-
      feeds_[index].setDownloadState(DOWNLOADED);
 }
 

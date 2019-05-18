@@ -49,6 +49,11 @@ size_t RSSData::getArticlesSize()
 
 RSSArticle RSSData::articleAt(unsigned int index)
 {
+    RSSArticle default_value;
+    if (index >= rss_article_list_.size())
+    {
+        return default_value;
+    }
     return rss_article_list_[index];
 }
 
