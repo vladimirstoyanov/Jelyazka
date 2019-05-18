@@ -67,7 +67,7 @@ private:
 
 private:
        bool isDownloadingFinished();
-       void downloadFeed (unsigned int index);
+       void downloadFeed (const unsigned int index);
        int  getFreeFeedIndex ();
 
 

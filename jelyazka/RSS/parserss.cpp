@@ -1,9 +1,107 @@
 #include "RSS/parserss.h"
 
+//ToDo: remove the below constructor
 ParseRSS::ParseRSS(std::shared_ptr<Data> data_tmp):
     data_ (data_tmp)
 {
 
+}
+
+ParseRSS::ParseRSS()
+{
+
+}
+
+int ParseRSS::checkWebSourceForRSSContent(const QString &web_source, QString &title, int &version)
+{
+        Search cs;
+        QString begin="<?xml";
+        //Logger log;
+
+        if (web_source.length()<4)
+        {
+            //log.write("CheckForRss funtion: source.length()<4!");
+            return 1;
+        }
+        int i=0, j=0, r=0, f=0;
+        cs.searchAfter(web_source, "<?xml", &i);
+        cs.searchAfter(web_source, "<rss", &j);
+        cs.searchAfter(web_source, "<rdf", &r);
+        cs.searchAfter(web_source, "<feed", &f);
+
+        if (i==0 || (j==-1 && r==-1 && f ==-1) || (j!=-1 && i>j) || (r!=-1 && i>r) || (f!=-1 && i>f))
+            return 1;
+
+        if (f!=-1 && j==-1 && r==-1)
+            version = 2005;
+
+        //get rss title
+        i=0;
+        cs.searchAfter(web_source, "<title>", &i);
+        if (i==-1)
+        {
+            //log.write("CheckForRss funtion: can't find <title>");
+            return 1;
+        }
+
+        title = "";
+        int n = web_source.length();
+
+        if (i>=n-2)
+            return 1;
+
+        if (web_source[i] == '<' && web_source[i+1] == '!') //ignoring '<![CDATA'
+            title+=web_source[i++];
+
+        while (web_source[i]!='<')
+        {
+            title+=web_source[i++];
+
+            if (i>=n-2)
+            {
+                //log.write("CheckForRss funtion: fail to get </title>.");
+                return 1;
+            }
+            if (web_source[i] == '<' && web_source[i+1] == '!') //ignoring '<![CDATA'
+                title+=web_source[i++];
+        }
+
+
+        i++;
+        begin = "/title";
+
+        for(j=0;j<begin.length(); j++)
+            if (web_source[i++]!=begin[j])
+                return 1;
+
+        return 0;
+}
+
+
+void ParseRSS::getRSSDataByWebSource (const QString &web_source, std::shared_ptr<RSSData> rss_data)
+{
+    QString title;
+    int version;
+
+    if (!checkWebSourceForRSSContent(web_source, title, version)) //found rss
+    {
+        return;
+    }
+    QString encoding  = getEncodingByWebSource(web_source);
+
+    rss_data->setSiteName(title);
+
+    if (!version)
+    {
+        rss_data->setVersion(0);
+        rss_data->setEncoding(encoding);
+        getArticlesFromRSSContent(web_source, rss_data);
+    }
+    else
+    {
+        rss_data->setVersion("2005");
+        getArticlesFromRDFContent(web_source, rss_data);
+    }
 }
 
 void ParseRSS::findFeedDataRSS(int &index, const QString &content, RSSArticle &ar)
@@ -112,7 +210,7 @@ void ParseRSS::findFeedDataRDF(int &index, const QString &content, RSSArticle &a
 
 
 
-int ParseRSS::getTextBetweenIndexes(int item_b_index, int item_e_index, QString begin_text, QString end_text, QString &text, QString content)
+int ParseRSS::getTextBetweenIndexes(const int item_b_index, const int item_e_index, const QString &begin_text, const QString &end_text, QString &text, const QString &content)
 {
     Search cs;
     int tag_b_index, tag_e_index;
@@ -149,7 +247,7 @@ int ParseRSS::getTextBetweenIndexes(int item_b_index, int item_e_index, QString 
 
 }
 
-int ParseRSS::getDescription(int item_b_index, int item_e_index, QString &description, QString content)
+int ParseRSS::getDescription(const int item_b_index, const int item_e_index, QString &description, const QString &content)
 {
     Search cs;
     int tag_b_index, tag_e_index;
@@ -227,7 +325,7 @@ int ParseRSS::getDescription(int item_b_index, int item_e_index, QString &descri
 }
 
 //Get articles from rss source
-int ParseRSS::getArticlesFromRSSContent(QString content, std::shared_ptr<RSSData> rssData)
+int ParseRSS::getArticlesFromRSSContent(const QString &content, std::shared_ptr<RSSData> rssData)
 {
     int item_b_index=0, item_e_index=0;
     Search cs;
@@ -276,7 +374,7 @@ int ParseRSS::getArticlesFromRSSContent(QString content, std::shared_ptr<RSSData
 }
 
 //Get articles from rdf xml
-int ParseRSS::getArticlesFromRDFContent(QString content, std::shared_ptr<RSSData> rssData)
+int ParseRSS::getArticlesFromRDFContent(const QString &content, std::shared_ptr<RSSData> rssData)
 {
     int item_b_index=0, item_e_index=0;
     Search cs;
@@ -323,7 +421,7 @@ int ParseRSS::getArticlesFromRDFContent(QString content, std::shared_ptr<RSSData
     return 0;
 }
 
-void ParseRSS::convert_string (QString &str, bool link)
+void ParseRSS::convert_string (QString &str, const bool link)
 {
     QString entitie;
     QString str_tmp = "";
@@ -374,7 +472,7 @@ void ParseRSS::convert_string (QString &str, bool link)
     str = str_tmp;
 }
 
-QString ParseRSS::returnURL(QString source, int index)
+QString ParseRSS::returnURL(const QString &source, int index)
 {
     if (index <0 || index>source.length())
         return "";
@@ -412,7 +510,7 @@ QString ParseRSS::returnURL(QString source, int index)
     return url;
 }
 
-int ParseRSS::getContent(int item_b_index, int item_e_index, QString &description, QString content)
+int ParseRSS::getContent(const int item_b_index, const int item_e_index, QString &description, const QString &content)
 {
     Search cs;
     int tag_b_index, tag_e_index;
@@ -492,7 +590,7 @@ int ParseRSS::getContent(int item_b_index, int item_e_index, QString &descriptio
     return 0;
 }
 
-QString ParseRSS::convert_entitie(QString entitie)
+QString ParseRSS::convert_entitie(const QString &entitie)
 {
 
     if (entitie == "&quot")
@@ -561,4 +659,39 @@ QString ParseRSS::convert_entitie(QString entitie)
         return "®";
     else
         return "";
+}
+
+QString ParseRSS::getEncodingByWebSource(const QString &web_content)
+{
+    Search cs;
+    QString encoding="";
+    int index1=0, index2=0;
+
+    cs.searchAfter(web_content,"<?xml", &index1);
+
+    if (index1 == -1)
+        return "";
+
+    cs.searchBefore(web_content, "?>", &index2);
+
+    if (index2 == -1)
+        return "";
+
+    cs.searchAfter(web_content, "encoding=", &index1);
+
+    if (index1 == -1 || index1>index2)
+        return "";
+
+    while (web_content[index1]!='\'' && web_content [index1]!='\"' && index1<index2)
+    {
+        index1++;
+    }
+
+    index1++;
+    while (web_content[index1]!='\'' && web_content [index1]!='\"' && index1<index2)
+    {
+        encoding += web_content[index1++];
+    }
+
+    return encoding;
 }

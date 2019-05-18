@@ -37,6 +37,7 @@ InitWindowThread::~InitWindowThread()
 void InitWindowThread::loadRssUrls()
 {
     qDebug()<<__PRETTY_FUNCTION__<<" : loading RSS URLs from DB...";
+
     //get all URLs
     std::vector<QString> url_feeds;
     data_base_.getFeeds(&url_feeds);
@@ -67,13 +68,20 @@ void InitWindowThread::run()
         ; //ToDo: emit signal to "InitWindow" that the RSS content has been downloaded
 }
 
-void InitWindowThread::downloadFeed (unsigned int index)
+void InitWindowThread::downloadFeed (const unsigned int index)
 {
+     ParseRSS parserss;
      HTTP http;
-     QString content;
-     http.getQuery(feeds_[index].getFeedUrl(),content);
+     QString web_source;
+     std::shared_ptr<RSSData> rss_data = std::make_shared<RSSData>();
 
-     //parse
+     rss_data->setURL(feeds_[index].getFeedUrl());
+
+     //get the web content
+     http.getQuery(feeds_[index].getFeedUrl(),web_source);
+
+     //pasrse web content to RSSData
+     parserss.getRSSDataByWebSource(web_source, rss_data);
 
      //write in data base
 
