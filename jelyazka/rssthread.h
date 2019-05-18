@@ -19,7 +19,6 @@
 #ifndef RSSTHREAD_H
 #define RSSTHREAD_H
 
-//#include <boost/ptr_container/ptr_vector.hpp>
 
 #include <fstream>
 #include <limits.h>
@@ -44,7 +43,7 @@
 #include "database.h"
 #include "http.h"
 #include "notificationwindow.h"
-#include "parserss.h"
+#include "RSS/parserss.h"
 
 class AnimateWindow;
 

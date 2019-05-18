@@ -1,4 +1,4 @@
-#include "parserss.h"
+#include "RSS/parserss.h"
 
 ParseRSS::ParseRSS(std::shared_ptr<Data> data_tmp):
     data_ (data_tmp)
@@ -6,7 +6,7 @@ ParseRSS::ParseRSS(std::shared_ptr<Data> data_tmp):
 
 }
 
-void ParseRSS::findFeedDataRSS(int &index, QString content, RSSArticle &ar)
+void ParseRSS::findFeedDataRSS(int &index, const QString &content, RSSArticle &ar)
 {
     int item_b_index=index, item_e_index=index;
     Search cs;
@@ -59,7 +59,7 @@ void ParseRSS::findFeedDataRSS(int &index, QString content, RSSArticle &ar)
     ar.setDate(date);
 }
 
-void ParseRSS::findFeedDataRDF(int &index, QString content, RSSArticle &ar)
+void ParseRSS::findFeedDataRDF(int &index, const QString &content, RSSArticle &ar)
 {
     int item_b_index=index, item_e_index=index;
     Search cs;

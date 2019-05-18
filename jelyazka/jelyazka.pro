@@ -23,10 +23,10 @@ SOURCES += main.cpp\
     refreshfeedsdata.cpp \
     help.cpp \
     about.cpp \
-    rssdata.cpp \
-    rssarticle.cpp \
+    RSS/rssdata.cpp \
+    RSS/rssarticle.cpp \
     http.cpp \
-    parserss.cpp \
+    RSS/parserss.cpp \
     data.cpp \
     rssthread.cpp \
     notificationwindow.cpp \
@@ -46,10 +46,10 @@ HEADERS  += \
     refreshfeedsdata.h \
     help.h \
     about.h \
-    rssdata.h \
-    rssarticle.h \
+    RSS/rssdata.h \
+    RSS/rssarticle.h \
     http.h \
-    parserss.h \
+    RSS/parserss.h \
     data.h \
     rssthread.h \
     notificationwindow.h \

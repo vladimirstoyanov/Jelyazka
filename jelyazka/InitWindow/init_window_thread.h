@@ -26,7 +26,7 @@
 
 #include "database.h"
 #include "http.h"
-#include "parserss.h"
+#include "RSS/parserss.h"
 
 enum DownloadState
 {

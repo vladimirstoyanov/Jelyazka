@@ -16,9 +16,9 @@ public:
     ParseRSS(std::shared_ptr<Data> data_tmp);
     //ToDo: create destructor
 
-    void convert_string (QString &str, bool link); //ToDo: rename this function
-    void findFeedDataRSS(int &index, QString content, RSSArticle &ar);
-    void findFeedDataRDF(int &index, QString content, RSSArticle &ar);
+    void convert_string (QString &str, const bool link); //ToDo: rename this function
+    void findFeedDataRSS(int &index, const QString &content, RSSArticle &ar);
+    void findFeedDataRDF(int &index, const QString &content, RSSArticle &ar);
 
 public:
     int getArticlesFromRDFContent(QString content, std::shared_ptr<RSSData> data);

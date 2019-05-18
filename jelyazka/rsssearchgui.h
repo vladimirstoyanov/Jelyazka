@@ -44,7 +44,7 @@
 #include "http.h"
 #include "logger.h"
 #include "mainwindow.h"
-#include "parserss.h"
+#include "RSS/parserss.h"
 #include "rsssearchthread.h"
 #include "rssthread.h"
 #include "search.h"

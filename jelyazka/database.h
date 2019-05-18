@@ -7,7 +7,7 @@
 #include <QtSql/QtSql>
 
 #include "data.h"
-#include "rssdata.h"
+#include "RSS/rssdata.h"
 
 class DataBase
 {
