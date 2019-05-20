@@ -12,6 +12,27 @@ ParseRSS::ParseRSS()
 
 }
 
+
+void ParseRSS::getStoryTag (const QString &web_content, QString &storyOpenTag, QString &storyEndTag)
+{
+     Search search;
+
+    int item_index=0;
+    search.searchAfter(web_content,"<item ", &item_index);
+
+    int entry_index=0;
+    search.searchAfter(web_content,"<entry ", &entry_index);
+
+    if (item_index!=-1)
+    {
+        storyOpenTag = "<item";
+        storyEndTag = "</item";
+        return;
+    }
+    storyOpenTag = "<entry";
+    storyEndTag = "</entry";
+}
+
 int ParseRSS::checkWebSourceForRSSContent(const QString &web_source, QString &title, int &version)
 {
         Search cs;
@@ -85,7 +106,7 @@ void ParseRSS::getRSSDataByWebSource (const QString &web_source, std::shared_ptr
     QString title;
     int version;
 
-    if (!checkWebSourceForRSSContent(web_source, title, version)) //found rss
+    if (checkWebSourceForRSSContent(web_source, title, version)) //found rss
     {
         qDebug()<<__PRETTY_FUNCTION__<<": something wrong with checkWebSourceForRSSContent!";
         return;
@@ -315,7 +336,14 @@ int ParseRSS::getDescription(const int item_b_index, const int item_e_index, QSt
                 continue;
             }
             //<![CDATA["
-            if (content[i+1] == '!' && content[i+2] == '[' && content[i+3] == 'C' && content[i+4] == 'D' && content[i+5] == 'A' && content[i+6] == 'T' && content[i+7] == 'A' && content[i+8] == '[')
+            if (content[i+1] == '!'
+                    && content[i+2] == '['
+                    && content[i+3] == 'C'
+                    && content[i+4] == 'D'
+                    && content[i+5] == 'A'
+                    && content[i+6] == 'T'
+                    && content[i+7] == 'A'
+                    && content[i+8] == '[')
             {
                 i+=8;
                 cdata = true;
@@ -382,14 +410,26 @@ int ParseRSS::getArticlesFromRDFContent(const QString &content, std::shared_ptr<
     int item_b_index=0, item_e_index=0;
     Search cs;
 
+    cs.searchAfter(content, "</channel", &item_e_index);
+    if (item_e_index == -1)
+    {
+        return 1;
+    }
+    item_b_index = item_e_index;
+
+    QString storyOpenTag, storyEndTag;
+    getStoryTag(content, storyOpenTag, storyEndTag);
+
     while(1)
     {
-        cs.searchAfter(content,"<entry", &item_b_index);
+        cs.searchAfter(content,storyOpenTag, &item_b_index);
         if (item_b_index == -1)
-            break;
+        {
+            return 0;
+        }
 
         item_e_index = item_b_index;
-        cs.searchBefore(content,"</entry", &item_e_index);
+        cs.searchBefore(content, storyEndTag, &item_e_index);
 
         if (item_e_index == -1)
             break;
@@ -397,17 +437,18 @@ int ParseRSS::getArticlesFromRDFContent(const QString &content, std::shared_ptr<
         QString title, link, text, date;
 
         if(getTextBetweenIndexes(item_b_index, item_e_index, "<title", "</title>", title, content))
+        {
             break;
+        }
+        convert_string(title, false); //what is the second argument
 
-        convert_string(title, false);
-
-        int index_link = item_b_index;
-        cs.searchBefore(content, "<link", &index_link);
-        if (index_link == -1 || index_link>item_e_index)
+        if(getTextBetweenIndexes(item_b_index, item_e_index, "<link", "</link>", link, content))
+        {
             break;
-        link = returnURL(content, index_link);
+        }
         convert_string(link, true);
-        getContent(item_b_index, item_e_index, text, content);
+
+        getDescription(item_b_index, item_e_index, text, content);
 
         //get date if exist
         getTextBetweenIndexes(item_b_index, item_e_index, "<pubDate", "</pubDate>", date, content);

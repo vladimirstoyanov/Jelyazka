@@ -11,6 +11,7 @@
 #include "rssarticle.h"
 #include "search.h"
 
+//ToDo: refactor this class
 class ParseRSS
 {
 public:
@@ -40,8 +41,10 @@ public:
 
 private:
     std::shared_ptr<Data> data_; //ToDo: remove this member
-    int checkWebSourceForRSSContent (const QString &web_source, QString &title, int &version);
+
+    int     checkWebSourceForRSSContent (const QString &web_source, QString &title, int &version);
     QString getEncodingByWebSource  (const QString &web_content);
+    void    getStoryTag (const QString &web_content, QString &storyOpenTag, QString &storyEndTag);
 };
 
 #endif // PARSERSS_H
