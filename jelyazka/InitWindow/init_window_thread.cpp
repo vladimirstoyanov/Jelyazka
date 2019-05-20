@@ -38,7 +38,6 @@ void InitWindowThread::loadRssUrls()
 {
     qDebug()<<__PRETTY_FUNCTION__<<" : loading RSS URLs from DB...";
 
-    //get all URLs
     std::shared_ptr<Data> feeds = std::make_shared<Data> ();
     data_base_.loadStrctureFromDB(feeds);
 
@@ -53,10 +52,9 @@ void InitWindowThread::loadRssUrls()
 
 void InitWindowThread::run()
 {
-    qDebug()<<__PRETTY_FUNCTION__;
-
     int index = getFreeFeedIndex ();
     qDebug()<<__PRETTY_FUNCTION__<<": index="<<index;
+
     if (index<0)
     {
         qDebug()<<__PRETTY_FUNCTION__<<": All feeds are downloading now or downloaded!";
@@ -64,6 +62,7 @@ void InitWindowThread::run()
     }
 
     downloadFeed (index);
+
     if (isDownloadingFinished())
     {
         qDebug()<<__PRETTY_FUNCTION__<<": It has been downloaded."; //ToDo: emit signal to "InitWindow" that the RSS content has been downloaded
@@ -88,13 +87,11 @@ void InitWindowThread::downloadFeed (const unsigned int index)
          return;
      }
 
-     qDebug()<<__PRETTY_FUNCTION__<<": web_source: ";
-
      //pasrse web content to RSSData
      parserss.getRSSDataByWebSource(web_source, rss_data);
-     qDebug()<<__PRETTY_FUNCTION__<<"rss_data->at(0): "<<rss_data->articleAt(0).getText();
 
-     //write in data base
+     writeData(rss_data);
+
      feeds_[index].setDownloadState(DOWNLOADED);
 }
 
@@ -121,4 +118,16 @@ bool InitWindowThread::isDownloadingFinished ()
         }
     }
     return true;
+}
+
+//write rss data to the data base
+void InitWindowThread::writeData(std::shared_ptr<RSSData> rss_data)
+{
+    for (size_t i=0; i< rss_data->getArticlesSize(); ++i)
+    {
+         data_base_.insertIntoRssDataTable(rss_data->getSiteName()
+                                 , rss_data->getTitle()
+                                 , rss_data->getLink()
+                                 , rss_data->articleAt(i).getText());
+    }
 }

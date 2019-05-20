@@ -10,12 +10,18 @@ DataBase::DataBase()
     createTables(); //it creates RSS data necessary tables if they don't exist
 }
 
+DataBase::~DataBase ()
+{
+    closeDB();
+}
+
 void DataBase::createTables()
 {
     createCollectFeedsTable();
     createAllURLTable();
     createFavoriteFeedsTable();
     createFiltersTable();
+    createRssDataTable();
 }
 
 void DataBase::loadStrctureFromDB(std::shared_ptr<Data> data)
@@ -85,8 +91,6 @@ void DataBase::getFeeds(std::vector<QString> *l_old_view_feed)
     }
 }
 
-//remove site_name data from 'rss' table in 'sites.db3'. If all_data == 1,
-//then remove all data from 'rss' table
 void DataBase::removeDataFromRSSTable(const QString &site_name, const bool all_data)
 {
     QSqlQuery query;
@@ -142,6 +146,11 @@ int DataBase::insertIntoTable(const QString &query_string)
     }
 
     return 1;
+}
+
+void DataBase::dropRssDataTable()
+{
+    dropTable ("rss_data");
 }
 
 int DataBase::dropTable(const QString &table_name)

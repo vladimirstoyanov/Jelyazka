@@ -69,8 +69,7 @@ private:
        bool isDownloadingFinished();
        void downloadFeed (const unsigned int index);
        int  getFreeFeedIndex ();
-
-
+       void writeData(std::shared_ptr<RSSData> rss_data); //it writes rss data to the data base
 };
 
 
