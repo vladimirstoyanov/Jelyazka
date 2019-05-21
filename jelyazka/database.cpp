@@ -111,20 +111,44 @@ void DataBase::removeDataFromRSSTable(const QString &site_name, const bool all_d
 
 void DataBase::insertIntoFavoriteFeeds(const QString &name, const QString &url, const QString &version)
 {
-    insertIntoTable("insert into favorite_feeds (name, url, version) values (\'"+ name+"\',\'" + url+ "\',\'" + version + "\')");
+    QSqlQuery query;
+    query.prepare("insert into favorite_feeds (name, url, version) values (?,?,?)");
+    query.addBindValue(name);
+    query.addBindValue(url);
+    query.addBindValue(version);
+
+    if (!query.exec())
+    {
+        qDebug()<<__PRETTY_FUNCTION__<<"Error:"<<query.lastError();
+    }
 }
 
 void DataBase::insertIntoCollectFeeds(const QString &name, const QString &url, const QString &version)
 {
-    insertIntoTable("insert into collect_feeds (name, url, version) values (\'"+ name+"\',\'" + url+ "\',\'" + version + "\')");
+    QSqlQuery query;
+    query.prepare("insert into collect_feeds (name, url, version) values (?,?,?)");
+    query.addBindValue(name);
+    query.addBindValue(url);
+    query.addBindValue(version);
+
+    if (!query.exec())
+    {
+        qDebug()<<__PRETTY_FUNCTION__<<"Error:"<<query.lastError();
+    }
 }
 
 int DataBase::insertIntoAllURLs(const QString &url)
 {
-    if (!insertIntoTable("insert into all_urls (url) values (\'" + url+ "\')"))
+    QSqlQuery query;
+    query.prepare("insert into all_urls (url) values (?)");
+    query.addBindValue(url);
+
+    if (!query.exec())
     {
+        qDebug()<<__PRETTY_FUNCTION__<<"Error:"<<query.lastError();
         return 0;
     }
+
     return 1;
 }
 
@@ -145,20 +169,6 @@ void DataBase::insertIntoRssDataTable(const QString &name
     {
         qDebug()<<__PRETTY_FUNCTION__<<"Error:"<<query.lastError();
     }
-}
-
-int DataBase::insertIntoTable(const QString &query_string)
-{
-    QSqlQuery query;
-
-    if (!query.exec(query_string))
-    {
-        qDebug()<<__PRETTY_FUNCTION__<<"Error:"<<query.lastError()
-               <<" query: "  + query_string;
-        return 0;
-    }
-
-    return 1;
 }
 
 void DataBase::dropRssDataTable()

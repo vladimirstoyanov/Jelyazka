@@ -47,7 +47,6 @@ private:
     void createRssDataTable();
     void createTable (const QString &table_name, const QString &query_string);
     int  dropTable(const QString &table_name);
-    int  insertIntoTable(const QString &query_string);
     void openDB();
 
 private:
