@@ -26,6 +26,7 @@
 #include "database.h"
 #include "initialization.h"
 #include "initwindow.h"
+#include "RSS/rssdata.h"
 
 void removeOldRssData ()
 {
@@ -36,6 +37,8 @@ void removeOldRssData ()
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    qRegisterMetaType<RSSData>("RSSData"); //RSSData is used as parameter by SLOT function
 
     removeOldRssData ();
 

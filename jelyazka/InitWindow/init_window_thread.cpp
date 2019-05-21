@@ -19,7 +19,7 @@
 #include "init_window_thread.h"
 
 Feed::Feed ()
-    : feed_url_ ( "")
+    : feed_url_ ("")
     , download_state_ (NONE)
 {
 }
@@ -34,30 +34,14 @@ InitWindowThread::~InitWindowThread()
 {
 }
 
-void InitWindowThread::loadRssUrls()
-{
-    qDebug()<<__PRETTY_FUNCTION__<<" : loading RSS URLs from DB...";
-
-    std::shared_ptr<Data> feeds = std::make_shared<Data> ();
-    data_base_.loadStrctureFromDB(feeds);
-
-    for (unsigned int i=0; i<feeds->size(); ++i)
-    {
-        qDebug()<<"URL["<<i<<"] = "<<feeds->at(i)->getURL();
-        Feed feed;
-        feed.setFeedUrl(feeds->at(i)->getURL());
-        feeds_.push_back(feed);
-    }
-}
-
 void InitWindowThread::run()
 {
     int index = getFreeFeedIndex ();
+
     qDebug()<<__PRETTY_FUNCTION__<<": index="<<index;
 
     if (index<0)
     {
-        qDebug()<<__PRETTY_FUNCTION__<<": All feeds are downloading now or downloaded!";
         return;
     }
 
@@ -65,7 +49,7 @@ void InitWindowThread::run()
 
     if (isDownloadingFinished())
     {
-        qDebug()<<__PRETTY_FUNCTION__<<": It has been downloaded."; //ToDo: emit signal to "InitWindow" that the RSS content has been downloaded
+        emit downloadFinished ();
     }
 }
 
@@ -75,7 +59,7 @@ void InitWindowThread::downloadFeed (const unsigned int index)
      ParseRSS parserss;
      HTTP http;
      QString web_source;
-     std::shared_ptr<RSSData> rss_data = std::make_shared<RSSData>();
+     std::shared_ptr<RSSData> rss_data = std::make_shared<RSSData> ();
 
      rss_data->setURL(feeds_[index].getFeedUrl());
 
@@ -90,7 +74,9 @@ void InitWindowThread::downloadFeed (const unsigned int index)
      //pasrse web content to RSSData
      parserss.getRSSDataByWebSource(web_source, rss_data);
 
-     writeData(rss_data);
+     //test (rss_data);
+
+     emit writeData (*rss_data.get());
 
      feeds_[index].setDownloadState(DOWNLOADED);
 }
@@ -120,14 +106,27 @@ bool InitWindowThread::isDownloadingFinished ()
     return true;
 }
 
-//write rss data to the data base
-void InitWindowThread::writeData(std::shared_ptr<RSSData> rss_data)
+void InitWindowThread::setURLs (const std::vector<Feed> &feeds)
 {
-    for (size_t i=0; i< rss_data->getArticlesSize(); ++i)
+    for (unsigned int i=0; i<feeds.size(); ++i)
     {
-         data_base_.insertIntoRssDataTable(rss_data->getSiteName()
-                                 , rss_data->getTitle()
-                                 , rss_data->getLink()
-                                 , rss_data->articleAt(i).getText());
+        feeds_.push_back(feeds[i]);
+    }
+}
+
+void InitWindowThread::test (std::shared_ptr<RSSData> rss_data)
+{
+    rss_data->setSiteName("slashdot");
+    rss_data->setVersion("2005");
+    rss_data->setEncoding("UTF-8");
+    for (unsigned int i = 0; i<10; ++i)
+    {
+        RSSArticle rss_article;
+
+        rss_article.setLink ("link "     + QString::number(i));
+        rss_article.setText ("text "     + QString::number(i));
+        rss_article.setTitle("title "    + QString::number(i));
+        rss_article.setDate ("date "     + QString::number(i));
+        rss_data->articlesPushBack(rss_article);
     }
 }

@@ -20,15 +20,17 @@
 
 InitWindow::InitWindow(QWidget *parent) :
     QWidget(parent)
-    , ui_(new Ui::InitWindow)
-    , thread_pool_(std::make_shared <QThreadPool>(this))
+    , data_base_ ()
     , image_init_label_ (std::make_shared <QLabel>(this))
     , init_image_ (std::make_shared<QImage>("../resources/jelyazka_02_end.png"))
     , init_window_thread_ (std::make_shared<InitWindowThread> ())
+    , thread_pool_(std::make_shared <QThreadPool>(this))
+    , ui_(new Ui::InitWindow)
 {
     qDebug()<<__PRETTY_FUNCTION__;
-    settingInitWindow ();
-    loadRSSFeeds();
+    settingInitWindow();
+    makeConnections();
+    loadRssFeeds();
 }
 
 InitWindow::~InitWindow()
@@ -45,7 +47,7 @@ void InitWindow::settingInitWindow()
     ui_->label->setStyleSheet("QLabel { color : white; }");
     ui_->label->setText("");
 
-    this->setWindowFlags( Qt::FramelessWindowHint);
+    this->setWindowFlags(Qt::FramelessWindowHint);
     this->setGeometry(30,100,300,300);
     this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center()); //move the window to the center of the screen
     this->setStyleSheet("background-color:black;");
@@ -56,14 +58,66 @@ void InitWindow::settingInitWindow()
     image_init_label_->lower();
 }
 
-void InitWindow::loadRSSFeeds()
+void InitWindow::loadRssUrls()
+{
+    qDebug()<<__PRETTY_FUNCTION__<<": loading RSS URLs from DB...";
+
+    std::shared_ptr<Data> feeds = std::make_shared<Data> ();
+    data_base_.loadStrctureFromDB(feeds);
+
+    for (unsigned int i=0; i<feeds->size(); ++i)
+    {
+        qDebug()<<"URL["<<i<<"] = "<<feeds->at(i)->getURL();
+        Feed feed;
+        feed.setFeedUrl(feeds->at(i)->getURL());
+        feeds_.push_back(feed);
+    }
+}
+
+void InitWindow::loadRssFeeds()
 {
     qDebug()<<__PRETTY_FUNCTION__;
-    init_window_thread_->loadRssUrls();
-    unsigned int count_urls= init_window_thread_->getFeedsCount();
 
-    for (unsigned int i=0; i<count_urls; i++)
+    loadRssUrls();
+    init_window_thread_->setURLs(feeds_);
+
+    for (unsigned int i=0; i<feeds_.size(); ++i)
     {
         thread_pool_->start(init_window_thread_.get());
     }
+}
+
+void InitWindow::onWriteData(RSSData rss_data)
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+
+    for (size_t i=0; i< rss_data.getArticlesSize(); ++i)
+    {
+         data_base_.insertIntoRssDataTable(rss_data.getSiteName()
+                                 , rss_data.articleAt(i).getTitle()
+                                 , rss_data.articleAt(i).getLink()
+                                 , rss_data.articleAt(i).getText());
+    }
+}
+
+void InitWindow::onDownloadFinished ()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+}
+
+void InitWindow::makeConnections ()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+
+    connect(init_window_thread_.get()
+            , SIGNAL(writeData(RSSData))
+            , this
+            , SLOT(onWriteData(RSSData))
+            , Qt::QueuedConnection);
+
+    connect(init_window_thread_.get()
+            , SIGNAL(downloadFinished())
+            , this
+            , SLOT(onDownloadFinished())
+            , Qt::QueuedConnection);
 }

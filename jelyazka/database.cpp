@@ -3,10 +3,7 @@
 DataBase::DataBase()
 {
     //open db
-    q_sql_data_base_ = QSqlDatabase::addDatabase("QSQLITE");
-    q_sql_data_base_.setDatabaseName("../resources/sites.db3");
-    q_sql_data_base_.open();
-
+    openDB();
     createTables(); //it creates RSS data necessary tables if they don't exist
 }
 
@@ -59,13 +56,17 @@ void DataBase::openDB()
 {
     //open db
     q_sql_data_base_ = QSqlDatabase::addDatabase("QSQLITE");
-    q_sql_data_base_.setDatabaseName("sites.db3");
+    q_sql_data_base_.setDatabaseName("../resources/sites.db3");
     q_sql_data_base_.open();
 }
 
 void DataBase::closeDB()
 {
-   q_sql_data_base_.close();
+    //q_sql_data_base_.close();
+    QSqlDatabase db = QSqlDatabase::database();
+    db.close();
+
+    QSqlDatabase::removeDatabase( QSqlDatabase::defaultConnection );
 }
 
 //fill view_feeds (QListWidget var)
@@ -132,7 +133,18 @@ void DataBase::insertIntoRssDataTable(const QString &name
                                      , const QString &link
                                      , const QString &description)
 {
-    insertIntoTable("insert into rss_data (name, title, link, description) values (\'"+ name+"\',\'" + title+ "\',\'" + link + "\',\'" + description + "\')");
+
+    QSqlQuery query;
+    query.prepare("insert into rss_data (name, title, url, description) values (?,?,?,?)");
+    query.addBindValue(name);
+    query.addBindValue(title);
+    query.addBindValue(link);
+    query.addBindValue(description);
+
+    if (!query.exec())
+    {
+        qDebug()<<__PRETTY_FUNCTION__<<"Error:"<<query.lastError();
+    }
 }
 
 int DataBase::insertIntoTable(const QString &query_string)
@@ -141,7 +153,8 @@ int DataBase::insertIntoTable(const QString &query_string)
 
     if (!query.exec(query_string))
     {
-        qDebug()<<__PRETTY_FUNCTION__<<"Error insert: "  + query_string;
+        qDebug()<<__PRETTY_FUNCTION__<<"Error:"<<query.lastError()
+               <<" query: "  + query_string;
         return 0;
     }
 

@@ -58,20 +58,21 @@ public:
     virtual ~InitWindowThread();
 
     unsigned int getFeedsCount  () const { return this->feeds_.size(); }
-    void         loadRssUrls    ();
     void         run            ();
+    void         setURLs        (const std::vector<Feed> &feeds);
 
 private:
-        DataBase                data_base_;
         std::vector<Feed>       feeds_;
 
 private:
        bool isDownloadingFinished();
        void downloadFeed (const unsigned int index);
        int  getFreeFeedIndex ();
-       void writeData(std::shared_ptr<RSSData> rss_data); //it writes rss data to the data base
+       void test (std::shared_ptr<RSSData> rss_data);
+
+signals:
+       void downloadFinished();
+       void writeData (RSSData rss_data);
 };
-
-
 
 #endif // INITWINDOWTHREAD_H
