@@ -441,8 +441,8 @@ void RSSSearchGUI::on_pushButton_2_clicked() //add RSS feeds button
     //There is no data in rss_thread_ without below row in MainWindow
     rss_thread_->setAutoDelete(true);
 
-    main_window_->initDataInComboBoxFromStructure();
-    main_window_->initTextBrowser();
+    //main_window_->initDataInComboBoxFromStructure();
+    //main_window_->initTextBrowser();
 
     QApplication::restoreOverrideCursor();
 

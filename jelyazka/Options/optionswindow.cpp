@@ -247,7 +247,7 @@ void OptionsWindow::onFinish(const QString &name, const bool finish)
 {
     if (finish)
     {
-        main_window_->onUpdate(l_items_for_remove_);
+        //main_window_->onUpdate(l_items_for_remove_);
         this->close();
         return;
     }
@@ -437,7 +437,7 @@ void OptionsWindow::rssTableUpdate()
     {
         rss_thread_->is_add_option_ = true;
         this->close();
-        main_window_->onUpdate(l_items_for_remove_);
+        //main_window_->onUpdate(l_items_for_remove_);
     }
 }
 
@@ -464,7 +464,7 @@ void OptionsWindow::updateFiltersTable()
          insertRowToFiltersTable(lw_filter_list_->item(i)->text());
          main_window_->filters_qlist.append(lw_filter_list_->item(i)->text());
      }
-     main_window_->initTextBrowser();
+     //main_window_->initTextBrowser();
 }
 
 

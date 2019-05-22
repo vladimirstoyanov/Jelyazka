@@ -18,15 +18,10 @@
 */
 #include "mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent, std::shared_ptr<RSSThread> rss_thread, std::shared_ptr<Data> data):
+MainWindow::MainWindow(QWidget *parent):
     QWidget(parent)
     , ui_(std::make_shared<Ui::MainWindow> ())
-    , help_gui_ (std::make_shared<Help>())
-    , data_ (data)
-    , rss_thread_ (rss_thread)
-    , wsi_ (std::make_shared<RSSSearchGUI>(nullptr, rss_thread_, this, data_))
     , is_resizing_  (false)
-    , ow_ (std::make_shared<OptionsWindow>(nullptr, rss_thread_, data_))
     , image_add_rss_label_ (std::make_shared<QLabel>(this))
     , image_options_label_ (std::make_shared<QLabel>(this))
     , image_refresh_label_  (std::make_shared<QLabel>(this))
@@ -44,9 +39,7 @@ MainWindow::MainWindow(QWidget *parent, std::shared_ptr<RSSThread> rss_thread, s
     this->setMinimumHeight(200);
     this->setMinimumWidth(350);
 
-    initFilters();
-
-    connect(rss_thread_.get(),SIGNAL(Finish(QString, bool)),ow_.get(),SLOT(onFinish(const QString &, const bool)));
+    //initFilters();
 
     is_X_changed_ = 0;
     is_minimize_changed_= 0;
@@ -148,9 +141,11 @@ MainWindow::~MainWindow()
 {
 }
 
+/*
 //initialize text browser widget
 void MainWindow::initTextBrowser()
 {
+
     //get current value form combobox
     QString cur_text= ui_->comboBox->currentText();
 
@@ -176,7 +171,9 @@ void MainWindow::initTextBrowser()
     current_article_index_ = 0;
     current_site_index_=index;
 }
+*/
 
+/*
 void MainWindow::onUpdate(QList<bool> l_items_for_remove)
 {
     //remove unnecessary data from s_struct
@@ -189,7 +186,9 @@ void MainWindow::onUpdate(QList<bool> l_items_for_remove)
     initDataInComboBoxFromStructure();
     initTextBrowser();
 }
+*/
 
+/*
 //initialize combobox from structure
 void MainWindow::initDataInComboBoxFromStructure()
 {
@@ -201,7 +200,9 @@ void MainWindow::initDataInComboBoxFromStructure()
         addToCombobox(data_->at(i)->getSiteName());
     }
 }
+*/
 
+/*
 void MainWindow::addToCombobox(const QString &str)
 {
     if (str=="")
@@ -210,7 +211,9 @@ void MainWindow::addToCombobox(const QString &str)
     ui_->comboBox->insertItem(0, str);
     ui_->comboBox->setCurrentIndex (0);
 }
+*/
 
+/*
 int MainWindow::showArticle(int struct_index, int article_index)
 {
     if (struct_index>=data_->size()||struct_index<0)
@@ -260,26 +263,34 @@ int MainWindow::showArticle(int struct_index, int article_index)
 
     return 1;
 }
+*/
 
 void MainWindow::on_pushButton_clicked() // button '<'
 {
+    /*
     uint current_article_index_tmp = current_article_index_;
     if (current_article_index_tmp!=0)
         current_article_index_tmp--;
     if (showArticle(current_site_index_,current_article_index_tmp))
         current_article_index_ = current_article_index_tmp;
+
+        */
 }
 
 void MainWindow::on_pushButton_2_clicked() // button '>'
 {
+    /*
     if (showArticle(current_site_index_,current_article_index_+1))
         current_article_index_++;
+        */
 }
 
 void MainWindow::on_comboBox_currentIndexChanged(const QString &arg1) //event when content is changed
 {
+    /*
     qDebug()<<"[MainWindow::on_comboBox_currentIndexChanged] current RSS:"<<arg1;
     initTextBrowser();
+    */
 }
 void MainWindow::closeEvent(QCloseEvent *event)
 {
@@ -298,7 +309,7 @@ void MainWindow::showEvent(QShowEvent *)
     this->adjustSize();
     this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
 
-    initDataInComboBoxFromStructure();
+    //initDataInComboBoxFromStructure();
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
@@ -340,25 +351,25 @@ void MainWindow::mouseButtonPressed(QPoint p , QObject *o)
     {
         is_resizing_ = 0;
         is_press_released_ = 0;
-        wsi_->show();
+        //wsi_->show();
     }
     else if (image_refresh_label_->geometry().contains(p))
     {
         is_resizing_ = 0;
         is_press_released_ = 0;
-        refreshFeed();
+        //refreshFeed();
     }
     else if (image_help_label_->geometry().contains(p))
     {
         is_resizing_ = 0;
         is_press_released_ = 0;
-        help_gui_->show();
+        //help_gui_->show();
     }
     else if (image_options_label_->geometry().contains(p))
     {
         is_resizing_ = 0;
         is_press_released_ = 0;
-        ow_->show();
+        //ow_->show();
     }
     else if (ui_->textBrowser->geometry().contains(p))
     {
@@ -411,6 +422,7 @@ void MainWindow::mouseButtonPressed(QPoint p , QObject *o)
         is_resizing_ = 0;
     }
 }
+/*
 void MainWindow::refreshFeed()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -432,6 +444,7 @@ void MainWindow::refreshFeed()
     }
     QApplication::restoreOverrideCursor();
 }
+*/
 
 void MainWindow::mouseDblClicked(QMouseEvent * mouseEvent)
 {
@@ -624,6 +637,7 @@ void MainWindow::paintEvent(QPaintEvent *e) //paint backgraund image
 
 }
 
+/*
 int MainWindow::checkForFilters(QString &title, QString &article)
 {
     if (filters_qlist.size() == 0)
@@ -696,22 +710,27 @@ void MainWindow::initFilters()
     for (it=tmp.begin(); it!=tmp.end(); ++it)
         filters_qlist.append(*it);
 }
+*/
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     int key = event->key();
     if (key == 16777236) //->
     {
+        /*
         if (showArticle(current_site_index_,current_article_index_+1))
             current_article_index_++;
+            */
     }
     else if(key==16777234)//<-
     {
+        /*
         uint current_article_index_tmp = current_article_index_;
         if (current_article_index_tmp!=0)
             current_article_index_tmp--;
         if (showArticle(current_site_index_,current_article_index_tmp))
             current_article_index_ = current_article_index_tmp;
+            */
     }
 }
 

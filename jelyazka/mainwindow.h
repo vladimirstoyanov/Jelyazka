@@ -40,8 +40,8 @@
 #include "help.h"
 #include "http.h"
 #include "Options/optionswindow.h"
-#include "rssthread.h"
-#include "rsssearchgui.h"
+//#include "rssthread.h"
+//#include "rsssearchgui.h"
 #include "search.h"
 #include "ui_mainwindow.h"
 
@@ -61,19 +61,18 @@ public:
     QList<QString> filters_qlist; //ToDo: move it to the private section
 
     explicit MainWindow(
-            QWidget *parent = 0
-            , std::shared_ptr<RSSThread> rss_thread=nullptr
-            , std::shared_ptr<Data> data=nullptr);
+            QWidget *parent = 0);
     virtual ~MainWindow();
 
-    void initDataInComboBoxFromStructure();
-    void initTextBrowser();
-    void onUpdate(QList<bool> l_removed_items);
+    //void initDataInComboBoxFromStructure();
+    //void initTextBrowser();
+    //void onUpdate(QList<bool> l_removed_items);
 
 protected:
     void keyPressEvent(QKeyEvent *event);
 
 private slots:
+    //ToDo: rename the below functions
     void on_pushButton_clicked();
     void on_pushButton_2_clicked();
     void on_comboBox_currentIndexChanged(const QString &arg1);
@@ -88,26 +87,26 @@ private:
     bool eventFilter(QObject *, QEvent *);
 
 private:
-    void addToCombobox(const QString &str);
+    //void addToCombobox(const QString &str);
     void gradientRect(const int x, const int y, const int width, const int height);
-    void initDataInComboBox();
-    void initFilters();
+    //void initDataInComboBox();
+    //void initFilters();
     void mouseButtonPressed(QPoint p , QObject *o);
     void mouseDblClicked(QMouseEvent * mouseEvent);
     void mouseMove(QPoint p, QMouseEvent *e, QObject *o);
-    void refreshFeed();
+    //void refreshFeed();
 
 private:
     bool mouseInGrip(QPoint mousePos);
-    int checkForFilters(QString &title, QString &article);
-    int showArticle(int struct_index, int article_index);
-    int checkForFontTag(const QString &str1);
+    //int checkForFilters(QString &title, QString &article);
+    //int showArticle(int struct_index, int article_index);
+    //int checkForFontTag(const QString &str1);
 
 private:
     ulong current_site_index_;
     ulong current_article_index_;
     std::shared_ptr<Ui::MainWindow> ui_;
-    std::shared_ptr<RSSThread> rss_thread_;
+    //std::shared_ptr<RSSThread> rss_thread_;
     std::shared_ptr<QLabel> image_add_rss_label_;
     QImage add_rss_button_image_;
     std::shared_ptr<QLabel> image_options_label_;
@@ -122,10 +121,7 @@ private:
     QImage minimize_button_image_;
     std::shared_ptr<QLabel> image_maximize_label_;
     QImage maximize_button_image_;
-    std::shared_ptr<RSSSearchGUI> wsi_;
-    std::shared_ptr<OptionsWindow> ow_;
     QRect old_size_;
-    std::shared_ptr<Help> help_gui_;
     bool is_show_flag_;
     bool is_resizing_;
     bool is_minimize_;
@@ -141,7 +137,6 @@ private:
     QPoint cur_point_;
     QPoint move_point_pos_;
     QPoint resize_point_;
-    std::shared_ptr<Data> data_;
 };
 
 #endif // MainWindow_H
