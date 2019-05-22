@@ -19,11 +19,6 @@
 #ifndef INITIALIZATION_H
 #define INITIALIZATION_H
 
-#ifdef _WIN32
-#define NOMINMAX
-#include <Windows.h>
-#endif
-
 #include <memory>
 #include <vector>
 
@@ -40,30 +35,23 @@
 #include "rssthread.h"
 #include "trayicon.h"
 
-namespace Ui
-{
-    class Initialization;
-}
 
-class Initialization : public QMainWindow
+class Initialization
 {
-    Q_OBJECT
-    
+
 public:
-    /*explicit*/ Initialization(std::shared_ptr<InitWindow> window);
+    Initialization();
     virtual ~Initialization();
 
-public slots:
-    void onDone();
+    void makeConnections ();
 
 private:
-    std::shared_ptr<Ui::Initialization> ui_;
     std::shared_ptr<TrayIcon> tray_icon_;
     std::shared_ptr<MainWindow> main_window_;
     std::shared_ptr<NotificationWindow> notification_window_;
     std::shared_ptr<RSSThread> rss_thread_;
     std::shared_ptr<Data> data_;
-   std::shared_ptr<RefreshFeedsData> refresh_feed_data_;
+    std::shared_ptr<RefreshFeedsData> refresh_feed_data_;
 
 };
 

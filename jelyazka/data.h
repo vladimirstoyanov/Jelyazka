@@ -19,7 +19,6 @@ public:
     unsigned int size();
 
 private:
-     //boost::ptr_vector<RSSData> rss_data_vector_;
     std::vector<std::shared_ptr<RSSData>> rss_data_vector_;
 };
 

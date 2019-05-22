@@ -69,6 +69,30 @@ void DataBase::closeDB()
     QSqlDatabase::removeDatabase( QSqlDatabase::defaultConnection );
 }
 
+
+//fill view_feeds (QListWidget var)
+void DataBase::getURLs(std::vector<QString> *urls)
+{
+    QSqlQuery query;
+
+    query.prepare( "SELECT * FROM favorite_feeds" );
+
+    if( !query.exec() )
+    {
+        qDebug()<<__PRETTY_FUNCTION__<<"Error:"<<query.lastError();
+        return;
+    }
+
+    urls->clear();
+
+    while(query.next())
+    {
+        QString name;
+        name = query.value(2).toByteArray().data();
+        urls->push_back(name);
+    }
+}
+
 //fill view_feeds (QListWidget var)
 void DataBase::getFeeds(std::vector<QString> *l_old_view_feed)
 {

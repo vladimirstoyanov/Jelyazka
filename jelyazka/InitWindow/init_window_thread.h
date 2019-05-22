@@ -24,7 +24,6 @@
 
 #include <QtDebug>
 
-#include "database.h"
 #include "http.h"
 #include "RSS/parserss.h"
 

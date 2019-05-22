@@ -23,6 +23,7 @@ public:
     void    getCollectFeedsThatContainingText(const QString &text, std::vector<QString> *l_favorite_rss); //cf_find_feeds text changed event
     void    getFilterList(std::vector<QString> *l_old_filters);
     QString getURLByName(const QString &name);
+    void    getURLs(std::vector<QString> *urls);
     QString getVersionByName(const QString &name);
     int     insertIntoAllURLs(const QString &);
     void    insertIntoFavoriteFeeds(const QString &name, const QString &url, const QString &version);

@@ -23,30 +23,28 @@
 
 #include <QApplication>
 
-#include "database.h"
-#include "initialization.h"
-#include "initwindow.h"
+#include "jelyazkamanager.h"
 #include "RSS/rssdata.h"
 
+/*
 void removeOldRssData ()
 {
     DataBase data_base;
     data_base.dropRssDataTable();
 }
+*/
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    qRegisterMetaType<RSSData>("RSSData"); //RSSData is used as parameter by SLOT function
+    qRegisterMetaType<RSSData>("RSSData"); //RSSData is used as parameter by a SLOT function
 
-    removeOldRssData ();
+    std::shared_ptr<JelyazkaManager> jelayzka_manager = std::make_shared <JelyazkaManager> ();
 
-    std::shared_ptr<InitWindow> init_window = std::make_shared<InitWindow>();
-    init_window->show();
+    jelayzka_manager->makeConnections();
 
-    //std::shared_ptr<Initialization> w = std::make_shared <Initialization>(iw);
-    
+
     return a.exec();
 }
 

@@ -17,44 +17,19 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #include "initialization.h"
 
-Initialization::Initialization(std::shared_ptr<InitWindow> init_window):
-    notification_window_ (std::make_shared<NotificationWindow>()),
-    data_ (std::make_shared<Data>())
+Initialization::Initialization()
 {
-    rss_thread_  = std::make_shared<RSSThread>(data_);
-    rss_thread_->setAutoDelete(false);
 
-    main_window_ = std::make_shared<MainWindow>(nullptr, rss_thread_, data_);
-    tray_icon_ = std::make_shared<TrayIcon>(nullptr, main_window_);
-    refresh_feed_data_ = std::make_shared<RefreshFeedsData>(nullptr, rss_thread_, data_);
-
-    //when init_window is finished, then call onDone funtion
-    connect(init_window.get(),SIGNAL(Done()),this,SLOT(onDone()));
-
-    //load data
-    //init_window->setSignal(rss_thread_, data_);
-
-    //set thread signal
-    notification_window_->setSignal(rss_thread_, data_);
-
-    this->hide();
 }
 
 Initialization::~Initialization()
 {
-    rss_thread_->deleteLater();
+
 }
 
-void Initialization::onDone()
+void Initialization::makeConnections ()
 {
-    tray_icon_->addIcon();
-
-    main_window_->show();
-    refresh_feed_data_->start();
-    for (uint i=0; i<data_->size(); i++)
-      rss_thread_->data_for_animatewindow_+="<index=" + QString::number(i) + ">";
-    rss_thread_->emitAnimateWindow();
+    //ToDo: make connections here
 }

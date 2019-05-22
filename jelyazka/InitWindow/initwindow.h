@@ -28,7 +28,6 @@
 #include <QWidget>
 #include <QThreadPool>
 
-#include "data.h"
 #include "init_window_thread.h"
 #include "rssthread.h"
 #include "ui_initwindow.h"

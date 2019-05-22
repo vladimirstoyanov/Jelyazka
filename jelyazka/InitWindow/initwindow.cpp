@@ -62,14 +62,14 @@ void InitWindow::loadRssUrls()
 {
     qDebug()<<__PRETTY_FUNCTION__<<": loading RSS URLs from DB...";
 
-    std::shared_ptr<Data> feeds = std::make_shared<Data> ();
-    data_base_.loadStrctureFromDB(feeds);
+    std::vector<QString> urls;
+    data_base_.getURLs(&urls);
 
-    for (unsigned int i=0; i<feeds->size(); ++i)
+    for (unsigned int i=0; i<urls.size(); ++i)
     {
-        qDebug()<<"URL["<<i<<"] = "<<feeds->at(i)->getURL();
+        qDebug()<<"URL["<<i<<"] = "<<urls[i];
         Feed feed;
-        feed.setFeedUrl(feeds->at(i)->getURL());
+        feed.setFeedUrl(urls[i]);
         feeds_.push_back(feed);
     }
 }
@@ -81,10 +81,12 @@ void InitWindow::loadRssFeeds()
     loadRssUrls();
     init_window_thread_->setURLs(feeds_);
 
+    /*
     for (unsigned int i=0; i<feeds_.size(); ++i)
     {
         thread_pool_->start(init_window_thread_.get());
     }
+    */
 }
 
 void InitWindow::onWriteData(RSSData rss_data)
@@ -103,6 +105,7 @@ void InitWindow::onWriteData(RSSData rss_data)
 void InitWindow::onDownloadFinished ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
+    //send an event to window state machine
 }
 
 void InitWindow::makeConnections ()

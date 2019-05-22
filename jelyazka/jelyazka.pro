@@ -35,7 +35,18 @@ SOURCES += main.cpp\
     rsssearchguithread.cpp \
     trayicon.cpp \
     initialization.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    JelayzkaStateMachine/state.cpp \
+    JelayzkaStateMachine/idle_state.cpp \
+    JelayzkaStateMachine/init_window_state.cpp \
+    JelayzkaStateMachine/main_window_state.cpp \
+    JelayzkaStateMachine/option_window_state.cpp \
+    JelayzkaStateMachine/remove_old_data_state.cpp \
+    JelayzkaStateMachine/rss_data_updated_state.cpp \
+    JelayzkaStateMachine/update_settings_state.cpp \
+    JelayzkaStateMachine/jelyazka_state_machine.cpp \
+    JelayzkaStateMachine/transition.cpp \
+    jelyazkamanager.cpp
 
 HEADERS  += \
     search.h \
@@ -58,7 +69,18 @@ HEADERS  += \
     rsssearchthread.h \
     trayicon.h \
     initialization.h \
-    mainwindow.h
+    mainwindow.h \
+    JelayzkaStateMachine/state.hpp \
+    JelayzkaStateMachine/idle_state.hpp \
+    JelayzkaStateMachine/init_window_state.hpp \
+    JelayzkaStateMachine/main_window_state.hpp \
+    JelayzkaStateMachine/option_window_state.hpp \
+    JelayzkaStateMachine/remove_old_data_state.hpp \
+    JelayzkaStateMachine/rss_data_updated_state.hpp \
+    JelayzkaStateMachine/update_settings_state.hpp \
+    JelayzkaStateMachine/jelyazka_state_machine.hpp \
+    JelayzkaStateMachine/transition.hpp \
+    jelyazkamanager.h
 
 FORMS    += \
     initwindow.ui \
@@ -67,5 +89,4 @@ FORMS    += \
     about.ui \
     notificationwindow.ui \
     rsssearchgui.ui \
-    initialization.ui \
     mainwindow.ui
