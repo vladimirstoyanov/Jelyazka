@@ -3,6 +3,9 @@
 
 #include <memory>
 
+#include <QObject>
+#include <QtDebug>
+
 #include "idle_state.hpp"
 #include "init_window_state.hpp"
 #include "main_window_state.hpp"
@@ -15,14 +18,15 @@
 
 //ToDo: add transitions
 
-class JelayzkaStateMachine
+class JelayzkaStateMachine: public QObject
 {
+     Q_OBJECT
 public:
     JelayzkaStateMachine ();
     virtual ~JelayzkaStateMachine ();
 
 public slots:
-    void onStateChanged (const QString event);
+    void onStateChanged (const QString &event);
 
 private:
     std::shared_ptr<IState>                 current_state_;

@@ -7,12 +7,14 @@ void Transition::addTransition (const QString &event, std::shared_ptr<IState> fr
 
 void Transition::makeTransition (std::shared_ptr <IState> current_state, const QString &event)
 {
+    qDebug()<<__PRETTY_FUNCTION__;
     std::map<QString, std::pair< std::shared_ptr<IState>, std::shared_ptr<IState> > >::iterator it;
     it = transitions_.find(event);
     if (it != transitions_.end())
     {
-        if (current_state == it->second.first)
+        if (current_state->getName() == it->second.first->getName())
         {
+            qDebug()<<__PRETTY_FUNCTION__<<": making transition from "<<current_state->getName()<<" to "<<it->second.second->getName();
             current_state->onExit ();
             current_state = it->second.second;
             current_state->onEntry();

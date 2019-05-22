@@ -7,6 +7,7 @@ class IdleState: public IState
 {
     public:
         IdleState () {}
+        virtual QString   getName() const { return "IdleState"; }
         virtual void onEntry();
         virtual void onState();
         virtual void onExit ();

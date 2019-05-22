@@ -7,6 +7,7 @@ class UpdateSettingsState: public IState
 {
     public:
         UpdateSettingsState () {}
+        virtual QString   getName() const { return "UpdateSettingsState"; }
         virtual void onEntry();
         virtual void onState();
         virtual void onExit ();

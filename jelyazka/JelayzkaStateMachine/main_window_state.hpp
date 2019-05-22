@@ -7,6 +7,7 @@ class MainWindowState: public IState
 {
     public:
         MainWindowState () {}
+        virtual QString   getName() const { return "MainWindowState"; }
         virtual void onEntry();
         virtual void onState();
         virtual void onExit ();

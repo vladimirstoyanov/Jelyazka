@@ -7,6 +7,7 @@ class RssDataUpdatedState: public IState
 {
     public:
         RssDataUpdatedState () {}
+        virtual QString   getName() const { return "RssDataUpdatedState"; }
         virtual void onEntry();
         virtual void onState();
         virtual void onExit ();

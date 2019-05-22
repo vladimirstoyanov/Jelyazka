@@ -17,9 +17,14 @@ JelyazkaManager::JelyazkaManager():
     //tray_icon_->show(); //FIXME: the tray icon desn't appear. An empty window appears instead.
     //option_window_->show();
     makeConnections();
+    emit (removeOldData("RemoveOldData"));
 }
 
 void JelyazkaManager::makeConnections ()
 {
-    //use observer pattern
+    connect( this
+            , SIGNAL(removeOldData(const QString &))
+            , jelyazka_state_machine_.get()
+            , SLOT(onStateChanged(const QString &))
+            , Qt::QueuedConnection);
 }

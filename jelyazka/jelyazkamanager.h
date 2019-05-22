@@ -15,9 +15,9 @@
 #include "rsssearchgui.h"
 #include "trayicon.h"
 
-class JelyazkaManager
+class JelyazkaManager: public QObject
 {
-        //Q_OBJECT
+        Q_OBJECT
 public:
     JelyazkaManager();
 
@@ -35,7 +35,7 @@ private:
     std::shared_ptr<TrayIcon> tray_icon_;
 
 signals:
-       //void transitToInitWindow(const QString);
+       void removeOldData(const QString &);
 
 };
 

@@ -27,8 +27,9 @@ JelayzkaStateMachine::~JelayzkaStateMachine ()
 
 }
 
-void JelayzkaStateMachine::onStateChanged (const QString event)
+void JelayzkaStateMachine::onStateChanged (const QString &event)
 {
+    qDebug()<<__PRETTY_FUNCTION__<<": event: "<<event;
     transitions_.makeTransition(current_state_, event);
 }
 

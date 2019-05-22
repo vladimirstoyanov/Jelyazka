@@ -7,6 +7,7 @@ class RemoveOldDataState: public IState
 {
     public:
         RemoveOldDataState () {}
+        virtual QString   getName() const { return "RemoveOldDataState"; }
         virtual void onEntry();
         virtual void onState();
         virtual void onExit ();
