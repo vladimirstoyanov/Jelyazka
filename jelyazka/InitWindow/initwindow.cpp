@@ -29,8 +29,6 @@ InitWindow::InitWindow(QWidget *parent) :
 {
     qDebug()<<__PRETTY_FUNCTION__;
     settingInitWindow();
-    makeConnections();
-    loadRssFeeds();
 }
 
 InitWindow::~InitWindow()
@@ -86,7 +84,11 @@ void InitWindow::loadRssFeeds()
     {
         thread_pool_->start(init_window_thread_.get());
     }
+
+    if (feeds_.size() == 0)
     */
+        onDownloadFinished();
+
 }
 
 void InitWindow::onWriteData(RSSData rss_data)
@@ -105,7 +107,10 @@ void InitWindow::onWriteData(RSSData rss_data)
 void InitWindow::onDownloadFinished ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
+
     //send an event to window state machine
+    this->hide();
+    emit (rssDataDownloaded("RSSDataDownloaded"));
 }
 
 void InitWindow::makeConnections ()
@@ -123,4 +128,11 @@ void InitWindow::makeConnections ()
             , this
             , SLOT(onDownloadFinished())
             , Qt::QueuedConnection);
+}
+
+void InitWindow::showEvent(QShowEvent *event)
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    makeConnections();
+    loadRssFeeds();
 }

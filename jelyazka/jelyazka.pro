@@ -46,6 +46,8 @@ SOURCES += main.cpp\
     JelayzkaStateMachine/update_settings_state.cpp \
     JelayzkaStateMachine/jelyazka_state_machine.cpp \
     JelayzkaStateMachine/transition.cpp \
+    JelayzkaStateMachine/help_window_state.cpp \
+    JelayzkaStateMachine/rss_search_window_state.cpp \
     jelyazkamanager.cpp
 
 HEADERS  += \
@@ -80,6 +82,8 @@ HEADERS  += \
     JelayzkaStateMachine/update_settings_state.hpp \
     JelayzkaStateMachine/jelyazka_state_machine.hpp \
     JelayzkaStateMachine/transition.hpp \
+    JelayzkaStateMachine/help_window_state.hpp \
+    JelayzkaStateMachine/rss_search_window_state.hpp \
     jelyazkamanager.h
 
 FORMS    += \

@@ -5,12 +5,15 @@
 
 class OptionWindowState: public Jelyazka::IState
 {
+    Q_OBJECT
     public:
         OptionWindowState () {}
         virtual QString   getName() const { return "OptionWindowState"; }
         virtual void onEntry();
         virtual void onState();
         virtual void onExit ();
+signals:
+    void showOptionWindow ();
 };
 
 #endif

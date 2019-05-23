@@ -352,6 +352,7 @@ void MainWindow::mouseButtonPressed(QPoint p , QObject *o)
         is_resizing_ = 0;
         is_press_released_ = 0;
         //wsi_->show();
+        emit (stateChanged("ShowRssSearchWindow"));
     }
     else if (image_refresh_label_->geometry().contains(p))
     {
@@ -364,12 +365,14 @@ void MainWindow::mouseButtonPressed(QPoint p , QObject *o)
         is_resizing_ = 0;
         is_press_released_ = 0;
         //help_gui_->show();
+        emit (stateChanged("ShowHelpWindow"));
     }
     else if (image_options_label_->geometry().contains(p))
     {
         is_resizing_ = 0;
         is_press_released_ = 0;
         //ow_->show();
+        emit (stateChanged("ShowOptionWindow"));
     }
     else if (ui_->textBrowser->geometry().contains(p))
     {

@@ -3,6 +3,9 @@
 void InitWindowState::onEntry()
 {
     qDebug()<<__PRETTY_FUNCTION__;
+
+    //ToDo: send an event to show "InitWindow"
+    emit(showInitWindow());
 }
 
 void InitWindowState::onState()

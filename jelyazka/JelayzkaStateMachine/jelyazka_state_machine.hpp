@@ -6,12 +6,14 @@
 #include <QObject>
 #include <QtDebug>
 
+#include "help_window_state.hpp"
 #include "idle_state.hpp"
 #include "init_window_state.hpp"
 #include "main_window_state.hpp"
 #include "option_window_state.hpp"
 #include "remove_old_data_state.hpp"
 #include "rss_data_updated_state.hpp"
+#include "rss_search_window_state.hpp"
 #include "state.hpp"
 #include "transition.hpp"
 #include "update_settings_state.hpp"
@@ -27,15 +29,29 @@ public:
 
 public slots:
     void onStateChanged (const QString &event);
+    void onShowHelpWindow ();
+    void onShowInitWindow ();
+    void onShowMainWindow ();
+    void onShowOptionWindow ();
+    void onShowRssSearchWindow ();
+
+signals:
+    void showHelpWindow();
+    void showInitWindow();
+    void showMainWindow();
+    void showOptionWindow();
+    void showRssSearchWindow();
 
 private:
     std::shared_ptr<Jelyazka::IState>       current_state_;
+    std::shared_ptr<HelpWindowState>        help_window_state_;
     std::shared_ptr<IdleState>              idle_state_;
     std::shared_ptr<InitWindowState>        init_window_state_;
     std::shared_ptr<MainWindowState>        main_window_state_;
     std::shared_ptr<OptionWindowState>      option_window_state_;
     std::shared_ptr<RemoveOldDataState>     remove_old_data_state_;
     std::shared_ptr<RssDataUpdatedState>    rss_data_updated_state_;
+    std::shared_ptr<RssSearchWindowState>   rss_search_window_state_;
     Transition                              transitions_;
     std::shared_ptr<UpdateSettingsState>    update_settings_state_;
 

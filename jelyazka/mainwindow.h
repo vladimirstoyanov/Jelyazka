@@ -137,6 +137,9 @@ private:
     QPoint cur_point_;
     QPoint move_point_pos_;
     QPoint resize_point_;
+
+signals:
+    void stateChanged(const QString &);
 };
 
 #endif // MainWindow_H

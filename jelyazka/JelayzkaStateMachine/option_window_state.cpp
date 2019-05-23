@@ -3,6 +3,7 @@
 void OptionWindowState::onEntry()
 {
     qDebug()<<__PRETTY_FUNCTION__;
+    emit (showOptionWindow());
 }
 
 void OptionWindowState::onState()

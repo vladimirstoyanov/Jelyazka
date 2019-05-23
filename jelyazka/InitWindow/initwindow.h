@@ -44,11 +44,14 @@ class InitWindow : public QWidget
 
 public:
     explicit InitWindow(QWidget *parent = nullptr);
-    virtual ~InitWindow();
+    virtual  ~InitWindow();
 
 public slots:
     void onDownloadFinished ();
     void onWriteData(RSSData rss_data);
+
+signals:
+    void rssDataDownloaded (const QString &event);
 
 private:
     DataBase                            data_base_;
@@ -64,6 +67,7 @@ private:
     void loadRssUrls();
     void makeConnections ();
     void settingInitWindow();
+    void showEvent(QShowEvent *);
 };
 
 #endif // INITWINDOW_H

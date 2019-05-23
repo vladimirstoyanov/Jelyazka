@@ -4,6 +4,7 @@
 #include <memory>
 
 #include <QObject>
+#include <QtDebug>
 
 #include "about.h"
 #include "help.h"
@@ -23,20 +24,25 @@ public:
 
     void makeConnections ();
 
+public slots:
+    void onShowOptionWindow ();
+    void onShowInitWindow ();
+    void onShowMainWindow ();
+
 private:
-    std::shared_ptr<About>      about_window_;
-    std::shared_ptr<Help>       help_window_;
-    std::shared_ptr<InitWindow> init_window_;
-    std::shared_ptr<MainWindow> main_window_;
-    std::shared_ptr<NotificationWindow> notification_window_;
-    std::shared_ptr<JelayzkaStateMachine> jelyazka_state_machine_;
-    std::shared_ptr<OptionsWindow> option_window_;
-    std::shared_ptr<RSSSearchGUI> rss_search_window_;
-    std::shared_ptr<TrayIcon> tray_icon_;
+    std::shared_ptr<About>                  about_window_;
+    std::shared_ptr<Help>                   help_window_;
+    std::shared_ptr<InitWindow>             init_window_;
+    std::shared_ptr<MainWindow>             main_window_;
+    std::shared_ptr<NotificationWindow>     notification_window_;
+    std::shared_ptr<JelayzkaStateMachine>   jelyazka_state_machine_;
+    std::shared_ptr<OptionsWindow>          option_window_;
+    std::shared_ptr<RSSSearchGUI>           rss_search_window_;
+    std::shared_ptr<TrayIcon>               tray_icon_;
 
 signals:
        void removeOldData(const QString &);
-
+       void stateChanged (const QString &);
 };
 
 #endif // JELYAZKAMANAGER_H

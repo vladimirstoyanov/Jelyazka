@@ -5,12 +5,15 @@
 
 class InitWindowState: public Jelyazka::IState
 {
+    Q_OBJECT
     public:
         InitWindowState () {}
-        virtual QString   getName() const { return "InitWindowState"; }
+        virtual QString getName() const { return "InitWindowState"; }
         virtual void onEntry();
         virtual void onState();
         virtual void onExit ();
+signals:
+    void showInitWindow ();
 };
 
 #endif

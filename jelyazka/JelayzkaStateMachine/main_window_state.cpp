@@ -4,6 +4,7 @@
 void MainWindowState::onEntry()
 {
     qDebug()<<__PRETTY_FUNCTION__;
+    emit(showMainWindow());
 }
 
 void MainWindowState::onState()
