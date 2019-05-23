@@ -29,7 +29,7 @@ public slots:
     void onStateChanged (const QString &event);
 
 private:
-    std::shared_ptr<IState>                 current_state_;
+    std::shared_ptr<Jelyazka::IState>       current_state_;
     std::shared_ptr<IdleState>              idle_state_;
     std::shared_ptr<InitWindowState>        init_window_state_;
     std::shared_ptr<MainWindowState>        main_window_state_;
@@ -38,6 +38,9 @@ private:
     std::shared_ptr<RssDataUpdatedState>    rss_data_updated_state_;
     Transition                              transitions_;
     std::shared_ptr<UpdateSettingsState>    update_settings_state_;
+
+private:
+    void makeConnections ();
 
 };
 

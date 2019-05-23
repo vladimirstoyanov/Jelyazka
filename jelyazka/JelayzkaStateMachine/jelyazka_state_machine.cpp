@@ -20,6 +20,8 @@ JelayzkaStateMachine::JelayzkaStateMachine ():
     transitions_.addTransition("StartOptionWindow", main_window_state_, option_window_state_);
     transitions_.addTransition("UpdatingSettings", option_window_state_, update_settings_state_);
     transitions_.addTransition("SettingsUpdated", update_settings_state_, main_window_state_);
+
+    makeConnections();
 }
 
 JelayzkaStateMachine::~JelayzkaStateMachine ()
@@ -31,5 +33,16 @@ void JelayzkaStateMachine::onStateChanged (const QString &event)
 {
     qDebug()<<__PRETTY_FUNCTION__<<": event: "<<event;
     transitions_.makeTransition(current_state_, event);
+
+    qDebug()<<__PRETTY_FUNCTION__<<"current_state->getName = "<<current_state_->getName();
+}
+
+void JelayzkaStateMachine::makeConnections ()
+{
+    connect( remove_old_data_state_.get()
+            , SIGNAL(removeOldDataFinished(const QString &))
+            , this
+            , SLOT(onStateChanged(const QString &))
+            , Qt::QueuedConnection);
 }
 

@@ -4,10 +4,12 @@
 void RemoveOldDataState::onEntry()
 {
     qDebug()<<__PRETTY_FUNCTION__;
+
     //remove the old data
     DataBase data_base;
     data_base.dropRssDataTable();
-    //ToDo: send an event: RemoveOldDataFinished
+
+    emit (removeOldDataFinished("RemoveOldDataFinished"));
 }
 
 void RemoveOldDataState::onState()
@@ -18,7 +20,5 @@ void RemoveOldDataState::onState()
 void RemoveOldDataState::onExit ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
-
-
 }
 

@@ -3,7 +3,7 @@
 
 #include "state.hpp"
 
-class UpdateSettingsState: public IState
+class UpdateSettingsState: public Jelyazka::IState
 {
     public:
         UpdateSettingsState () {}

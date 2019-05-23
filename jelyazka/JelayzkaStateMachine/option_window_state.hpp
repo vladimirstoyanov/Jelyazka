@@ -3,7 +3,7 @@
 
 #include "state.hpp"
 
-class OptionWindowState: public IState
+class OptionWindowState: public Jelyazka::IState
 {
     public:
         OptionWindowState () {}

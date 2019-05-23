@@ -3,7 +3,7 @@
 
 #include "state.hpp"
 
-class RssDataUpdatedState: public IState
+class RssDataUpdatedState: public Jelyazka::IState
 {
     public:
         RssDataUpdatedState () {}
