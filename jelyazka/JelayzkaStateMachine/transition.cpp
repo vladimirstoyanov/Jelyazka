@@ -12,7 +12,6 @@ void Transition::makeTransition (std::shared_ptr<Jelyazka::IState> &current_stat
     it = transitions_.find(event);
     if (it != transitions_.end())
     {
-        qDebug()<<__PRETTY_FUNCTION__<<": event: "<<event<<" found.";
         if (current_state->getName() == it->second.first->getName())
         {
             qDebug()<<__PRETTY_FUNCTION__<<": making transition from "<<current_state->getName()<<" to "<<it->second.second->getName();
@@ -21,7 +20,6 @@ void Transition::makeTransition (std::shared_ptr<Jelyazka::IState> &current_stat
             current_state = it->second.second;
             current_state->onEntry();
             current_state->onState();
-            qDebug()<<__PRETTY_FUNCTION__<<"current_state->getName = "<<current_state->getName();
         }
     }
 }

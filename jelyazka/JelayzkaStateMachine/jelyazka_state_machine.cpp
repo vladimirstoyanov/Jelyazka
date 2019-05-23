@@ -33,8 +33,6 @@ void JelayzkaStateMachine::onStateChanged (const QString &event)
 {
     qDebug()<<__PRETTY_FUNCTION__<<": event: "<<event;
     transitions_.makeTransition(current_state_, event);
-
-    qDebug()<<__PRETTY_FUNCTION__<<"current_state->getName = "<<current_state_->getName();
 }
 
 void JelayzkaStateMachine::makeConnections ()
