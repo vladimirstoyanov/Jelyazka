@@ -13,6 +13,7 @@ class MainWindowState: public Jelyazka::IState
         virtual void onState();
         virtual void onExit ();
 signals:
+    void hideMainWindow ();
     void showMainWindow ();
 };
 

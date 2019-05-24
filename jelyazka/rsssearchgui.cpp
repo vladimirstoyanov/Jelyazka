@@ -123,6 +123,8 @@ void RSSSearchGUI::closeEvent(QCloseEvent * event)
     if (feeds_struct_tmp_.size()>0)
         feeds_struct_tmp_.clear();
     old_names_.clear();
+
+    emit(stateChanged("HideRssSearchWindow"));
 }
 
 //paint rows in ui->tableView

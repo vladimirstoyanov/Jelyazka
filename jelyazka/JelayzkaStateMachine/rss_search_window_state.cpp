@@ -14,4 +14,5 @@ void RssSearchWindowState::onState()
 void RssSearchWindowState::onExit ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
+    emit (hideRssSearchWindow());
 }

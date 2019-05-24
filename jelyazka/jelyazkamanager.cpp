@@ -10,36 +10,9 @@ JelyazkaManager::JelyazkaManager():
     , rss_search_window_(std::make_shared<RSSSearchGUI> ())
     , tray_icon_(std::make_shared<TrayIcon> ())
 {
-    //main_window_->show();
-    //init_window_->show();
-    //notification_window_->show(); //FIXME It seems that doesn't
-    //rss_search_window_->show();
-    //tray_icon_->show(); //FIXME: the tray icon desn't appear. An empty window appears instead.
-    //option_window_->show();
     makeConnections();
     emit (stateChanged("RemoveOldData"));
 }
-/*
-    //ToDo: add transitions
-    transitions_.addTransition("RemoveOldData", idle_state_, remove_old_data_state_);
-    transitions_.addTransition("RemoveOldDataFinished", remove_old_data_state_, init_window_state_);
-    transitions_.addTransition("RSSDataDownloaded", init_window_state_, main_window_state_);
-    transitions_.addTransition("RSSDataUpdating", main_window_state_, rss_data_updated_state_);
-    transitions_.addTransition("RSSDataUpdated", rss_data_updated_state_, main_window_state_);
-
-    transitions_.addTransition("ShowOptionWindow"   , main_window_state_, option_window_state_);
-    transitions_.addTransition("ShowHelpWindow"     , main_window_state_, help_window_state_);
-    transitions_.addTransition("ShowRssSearchWindow", main_window_state_, rss_search_window_state_);
-
-    transitions_.addTransition("UpdatingSettings", option_window_state_, update_settings_state_);
-    transitions_.addTransition("HideOptionWindow", option_window_state_, main_window_state_);
-
-    transitions_.addTransition("SettingsUpdated", update_settings_state_, main_window_state_);
-
-    transitions_.addTransition("HideRssSearchWindow", rss_search_window_state_, main_window_state_);
-
-    transitions_.addTransition("HideHelpWindow"     , help_window_state_, main_window_state_);
-    */
 void JelyazkaManager::makeConnections ()
 {
     connectionsFromJelyazkaStateMachine();
@@ -103,6 +76,41 @@ void JelyazkaManager::connectionsFromJelyazkaStateMachine ()
             , this
             , SLOT(onShowMainWindow())
             , Qt::QueuedConnection);
+
+    //show Rss search window
+    connect( jelyazka_state_machine_.get()
+            , SIGNAL(showRssSearchWindow())
+            , this
+            , SLOT(onShowRssSearchWindow())
+            , Qt::QueuedConnection);
+
+    //hide OptionWindow
+    connect( jelyazka_state_machine_.get()
+            , SIGNAL(hideOptionWindow())
+            , this
+            , SLOT(onHideOptionWindow())
+            , Qt::QueuedConnection);
+
+    //hide InitWindow
+    connect( jelyazka_state_machine_.get()
+            , SIGNAL(hideInitWindow())
+            , this
+            , SLOT(onHideInitWindow())
+            , Qt::QueuedConnection);
+
+    //hide MainWindow
+    connect( jelyazka_state_machine_.get()
+            , SIGNAL(hideMainWindow())
+            , this
+            , SLOT(onHideMainWindow())
+            , Qt::QueuedConnection);
+
+    //hide Rss search window
+    connect( jelyazka_state_machine_.get()
+            , SIGNAL(hideRssSearchWindow())
+            , this
+            , SLOT(onHideMainWindow())
+            , Qt::QueuedConnection);
 }
 
 void JelyazkaManager::onShowOptionWindow ()
@@ -129,6 +137,35 @@ void JelyazkaManager::onShowHelpWindow()
     help_window_->show();
 }
 void JelyazkaManager::onShowRssSearchWindow()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    rss_search_window_->show();
+}
+
+void JelyazkaManager::onHideOptionWindow ()
+{
+   qDebug()<<__PRETTY_FUNCTION__;
+   option_window_->show();
+}
+
+void JelyazkaManager::onHideInitWindow ()
+{
+   qDebug()<<__PRETTY_FUNCTION__;
+   init_window_->show();
+}
+
+void JelyazkaManager::onHideMainWindow ()
+{
+   qDebug()<<__PRETTY_FUNCTION__;
+   main_window_->show();
+}
+
+void JelyazkaManager::onHideHelpWindow()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    help_window_->show();
+}
+void JelyazkaManager::onHideRssSearchWindow()
 {
     qDebug()<<__PRETTY_FUNCTION__;
     rss_search_window_->show();

@@ -13,6 +13,7 @@ class HelpWindowState: public Jelyazka::IState
         virtual void onState();
         virtual void onExit ();
 signals:
+    void hideHelpWindow ();
     void showHelpWindow ();
 };
 

@@ -1180,3 +1180,8 @@ void OptionsWindow::hideProxyConnection()
     te_proxy_port_->hide();
 }
 
+void OptionsWindow::closeEvent(QShowEvent *event)
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    emit (stateChanged("HideOptionWindow"));
+}

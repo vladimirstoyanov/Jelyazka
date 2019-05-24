@@ -28,6 +28,11 @@ public:
     virtual ~JelayzkaStateMachine ();
 
 public slots:
+    void onHideHelpWindow ();
+    void onHideInitWindow ();
+    void onHideMainWindow ();
+    void onHideOptionWindow ();
+    void onHideRssSearchWindow ();
     void onStateChanged (const QString &event);
     void onShowHelpWindow ();
     void onShowInitWindow ();
@@ -36,6 +41,11 @@ public slots:
     void onShowRssSearchWindow ();
 
 signals:
+    void hideHelpWindow();
+    void hideInitWindow();
+    void hideMainWindow();
+    void hideOptionWindow();
+    void hideRssSearchWindow();
     void showHelpWindow();
     void showInitWindow();
     void showMainWindow();
@@ -56,8 +66,9 @@ private:
     std::shared_ptr<UpdateSettingsState>    update_settings_state_;
 
 private:
+    void hideWindowConnections ();
     void makeConnections ();
-
+    void showWindowConnections ();
 };
 
 #endif

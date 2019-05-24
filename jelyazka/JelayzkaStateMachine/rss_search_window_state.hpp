@@ -13,6 +13,7 @@ class RssSearchWindowState: public Jelyazka::IState
         virtual void onState();
         virtual void onExit ();
 signals:
+    void hideRssSearchWindow ();
     void showRssSearchWindow ();
 };
 

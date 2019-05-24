@@ -58,7 +58,13 @@ void JelayzkaStateMachine::makeConnections ()
             , SLOT(onStateChanged(const QString &))
             , Qt::QueuedConnection);
 
-    //show connections
+    showWindowConnections();
+    hideWindowConnections();
+
+}
+
+void JelayzkaStateMachine::showWindowConnections()
+{
     //show option window
     connect( option_window_state_.get()
             , SIGNAL(showOptionWindow())
@@ -96,6 +102,44 @@ void JelayzkaStateMachine::makeConnections ()
             , Qt::QueuedConnection);
 }
 
+void JelayzkaStateMachine::hideWindowConnections ()
+{
+    //hide option window
+    connect( option_window_state_.get()
+            , SIGNAL(hideOptionWindow())
+            , this
+            , SLOT(onHideOptionWindow())
+            , Qt::QueuedConnection);
+
+    //hide init window
+    connect( init_window_state_.get()
+            , SIGNAL(hideInitWindow())
+            , this
+            , SLOT(onHideInitWindow())
+            , Qt::QueuedConnection);
+
+    //hide main window
+    connect( main_window_state_.get()
+            , SIGNAL(hideMainWindow())
+            , this
+            , SLOT(onHideMainWindow())
+            , Qt::QueuedConnection);
+
+
+    //hide help window
+    connect( help_window_state_.get()
+            , SIGNAL(hideHelpWindow())
+            , this
+            , SLOT(onHideHelpWindow())
+            , Qt::QueuedConnection);
+
+    //hide rss search window
+    connect( rss_search_window_state_.get()
+            , SIGNAL(hideRssSearchWindow())
+            , this
+            , SLOT(onHideRssSearchWindow())
+            , Qt::QueuedConnection);
+}
 void JelayzkaStateMachine::onShowInitWindow ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
@@ -124,5 +168,35 @@ void JelayzkaStateMachine::onShowRssSearchWindow ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
     emit (showRssSearchWindow());
+}
+
+void JelayzkaStateMachine::onHideInitWindow ()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    emit (hideInitWindow());
+}
+
+void JelayzkaStateMachine::onHideMainWindow ()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    emit (hideMainWindow());
+}
+
+void JelayzkaStateMachine::onHideOptionWindow ()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    emit (hideOptionWindow());
+}
+
+void JelayzkaStateMachine::onHideHelpWindow ()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    emit (hideHelpWindow());
+}
+
+void JelayzkaStateMachine::onHideRssSearchWindow ()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    emit (hideRssSearchWindow());
 }
 

@@ -23,6 +23,7 @@
 #include <vector>
 
 #include <QCheckBox>
+#include <QCloseEvent>
 #include <QDebug>
 #include <QLineEdit>
 #include <QListWidget>
@@ -76,6 +77,7 @@ private slots:
     void on_textChanged(const QString &text);
 
 private:
+     void closeEvent(QShowEvent *);
      void resizeEvent(QResizeEvent *event);
      void showEvent(QShowEvent *);
 private:
@@ -152,5 +154,9 @@ private:
     std::shared_ptr<QLabel> l_filter_list_;
     std::shared_ptr<QPushButton> pb_remove_filter_;
     std::shared_ptr<QCheckBox> cb_enable_filtering_;
+
+
+signals:
+    void stateChanged (const QString &);
 };
 #endif // OPTIONSWINDOW_H

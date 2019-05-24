@@ -14,5 +14,6 @@ void OptionWindowState::onState()
 void OptionWindowState::onExit ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
+    emit (hideOptionWindow());
 }
 

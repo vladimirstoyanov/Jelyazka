@@ -26,6 +26,11 @@ public:
     void makeConnections ();
 
 public slots:
+    void onHideHelpWindow       ();
+    void onHideInitWindow       ();
+    void onHideMainWindow       ();
+    void onHideOptionWindow     ();
+    void onHideRssSearchWindow  ();
     void onShowHelpWindow       ();
     void onShowInitWindow       ();
     void onShowMainWindow       ();

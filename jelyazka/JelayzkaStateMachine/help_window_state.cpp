@@ -14,5 +14,6 @@ void HelpWindowState::onState()
 void HelpWindowState::onExit ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
+    emit (hideHelpWindow());
 }
 

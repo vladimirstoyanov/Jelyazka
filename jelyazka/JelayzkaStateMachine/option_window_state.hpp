@@ -13,6 +13,7 @@ class OptionWindowState: public Jelyazka::IState
         virtual void onState();
         virtual void onExit ();
 signals:
+    void hideOptionWindow ();
     void showOptionWindow ();
 };
 
