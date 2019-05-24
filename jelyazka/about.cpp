@@ -20,33 +20,31 @@
 
 About::About(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::About)
+    ui_(std::make_shared<Ui::About> ())
 {
-    ui->setupUi(this);
+    ui_->setupUi(this);
 
-    ui->textBrowser->setGeometry(0,0,this->width(), this->height());
-    //ui->pushButton->setGeometry(this->width() - (ui->pushButton->width()+5), this->height() - (ui->pushButton->height()+5), ui->pushButton->width(), ui->pushButton->height());
+    ui_->textBrowser->setGeometry(0,0,this->width(), this->height());
 
-    ui->textBrowser->setHtml("Jelyazka RSS Reader written by Vladimir Stoyanov.<p>e-mail:<a href=\"mailto:vlado_stoyanov@yahoo.com\">vlado_stoyanov@yahoo.com</p>");
+    ui_->textBrowser->setHtml("Jelyazka RSS Reader written by Vladimir Stoyanov.<p>e-mail:<a href=\"mailto:vlado_stoyanov@yahoo.com\">vlado_stoyanov@yahoo.com</p>");
 
-    ui->textBrowser->setOpenLinks(1);
-    ui->textBrowser->setOpenExternalLinks(1);
+    ui_->textBrowser->setOpenLinks(1);
+    ui_->textBrowser->setOpenExternalLinks(1);
 }
 
 About::~About()
 {
-    delete ui;
 }
 
 //'OK' button has been clicked
 void About::OKButtonClicked()
 {
-    this->hide();
+    emit (stateChanged("HideAboutWindow"));
 }
 
 void About::closeEvent(QCloseEvent *)
 {
-    this->hide();
+    emit (stateChanged("HideAboutWindow"));
 }
 
 void About::showEvent(QShowEvent *)

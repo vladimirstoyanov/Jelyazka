@@ -6,6 +6,7 @@
 #include <QObject>
 #include <QtDebug>
 
+#include "about_window_state.hpp"
 #include "help_window_state.hpp"
 #include "idle_state.hpp"
 #include "init_window_state.hpp"
@@ -16,9 +17,8 @@
 #include "rss_search_window_state.hpp"
 #include "state.hpp"
 #include "transition.hpp"
+#include "tray_icon_state.hpp"
 #include "update_settings_state.hpp"
-
-//ToDo: add transitions
 
 class JelayzkaStateMachine: public QObject
 {
@@ -28,31 +28,43 @@ public:
     virtual ~JelayzkaStateMachine ();
 
 public slots:
+    void onHideAboutWindow ();
     void onHideHelpWindow ();
     void onHideInitWindow ();
     void onHideMainWindow ();
     void onHideOptionWindow ();
     void onHideRssSearchWindow ();
-    void onStateChanged (const QString &event);
+    void onHideTrayIcon ();
+
+    void onShowAboutWindow ();
     void onShowHelpWindow ();
     void onShowInitWindow ();
     void onShowMainWindow ();
     void onShowOptionWindow ();
     void onShowRssSearchWindow ();
+    void onShowTrayIcon ();
+
+    void onStateChanged (const QString &event);
 
 signals:
+    void hideAboutWindow();
     void hideHelpWindow();
     void hideInitWindow();
     void hideMainWindow();
     void hideOptionWindow();
     void hideRssSearchWindow();
+    void hideTrayIcon();
+
+    void showAboutWindow();
     void showHelpWindow();
     void showInitWindow();
     void showMainWindow();
     void showOptionWindow();
     void showRssSearchWindow();
+    void showTrayIcon();
 
 private:
+    std::shared_ptr<AboutWindowState>       about_window_state_;
     std::shared_ptr<Jelyazka::IState>       current_state_;
     std::shared_ptr<HelpWindowState>        help_window_state_;
     std::shared_ptr<IdleState>              idle_state_;
@@ -63,6 +75,7 @@ private:
     std::shared_ptr<RssDataUpdatedState>    rss_data_updated_state_;
     std::shared_ptr<RssSearchWindowState>   rss_search_window_state_;
     Transition                              transitions_;
+    std::shared_ptr<TrayIconState>          tray_icon_state_;
     std::shared_ptr<UpdateSettingsState>    update_settings_state_;
 
 private:

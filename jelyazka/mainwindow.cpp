@@ -292,11 +292,13 @@ void MainWindow::on_comboBox_currentIndexChanged(const QString &arg1) //event wh
     initTextBrowser();
     */
 }
+
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-        this->hide();
-        event->ignore(); // Don't let the event propagate to the base class
+    qDebug()<<__PRETTY_FUNCTION__;
+    event->ignore(); // Don't let the event propagate to the base class
 }
+
 void MainWindow::showEvent(QShowEvent *)
 {
     if (is_minimize_ || is_close_)
@@ -385,7 +387,8 @@ void MainWindow::mouseButtonPressed(QPoint p , QObject *o)
         is_resizing_ = 0;
         is_press_released_ = 0;
         is_close_ = 1;
-        this->hide();
+        //this->hide();
+        emit (stateChanged("HideMainWindow"));
 
         //e->ignore();
     }

@@ -15,4 +15,5 @@ void MainWindowState::onState()
 void MainWindowState::onExit ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
+    emit(hideMainWindow());
 }

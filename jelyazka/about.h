@@ -19,6 +19,8 @@
 #ifndef ABOUT_H
 #define ABOUT_H
 
+#include <memory>
+
 #include <QCloseEvent>
 #include <QShowEvent>
 #include <QWidget>
@@ -41,10 +43,14 @@ private slots:
     void OKButtonClicked(); //'OK' button
 
 private:
-    Ui::About *ui;
+    std::shared_ptr<Ui::About> ui_;
+
 private:
     void closeEvent(QCloseEvent *); // Overriding the window's close event
     void showEvent(QShowEvent *);
+
+signals:
+    void stateChanged(const QString &);
 };
 
 #endif // ABOUT_H

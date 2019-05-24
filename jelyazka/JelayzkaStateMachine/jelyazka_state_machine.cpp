@@ -1,7 +1,8 @@
 #include "jelyazka_state_machine.hpp"
 
 JelayzkaStateMachine::JelayzkaStateMachine ():
-    current_state_              (std::make_shared<IdleState> ())
+    about_window_state_         (std::make_shared<AboutWindowState> ())
+    , current_state_            (std::make_shared<IdleState> ())
     , help_window_state_        (std::make_shared<HelpWindowState> ())
     , idle_state_               (std::make_shared<IdleState> ())
     , init_window_state_        (std::make_shared<InitWindowState> ())
@@ -11,27 +12,34 @@ JelayzkaStateMachine::JelayzkaStateMachine ():
     , rss_data_updated_state_   (std::make_shared<RssDataUpdatedState> ())
     , rss_search_window_state_  (std::make_shared<RssSearchWindowState> ())
     , transitions_              ()
+    , tray_icon_state_          (std::make_shared<TrayIconState> ())
     , update_settings_state_    (std::make_shared<UpdateSettingsState> ())
 {
     //ToDo: add transitions
-    transitions_.addTransition("RemoveOldData", idle_state_, remove_old_data_state_);
-    transitions_.addTransition("RemoveOldDataFinished", remove_old_data_state_, init_window_state_);
-    transitions_.addTransition("RSSDataDownloaded", init_window_state_, main_window_state_);
-    transitions_.addTransition("RSSDataUpdating", main_window_state_, rss_data_updated_state_);
-    transitions_.addTransition("RSSDataUpdated", rss_data_updated_state_, main_window_state_);
+    transitions_.addTransition("RemoveOldData"         , idle_state_, remove_old_data_state_);
+    transitions_.addTransition("RemoveOldDataFinished" , remove_old_data_state_, init_window_state_);
+    transitions_.addTransition("RSSDataDownloaded"     , init_window_state_, main_window_state_);
+    transitions_.addTransition("RSSDataUpdating"       , main_window_state_, rss_data_updated_state_);
+    transitions_.addTransition("RSSDataUpdated"        , rss_data_updated_state_, main_window_state_);
 
-    transitions_.addTransition("ShowOptionWindow"   , main_window_state_, option_window_state_);
-    transitions_.addTransition("ShowHelpWindow"     , main_window_state_, help_window_state_);
-    transitions_.addTransition("ShowRssSearchWindow", main_window_state_, rss_search_window_state_);
+    transitions_.addTransition("ShowOptionWindow"      , main_window_state_, option_window_state_);
+    transitions_.addTransition("ShowHelpWindow"        , main_window_state_, help_window_state_);
+    transitions_.addTransition("ShowRssSearchWindow"   , main_window_state_, rss_search_window_state_);
+    transitions_.addTransition("HideMainWindow"        , main_window_state_, tray_icon_state_);
 
-    transitions_.addTransition("UpdatingSettings", option_window_state_, update_settings_state_);
-    transitions_.addTransition("HideOptionWindow", option_window_state_, main_window_state_);
+    transitions_.addTransition("UpdatingSettings"      , option_window_state_, update_settings_state_);
+    transitions_.addTransition("HideOptionWindow"      , option_window_state_, main_window_state_);
 
-    transitions_.addTransition("SettingsUpdated", update_settings_state_, main_window_state_);
+    transitions_.addTransition("SettingsUpdated"       , update_settings_state_, main_window_state_);
 
-    transitions_.addTransition("HideRssSearchWindow", rss_search_window_state_, main_window_state_);
+    transitions_.addTransition("HideRssSearchWindow"   , rss_search_window_state_, main_window_state_);
 
-    transitions_.addTransition("HideHelpWindow"     , help_window_state_, main_window_state_);
+    transitions_.addTransition("HideHelpWindow"        , help_window_state_, main_window_state_);
+
+    transitions_.addTransition("HideTrayIcon"          , tray_icon_state_, main_window_state_);
+    transitions_.addTransition("ShowAboutWindow"       , tray_icon_state_, about_window_state_);
+
+    transitions_.addTransition("HideAboutWindow"       , about_window_state_, tray_icon_state_);
 
     makeConnections();
 }
@@ -100,6 +108,20 @@ void JelayzkaStateMachine::showWindowConnections()
             , this
             , SLOT(onShowRssSearchWindow())
             , Qt::QueuedConnection);
+
+    //show tray icon
+    connect( tray_icon_state_.get()
+            , SIGNAL(showTrayIcon())
+            , this
+            , SLOT(onShowTrayIcon())
+            , Qt::QueuedConnection);
+
+    //show about window
+    connect( about_window_state_.get()
+            , SIGNAL(showAboutWindow())
+            , this
+            , SLOT(onShowAboutWindow())
+            , Qt::QueuedConnection);
 }
 
 void JelayzkaStateMachine::hideWindowConnections ()
@@ -139,6 +161,20 @@ void JelayzkaStateMachine::hideWindowConnections ()
             , this
             , SLOT(onHideRssSearchWindow())
             , Qt::QueuedConnection);
+
+    //hide tray icon
+    connect( tray_icon_state_.get()
+            , SIGNAL(hideTrayIcon())
+            , this
+            , SLOT(onHideTrayIcon())
+            , Qt::QueuedConnection);
+
+    //hide about window
+    connect( about_window_state_.get()
+            , SIGNAL(hideAboutWindow())
+            , this
+            , SLOT(onHideAboutWindow())
+            , Qt::QueuedConnection);
 }
 void JelayzkaStateMachine::onShowInitWindow ()
 {
@@ -170,6 +206,18 @@ void JelayzkaStateMachine::onShowRssSearchWindow ()
     emit (showRssSearchWindow());
 }
 
+void JelayzkaStateMachine::onShowTrayIcon ()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    emit (showTrayIcon());
+}
+
+void JelayzkaStateMachine::onShowAboutWindow ()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    emit (showAboutWindow());
+}
+
 void JelayzkaStateMachine::onHideInitWindow ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
@@ -198,5 +246,17 @@ void JelayzkaStateMachine::onHideRssSearchWindow ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
     emit (hideRssSearchWindow());
+}
+
+void JelayzkaStateMachine::onHideTrayIcon ()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    emit (hideTrayIcon());
+}
+
+void JelayzkaStateMachine::onHideAboutWindow()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    emit (hideAboutWindow());
 }
 

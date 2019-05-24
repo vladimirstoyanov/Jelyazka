@@ -1,9 +1,7 @@
 #include "trayicon.h"
 
-TrayIcon::TrayIcon(QWidget *parent, std::shared_ptr<MainWindow> main_window_)
-    : QWidget(parent),
-      main_window_(main_window_),
-      about_gui_(std::make_shared<About>())
+TrayIcon::TrayIcon(QWidget *parent)
+    : QWidget(parent)
 {
     createActions();
     createTrayIcon();
@@ -21,12 +19,14 @@ void TrayIcon::addIcon()
 
 void TrayIcon::mainWindow()
 {
-    main_window_->show();
+    //main_window_->show();
+    emit (stateChanged("HideTrayIcon"));
 }
 
 void TrayIcon::showAbout()
 {
-    about_gui_->show();
+    //about_gui_->show();
+    emit (stateChanged("ShowAboutWindow"));
 }
 
 void TrayIcon::createActions()
@@ -71,7 +71,7 @@ void TrayIcon::setIcon()
 void TrayIcon::trayIconClicked(QSystemTrayIcon::ActivationReason reason)
 {
     if(reason == QSystemTrayIcon::Trigger)
-        main_window_->show();
+        ;//main_window_->show(); //ToDo: emit an event to show main_window
 }
 
 void TrayIcon::closeEvent(QCloseEvent *event)

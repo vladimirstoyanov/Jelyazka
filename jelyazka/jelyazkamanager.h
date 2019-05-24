@@ -26,16 +26,21 @@ public:
     void makeConnections ();
 
 public slots:
+    void onHideAboutWindow      ();
     void onHideHelpWindow       ();
     void onHideInitWindow       ();
     void onHideMainWindow       ();
     void onHideOptionWindow     ();
     void onHideRssSearchWindow  ();
+    void onHideTrayIcon         ();
+
+    void onShowAboutWindow      ();
     void onShowHelpWindow       ();
     void onShowInitWindow       ();
     void onShowMainWindow       ();
     void onShowOptionWindow     ();
     void onShowRssSearchWindow  ();
+    void onShowTrayIcon         ();
 
 signals:
        void stateChanged (const QString &);
