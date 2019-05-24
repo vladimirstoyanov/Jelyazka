@@ -73,6 +73,7 @@ void DataBase::closeDB()
 //fill view_feeds (QListWidget var)
 void DataBase::getURLs(std::vector<QString> *urls)
 {
+    openDB();
     QSqlQuery query;
 
     query.prepare( "SELECT * FROM favorite_feeds" );
@@ -91,6 +92,7 @@ void DataBase::getURLs(std::vector<QString> *urls)
         name = query.value(2).toByteArray().data();
         urls->push_back(name);
     }
+    closeDB();
 }
 
 //fill view_feeds (QListWidget var)

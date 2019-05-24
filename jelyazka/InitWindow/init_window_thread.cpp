@@ -56,7 +56,7 @@ void InitWindowThread::run()
 void InitWindowThread::downloadFeed (const unsigned int index)
 {
      qDebug()<<__PRETTY_FUNCTION__;
-     ParseRSS parserss;
+     ParseRSS parse;
      HTTP http;
      QString web_source;
      std::shared_ptr<RSSData> rss_data = std::make_shared<RSSData> ();
@@ -72,7 +72,7 @@ void InitWindowThread::downloadFeed (const unsigned int index)
      }
 
      //pasrse web content to RSSData
-     parserss.getRSSDataByWebSource(web_source, rss_data);
+     parse.getRSSDataByWebSource(web_source, rss_data);
 
      //test (rss_data);
 

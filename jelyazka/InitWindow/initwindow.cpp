@@ -79,15 +79,16 @@ void InitWindow::loadRssFeeds()
     loadRssUrls();
     init_window_thread_->setURLs(feeds_);
 
-    /*
+
     for (unsigned int i=0; i<feeds_.size(); ++i)
     {
         thread_pool_->start(init_window_thread_.get());
     }
 
     if (feeds_.size() == 0)
-    */
+    {
         onDownloadFinished();
+    }
 
 }
 
