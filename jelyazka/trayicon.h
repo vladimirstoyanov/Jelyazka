@@ -9,6 +9,8 @@
 #include <QSystemTrayIcon>
 #include <QWidget>
 
+#include "about.h"
+
 class TrayIcon : public QWidget
 {
     Q_OBJECT
@@ -32,6 +34,7 @@ private:
     void setIcon();
 
 private:
+    std::shared_ptr<About>           about_window_;
     std::shared_ptr<QSystemTrayIcon> tray_icon_;
     std::shared_ptr<QMenu> tray_icon_menu_;
     std::shared_ptr<QAction> about_;

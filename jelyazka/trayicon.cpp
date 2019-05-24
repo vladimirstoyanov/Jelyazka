@@ -2,6 +2,7 @@
 
 TrayIcon::TrayIcon(QWidget *parent)
     : QWidget(parent)
+    , about_window_ (std::make_shared<About> ())
 {
     createActions();
     createTrayIcon();
@@ -25,8 +26,8 @@ void TrayIcon::mainWindow()
 
 void TrayIcon::showAbout()
 {
-    //about_gui_->show();
-    emit (stateChanged("ShowAboutWindow"));
+    about_window_->show();
+    //emit (stateChanged("ShowAboutWindow"));
 }
 
 void TrayIcon::createActions()
@@ -71,16 +72,18 @@ void TrayIcon::setIcon()
 void TrayIcon::trayIconClicked(QSystemTrayIcon::ActivationReason reason)
 {
     if(reason == QSystemTrayIcon::Trigger)
-        ;//main_window_->show(); //ToDo: emit an event to show main_window
+    {
+        emit (stateChanged("HideTrayIcon"));
+    }
 }
 
 void TrayIcon::closeEvent(QCloseEvent *event)
 {
-    if (tray_icon_->isVisible()) {
+    if (tray_icon_->isVisible())
+    {
         tray_icon_->showMessage(tr("Still here!!!"),
         tr("This application is still running. To quit please click this icon and select Quit"));
         hide();
-
 
         event->ignore(); // Don't let the event propagate to the base class
     }

@@ -44,7 +44,8 @@ void About::OKButtonClicked()
 
 void About::closeEvent(QCloseEvent *)
 {
-    emit (stateChanged("HideAboutWindow"));
+    //emit (stateChanged("HideAboutWindow"));
+    this->hide();
 }
 
 void About::showEvent(QShowEvent *)
