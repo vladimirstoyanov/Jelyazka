@@ -50,7 +50,8 @@ void Help::loadHelp()
 {
     QString html_source;
     QFile file("../resources/jelyazka_help/help.htm");
-    if(!file.open(QIODevice::ReadOnly)) {
+    if(!file.open(QIODevice::ReadOnly))
+    {
         QMessageBox::information(0, "Error!", "Can't read help file: " + file.errorString());
     }
 

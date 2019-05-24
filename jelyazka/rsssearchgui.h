@@ -50,8 +50,9 @@
 #include "search.h"
 #include "ui_rsssearchgui.h"
 
-namespace Ui {
-class RSSSearchGUI;
+namespace Ui
+{
+    class RSSSearchGUI;
 }
 
 class MainWindow;

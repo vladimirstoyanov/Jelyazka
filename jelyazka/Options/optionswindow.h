@@ -77,7 +77,7 @@ private slots:
     void on_textChanged(const QString &text);
 
 private:
-     void closeEvent(QShowEvent *);
+     void closeEvent (QCloseEvent *);
      void resizeEvent(QResizeEvent *event);
      void showEvent(QShowEvent *);
 private:

@@ -51,6 +51,12 @@ void JelyazkaManager::connectionsToJelyazkaStateMachine ()
             , jelyazka_state_machine_.get()
             , SLOT(onStateChanged(const QString &))
             , Qt::QueuedConnection);
+
+    connect( option_window_.get()
+            , SIGNAL(stateChanged(const QString &))
+            , jelyazka_state_machine_.get()
+            , SLOT(onStateChanged(const QString &))
+            , Qt::QueuedConnection);
 }
 
 void JelyazkaManager::connectionsFromJelyazkaStateMachine ()
@@ -84,6 +90,13 @@ void JelyazkaManager::connectionsFromJelyazkaStateMachine ()
             , SLOT(onShowRssSearchWindow())
             , Qt::QueuedConnection);
 
+    //show help window
+    connect( jelyazka_state_machine_.get()
+            , SIGNAL(showHelpWindow())
+            , this
+            , SLOT(onShowHelpWindow())
+            , Qt::QueuedConnection);
+
     //hide OptionWindow
     connect( jelyazka_state_machine_.get()
             , SIGNAL(hideOptionWindow())
@@ -110,6 +123,13 @@ void JelyazkaManager::connectionsFromJelyazkaStateMachine ()
             , SIGNAL(hideRssSearchWindow())
             , this
             , SLOT(onHideMainWindow())
+            , Qt::QueuedConnection);
+
+    //hide help window
+    connect( jelyazka_state_machine_.get()
+            , SIGNAL(hideHelpWindow())
+            , this
+            , SLOT(onHideHelpWindow())
             , Qt::QueuedConnection);
 }
 
@@ -145,28 +165,28 @@ void JelyazkaManager::onShowRssSearchWindow()
 void JelyazkaManager::onHideOptionWindow ()
 {
    qDebug()<<__PRETTY_FUNCTION__;
-   option_window_->show();
+   option_window_->hide();
 }
 
 void JelyazkaManager::onHideInitWindow ()
 {
    qDebug()<<__PRETTY_FUNCTION__;
-   init_window_->show();
+   init_window_->hide();
 }
 
 void JelyazkaManager::onHideMainWindow ()
 {
    qDebug()<<__PRETTY_FUNCTION__;
-   main_window_->show();
+   main_window_->hide();
 }
 
 void JelyazkaManager::onHideHelpWindow()
 {
     qDebug()<<__PRETTY_FUNCTION__;
-    help_window_->show();
+    help_window_->hide();
 }
 void JelyazkaManager::onHideRssSearchWindow()
 {
     qDebug()<<__PRETTY_FUNCTION__;
-    rss_search_window_->show();
+    rss_search_window_->hide();
 }

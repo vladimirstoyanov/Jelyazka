@@ -41,7 +41,7 @@ class Help : public QWidget
     Q_OBJECT
 
 public:
-    explicit Help(QWidget *parent = 0);
+    explicit Help(QWidget *parent = nullptr);
     virtual ~Help();
 
 private:
