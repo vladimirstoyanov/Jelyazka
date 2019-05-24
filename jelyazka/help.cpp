@@ -21,19 +21,17 @@
 
 Help::Help(QWidget *parent) :
     QWidget(parent),
-    ui_(new Ui::Help)
+    ui_(std::make_shared <Ui::Help> ())
 {
     ui_->setupUi(this);
 
-    //with bottom 2 lines, when clicks on a link in textBrowser widget,
-    //it opens default web browser and loading the link
+    //when clicks on a link, it opens the default web browser and loading the link
     ui_->textBrowser->setOpenLinks(1);
     ui_->textBrowser->setOpenExternalLinks(1);
 }
 
 Help::~Help()
 {
-    delete ui_;
 }
 
 void Help::showEvent(QShowEvent *)
@@ -66,4 +64,10 @@ void Help::loadHelp()
     file.close();
 
     ui_->textBrowser->setHtml(html_source);
+}
+
+void Help::closeEvent (QCloseEvent *event)
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    emit (stateChanged("HideHelpWindow"));
 }

@@ -110,7 +110,7 @@ void InitWindow::onDownloadFinished ()
 
     //send an event to window state machine
     this->hide();
-    emit (rssDataDownloaded("RSSDataDownloaded"));
+    emit (stateChanged("RSSDataDownloaded"));
 }
 
 void InitWindow::makeConnections ()

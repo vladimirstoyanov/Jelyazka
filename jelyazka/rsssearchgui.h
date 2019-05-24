@@ -69,16 +69,6 @@ protected:
     void keyPressEvent(QKeyEvent *event);
     void showEvent(QShowEvent *);
 
-private slots:
-    void on_modelItemChanged(QStandardItem*);
-    void on_pushButton_clicked();
-    void on_pushButton_3_clicked();
-    void on_pushButton_2_clicked();
-
-public slots:
-    void onFoundRSS(int type, QString name, QString url, QString encoding, QString web_source, int version);
-    void onEndOfUrls();
-
 private:
     void closeEvent(QCloseEvent *);
 
@@ -135,6 +125,20 @@ private:
     TreeNode *tree_node_;
     std::vector<std::shared_ptr<RSSData>> feeds_struct_tmp_;
     std::vector<QString> old_names_;
+
+private slots:
+    //ToDo: rename the below functions
+    void on_modelItemChanged(QStandardItem*);
+    void on_pushButton_clicked();
+    void on_pushButton_3_clicked();
+    void on_pushButton_2_clicked();
+
+public slots:
+    void onFoundRSS(int type, QString name, QString url, QString encoding, QString web_source, int version);
+    void onEndOfUrls();
+
+signals:
+    void stateChanged (const QString &);
 };
 
 #endif // WEB_SEARCH_INTERFACE_H

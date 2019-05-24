@@ -17,7 +17,7 @@ JelyazkaManager::JelyazkaManager():
     //tray_icon_->show(); //FIXME: the tray icon desn't appear. An empty window appears instead.
     //option_window_->show();
     makeConnections();
-    emit (removeOldData("RemoveOldData"));
+    emit (stateChanged("RemoveOldData"));
 }
 /*
     //ToDo: add transitions
@@ -42,32 +42,52 @@ JelyazkaManager::JelyazkaManager():
     */
 void JelyazkaManager::makeConnections ()
 {
+    connectionsFromJelyazkaStateMachine();
+    connectionsToJelyazkaStateMachine();
+}
+
+void JelyazkaManager::connectionsToJelyazkaStateMachine ()
+{
     //transition to "remove old data" state
     connect( this
-            , SIGNAL(removeOldData(const QString &))
+            , SIGNAL(stateChanged(const QString &))
             , jelyazka_state_machine_.get()
             , SLOT(onStateChanged(const QString &))
             , Qt::QueuedConnection);
 
-    //transition to "main window" state
     connect( init_window_.get()
-            , SIGNAL(rssDataDownloaded(const QString &)) //
+            , SIGNAL(stateChanged(const QString &))
             , jelyazka_state_machine_.get()
             , SLOT(onStateChanged(const QString &))
             , Qt::QueuedConnection);
 
+    connect( main_window_.get()
+            , SIGNAL(stateChanged(const QString &))
+            , jelyazka_state_machine_.get()
+            , SLOT(onStateChanged(const QString &))
+            , Qt::QueuedConnection);
+
+    connect( help_window_.get()
+            , SIGNAL(stateChanged(const QString &))
+            , jelyazka_state_machine_.get()
+            , SLOT(onStateChanged(const QString &))
+            , Qt::QueuedConnection);
+
+    connect( rss_search_window_.get()
+            , SIGNAL(stateChanged(const QString &))
+            , jelyazka_state_machine_.get()
+            , SLOT(onStateChanged(const QString &))
+            , Qt::QueuedConnection);
+}
+
+void JelyazkaManager::connectionsFromJelyazkaStateMachine ()
+{
     //show window connections
     //show OptionWindow
     connect( jelyazka_state_machine_.get()
             , SIGNAL(showOptionWindow())
             , this
             , SLOT(onShowOptionWindow())
-            , Qt::QueuedConnection);
-
-    connect( main_window_.get()
-            , SIGNAL(stateChanged(const QString &))
-            , this
-            , SLOT(onStateChanged(const QString &))
             , Qt::QueuedConnection);
 
     //show InitWindow
@@ -83,30 +103,7 @@ void JelyazkaManager::makeConnections ()
             , this
             , SLOT(onShowMainWindow())
             , Qt::QueuedConnection);
-
-    //hide window connections
-    //hide option window
-    connect( this
-            , SIGNAL(hideOptionWindow())
-            , jelyazka_state_machine_.get()
-            , SLOT(onStateChanged(const QString &))
-            , Qt::QueuedConnection);
-
-    //hide help window
-    connect( this
-            , SIGNAL(hideHelpWindow())
-            , jelyazka_state_machine_.get()
-            , SLOT(onStateChanged(const QString &))
-            , Qt::QueuedConnection);
-
-    //hide rss search window
-    connect( this
-            , SIGNAL(hideRssSearchWindow())
-            , jelyazka_state_machine_.get()
-            , SLOT(onStateChanged(const QString &))
-            , Qt::QueuedConnection);
 }
-
 
 void JelyazkaManager::onShowOptionWindow ()
 {
@@ -124,4 +121,15 @@ void JelyazkaManager::onShowMainWindow ()
 {
    qDebug()<<__PRETTY_FUNCTION__;
    main_window_->show();
+}
+
+void JelyazkaManager::onShowHelpWindow()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    help_window_->show();
+}
+void JelyazkaManager::onShowRssSearchWindow()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    rss_search_window_->show();
 }

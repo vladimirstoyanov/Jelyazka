@@ -21,13 +21,19 @@ class JelyazkaManager: public QObject
         Q_OBJECT
 public:
     JelyazkaManager();
+    virtual ~JelyazkaManager () {}
 
     void makeConnections ();
 
 public slots:
-    void onShowOptionWindow ();
-    void onShowInitWindow ();
-    void onShowMainWindow ();
+    void onShowHelpWindow       ();
+    void onShowInitWindow       ();
+    void onShowMainWindow       ();
+    void onShowOptionWindow     ();
+    void onShowRssSearchWindow  ();
+
+signals:
+       void stateChanged (const QString &);
 
 private:
     std::shared_ptr<About>                  about_window_;
@@ -40,9 +46,9 @@ private:
     std::shared_ptr<RSSSearchGUI>           rss_search_window_;
     std::shared_ptr<TrayIcon>               tray_icon_;
 
-signals:
-       void removeOldData(const QString &);
-       void stateChanged (const QString &);
+private:
+    void connectionsFromJelyazkaStateMachine ();
+    void connectionsToJelyazkaStateMachine ();
 };
 
 #endif // JELYAZKAMANAGER_H

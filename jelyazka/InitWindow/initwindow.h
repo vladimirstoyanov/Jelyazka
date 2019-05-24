@@ -51,7 +51,7 @@ public slots:
     void onWriteData(RSSData rss_data);
 
 signals:
-    void rssDataDownloaded (const QString &event);
+    void stateChanged (const QString &event);
 
 private:
     DataBase                            data_base_;

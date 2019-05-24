@@ -19,16 +19,21 @@
 #ifndef HELP_H
 #define HELP_H
 
+#include <memory>
+
+#include <QCloseEvent>
 #include <QDesktopWidget>
 #include <QFile>
 #include <QMessageBox>
 #include <QTextStream>
+#include <QtDebug>
 #include <QWidget>
 
 #include "ui_help.h"
 
-namespace Ui {
-class Help;
+namespace Ui
+{
+    class Help;
 }
 
 class Help : public QWidget
@@ -40,15 +45,16 @@ public:
     virtual ~Help();
 
 private:
-    void showEvent(QShowEvent *);
-    void resizeEvent(QResizeEvent *event);
+    std::shared_ptr <Ui::Help> ui_;
 
 private:
+    void closeEvent (QCloseEvent *);
     void loadHelp();
+    void resizeEvent(QResizeEvent *event);
+    void showEvent(QShowEvent *);
 
-private:
-    Ui::Help *ui_;
-
+signals:
+    void stateChanged (const QString &);
 };
 
 #endif // HELP_H
