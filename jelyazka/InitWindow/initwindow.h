@@ -58,7 +58,7 @@ private:
     std::vector<Feed>                   feeds_;
     std::shared_ptr<QLabel>             image_init_label_;
     std::shared_ptr<QImage>             init_image_;
-    std::shared_ptr<InitWindowThread>   init_window_thread_;
+    InitWindowThread*                   init_window_thread_;
     std::shared_ptr<QThreadPool>        thread_pool_;
     std::shared_ptr<Ui::InitWindow>     ui_;
 

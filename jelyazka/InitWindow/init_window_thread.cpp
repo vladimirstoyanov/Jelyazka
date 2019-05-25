@@ -32,10 +32,16 @@ InitWindowThread::InitWindowThread()
 
 InitWindowThread::~InitWindowThread()
 {
+    qDebug()<<__PRETTY_FUNCTION__;
+
 }
+
 
 void InitWindowThread::run()
 {
+    qDebug()<<__PRETTY_FUNCTION__;
+
+
     int index = getFreeFeedIndex ();
 
     qDebug()<<__PRETTY_FUNCTION__<<": index="<<index;
@@ -51,6 +57,7 @@ void InitWindowThread::run()
     {
         emit downloadFinished ();
     }
+
 }
 
 void InitWindowThread::downloadFeed (const unsigned int index)
@@ -106,7 +113,7 @@ bool InitWindowThread::isDownloadingFinished ()
     return true;
 }
 
-void InitWindowThread::setURLs (const std::vector<Feed> &feeds)
+void InitWindowThread::setURLs (std::vector<Feed> feeds)
 {
     for (unsigned int i=0; i<feeds.size(); ++i)
     {

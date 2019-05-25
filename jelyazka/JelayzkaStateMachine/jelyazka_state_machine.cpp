@@ -17,6 +17,7 @@ JelayzkaStateMachine::JelayzkaStateMachine ():
 {
     //ToDo: add transitions
     transitions_.addTransition("RemoveOldData"         , idle_state_, remove_old_data_state_);
+
     transitions_.addTransition("RemoveOldDataFinished" , remove_old_data_state_, init_window_state_);
     transitions_.addTransition("RSSDataDownloaded"     , init_window_state_, main_window_state_);
     transitions_.addTransition("RSSDataUpdating"       , main_window_state_, rss_data_updated_state_);

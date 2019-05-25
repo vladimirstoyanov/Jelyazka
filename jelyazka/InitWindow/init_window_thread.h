@@ -58,7 +58,7 @@ public:
 
     unsigned int getFeedsCount  () const { return this->feeds_.size(); }
     void         run            ();
-    void         setURLs        (const std::vector<Feed> &feeds);
+    void         setURLs        (std::vector<Feed> feeds);
 
 private:
         std::vector<Feed>       feeds_;

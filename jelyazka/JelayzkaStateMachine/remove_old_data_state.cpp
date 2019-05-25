@@ -8,6 +8,7 @@ void RemoveOldDataState::onEntry()
     //remove the old data
     DataBase data_base;
     data_base.dropRssDataTable();
+    data_base.createTables();
 
     emit (removeOldDataFinished("RemoveOldDataFinished"));
 }
