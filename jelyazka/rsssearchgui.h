@@ -75,6 +75,7 @@ private:
 
 private:
     //ToDo: replace tree with std::map
+    /*
     struct TreeNode {
        QString item_;
        TreeNode *left_;
@@ -85,27 +86,28 @@ private:
           right_ = NULL;
        }
     };
-    typedef TreeNode treenode;
+    */
+    //typedef TreeNode treenode;
 
 private:
-    void buidBinaryTreeFromDBData();
+    //void buidBinaryTreeFromDBData();
     void clearSearchCache();
     void convertBigEndianToLittleEndian(QString &url);
-    void deleteKey(QString key, TreeNode **T);
-    void destroyTree(TreeNode *leaf);
+    //void deleteKey(QString key, TreeNode **T);
+    //void destroyTree(TreeNode *leaf);
     void interateSite(QString url_addres/*, vector<QString>&result_urls*/);
     void paintRows();
     void returnModifedString(QString &str);
-    void treeInsert(TreeNode *&root, QString newItem);
-    bool treeContains( TreeNode *root, QString item );
+    //void treeInsert(TreeNode *&root, QString newItem);
+    //bool treeContains( TreeNode *root, QString item );
 
 private:
-    bool editNode(TreeNode *root, QString item, QString new_item);
+    //bool editNode(TreeNode *root, QString item, QString new_item);
     int checkExistingURL(QString url);
     int checkForExistingURL(QString url);
-    int countNodes(TreeNode *node);
+    //int countNodes(TreeNode *node);
     int isFeedChecked(QString url, int &index);
-    treenode* findMin(TreeNode *T);
+    //treenode* findMin(TreeNode *T);
     QString change_name(QString name); //ToDo: rename this function
     QString getEncodingFromRSS(QString content);
     QString insertName(QString name);
@@ -123,7 +125,7 @@ private:
     DataBase data_base_;
     std::shared_ptr<Data> data_;
     std::shared_ptr<ParseRSS> parse_rss_;
-    TreeNode *tree_node_;
+    //TreeNode *tree_node_;
     std::vector<std::shared_ptr<RSSData>> feeds_struct_tmp_;
     std::vector<QString> old_names_;
 

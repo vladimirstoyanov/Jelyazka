@@ -83,11 +83,13 @@ RSSSearchGUI::~RSSSearchGUI()
     thread_pool_2->waitForDone();
     mThread->deleteLater();
 
+    /*
     if (tree_node_!=NULL)
     {
         destroyTree(tree_node_);
         tree_node_=NULL;
     }
+    */
 
 
     if (feeds_struct_tmp_.size()>0)
@@ -114,11 +116,13 @@ void RSSSearchGUI::closeEvent(QCloseEvent * event)
     this->hide();
     event->ignore();
 
+    /*
     if (tree_node_!=NULL)
     {
         destroyTree(tree_node_);
         tree_node_ = NULL;
     }
+    */
 
     if (feeds_struct_tmp_.size()>0)
         feeds_struct_tmp_.clear();
@@ -192,7 +196,7 @@ void RSSSearchGUI::showEvent(QShowEvent *)
 {
     this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
 
-    tree_node_ = new TreeNode;
+    //tree_node_ = new TreeNode;
     int row_count = model_->rowCount();
     model_->removeRows(0, row_count);
     ui_->lineEdit->setText("");
@@ -291,9 +295,9 @@ void RSSSearchGUI::onFoundRSS(int type, QString name, QString url, QString encod
             return;
         is_user_edit_ = false;
         parse_rss_->convert_string(name, false);
-        while(treeContains(tree_node_,name))
-            name = change_name(name); //make unique name
-        treeInsert(tree_node_, name);
+        //while(treeContains(tree_node_,name))
+            //name = change_name(name); //make unique name
+        //treeInsert(tree_node_, name);
 
         if (INT_MAX<=old_names_.size())
             return;
@@ -384,7 +388,7 @@ void RSSSearchGUI::on_pushButton_3_clicked() //'Remove' button clicked
     while (!indexes.isEmpty())
     {
         model_->removeRows(indexes.last().row(), 1);
-        deleteKey(old_names_[indexes.last().row()],&tree_node_);
+        //deleteKey(old_names_[indexes.last().row()],&tree_node_);
         old_names_.erase(old_names_.begin() + indexes.last().row());
 
         indexes.removeLast();
@@ -397,8 +401,8 @@ void RSSSearchGUI::on_pushButton_2_clicked() //add RSS feeds button
     this->setEnabled(false);
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    if (feeds_struct_tmp_.size()>0)
-        buidBinaryTreeFromDBData();
+    //if (feeds_struct_tmp_.size()>0)
+        //buidBinaryTreeFromDBData();
 
     for(unsigned int i=0; i<feeds_struct_tmp_.size(); i++)
     {
@@ -451,11 +455,14 @@ void RSSSearchGUI::on_pushButton_2_clicked() //add RSS feeds button
     if (feeds_struct_tmp_.size()>0)
         feeds_struct_tmp_.clear();
 
+    /*
     if (tree_node_!=NULL)
     {
         destroyTree(tree_node_);
         tree_node_ = NULL;
     }
+    */
+
     this->setEnabled(true);
     this->close();
 }
@@ -478,6 +485,7 @@ int RSSSearchGUI::isFeedChecked(QString url, int &index)
     return 0;
 }
 
+/*
 void RSSSearchGUI::treeInsert(TreeNode *&root, QString newItem) {
    if ( root == NULL ) {
       root = new TreeNode( newItem );
@@ -505,8 +513,8 @@ bool RSSSearchGUI::treeContains( TreeNode *root, QString item ) {
       return treeContains( root->right_, item );
    }
 }
-
-
+*/
+/*
 int RSSSearchGUI::countNodes(TreeNode *node) {
    if ( node == NULL ) {
       return 0;
@@ -533,6 +541,7 @@ bool RSSSearchGUI::editNode(TreeNode *root, QString item, QString new_item)
       return editNode( root->right_, item, new_item );
    }
 }
+*/
 QString RSSSearchGUI::change_name(QString name)
 {
     if (name.length()<1)
@@ -583,6 +592,7 @@ QString RSSSearchGUI::change_name(QString name)
 
 void RSSSearchGUI::on_modelItemChanged(QStandardItem*item)
 {
+    /*
     bool in_if=false;
     if (item->column() == 0 && is_user_edit_ && !is_program_edit_)
     {
@@ -604,19 +614,23 @@ void RSSSearchGUI::on_modelItemChanged(QStandardItem*item)
     }
     if (is_program_edit_ && !in_if)
         is_program_edit_ = false;
+        */
 }
 QString RSSSearchGUI::insertName(QString name)
 {
+    /*
     while(treeContains(tree_node_,name))
         name = change_name(name); //make unique name
 
     //edit name
     treeInsert(tree_node_, name);
+    */
     return name;
 }
-
+/*
 void RSSSearchGUI::buidBinaryTreeFromDBData()
 {
+
     if (tree_node_!=NULL)
     {
         destroyTree(tree_node_);
@@ -634,14 +648,17 @@ void RSSSearchGUI::buidBinaryTreeFromDBData()
         treeInsert(tree_node_, tmp[i]);
     }
 }
-
+*/
+/*
 RSSSearchGUI::treenode* RSSSearchGUI::findMin(TreeNode *T)
 {
     while (NULL != T->left_)
         T = T->left_;
     return T;
 }
+*/
 
+/*
 void RSSSearchGUI::deleteKey(QString key, TreeNode **T)
 {
     if (NULL == *T) {
@@ -678,3 +695,4 @@ void RSSSearchGUI::destroyTree(TreeNode *leaf)
     delete leaf;
   }
 }
+*/

@@ -34,8 +34,9 @@ InitWindow::InitWindow(QWidget *parent) :
 InitWindow::~InitWindow()
 {
     qDebug()<<__PRETTY_FUNCTION__;
+
     thread_pool_->waitForDone();
-    init_window_thread_->deleteLater();
+    //init_window_thread_->deleteLater();
 }
 
 void InitWindow::settingInitWindow()
@@ -93,7 +94,6 @@ void InitWindow::loadRssFeeds()
     {
         onDownloadFinished();
     }
-
 }
 
 void InitWindow::onWriteData(RSSData rss_data)
