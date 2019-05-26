@@ -8,16 +8,16 @@ class RSSArticle
 public:
     RSSArticle();
 
-    void setTitle(QString title);
-    void setLink(QString link);
-    void setText(QString text);
-    void setDate(QString date);
+    void setTitle(const QString &title);
+    void setLink(const QString &link);
+    void setText(const QString &text);
+    void setDate(const QString &date);
 
 public:
-    QString getTitle();
-    QString getLink();
-    QString getText();
-    QString getDate();
+    QString getTitle() const;
+    QString getLink() const;
+    QString getText() const;
+    QString getDate() const;
 
 private:
     QString date_;

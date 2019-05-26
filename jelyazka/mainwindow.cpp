@@ -211,10 +211,32 @@ void MainWindow::addToCombobox(const QString &str)
     ui_->comboBox->setCurrentIndex (0);
 }
 
-
-int MainWindow::showArticle()
+void MainWindow::setHtmlContent (const RSSArticle rss_article)
 {
+    ui_->textBrowser->setHtml(
+                QString("<h2>%1</h2><i>%2</i><br>Link: <a href=\"%3\">%3</a><br><br>%4")
+                .arg(rss_article.getTitle(),
+                     rss_article.getDate(),
+                     rss_article.getLink(),
+                     rss_article.getText()));
+}
 
+void MainWindow::showArticle()
+{
+    QString web_site_name = ui_->comboBox->currentText();
+    std::map<QString, RSSData>::iterator it;
+    it = rss_data_.find(web_site_name);
+    if (it==rss_data_.end())
+    {
+        ui_->textBrowser->setHtml("");
+        return;
+    }
+
+    setHtmlContent (it->second.getCurrentArticle());
+}
+
+void MainWindow::showNextArticle()
+{
     //get current value form combobox
     QString web_site_name = ui_->comboBox->currentText();
     std::map<QString, RSSData>::iterator it;
@@ -222,92 +244,42 @@ int MainWindow::showArticle()
     if (it==rss_data_.end())
     {
         ui_->textBrowser->setHtml("");
-        return 0;
+        return;
     }
+    it->second.getNextArticle();
+    setHtmlContent (it->second.getCurrentArticle());
+}
 
-    ui_->textBrowser->setHtml(
-                QString("<h2>%1</h2><i>%2</i><br>Link: <a href=\"%3\">%3</a><br><br>%4")
-                .arg(it->second.getCurrentArticle().getTitle(),
-                     it->second.getCurrentArticle().getDate(),
-                     it->second.getCurrentArticle().getLink(),
-                     it->second.getCurrentArticle().getText()));
-    /*
-    if (struct_index>=data_->size()||struct_index<0)
+
+void MainWindow::showPreviousArticle()
+{
+    //get current value form combobox
+    QString web_site_name = ui_->comboBox->currentText();
+    std::map<QString, RSSData>::iterator it;
+    it = rss_data_.find(web_site_name);
+    if (it==rss_data_.end())
     {
-         //qDebug()<<"show article first if.";
-        return 0;
-    }
-    if (data_->at(struct_index)->getArticlesSize() == 0)
-    {
-        //qDebug()<<"show article second if.";
         ui_->textBrowser->setHtml("");
-        return 0;
+        return;
     }
-    if (article_index>=data_->at(struct_index)->getArticlesSize()||article_index<0)
-    {
-        if (!is_show_flag_)
-            ui_->textBrowser->setHtml("");
-         //qDebug()<<"show article third if.";
-        return 0;
-    }
-
-    QString title_tmp = data_->at(struct_index)->articleAt(article_index).getTitle(),
-            text_tmp = data_->at(struct_index)->articleAt(article_index).getText(),
-            date_tmp = "";
-
-    if (!checkForFilters(title_tmp, text_tmp))
-    {
-        is_show_flag_ = false;
-        showArticle(struct_index,article_index+1);
-
-        return 0;
-    }
-    is_show_flag_ = true;
-
-    //date
-    if (data_->at(struct_index)->articleAt(article_index).getDate()!="")
-        date_tmp = "Date: " + data_->at(struct_index)->articleAt(article_index).getDate();
-
-
-    ui_->textBrowser->setHtml(
-                QString(
-                    "<h2>%1</h2><i>%2</i><br>Link: <a href=\"%3\">%3</a><br><br>%4")
-                .arg(title_tmp,
-                     date_tmp,
-                     data_->at(struct_index)->articleAt(article_index).getLink(),
-                     text_tmp));
-
-    return 1;
-    */
+    it->second.getPreviousArticle();
+    setHtmlContent (it->second.getCurrentArticle());
 }
 
 
 void MainWindow::on_pushButton_clicked() // button '<'
 {
-    /*
-    uint current_article_index_tmp = current_article_index_;
-    if (current_article_index_tmp!=0)
-        current_article_index_tmp--;
-    if (showArticle(current_site_index_,current_article_index_tmp))
-        current_article_index_ = current_article_index_tmp;
-
-        */
+    showPreviousArticle();
 }
 
 void MainWindow::on_pushButton_2_clicked() // button '>'
 {
-    /*
-    if (showArticle(current_site_index_,current_article_index_+1))
-        current_article_index_++;
-        */
+    showNextArticle();
 }
 
-void MainWindow::on_comboBox_currentIndexChanged(const QString &arg1) //event when content is changed
+void MainWindow::on_comboBox_currentIndexChanged(const QString &) //event when content is changed
 {
-    /*
-    qDebug()<<"[MainWindow::on_comboBox_currentIndexChanged] current RSS:"<<arg1;
-    initTextBrowser();
-    */
+    showArticle();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -738,22 +710,13 @@ void MainWindow::initFilters()
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     int key = event->key();
-    if (key == 16777236) //->
+    if (key == 16777236) //-> key pressed
     {
-        /*
-        if (showArticle(current_site_index_,current_article_index_+1))
-            current_article_index_++;
-            */
+        showNextArticle();
     }
-    else if(key==16777234)//<-
+    else if(key==16777234)//<- key pressed
     {
-        /*
-        uint current_article_index_tmp = current_article_index_;
-        if (current_article_index_tmp!=0)
-            current_article_index_tmp--;
-        if (showArticle(current_site_index_,current_article_index_tmp))
-            current_article_index_ = current_article_index_tmp;
-            */
+        showPreviousArticle();
     }
 }
 

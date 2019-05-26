@@ -77,7 +77,7 @@ private slots:
     //ToDo: rename the below functions
     void on_pushButton_clicked();
     void on_pushButton_2_clicked();
-    void on_comboBox_currentIndexChanged(const QString &arg1);
+    void on_comboBox_currentIndexChanged(const QString &);
 
 private:
     void closeEvent(QCloseEvent *);
@@ -101,7 +101,11 @@ private:
 private:
     bool mouseInGrip(QPoint mousePos);
     //int checkForFilters(QString &title, QString &article);
-    int showArticle();
+    void setHtmlContent (const RSSArticle rss_article);
+    void showArticle();
+    void showNextArticle();
+    void showPreviousArticle ();
+
     //int checkForFontTag(const QString &str1);
 
 private:
