@@ -96,6 +96,7 @@ void RSSThread::synchronizeData(int struct_index, QString content)
 
 void RSSThread::run() //runnning another thread (synchronize data for n time)
 {
+    /*
     HTTP http;
     QString content;
 
@@ -138,6 +139,7 @@ void RSSThread::run() //runnning another thread (synchronize data for n time)
     data_->at(index)->setIsLoaded(true);// = true;
     checkIsLoaded();
     mutex_->unlock();
+    */
 }
 
 void RSSThread::setProxySettings()
@@ -166,6 +168,7 @@ void RSSThread::emitAnimateWindow()
 
 int RSSThread::checkIsLoaded()
 {
+    /*
     uint count = 0;
 
     for (uint i = 0; i< data_->size(); i++)
@@ -186,6 +189,7 @@ int RSSThread::checkIsLoaded()
         is_add_option_ = true;
         return 0;
     }
+    */
     return 1;
 }
 

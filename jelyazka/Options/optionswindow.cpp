@@ -365,7 +365,7 @@ void OptionsWindow::rssTableUpdate()
             insertRowToRSSTable(view_feeds_->item(i)->text(), url, version);
             isAddedToView = true;
             data_->pushBack(rss_thread_->initStruct(view_feeds_->item(i)->text(),"RSS",url));
-            data_->at(data_->size()-1)->setIsRead(false);
+            //data_->at(data_->size()-1)->setIsRead(false);
             data_->at(data_->size()-1)->setVersion(version);
             thread_pool_->start(rss_thread_.get());
         }
@@ -403,7 +403,7 @@ void OptionsWindow::rssTableUpdate()
                 QString version = data_base_.getVersionByName(view_feeds_->item(i)->text());
                 insertRowToRSSTable(view_feeds_->item(i)->text(), url, version);
                 data_->pushBack(rss_thread_->initStruct(view_feeds_->item(i)->text(),"RSS",url));
-                data_->at(data_->size()-1)->setIsRead(false);
+                //data_->at(data_->size()-1)->setIsRead(false);
                 data_->at(data_->size()-1)->setVersion(version);
                 isAddedToView = true;
                 thread_pool_->start(rss_thread_.get());

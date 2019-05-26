@@ -7,39 +7,29 @@ RSSData::RSSData()
 
 
 //get
-QString RSSData::getType ()
+QString RSSData::getType () const
 {
     return type_;
 }
 
-QString RSSData::getSiteName()
+QString RSSData::getSiteName() const
 {
     return site_name_;
 }
 
-QString RSSData::getURL()
+QString RSSData::getURL() const
 {
     return url_;
 }
 
-QString RSSData::getEncoding()
+QString RSSData::getEncoding() const
 {
     return encoding_;
 }
 
-QString RSSData::getVersion()
+QString RSSData::getVersion() const
 {
     return version_;
-}
-
-bool RSSData::getIsRead()
-{
-    return is_read_;
-}
-
-bool RSSData::getIsLoaded()
-{
-    return is_loaded_;
 }
 
 size_t RSSData::getArticlesSize()
@@ -62,7 +52,7 @@ void RSSData::eraseArticleAt(unsigned int index)
     rss_article_list_.erase(rss_article_list_.begin() + index);
 }
 
-void RSSData::articlesPushFront(RSSArticle rss_article)
+void RSSData::articlesPushFront(const RSSArticle rss_article)
 {
     if (INT_MAX <= getArticlesSize()) //prevent int overflow
     {
@@ -74,7 +64,7 @@ void RSSData::articlesPushFront(RSSArticle rss_article)
     rss_article_list_.push_front(rss_article);
 }
 
-void RSSData::articlesPushBack(RSSArticle rss_article)
+void RSSData::articlesPushBack(const RSSArticle rss_article)
 {
     if (INT_MAX <= getArticlesSize()) //prevent int overflow
     {
@@ -87,39 +77,29 @@ void RSSData::articlesPushBack(RSSArticle rss_article)
 }
 
 //set
-void RSSData::setType(QString type)
+void RSSData::setType(const QString &type)
 {
     type_ = type;
 }
 
-void RSSData::setSiteName(QString site_name)
+void RSSData::setSiteName(const QString &site_name)
 {
     site_name_ = site_name;
 }
 
-void RSSData::setURL(QString url)
+void RSSData::setURL(const QString &url)
 {
     url_ = url;
 }
 
-void RSSData::setEncoding(QString enconding)
+void RSSData::setEncoding(const QString &enconding)
 {
     encoding_ = enconding;
 }
 
-void RSSData::setVersion(QString version_tmp)
+void RSSData::setVersion(const QString &version_tmp)
 {
     version_ = version_tmp;
-}
-
-void RSSData::setIsRead(bool is_read)
-{
-    is_read_ = is_read;
-}
-
-void RSSData::setIsLoaded(bool is_loaded)
-{
-    is_loaded_ = is_loaded;
 }
 
 

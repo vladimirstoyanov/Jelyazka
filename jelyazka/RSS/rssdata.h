@@ -13,27 +13,22 @@ class RSSData: public RSSArticle
 public:
     RSSData();
 
-    void articlesPushFront(RSSArticle rss_article);
-    void articlesPushBack(RSSArticle rss_article);
+    void articlesPushFront(const RSSArticle rss_article);
+    void articlesPushBack(const RSSArticle rss_article);
     void eraseArticleAt(unsigned int index);
-    void setEncoding(QString enconding);
-    void setIsLoaded(bool isLoaded);
-    void setIsRead(bool isRead);
-    void setSiteName(QString site_name);
-    void setType(QString type);
-    void setURL(QString url);
-    void setVersion(QString version);
+    void setEncoding(const QString &enconding);
+    void setSiteName(const QString &site_name);
+    void setType(const QString &type);
+    void setURL(const QString &url);
+    void setVersion(const QString &version);
 
 public:
-    bool getIsLoaded();
-    bool getIsMarkedForRemove();
-    bool getIsRead();
     size_t getArticlesSize();
-    QString getEncoding();
-    QString getSiteName();
-    QString getType ();
-    QString getURL();
-    QString getVersion();
+    QString getEncoding () const;
+    QString getSiteName() const;
+    QString getType () const;
+    QString getURL() const;
+    QString getVersion() const;
     RSSArticle articleAt(unsigned int index);
 
 private:
@@ -42,8 +37,6 @@ private:
     QString url_;
     QString encoding_;
     QString version_;
-    bool is_read_;
-    bool is_loaded_;
     QList<RSSArticle> rss_article_list_;
 };
 
