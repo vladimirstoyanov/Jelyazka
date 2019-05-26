@@ -250,8 +250,6 @@ void MainWindow::showEvent(QShowEvent *)
 
     this->adjustSize();
     this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
-
-    //initDataInComboBoxFromStructure();
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
