@@ -1,7 +1,10 @@
 #include "rssarticle.h"
 
 RSSArticle::RSSArticle():
-    is_marked_for_remove_(false)
+    date_ ("")
+    , link_("")
+    , text_ ("")
+    , title_ ("")
 {
 
 }
@@ -27,10 +30,6 @@ QString RSSArticle::getDate()
     return date_;
 }
 
-bool RSSArticle::getIsMarkedForRemove()
-{
-    return is_marked_for_remove_;
-}
 
 //set
 void RSSArticle::setTitle(QString title)
@@ -51,9 +50,4 @@ void RSSArticle::setText(QString text)
 void RSSArticle::setDate(QString date)
 {
     date_ = date;
-}
-
-void RSSArticle::setIsMarkedForRemove (bool is_marked_for_remove)
-{
-    is_marked_for_remove_ = is_marked_for_remove;
 }

@@ -1,6 +1,12 @@
 #include "rssdata.h"
 
-RSSData::RSSData()
+RSSData::RSSData():
+    current_index_rss_articles_ (0)
+    , encoding_ ("")
+    , site_name_ ("")
+    , type_ ("")
+    , url_ ("")
+    , version_ ("")
 {
 
 }
@@ -34,22 +40,22 @@ QString RSSData::getVersion() const
 
 size_t RSSData::getArticlesSize()
 {
-    return rss_article_list_.size();
+    return rss_articles_.size();
 }
 
 RSSArticle RSSData::articleAt(unsigned int index)
 {
     RSSArticle default_value;
-    if (index >= rss_article_list_.size())
+    if (index >= rss_articles_.size())
     {
         return default_value;
     }
-    return rss_article_list_[index];
+    return rss_articles_[index];
 }
 
 void RSSData::eraseArticleAt(unsigned int index)
 {
-    rss_article_list_.erase(rss_article_list_.begin() + index);
+    rss_articles_.erase(rss_articles_.begin() + index);
 }
 
 void RSSData::articlesPushFront(const RSSArticle rss_article)
@@ -61,7 +67,7 @@ void RSSData::articlesPushFront(const RSSArticle rss_article)
         return;
     }
 
-    rss_article_list_.push_front(rss_article);
+    rss_articles_.push_front(rss_article);
 }
 
 void RSSData::articlesPushBack(const RSSArticle rss_article)
@@ -73,7 +79,7 @@ void RSSData::articlesPushBack(const RSSArticle rss_article)
         return;
     }
 
-    rss_article_list_.push_back(rss_article);
+    rss_articles_.push_back(rss_article);
 }
 
 //set
@@ -103,3 +109,14 @@ void RSSData::setVersion(const QString &version_tmp)
 }
 
 
+RSSArticle  RSSData::getCurrentArticle ()
+{
+
+}
+RSSArticle  RSSData::getNextArticle ()
+{
+}
+
+RSSArticle  RSSData::getPreviousArticle ()
+{
+}
