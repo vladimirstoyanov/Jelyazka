@@ -111,12 +111,33 @@ void RSSData::setVersion(const QString &version_tmp)
 
 RSSArticle  RSSData::getCurrentArticle ()
 {
-
+    RSSArticle result;
+    if (current_index_rss_articles_<rss_articles_.size())
+    {
+        return rss_articles_[current_index_rss_articles_];
+    }
+    return result; //RSSArticle class with empty values
 }
 RSSArticle  RSSData::getNextArticle ()
 {
+    RSSArticle result;
+    if ((current_index_rss_articles_+1)<rss_articles_.size())
+    {
+        ++current_index_rss_articles_;
+        return rss_articles_[current_index_rss_articles_];
+    }
+
+    return getCurrentArticle();
 }
 
 RSSArticle  RSSData::getPreviousArticle ()
 {
+    RSSArticle result;
+
+    if ((current_index_rss_articles_-1)>-1)
+    {
+        --current_index_rss_articles_;
+    }
+
+    return getCurrentArticle();
 }

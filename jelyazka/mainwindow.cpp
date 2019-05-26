@@ -145,7 +145,6 @@ MainWindow::~MainWindow()
 //initialize text browser widget
 void MainWindow::initTextBrowser()
 {
-
     //get current value form combobox
     QString cur_text= ui_->comboBox->currentText();
 
@@ -212,9 +211,27 @@ void MainWindow::addToCombobox(const QString &str)
     ui_->comboBox->setCurrentIndex (0);
 }
 
-/*
-int MainWindow::showArticle(int struct_index, int article_index)
+
+int MainWindow::showArticle()
 {
+
+    //get current value form combobox
+    QString web_site_name = ui_->comboBox->currentText();
+    std::map<QString, RSSData>::iterator it;
+    it = rss_data_.find(web_site_name);
+    if (it==rss_data_.end())
+    {
+        ui_->textBrowser->setHtml("");
+        return 0;
+    }
+
+    ui_->textBrowser->setHtml(
+                QString("<h2>%1</h2><i>%2</i><br>Link: <a href=\"%3\">%3</a><br><br>%4")
+                .arg(it->second.getCurrentArticle().getTitle(),
+                     it->second.getCurrentArticle().getDate(),
+                     it->second.getCurrentArticle().getLink(),
+                     it->second.getCurrentArticle().getText()));
+    /*
     if (struct_index>=data_->size()||struct_index<0)
     {
          //qDebug()<<"show article first if.";
@@ -261,8 +278,9 @@ int MainWindow::showArticle(int struct_index, int article_index)
                      text_tmp));
 
     return 1;
+    */
 }
-*/
+
 
 void MainWindow::on_pushButton_clicked() // button '<'
 {
@@ -761,4 +779,5 @@ void MainWindow::onUpdateRSSData()
     rss_data_.clear(); //
     rss_data_ = data_base.getRssData();
     initDataInComboBoxFromStructure();
+    showArticle ();
 }

@@ -101,7 +101,7 @@ private:
 private:
     bool mouseInGrip(QPoint mousePos);
     //int checkForFilters(QString &title, QString &article);
-    //int showArticle(int struct_index, int article_index);
+    int showArticle();
     //int checkForFontTag(const QString &str1);
 
 private:
