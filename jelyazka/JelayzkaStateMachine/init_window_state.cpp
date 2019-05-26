@@ -14,5 +14,6 @@ void InitWindowState::onState()
 void InitWindowState::onExit ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
+    emit (updateRssData());
     emit (hideInitWindow());
 }

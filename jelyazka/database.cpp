@@ -78,6 +78,47 @@ void DataBase::closeDB()
     qDebug()<<__PRETTY_FUNCTION__<<": END";
 }
 
+std::map<QString, RSSData> DataBase::getRssData ()
+{
+    std::map<QString, RSSData> result;
+    std::map<QString, RSSData>::iterator it;
+    {
+        openDB();
+        QSqlQuery query(q_sql_data_base_);
+
+        query.prepare( "SELECT * FROM rss_data" );
+
+        if( !query.exec() )
+        {
+            qDebug()<<__PRETTY_FUNCTION__<<"Error:"<<query.lastError();
+            closeDB();
+            return result;
+        }
+
+        while(query.next())
+        {
+            RSSData rss_data;
+            RSSArticle rss_article;
+            rss_article.setTitle(query.value(2).toByteArray().data());
+            rss_article.setLink( query.value(3).toByteArray().data());
+            rss_article.setText( query.value(4).toByteArray().data());
+            QString  name = query.value(1).toByteArray().data();
+
+            it = result.find(name);
+            if (it==result.end())
+            {
+                rss_data.setSiteName(name);
+                rss_data.articlesPushFront(rss_article);
+                result[name] = rss_data;
+            }
+            else
+            {
+                it->second.articlesPushFront(rss_article);
+            }
+        }
+    }
+    closeDB();
+}
 
 //fill view_feeds (QListWidget var)
 void DataBase::getURLs(std::vector<QString> *urls)

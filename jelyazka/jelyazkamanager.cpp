@@ -76,6 +76,13 @@ void JelyazkaManager::connectionsToJelyazkaStateMachine ()
 
 void JelyazkaManager::connectionsFromJelyazkaStateMachine ()
 {
+    //update rss data in main window
+    connect( jelyazka_state_machine_.get()
+            , SIGNAL(updateRssData())
+            , main_window_.get()
+            , SLOT(onUpdateRSSData())
+            , Qt::QueuedConnection);
+
     //show window connections
     //show OptionWindow
     connect( jelyazka_state_machine_.get()

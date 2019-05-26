@@ -67,6 +67,12 @@ void JelayzkaStateMachine::makeConnections ()
             , SLOT(onStateChanged(const QString &))
             , Qt::QueuedConnection);
 
+    connect( init_window_state_.get()
+            , SIGNAL(updateRssData())
+            , this
+            , SLOT(onUpdateRssData())
+            , Qt::QueuedConnection);
+
     showWindowConnections();
     hideWindowConnections();
 
@@ -261,3 +267,8 @@ void JelayzkaStateMachine::onHideAboutWindow()
     emit (hideAboutWindow());
 }
 
+void JelayzkaStateMachine::onUpdateRssData()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    emit (updateRssData());
+}

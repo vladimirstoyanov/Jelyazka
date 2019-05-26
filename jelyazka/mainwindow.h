@@ -64,13 +64,15 @@ public:
             QWidget *parent = 0);
     virtual ~MainWindow();
 
-    //void initDataInComboBoxFromStructure();
+    void initDataInComboBoxFromStructure();
     //void initTextBrowser();
     //void onUpdate(QList<bool> l_removed_items);
 
 protected:
     void keyPressEvent(QKeyEvent *event);
 
+public slots:
+    void onUpdateRSSData ();
 private slots:
     //ToDo: rename the below functions
     void on_pushButton_clicked();
@@ -87,7 +89,7 @@ private:
     bool eventFilter(QObject *, QEvent *);
 
 private:
-    //void addToCombobox(const QString &str);
+    void addToCombobox(const QString &str);
     void gradientRect(const int x, const int y, const int width, const int height);
     //void initDataInComboBox();
     //void initFilters();
@@ -137,6 +139,7 @@ private:
     QPoint cur_point_;
     QPoint move_point_pos_;
     QPoint resize_point_;
+    std::map<QString, RSSData> rss_data_;
 
 signals:
     void stateChanged(const QString &);

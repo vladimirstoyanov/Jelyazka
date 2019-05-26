@@ -188,21 +188,21 @@ void MainWindow::onUpdate(QList<bool> l_items_for_remove)
 }
 */
 
-/*
+
 //initialize combobox from structure
 void MainWindow::initDataInComboBoxFromStructure()
 {
+    std::map<QString, RSSData>::iterator it;
     ui_->comboBox->clear();
 
-    for (unsigned int i=0; i<data_->size(); i++)
+    for (it = rss_data_.begin(); it!=rss_data_.end(); ++it)
     {
-        //QString site_name = data->at(i)->getSiteName();
-        addToCombobox(data_->at(i)->getSiteName());
+        addToCombobox(it->first);
     }
 }
-*/
 
-/*
+
+
 void MainWindow::addToCombobox(const QString &str)
 {
     if (str=="")
@@ -211,7 +211,6 @@ void MainWindow::addToCombobox(const QString &str)
     ui_->comboBox->insertItem(0, str);
     ui_->comboBox->setCurrentIndex (0);
 }
-*/
 
 /*
 int MainWindow::showArticle(int struct_index, int article_index)
@@ -750,7 +749,16 @@ void MainWindow::gradientRect(int x, int y, int width, int height)
     gradient.setColorAt(1, Qt::white);
     painter.fillRect(myQRect, gradient);
 }
+
 bool MainWindow::mouseInGrip(QPoint mousePos)
 {
     return ((mousePos.x() > (this->width_  - 10))&&  (mousePos.y() > (this->height_ - 10)));
+}
+
+void MainWindow::onUpdateRSSData()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    rss_data_.clear(); //
+    rss_data_ = data_base.getRssData();
+    initDataInComboBoxFromStructure();
 }
