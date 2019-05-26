@@ -141,53 +141,6 @@ MainWindow::~MainWindow()
 {
 }
 
-/*
-//initialize text browser widget
-void MainWindow::initTextBrowser()
-{
-    //get current value form combobox
-    QString cur_text= ui_->comboBox->currentText();
-
-
-    //find index of ui->comboBox->currentText() in 's_struct' structure
-    int index=-1;
-    for (uint i=0; i<data_->size(); i++)
-    {
-        if (data_->at(i)->getSiteName()==cur_text)
-        {
-            index = i;
-            break;
-        }
-    }
-
-    if (index==-1)
-    {
-        ui_->textBrowser->setHtml("");
-        return;
-    }
-
-    showArticle(index,0); //show article in text browser with index=0 from 's_struct' structure
-    current_article_index_ = 0;
-    current_site_index_=index;
-}
-*/
-
-/*
-void MainWindow::onUpdate(QList<bool> l_items_for_remove)
-{
-    //remove unnecessary data from s_struct
-    for (int i=l_items_for_remove.size()-1; i>=0; i--)
-    {
-        if (l_items_for_remove[i]==0)
-            data_->erase(i);
-    }
-
-    initDataInComboBoxFromStructure();
-    initTextBrowser();
-}
-*/
-
-
 //initialize combobox from structure
 void MainWindow::initDataInComboBoxFromStructure()
 {
@@ -199,8 +152,6 @@ void MainWindow::initDataInComboBoxFromStructure()
         addToCombobox(it->first);
     }
 }
-
-
 
 void MainWindow::addToCombobox(const QString &str)
 {

@@ -35,23 +35,17 @@
 #include <QStyle>
 #include <QWidget>
 
-#include "data.h"
+
 #include "database.h"
-#include "help.h"
-#include "http.h"
-#include "Options/optionswindow.h"
-//#include "rssthread.h"
-//#include "rsssearchgui.h"
-#include "search.h"
+#include "RSS/rssdata.h"
+//#include "search.h"
+
 #include "ui_mainwindow.h"
 
 namespace Ui
 {
     class MainWindow;
 }
-
-class RSSSearchGUI;
-class OptionsWindow;
 
 class MainWindow : public QWidget
 {
@@ -64,9 +58,7 @@ public:
             QWidget *parent = 0);
     virtual ~MainWindow();
 
-    void initDataInComboBoxFromStructure();
-    //void initTextBrowser();
-    //void onUpdate(QList<bool> l_removed_items);
+    void initDataInComboBoxFromStructure(); //ToDo: move this method in the private section
 
 protected:
     void keyPressEvent(QKeyEvent *event);
@@ -91,7 +83,6 @@ private:
 private:
     void addToCombobox(const QString &str);
     void gradientRect(const int x, const int y, const int width, const int height);
-    //void initDataInComboBox();
     //void initFilters();
     void mouseButtonPressed(QPoint p , QObject *o);
     void mouseDblClicked(QMouseEvent * mouseEvent);
@@ -99,14 +90,13 @@ private:
     //void refreshFeed();
 
 private:
-    bool mouseInGrip(QPoint mousePos);
     //int checkForFilters(QString &title, QString &article);
+    //int checkForFontTag(const QString &str1);
+    bool mouseInGrip(QPoint mousePos);
     void setHtmlContent (const RSSArticle rss_article);
     void showArticle();
     void showNextArticle();
     void showPreviousArticle ();
-
-    //int checkForFontTag(const QString &str1);
 
 private:
     ulong current_site_index_;
