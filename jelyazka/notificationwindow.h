@@ -21,6 +21,7 @@
 
 #include <memory>
 
+#include <QDebug>
 #include <QDesktopWidget>
 #include <QLabel>
 #include <QList>
@@ -28,10 +29,10 @@
 #include <QPainter>
 #include <QPropertyAnimation>
 #include <QShowEvent>
+#include <QTime>
 #include <QWidget>
 
 #include "data.h"
-#include "rssthread.h"
 #include "ui_notificationwindow.h"
 
 namespace Ui
@@ -80,7 +81,7 @@ private:
     std::shared_ptr<QLabel> image_label_;
     QImage close_button_image_;
     std::shared_ptr<Ui::NotificationWindow> ui_;
-    std::shared_ptr<RSSThread> rss_thread_;
+    //std::shared_ptr<RSSThread> rss_thread_;
     bool is_mouse_clicked_; //if mouse clicked on this window, mouse_clicked = true, otherwise mouse_clicked = false;
     bool is_X_changed_; //'X' button image has been changed, then isXchanged = true, otherwise isXchanged = false;
     std::shared_ptr<Data> data_;

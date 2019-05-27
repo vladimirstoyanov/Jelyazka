@@ -1,17 +1,17 @@
 #include "rss_search_window_state.hpp"
 
-void RssSearchWindowState::onEntry()
+void RssSearchWindowState::onEntry(const QString &event)
 {
     qDebug()<<__PRETTY_FUNCTION__;
     emit (showRssSearchWindow());
 }
 
-void RssSearchWindowState::onState()
+void RssSearchWindowState::onState(const QString &event)
 {
     qDebug()<<__PRETTY_FUNCTION__;
 }
 
-void RssSearchWindowState::onExit ()
+void RssSearchWindowState::onExit (const QString &event)
 {
     qDebug()<<__PRETTY_FUNCTION__;
     emit (hideRssSearchWindow());

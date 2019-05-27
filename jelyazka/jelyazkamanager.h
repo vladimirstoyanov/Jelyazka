@@ -14,6 +14,7 @@
 #include "notificationwindow.h"
 #include "Options/optionswindow.h"
 #include "rsssearchgui.h"
+#include "RSS/refresh_rss_data.h"
 #include "trayicon.h"
 
 class JelyazkaManager: public QObject
@@ -43,7 +44,9 @@ public slots:
     void onShowTrayIcon         ();
 
 signals:
-       void stateChanged (const QString &);
+    void stateChanged (const QString &);
+    void startRssRefreshData ();
+    void stopRssRefreshData ();
 
 private:
     std::shared_ptr<About>                  about_window_;
@@ -53,6 +56,7 @@ private:
     std::shared_ptr<NotificationWindow>     notification_window_;
     std::shared_ptr<JelayzkaStateMachine>   jelyazka_state_machine_;
     std::shared_ptr<OptionsWindow>          option_window_;
+    std::shared_ptr<RefreshRssDataTimer>    refresh_rss_data_;
     std::shared_ptr<RSSSearchGUI>           rss_search_window_;
     std::shared_ptr<TrayIcon>               tray_icon_;
 

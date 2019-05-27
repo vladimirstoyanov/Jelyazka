@@ -9,9 +9,9 @@ class RssSearchWindowState: public Jelyazka::IState
     public:
         RssSearchWindowState () {}
         virtual QString   getName() const { return "RssSearchWindowState"; }
-        virtual void onEntry();
-        virtual void onState();
-        virtual void onExit ();
+        virtual void onEntry(const QString &event);
+        virtual void onState(const QString &event);
+        virtual void onExit (const QString &event);
 signals:
     void hideRssSearchWindow ();
     void showRssSearchWindow ();

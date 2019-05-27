@@ -22,7 +22,7 @@ NotificationWindow::NotificationWindow(QWidget *parent) :
     QWidget(parent),
     ui_(new Ui::NotificationWindow),
     image_label_(nullptr),
-    rss_thread_(nullptr),
+    //rss_thread_(nullptr),
     show_window_animation_ (std::make_shared<QPropertyAnimation>(this, "geometry")),
     hide_window_animation_ (std::make_shared<QPropertyAnimation>(this, "geometry")),
     is_mouse_clicked_ (false),
@@ -182,9 +182,9 @@ QList<unsigned int> NotificationWindow::getIndexes(QString data_str)
 //make connection to RSSThread instance.
 void NotificationWindow::setSignal(std::shared_ptr<RSSThread> rssThread, std::shared_ptr<Data> data)
 {
-    rss_thread_ = rssThread;
+    //rss_thread_ = rssThread;
     data_ = data;
-    connect(rss_thread_.get(), SIGNAL(showAnimateWindow(QString)), this, SLOT(onShowAnimateWindow(QString)));
+    //connect(rss_thread_.get(), SIGNAL(showAnimateWindow(QString)), this, SLOT(onShowAnimateWindow(QString)));
 }
 
 //This method is similar of 'Sleep(mseconds)' function in 'windows.h'

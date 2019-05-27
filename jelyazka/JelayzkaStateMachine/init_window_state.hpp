@@ -9,9 +9,9 @@ class InitWindowState: public Jelyazka::IState
     public:
         InitWindowState () {}
         virtual QString getName() const { return "InitWindowState"; }
-        virtual void onEntry();
-        virtual void onState();
-        virtual void onExit ();
+        virtual void onEntry(const QString &event);
+        virtual void onState(const QString &event);
+        virtual void onExit (const QString &event);
 signals:
 
     void hideInitWindow ();

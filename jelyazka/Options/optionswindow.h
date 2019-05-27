@@ -27,6 +27,7 @@
 #include <QDebug>
 #include <QLineEdit>
 #include <QListWidget>
+#include <QMessageBox>
 #include <QResizeEvent>
 #include <QSpinBox>
 #include <QTextEdit>
@@ -37,7 +38,6 @@
 #include "database.h"
 #include "mainwindow.h"
 #include "http.h"
-#include "rssthread.h"
 #include "ui_optionswindow.h"
 
 namespace Ui
@@ -53,7 +53,7 @@ class OptionsWindow : public QWidget
 public:
     explicit OptionsWindow(
             QWidget *parent = nullptr
-            , std::shared_ptr<RSSThread> rss_thread = nullptr
+            //, std::shared_ptr<RSSThread> rss_thread = nullptr
             , std::shared_ptr<Data> data = nullptr);
 
     ~OptionsWindow();
@@ -120,7 +120,7 @@ private:
 private:
     DataBase data_base_;
     std::shared_ptr<Ui::OptionsWindow> ui_;
-    std::shared_ptr<RSSThread> rss_thread_;
+    //std::shared_ptr<RSSThread> rss_thread_;
     std::shared_ptr<Data> data_;
     std::shared_ptr<QListWidget> collect_feeds_;
     std::shared_ptr<QListWidget> view_feeds_;

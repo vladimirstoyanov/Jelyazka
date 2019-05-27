@@ -9,9 +9,9 @@ class HelpWindowState: public Jelyazka::IState
     public:
         HelpWindowState () {}
         virtual QString   getName() const { return "HelpWindowState"; }
-        virtual void onEntry();
-        virtual void onState();
-        virtual void onExit ();
+        virtual void onEntry(const QString &event);
+        virtual void onState(const QString &event);
+        virtual void onExit (const QString &event);
 signals:
     void hideHelpWindow ();
     void showHelpWindow ();

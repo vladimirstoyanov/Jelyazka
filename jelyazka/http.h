@@ -27,7 +27,6 @@
 #include <QTcpSocket>
 #include <QTextCodec>
 
-#include "rssthread.h"
 #include "search.h"
 
 class HTTP

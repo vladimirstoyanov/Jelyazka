@@ -36,7 +36,6 @@ InitWindowThread::~InitWindowThread()
 
 }
 
-
 void InitWindowThread::run()
 {
     qDebug()<<__PRETTY_FUNCTION__;
@@ -68,6 +67,8 @@ void InitWindowThread::downloadFeed (const unsigned int index)
      QString web_source;
      std::shared_ptr<RSSData> rss_data = std::make_shared<RSSData> ();
 
+
+     /*
      rss_data->setURL(feeds_[index].getFeedUrl());
 
      //get the web content
@@ -80,9 +81,15 @@ void InitWindowThread::downloadFeed (const unsigned int index)
 
      //pasrse web content to RSSData
      parse.getRSSDataByWebSource(web_source, rss_data);
+     */
 
-     //test (rss_data);
+     //ToDo: remove the below row. It has been added only for test reasons
+     test (rss_data);
 
+     emit writeData (*rss_data.get());
+
+     //ToDo: remove the below two rows. They have been added only for test reasons
+     rss_data->setSiteName("dnes.bg");
      emit writeData (*rss_data.get());
 
      feeds_[index].setDownloadState(DOWNLOADED);

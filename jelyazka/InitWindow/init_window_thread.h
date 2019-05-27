@@ -22,6 +22,7 @@
 #include <memory>
 #include <vector>
 
+#include <QRunnable>
 #include <QtDebug>
 
 #include "http.h"

@@ -8,9 +8,9 @@ class RssDataUpdatedState: public Jelyazka::IState
     public:
         RssDataUpdatedState () {}
         virtual QString   getName() const { return "RssDataUpdatedState"; }
-        virtual void onEntry();
-        virtual void onState();
-        virtual void onExit ();
+        virtual void onEntry(const QString &event);
+        virtual void onState(const QString &event);
+        virtual void onExit (const QString &event);
 };
 
 #endif

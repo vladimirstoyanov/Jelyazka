@@ -44,9 +44,14 @@ public slots:
     void onShowRssSearchWindow ();
     void onShowTrayIcon ();
 
+    void onStartRssRefreshData ();
+    void onStopRssRefreshData ();
+
     void onStateChanged (const QString &event);
 
     void onUpdateRssData ();
+
+
 
 signals:
     void hideAboutWindow();
@@ -64,6 +69,9 @@ signals:
     void showOptionWindow();
     void showRssSearchWindow();
     void showTrayIcon();
+
+    void startRssRefreshData ();
+    void stopRssRefreshData ();
 
     void updateRssData();
 

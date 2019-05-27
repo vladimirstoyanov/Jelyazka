@@ -15,11 +15,15 @@ void Transition::makeTransition (std::shared_ptr<Jelyazka::IState> &current_stat
         if (current_state->getName() == it->second.first->getName())
         {
             qDebug()<<__PRETTY_FUNCTION__<<": making transition from "<<current_state->getName()<<" to "<<it->second.second->getName();
-            current_state->onExit ();
+            current_state->onExit (event);
             current_state.reset();
             current_state = it->second.second;
-            current_state->onEntry();
-            current_state->onState();
+            current_state->onEntry(event);
+            current_state->onState(event);
+        }
+        else
+        {
+            current_state->onState(event);
         }
     }
 }

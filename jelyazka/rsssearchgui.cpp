@@ -18,12 +18,11 @@
 */
 #include "rsssearchgui.h"
 
-RSSSearchGUI::RSSSearchGUI(QWidget *parent, std::shared_ptr<RSSThread> rss_thread, MainWindow *main_window, std::shared_ptr<Data> data) :
+RSSSearchGUI::RSSSearchGUI(QWidget *parent, MainWindow *main_window, std::shared_ptr<Data> data) :
     QWidget(parent)
     , ui_(std::make_shared<Ui::RSSSearchGUI> ())
     , data_ (data)
     , parse_rss_ (std::make_shared<ParseRSS>(data_))
-    , rss_thread_ (rss_thread)
     , thread_pool_ (std::make_shared<QThreadPool>(this))
     , model_ (std::make_shared<QStandardItemModel>(0,3,this))
     , thread_pool_2 (std::make_shared<QThreadPool>(this))
@@ -113,19 +112,13 @@ void RSSSearchGUI::closeEvent(QCloseEvent * event)
         ui_->label->setText("");
         QApplication::restoreOverrideCursor();
     }
-    this->hide();
+    //this->hide();
     event->ignore();
 
-    /*
-    if (tree_node_!=NULL)
-    {
-        destroyTree(tree_node_);
-        tree_node_ = NULL;
-    }
-    */
-
     if (feeds_struct_tmp_.size()>0)
+    {
         feeds_struct_tmp_.clear();
+    }
     old_names_.clear();
 
     emit(stateChanged("HideRssSearchWindow"));
@@ -162,12 +155,14 @@ int RSSSearchGUI::checkExistingURL(QString url)
 
 int RSSSearchGUI::checkForExistingURL(QString url)
 {
+    /*
     if (rss_thread_ == NULL)
         return 1;
 
     for (uint i=0; i<data_->size(); i++)
         if (url == data_->at(i)->getURL())
             return 1;
+    */
 
     return 0;
 
@@ -429,7 +424,7 @@ void RSSSearchGUI::on_pushButton_2_clicked() //add RSS feeds button
         }
 
         //add to 'rss_thread_'
-        data_->pushBack(rss_thread_->initStruct(feeds_struct_tmp_[i]->getSiteName(),"RSS",feeds_struct_tmp_[i]->getURL()));
+        //data_->pushBack(rss_thread_->initStruct(feeds_struct_tmp_[i]->getSiteName(),"RSS",feeds_struct_tmp_[i]->getURL()));
         data_->at(data_->size()-1)->setVersion(version);
 
         //adding data_ (titles, links, descriptions)
@@ -445,7 +440,7 @@ void RSSSearchGUI::on_pushButton_2_clicked() //add RSS feeds button
         }
     }
     //There is no data in rss_thread_ without below row in MainWindow
-    rss_thread_->setAutoDelete(true);
+    //rss_thread_->setAutoDelete(true);
 
     //main_window_->initDataInComboBoxFromStructure();
     //main_window_->initTextBrowser();

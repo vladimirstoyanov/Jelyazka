@@ -70,5 +70,6 @@ void Help::loadHelp()
 void Help::closeEvent (QCloseEvent *event)
 {
     qDebug()<<__PRETTY_FUNCTION__;
+    event->ignore();
     emit (stateChanged("HideHelpWindow"));
 }

@@ -46,7 +46,6 @@
 #include "mainwindow.h"
 #include "RSS/parserss.h"
 #include "rsssearchthread.h"
-#include "rssthread.h"
 #include "search.h"
 #include "ui_rsssearchgui.h"
 
@@ -62,7 +61,7 @@ class RSSSearchGUI : public QWidget
     Q_OBJECT
 
 public:
-    explicit RSSSearchGUI(QWidget *parent = 0, std::shared_ptr<RSSThread> rss_thread=nullptr, MainWindow *main_window=nullptr, std::shared_ptr<Data> data = nullptr);
+    explicit RSSSearchGUI(QWidget *parent = 0, MainWindow *main_window=nullptr, std::shared_ptr<Data> data = nullptr);
     virtual ~RSSSearchGUI();
     RSSSearchGUIThread *mThread;
 
@@ -116,7 +115,6 @@ private:
     std::shared_ptr<Ui::RSSSearchGUI> ui_;
     std::shared_ptr<QStandardItemModel> model_;
     std::shared_ptr<QGridLayout> grid_;
-    std::shared_ptr<RSSThread> rss_thread_;
     std::shared_ptr<MainWindow> main_window_;
     std::shared_ptr<QThreadPool> thread_pool_;
     std::shared_ptr<QThreadPool> thread_pool_2;

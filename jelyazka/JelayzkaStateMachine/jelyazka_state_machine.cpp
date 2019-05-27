@@ -73,6 +73,18 @@ void JelayzkaStateMachine::makeConnections ()
             , SLOT(onUpdateRssData())
             , Qt::QueuedConnection);
 
+    connect( main_window_state_.get()
+            , SIGNAL(startRssRefreshData())
+            , this
+            , SLOT(onStartRssRefreshData())
+            , Qt::QueuedConnection);
+
+    connect( main_window_state_.get()
+            , SIGNAL(stopRssRefreshData())
+            , this
+            , SLOT(onStopRssRefreshData())
+            , Qt::QueuedConnection);
+
     showWindowConnections();
     hideWindowConnections();
 
@@ -271,4 +283,16 @@ void JelayzkaStateMachine::onUpdateRssData()
 {
     qDebug()<<__PRETTY_FUNCTION__;
     emit (updateRssData());
+}
+
+void JelayzkaStateMachine::onStartRssRefreshData ()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    emit (startRssRefreshData());
+}
+
+void JelayzkaStateMachine::onStopRssRefreshData ()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    emit (stopRssRefreshData());
 }

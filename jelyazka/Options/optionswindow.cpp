@@ -19,7 +19,7 @@
 
 #include "optionswindow.h"
 
-OptionsWindow::OptionsWindow(QWidget *parent, std::shared_ptr<RSSThread> rss_thread, std::shared_ptr<Data> data) :
+OptionsWindow::OptionsWindow(QWidget *parent, /*std::shared_ptr<RSSThread> rss_thread, */std::shared_ptr<Data> data) :
     QWidget(parent)
     , ui_(std::make_shared<Ui::OptionsWindow> ())
     , data_ (data)
@@ -52,7 +52,7 @@ OptionsWindow::OptionsWindow(QWidget *parent, std::shared_ptr<RSSThread> rss_thr
     options_type_ = 1;
 
     main_window_ = main_window_; //FIXME: what the fuck is this shit?
-    rss_thread_ = rss_thread;
+    //rss_thread_ = rss_thread;
 
     ui_->treeWidget->setHeaderLabel("Options");
 
@@ -348,8 +348,9 @@ int OptionsWindow::addStringToViewList(const QString &cur_text)
 //update 'rss' DB table and 'site_struct->s_struct' vector list
 void OptionsWindow::rssTableUpdate()
 {
+    /*
     bool isAddedToView = false;
-    rss_thread_->is_add_option_ = false;
+    //rss_thread_->is_add_option_ = false;
 
     l_items_for_remove_.clear();
 
@@ -439,6 +440,7 @@ void OptionsWindow::rssTableUpdate()
         this->close();
         //main_window_->onUpdate(l_items_for_remove_);
     }
+    */
 }
 
 //remove site_name data from 'rss' table in 'sites.db3'. If all_data == 1,
@@ -666,46 +668,46 @@ void OptionsWindow::saveOptions()
 
     //notifications
     out << "Refresh time: " << QString::number(sb_refresh_time_->value()) <<'\n';
-    rss_thread_->setRefreshTime(sb_refresh_time_->value());
+    //rss_thread_->setRefreshTime(sb_refresh_time_->value());
     if (cb_enable_notification_->isChecked())
     {
         out << "Notification window: 1\n";
-        rss_thread_->setEnableNotificationWindow(1);
+        //rss_thread_->setEnableNotificationWindow(1);
     }
     else
     {
         out << "Notification window: 0\n";
-        rss_thread_->setEnableNotificationWindow(0);
+        //rss_thread_->setEnableNotificationWindow(0);
     }
 
     //proxy
     if (cb_enable_proxy_->isChecked())
     {
         out << "Enabled Proxy: 1\n";
-        rss_thread_->enabled_proxy_connection_ = 1;
+        //rss_thread_->enabled_proxy_connection_ = 1;
     }
     else
     {
         out << "Enabled Proxy: 0\n";
-        rss_thread_->enabled_proxy_connection_ = 0;
+        //rss_thread_->enabled_proxy_connection_ = 0;
     }
 
     out<<"Proxy Address: "<< te_proxy_url_->toPlainText()<<"\n";
-    rss_thread_->proxy_url_ = te_proxy_url_->toPlainText();
+    //rss_thread_->proxy_url_ = te_proxy_url_->toPlainText();
     out<<"Proxy Port: "<< te_proxy_port_->toPlainText()<<"\n";
-    rss_thread_->proxy_port_ = te_proxy_port_->toPlainText();
+    //rss_thread_->proxy_port_ = te_proxy_port_->toPlainText();
 
 
     //filters
     if (cb_enable_filtering_->isChecked())
     {
         out << "Enabled Filters: 1\n";
-        rss_thread_->enabled_filters_ = 1;
+        //rss_thread_->enabled_filters_ = 1;
     }
     else
     {
         out << "Enabled Filters: 0\n";
-        rss_thread_->enabled_filters_ = 0;
+        //rss_thread_->enabled_filters_ = 0;
     }
 
     file.close();
@@ -874,7 +876,7 @@ void OptionsWindow::on_OK_Button_clicked()
     download_feed_status_->show();
     this->setEnabled(false);
     saveOptions();
-    rss_thread_->setProxySettings();
+    //rss_thread_->setProxySettings();
     updateFiltersTable();
     updateCollectFeedListView();
     rssTableUpdate();
@@ -1180,8 +1182,9 @@ void OptionsWindow::hideProxyConnection()
     te_proxy_port_->hide();
 }
 
-void OptionsWindow::closeEvent (QCloseEvent *)
+void OptionsWindow::closeEvent (QCloseEvent *event)
 {
     qDebug()<<__PRETTY_FUNCTION__;
+    event->ignore();
     emit (stateChanged("HideOptionWindow"));
 }

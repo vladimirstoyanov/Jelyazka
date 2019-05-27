@@ -1,18 +1,19 @@
 #include "main_window_state.hpp"
 
 
-void MainWindowState::onEntry()
+void MainWindowState::onEntry(const QString &event)
 {
     qDebug()<<__PRETTY_FUNCTION__;
+    emit(startRssRefreshData());
     emit(showMainWindow());
 }
 
-void MainWindowState::onState()
+void MainWindowState::onState(const QString &event)
 {
     qDebug()<<__PRETTY_FUNCTION__;
 }
 
-void MainWindowState::onExit ()
+void MainWindowState::onExit (const QString &event)
 {
     qDebug()<<__PRETTY_FUNCTION__;
     emit(hideMainWindow());

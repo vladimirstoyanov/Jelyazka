@@ -15,9 +15,9 @@ public:
       virtual ~IState () {}
 
       virtual QString   getName() const = 0;
-      virtual void      onEntry() = 0;
-      virtual void      onState() = 0;
-      virtual void      onExit () = 0;
+      virtual void      onEntry(const QString &event) = 0;
+      virtual void      onState(const QString &event) = 0;
+      virtual void      onExit (const QString &event) = 0;
 };
 
 }

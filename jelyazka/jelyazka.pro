@@ -20,7 +20,6 @@ SOURCES += main.cpp\
     InitWindow/initwindow.cpp \
     InitWindow/init_window_thread.cpp \
     Options/optionswindow.cpp \
-    refreshfeedsdata.cpp \
     help.cpp \
     about.cpp \
     RSS/rssdata.cpp \
@@ -28,13 +27,11 @@ SOURCES += main.cpp\
     http.cpp \
     RSS/parserss.cpp \
     data.cpp \
-    rssthread.cpp \
     notificationwindow.cpp \
     database.cpp \
     rsssearchgui.cpp \
     rsssearchguithread.cpp \
     trayicon.cpp \
-    initialization.cpp \
     mainwindow.cpp \
     JelayzkaStateMachine/state.cpp \
     JelayzkaStateMachine/idle_state.cpp \
@@ -50,7 +47,8 @@ SOURCES += main.cpp\
     JelayzkaStateMachine/rss_search_window_state.cpp \
     JelayzkaStateMachine/tray_icon_state.cpp \
     JelayzkaStateMachine/about_window_state.cpp \
-    jelyazkamanager.cpp
+    jelyazkamanager.cpp \
+    RSS/refresh_rss_data.cpp
 
 HEADERS  += \
     search.h \
@@ -58,7 +56,6 @@ HEADERS  += \
     InitWindow/initwindow.h \
     InitWindow/init_window_thread.h \
     Options/optionswindow.h \
-    refreshfeedsdata.h \
     help.h \
     about.h \
     RSS/rssdata.h \
@@ -66,13 +63,11 @@ HEADERS  += \
     http.h \
     RSS/parserss.h \
     data.h \
-    rssthread.h \
     notificationwindow.h \
     database.h \
     rsssearchgui.h \
     rsssearchthread.h \
     trayicon.h \
-    initialization.h \
     mainwindow.h \
     JelayzkaStateMachine/state.hpp \
     JelayzkaStateMachine/idle_state.hpp \
@@ -88,7 +83,8 @@ HEADERS  += \
     JelayzkaStateMachine/rss_search_window_state.hpp \
     JelayzkaStateMachine/tray_icon_state.hpp \
     JelayzkaStateMachine/about_window_state.hpp \
-    jelyazkamanager.h
+    jelyazkamanager.h \
+    RSS/refresh_rss_data.h
 
 FORMS    += \
     initwindow.ui \

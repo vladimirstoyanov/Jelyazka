@@ -56,7 +56,7 @@ void DataBase::loadStrctureFromDB(std::shared_ptr<Data> data)
 
 void DataBase::openDB()
 {
-    qDebug()<<__PRETTY_FUNCTION__;
+    //qDebug()<<__PRETTY_FUNCTION__;
     //open db
     q_sql_data_base_ = QSqlDatabase::addDatabase("QSQLITE");
     q_sql_data_base_.setDatabaseName("../resources/sites.db3");
@@ -65,7 +65,7 @@ void DataBase::openDB()
 
 void DataBase::closeDB()
 {
-    qDebug()<<__PRETTY_FUNCTION__;
+    //qDebug()<<__PRETTY_FUNCTION__;
     //q_sql_data_base_.close();
     QSqlDatabase db = QSqlDatabase::database();
     db.close();
@@ -75,7 +75,7 @@ void DataBase::closeDB()
     //QSqlDatabase::removeDatabase("QSQLITE");
     //  'qt_sql_default_connection'
     QSqlDatabase::removeDatabase("qt_sql_default_connection");
-    qDebug()<<__PRETTY_FUNCTION__<<": END";
+    //qDebug()<<__PRETTY_FUNCTION__<<": END";
 }
 
 std::map<QString, RSSData> DataBase::getRssData ()
@@ -88,8 +88,7 @@ std::map<QString, RSSData> DataBase::getRssData ()
 
         query.prepare( "SELECT * FROM rss_data" );
 
-        if( !query.exec() )
-        {
+        if( !query.exec() )        {
             qDebug()<<__PRETTY_FUNCTION__<<"Error:"<<query.lastError();
             closeDB();
             return result;
@@ -586,4 +585,40 @@ void DataBase::createTable (const QString &table_name, const QString &query_stri
         }
     }
     closeDB();
+}
+
+void DataBase::updateArticles(RSSData rss_data, std::vector<QString> *new_articles)
+{
+    std::map<QString, RSSData>::iterator it;
+    std::map<QString, RSSData> all_rss_data =  getRssData ();
+
+    it = all_rss_data.find(rss_data.getSiteName());
+    if (it == all_rss_data.end())
+    {
+        qDebug()<<__PRETTY_FUNCTION__<<": Web site name: "<<rss_data.getSiteName()<<" hasn't been found!";
+        return;
+    }
+
+    for (size_t i=0; i<it->second.getArticlesSize(); ++i)
+    {
+        for (size_t j=0; j<rss_data.getArticlesSize(); ++j)
+        {
+            if (it->second.articleAt(i).getLink() == rss_data.articleAt(j).getLink())
+            {
+                break;
+            }
+
+            if (j==rss_data.getArticlesSize()-1) //found a new article
+            {
+                insertIntoRssDataTable(rss_data.getSiteName()
+                                                 , rss_data.articleAt(j).getTitle()
+                                                 , rss_data.articleAt(j).getLink()
+                                                 , rss_data.articleAt(j).getText());
+                if (new_articles!=nullptr)
+                {
+                    new_articles->push_back(rss_data.articleAt(j).getTitle());
+                }
+            }
+        }
+    }
 }

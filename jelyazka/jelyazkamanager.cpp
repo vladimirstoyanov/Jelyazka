@@ -8,6 +8,7 @@ JelyazkaManager::JelyazkaManager():
     , notification_window_ (std::make_shared<NotificationWindow> ())
     , jelyazka_state_machine_(std::make_shared<JelayzkaStateMachine> ())
     , option_window_ (std::make_shared<OptionsWindow> ())
+    , refresh_rss_data_(std::make_shared<RefreshRssDataTimer> ())
     , rss_search_window_(std::make_shared<RSSSearchGUI> ())
     , tray_icon_(std::make_shared<TrayIcon> ())
 {
@@ -158,7 +159,7 @@ void JelyazkaManager::connectionsFromJelyazkaStateMachine ()
     connect( jelyazka_state_machine_.get()
             , SIGNAL(hideRssSearchWindow())
             , this
-            , SLOT(onHideMainWindow())
+            , SLOT(onHideRssSearchWindow())
             , Qt::QueuedConnection);
 
     //hide help window
@@ -180,6 +181,20 @@ void JelyazkaManager::connectionsFromJelyazkaStateMachine ()
             , SIGNAL(hideAboutWindow())
             , this
             , SLOT(onHideAboutWindow())
+            , Qt::QueuedConnection);
+
+    //start rss thread
+    connect( jelyazka_state_machine_.get()
+            , SIGNAL(startRssRefreshData())
+            , refresh_rss_data_.get()
+            , SLOT(onStartRssRefreshData())
+            , Qt::QueuedConnection);
+
+    //stop rss thread
+    connect( jelyazka_state_machine_.get()
+            , SIGNAL(stopRssRefreshData())
+            , refresh_rss_data_.get()
+            , SLOT(onStopRssRefreshData())
             , Qt::QueuedConnection);
 }
 
