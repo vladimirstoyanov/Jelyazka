@@ -46,13 +46,16 @@ public slots:
     void onStopRssRefreshData ();
     void onTimeout();
     void onTimeValueChanged (const int time_msec);
-    void onWrite (const RSSData rss_data);
+    void onWriteData (const RSSData rss_data);
+
+signals:
+    void rssDataUpdated (std::vector<RSSData>);
 
 private:
     DataBase                        data_base_;
     std::vector<Feed>               feeds_;
     InitWindowThread*               init_window_thread_;
-    std::vector<QString>            new_articles_;
+    std::vector<RSSData>            new_articles_;
     std::shared_ptr<QThreadPool>    thread_pool_;
     int                             time_msec_;
     std::shared_ptr<QTimer>         timer_;

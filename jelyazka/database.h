@@ -41,7 +41,7 @@ public:
     void    removeDataFromFilters();
     void    removeDataFromCollectFeeds(const QString &site_name);
     int     selectURLFromAllURLs(const QString &);
-    void    updateArticles(RSSData rss_data, std::vector<QString> *new_articles);
+    void    updateArticles(RSSData rss_data);
 
 private:
     void closeDB();

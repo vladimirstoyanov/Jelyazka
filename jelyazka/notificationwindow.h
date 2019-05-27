@@ -55,7 +55,9 @@ public:
 public slots:
     void onHideAnimationFinished();
     void onShowAnimateWindow(QString);
+    void onRssDataUpdated(std::vector<RSSData>);
     void onShowAnimationFinished();
+
 
 private:
     bool eventFilter(QObject *, QEvent *);

@@ -252,3 +252,27 @@ void NotificationWindow::gradientRect(int x, int y, int width, int height)
     painter.fillRect(myQRect, gradient);
 
 }
+
+void NotificationWindow::onRssDataUpdated(std::vector<RSSData> updated_rss_data)
+{
+    QString html_source="";
+
+    if (updated_rss_data.size() == 0)
+    {
+        return;
+    }
+
+    for (unsigned int i=0; i<updated_rss_data.size(); i++)
+    {
+                html_source+="<a href = \""
+                        + updated_rss_data[i].articleAt(0).getLink()
+                        + "\" style=\"color: #000000\">"
+                        + updated_rss_data[i].getSiteName()
+                        + ": "
+                        + updated_rss_data[i].articleAt(0).getTitle()
+                        + "</a><br><hr>";
+    }
+
+    ui_->textBrowser->setHtml(html_source);
+    this->show();
+}

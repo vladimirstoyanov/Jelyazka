@@ -587,7 +587,7 @@ void DataBase::createTable (const QString &table_name, const QString &query_stri
     closeDB();
 }
 
-void DataBase::updateArticles(RSSData rss_data, std::vector<QString> *new_articles)
+void DataBase::updateArticles(RSSData rss_data)
 {
     std::map<QString, RSSData>::iterator it;
     std::map<QString, RSSData> all_rss_data =  getRssData ();
@@ -599,25 +599,22 @@ void DataBase::updateArticles(RSSData rss_data, std::vector<QString> *new_articl
         return;
     }
 
-    for (size_t i=0; i<it->second.getArticlesSize(); ++i)
+    for (size_t i=0; i<rss_data.getArticlesSize(); ++i)
     {
-        for (size_t j=0; j<rss_data.getArticlesSize(); ++j)
+        for (size_t j=0; j<it->second.getArticlesSize(); ++j)
         {
-            if (it->second.articleAt(i).getLink() == rss_data.articleAt(j).getLink())
+            if (it->second.articleAt(j).getLink() == rss_data.articleAt(i).getLink())
             {
                 break;
             }
 
-            if (j==rss_data.getArticlesSize()-1) //found a new article
+            if (j==it->second.getArticlesSize()-1) //found a new article
             {
                 insertIntoRssDataTable(rss_data.getSiteName()
-                                                 , rss_data.articleAt(j).getTitle()
-                                                 , rss_data.articleAt(j).getLink()
-                                                 , rss_data.articleAt(j).getText());
-                if (new_articles!=nullptr)
-                {
-                    new_articles->push_back(rss_data.articleAt(j).getTitle());
-                }
+                                                 , rss_data.articleAt(i).getTitle()
+                                                 , rss_data.articleAt(i).getLink()
+                                                 , rss_data.articleAt(i).getText());
+
             }
         }
     }

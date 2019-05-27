@@ -79,12 +79,13 @@ void JelayzkaStateMachine::makeConnections ()
             , SLOT(onStartRssRefreshData())
             , Qt::QueuedConnection);
 
+    /*
     connect( main_window_state_.get()
             , SIGNAL(stopRssRefreshData())
             , this
             , SLOT(onStopRssRefreshData())
             , Qt::QueuedConnection);
-
+    */
     showWindowConnections();
     hideWindowConnections();
 

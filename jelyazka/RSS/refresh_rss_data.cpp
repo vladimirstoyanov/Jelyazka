@@ -30,6 +30,7 @@ RefreshRssDataTimer::RefreshRssDataTimer():
 
 RefreshRssDataTimer::~RefreshRssDataTimer()
 {
+    stop();
     thread_pool_->waitForDone();
     //init_window_thread_->deleteLater();
 }
@@ -50,9 +51,10 @@ void RefreshRssDataTimer::stop()
 void RefreshRssDataTimer::onTimeout()
 {
     qDebug()<<__PRETTY_FUNCTION__;
-    //ToDo emit an event to Main Window to update its articles
-    //ToDo emit the changes by new_articles_ to notification window
-
+    if (new_articles_.size()>0)
+    {
+        emit (rssDataUpdated(new_articles_));
+    }
     new_articles_.clear(); //ToDo: check for memory leaks
     loadRssFeeds();
     start(); //start the timer
@@ -68,11 +70,12 @@ void RefreshRssDataTimer::onFavoriteFeedsChanged ()
     qDebug()<<__PRETTY_FUNCTION__;
 }
 
-void RefreshRssDataTimer::onWrite (const RSSData rss_data)
+void RefreshRssDataTimer::onWriteData (const RSSData rss_data)
 {
     qDebug()<<__PRETTY_FUNCTION__;
 
-    data_base_.updateArticles(rss_data, &new_articles_);
+    data_base_.updateArticles(rss_data);
+    new_articles_.push_back(rss_data);
 }
 
 void RefreshRssDataTimer::onDownloadFinished ()
@@ -140,11 +143,11 @@ void RefreshRssDataTimer::loadRssFeeds()
 void RefreshRssDataTimer::onStartRssRefreshData ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
-    //start();
+    start();
 }
 
 void RefreshRssDataTimer::onStopRssRefreshData ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
-    //stop();
+    stop();
 }

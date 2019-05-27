@@ -65,6 +65,8 @@ protected:
 
 public slots:
     void onUpdateRSSData ();
+    void onRssDataUpdated (std::vector<RSSData> updated_rss_data);
+
 private slots:
     //ToDo: rename the below functions
     void on_pushButton_clicked();
