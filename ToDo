@@ -9,6 +9,3 @@
 - update data when click on "Add RSS Feed(s)" button;
 - http class should subscribe to Option window about the proxy settings;
 - refresh button in main windows (gray out main window, when click on the button)
-
-
-rssDataUpdated(std::vector<RSSData> new_articles)
