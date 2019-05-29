@@ -27,7 +27,9 @@
 #include <QTcpSocket>
 #include <QTextCodec>
 
+#include "Options/settings.h"
 #include "search.h"
+
 
 class HTTP
 {
@@ -35,27 +37,27 @@ public:
     HTTP();
     virtual ~HTTP();
 
-    void addSubStringAtBeginning(QString &url, QString substring);
+    void addSubStringAtBeginning(QString &url, const QString &substring);
     void addOrRemoveWWW(QString &url); //ToDo: rename this funtion
-    void changeUrl(QString &url, int option);
+    void changeUrl(QString &url, const int option);
     void checkAndChangeURL2(QString &url); //ToDO: rename this function
     void convertURLToFileName(char *url, char **filename);
-    void getCorrectURL(QString content, QString &url);
+    void getCorrectURL(const QString &content, QString &url);
     void queryPartAndURL(QString &url, QString &query_part);
-    void removeSubString(QString &url, QString substring);
+    void removeSubString(QString &url, const QString &substring);
 
 public:
-    int getQuery(QString url, QString &content, QNetworkProxy *network_proxy=NULL);
+    int getQuery(QString url, QString &content);
     int getQuery(QString url, QString &content, int &type);
-    int isHTMLorXML(QString content);
+    int isHTMLorXML(const QString &content);
     int reconnect(QString url, QString &content, QTcpSocket &socket);
-    bool checkInTheBeginning(QString url, QString http);
-    bool checkForProtocol(QString url);
-    bool checkForProtocol(QString url, QString &protocol);
-    bool checkForProtocol(QString url, int &index);
-    bool checkForProtocol(QString url, int &index, QString &protocol);
-    bool checkInMiddle(QString url, QString substring, int begin_index);
-    bool checkResponse(QString content, QString &response_num);
+    bool checkInTheBeginning(const QString &url, const QString &http);
+    bool checkForProtocol(const QString &url);
+    bool checkForProtocol(const QString &url, QString &protocol);
+    bool checkForProtocol(const QString &url, int &index);
+    bool checkForProtocol(const QString &url, int &index, QString &protocol);
+    bool checkInMiddle(const QString &url, const QString &substring, int begin_index);
+    bool checkResponse(const QString &content, QString &response_num);
 
 private:
     int url_option_;

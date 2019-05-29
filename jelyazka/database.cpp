@@ -120,8 +120,9 @@ std::map<QString, RSSData> DataBase::getRssData ()
 }
 
 //fill view_feeds (QListWidget var)
-void DataBase::getURLs(std::vector<QString> *urls)
+std::vector<QString> DataBase::getURLs()
 {
+    std::vector<QString> urls;
     {
         openDB();
         QSqlQuery query(q_sql_data_base_);
@@ -131,19 +132,19 @@ void DataBase::getURLs(std::vector<QString> *urls)
         if( !query.exec() )
         {
             qDebug()<<__PRETTY_FUNCTION__<<"Error:"<<query.lastError();
-            return;
+            closeDB();
+            return urls;
         }
-
-        urls->clear();
 
         while(query.next())
         {
             QString name;
             name = query.value(2).toByteArray().data();
-            urls->push_back(name);
+            urls.push_back(name);
         }
     }
     closeDB();
+    return urls;
 }
 
 //fill view_feeds (QListWidget var)

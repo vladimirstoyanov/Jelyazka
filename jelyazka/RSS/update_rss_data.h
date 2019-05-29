@@ -16,50 +16,38 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef REFRESHRSSDATATIMER_H
-#define REFRESHRSSDATATIMER_H
+#ifndef UpdateRssData_H
+#define UpdateRssData_H
 
 #include <memory>
 
 #include <QObject>
 #include <QtDebug>
 #include <QThreadPool>
-#include <QTimer>
 
 #include "database.h"
 #include "InitWindow/download_rss_data_thread.h"
 
-class RefreshRssData : public QObject
+class UpdateRssData : public QObject
 {
     Q_OBJECT
 public:
-    RefreshRssData();
-    virtual ~RefreshRssData();
-
-    void start ();
-    void stop  ();
+    UpdateRssData();
+    virtual ~UpdateRssData();
 
 public slots:
     void onDownloadFinished ();
-    void onFavoriteFeedsChanged ();
-    void onStartRssRefreshData ();
-    void onStopRssRefreshData ();
-    void onTimeout();
-    void onTimeValueChanged (const int time_msec);
     void onWriteData (const RSSData rss_data);
+    void onUpdateSettings();
 
 signals:
-    void rssDataUpdated (std::vector<RSSData>);
+    void stateChanged (const QString &);
 
 private:
     DataBase                        data_base_;
     std::vector<Feed>               feeds_;
     DownloadRssDataThread*          download_rss_data_thread_;
-    std::vector<RSSData>            new_articles_;
     std::shared_ptr<QThreadPool>    thread_pool_;
-    int                             time_msec_;
-    std::shared_ptr<QTimer>         timer_;
-
 
 private:
    void makeConnections ();
@@ -67,4 +55,4 @@ private:
    void loadRssUrls ();
 };
 
-#endif // REFRESHRSSDATATIMER_H
+#endif // UpdateRssData_H

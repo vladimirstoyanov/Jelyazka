@@ -1,5 +1,5 @@
 /*
-    RefreshRssData.cpp
+    UpdateRssData.cpp
     Jelyazka RSS/RDF reader
     Copyright (C) 2014 Vladimir Stoyanov
 
@@ -16,74 +16,37 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "refresh_rss_data.h"
+#include "update_rss_data.h"
 
-RefreshRssData::RefreshRssData():
+UpdateRssData::UpdateRssData():
     data_base_()
     , download_rss_data_thread_(new DownloadRssDataThread ())
     , thread_pool_(std::make_shared <QThreadPool>(this))
-    , time_msec_(60000) //1 minute
-    , timer_ (std::make_shared<QTimer> ())
 {
     makeConnections ();
 }
 
-RefreshRssData::~RefreshRssData()
+UpdateRssData::~UpdateRssData()
 {
-    stop();
     thread_pool_->waitForDone();
     //download_rss_data_thread_->deleteLater();
 }
 
-void RefreshRssData::start()
-{
-    qDebug()<<__PRETTY_FUNCTION__;
-    loadRssFeeds();
-    //timer_->start(time_msec_);
-}
-
-void RefreshRssData::stop()
-{
-    qDebug()<<__PRETTY_FUNCTION__;
-    timer_->stop();
-}
-
-void RefreshRssData::onTimeout()
-{
-    qDebug()<<__PRETTY_FUNCTION__;
-    if (new_articles_.size()>0)
-    {
-        emit (rssDataUpdated(new_articles_));
-    }
-    new_articles_.clear(); //ToDo: check for memory leaks
-    loadRssFeeds();
-    start(); //start the timer
-}
-
-void RefreshRssData::onTimeValueChanged(const int time_msec)
-{
-    this->time_msec_ = time_msec;
-}
-
-void RefreshRssData::onFavoriteFeedsChanged ()
-{
-    qDebug()<<__PRETTY_FUNCTION__;
-}
-
-void RefreshRssData::onWriteData (const RSSData rss_data)
+void UpdateRssData::onWriteData (const RSSData rss_data)
 {
     qDebug()<<__PRETTY_FUNCTION__;
 
-    data_base_.updateArticles(rss_data);
-    new_articles_.push_back(rss_data);
+    //data_base_.updateArticles(rss_data);
+
 }
 
-void RefreshRssData::onDownloadFinished ()
+void UpdateRssData::onDownloadFinished ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
+    emit (stateChanged("SettingsUpdated"));
 }
 
-void RefreshRssData::makeConnections ()
+void UpdateRssData::makeConnections ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
 
@@ -101,7 +64,7 @@ void RefreshRssData::makeConnections ()
 }
 
 //FIXME: this code is the same like a code in initwindow.cpp.
-void RefreshRssData::loadRssUrls()
+void UpdateRssData::loadRssUrls()
 {
     qDebug()<<__PRETTY_FUNCTION__<<": loading RSS URLs from DB...";
 
@@ -119,7 +82,7 @@ void RefreshRssData::loadRssUrls()
 }
 
 //FIXME: this code is the same like a code in initwindow.cpp.
-void RefreshRssData::loadRssFeeds()
+void UpdateRssData::loadRssFeeds()
 {
     qDebug()<<__PRETTY_FUNCTION__;
 
@@ -143,14 +106,9 @@ void RefreshRssData::loadRssFeeds()
     }
 }
 
-void RefreshRssData::onStartRssRefreshData ()
+void UpdateRssData::onUpdateSettings()
 {
     qDebug()<<__PRETTY_FUNCTION__;
-    start();
-}
-
-void RefreshRssData::onStopRssRefreshData ()
-{
-    qDebug()<<__PRETTY_FUNCTION__;
-    stop();
+    loadRssUrls ();
+    loadRssFeeds (); //start downloading of rss data
 }

@@ -18,7 +18,6 @@ SOURCES += main.cpp\
     search.cpp \
     logger.cpp \
     InitWindow/initwindow.cpp \
-    InitWindow/init_window_thread.cpp \
     Options/optionswindow.cpp \
     help.cpp \
     about.cpp \
@@ -48,13 +47,15 @@ SOURCES += main.cpp\
     JelayzkaStateMachine/tray_icon_state.cpp \
     JelayzkaStateMachine/about_window_state.cpp \
     jelyazkamanager.cpp \
-    RSS/refresh_rss_data.cpp
+    RSS/refresh_rss_data.cpp \
+    Options/settings.cpp \
+    RSS/update_rss_data.cpp \
+    InitWindow/download_rss_data_thread.cpp
 
 HEADERS  += \
     search.h \
     logger.h \
     InitWindow/initwindow.h \
-    InitWindow/init_window_thread.h \
     Options/optionswindow.h \
     help.h \
     about.h \
@@ -84,7 +85,10 @@ HEADERS  += \
     JelayzkaStateMachine/tray_icon_state.hpp \
     JelayzkaStateMachine/about_window_state.hpp \
     jelyazkamanager.h \
-    RSS/refresh_rss_data.h
+    RSS/refresh_rss_data.h \
+    Options/settings.h \
+    RSS/update_rss_data.h \
+    InitWindow/download_rss_data_thread.h
 
 FORMS    += \
     initwindow.ui \

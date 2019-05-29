@@ -23,7 +23,7 @@ InitWindow::InitWindow(QWidget *parent) :
     , data_base_ ()
     , image_init_label_ (std::make_shared <QLabel>(this))
     , init_image_ (std::make_shared<QImage>("../resources/jelyazka_02_end.png"))
-    , init_window_thread_ (new InitWindowThread ())
+    , download_rss_data_thread_ (new DownloadRssDataThread ())
     , thread_pool_(std::make_shared <QThreadPool>(this))
     , ui_(new Ui::InitWindow)
 {
@@ -36,7 +36,7 @@ InitWindow::~InitWindow()
     qDebug()<<__PRETTY_FUNCTION__;
 
     thread_pool_->waitForDone();
-    //init_window_thread_->deleteLater();
+    //download_rss_data_thread_->deleteLater();
 }
 
 void InitWindow::settingInitWindow()
@@ -65,7 +65,7 @@ void InitWindow::loadRssUrls()
     qDebug()<<__PRETTY_FUNCTION__<<": loading RSS URLs from DB...";
 
     std::vector<QString> urls;
-    data_base_.getURLs(&urls);
+    urls = data_base_.getURLs();
 
     for (unsigned int i=0; i<urls.size(); ++i)
     {
@@ -81,12 +81,12 @@ void InitWindow::loadRssFeeds()
     qDebug()<<__PRETTY_FUNCTION__;
 
     loadRssUrls();
-    init_window_thread_->setURLs(feeds_);
+    download_rss_data_thread_->setURLs(feeds_);
 
 
     for (unsigned int i=0; i<feeds_.size(); ++i)
     {
-        thread_pool_->start(init_window_thread_);
+        thread_pool_->start(download_rss_data_thread_);
         qDebug()<<__PRETTY_FUNCTION__<<": after";
     }
 
@@ -122,13 +122,13 @@ void InitWindow::makeConnections ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
 
-    connect(init_window_thread_
+    connect(download_rss_data_thread_
             , SIGNAL(writeData(RSSData))
             , this
             , SLOT(onWriteData(RSSData))
             , Qt::QueuedConnection);
 
-    connect(init_window_thread_
+    connect(download_rss_data_thread_
             , SIGNAL(downloadFinished())
             , this
             , SLOT(onDownloadFinished())

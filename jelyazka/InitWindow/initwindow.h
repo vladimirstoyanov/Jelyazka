@@ -29,7 +29,7 @@
 #include <QThreadPool>
 
 #include "database.h"
-#include "init_window_thread.h"
+#include "download_rss_data_thread.h"
 #include "ui_initwindow.h"
 
 
@@ -58,7 +58,7 @@ private:
     std::vector<Feed>                   feeds_;
     std::shared_ptr<QLabel>             image_init_label_;
     std::shared_ptr<QImage>             init_image_;
-    InitWindowThread*                   init_window_thread_;
+    DownloadRssDataThread*              download_rss_data_thread_;
     std::shared_ptr<QThreadPool>        thread_pool_;
     std::shared_ptr<Ui::InitWindow>     ui_;
 

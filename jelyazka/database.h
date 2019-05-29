@@ -26,7 +26,7 @@ public:
     void    getFilterList(std::vector<QString> *l_old_filters);
     std::map<QString, RSSData> getRssData();
     QString getURLByName(const QString &name);
-    void    getURLs(std::vector<QString> *urls);
+    std::vector<QString> getURLs();
     QString getVersionByName(const QString &name);
     int     insertIntoAllURLs(const QString &);
     void    insertIntoFavoriteFeeds(const QString &name, const QString &url, const QString &version);

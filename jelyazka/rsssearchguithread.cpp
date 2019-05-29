@@ -50,13 +50,19 @@ bool RSSSearchGUIThread::setUrlRoot(QString url)
     {
         url_root_="";
         for (int i=4; i<url.length(); i++)
+        {
             url_root_+=url[i];
+        }
     }
     else
+    {
         url_root_ = url;
+    }
 
     if (url_root_ == "")
+    {
         return 0;
+    }
 
     return 1;
 }

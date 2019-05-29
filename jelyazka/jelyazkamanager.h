@@ -13,8 +13,10 @@
 #include "mainwindow.h"
 #include "notificationwindow.h"
 #include "Options/optionswindow.h"
+#include "Options/settings.h"
 #include "rsssearchgui.h"
 #include "RSS/refresh_rss_data.h"
+#include "RSS/update_rss_data.h"
 #include "trayicon.h"
 
 class JelyazkaManager: public QObject
@@ -43,10 +45,13 @@ public slots:
     void onShowRssSearchWindow  ();
     void onShowTrayIcon         ();
 
+    void onUpdateSettings       ();
+
+
 signals:
-    void stateChanged (const QString &);
-    void startRssRefreshData ();
-    void stopRssRefreshData ();
+    void stateChanged           (const QString &);
+    void startRssRefreshData    ();
+    void stopRssRefreshData     ();
 
 private:
     std::shared_ptr<About>                  about_window_;
@@ -56,9 +61,11 @@ private:
     std::shared_ptr<NotificationWindow>     notification_window_;
     std::shared_ptr<JelayzkaStateMachine>   jelyazka_state_machine_;
     std::shared_ptr<OptionsWindow>          option_window_;
-    std::shared_ptr<RefreshRssDataTimer>    refresh_rss_data_;
+    std::shared_ptr<RefreshRssData>         refresh_rss_data_;
     std::shared_ptr<RSSSearchGUI>           rss_search_window_;
+    Jelyazka::Settings                      settings_;
     std::shared_ptr<TrayIcon>               tray_icon_;
+    std::shared_ptr<UpdateRssData>          update_rss_data_;
 
 private:
     void connectionsFromJelyazkaStateMachine ();

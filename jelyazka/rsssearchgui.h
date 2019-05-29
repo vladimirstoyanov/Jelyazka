@@ -20,11 +20,14 @@
 #define WEB_SEARCH_INTERFACE_H
 
 #include <limits.h>
+#include <map>
 #include <memory>
 #include <vector>
 
+#include <QApplication>
 #include <QCloseEvent>
 #include <QDebug>
+#include <QDesktopWidget>
 #include <QGridLayout>
 #include <QFontMetrics>
 #include <QMessageBox>
@@ -40,10 +43,8 @@
 #include <QTextCodec>
 #include <QThreadPool>
 
-#include "data.h"
 #include "http.h"
 #include "logger.h"
-#include "mainwindow.h"
 #include "RSS/parserss.h"
 #include "rsssearchthread.h"
 #include "search.h"
@@ -54,14 +55,12 @@ namespace Ui
     class RSSSearchGUI;
 }
 
-class MainWindow;
-
 class RSSSearchGUI : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit RSSSearchGUI(QWidget *parent = 0, MainWindow *main_window=nullptr, std::shared_ptr<Data> data = nullptr);
+    explicit RSSSearchGUI(QWidget *parent = nullptr);
     virtual ~RSSSearchGUI();
     RSSSearchGUIThread *mThread;
 
@@ -87,6 +86,7 @@ private:
     };
     */
     //typedef TreeNode treenode;
+    std::map <QString, RSSData> rss_data_;
 
 private:
     //void buidBinaryTreeFromDBData();
@@ -102,37 +102,34 @@ private:
 
 private:
     //bool editNode(TreeNode *root, QString item, QString new_item);
-    int checkExistingURL(QString url);
-    int checkForExistingURL(QString url);
+    int checkExistingURL(const QString &url);
+    int checkForExistingURL(const QString &url);
     //int countNodes(TreeNode *node);
-    int isFeedChecked(QString url, int &index);
+    int isFeedChecked(const QString &url, int &index);
     //treenode* findMin(TreeNode *T);
-    QString change_name(QString name); //ToDo: rename this function
-    QString getEncodingFromRSS(QString content);
-    QString insertName(QString name);
+    QString changeName(const QString &name); //ToDo: rename this function
+    QString getEncodingFromRSS(const QString &content);
+    QString insertName(const QString &name);
 
 private:
     std::shared_ptr<Ui::RSSSearchGUI> ui_;
     std::shared_ptr<QStandardItemModel> model_;
     std::shared_ptr<QGridLayout> grid_;
-    std::shared_ptr<MainWindow> main_window_;
     std::shared_ptr<QThreadPool> thread_pool_;
     std::shared_ptr<QThreadPool> thread_pool_2;
     bool is_user_edit_;
     bool is_program_edit_;
     DataBase data_base_;
-    std::shared_ptr<Data> data_;
     std::shared_ptr<ParseRSS> parse_rss_;
-    //TreeNode *tree_node_;
     std::vector<std::shared_ptr<RSSData>> feeds_struct_tmp_;
     std::vector<QString> old_names_;
 
 private slots:
     //ToDo: rename the below functions
     void on_modelItemChanged(QStandardItem*);
-    void on_pushButton_clicked();
-    void on_pushButton_3_clicked();
-    void on_pushButton_2_clicked();
+    void on_pushButton_clicked(); //'Search' button
+    void on_pushButton_3_clicked(); //'Remove' button clicked
+    void on_pushButton_2_clicked(); //"add RSS feeds" button
 
 public slots:
     void onFoundRSS(int type, QString name, QString url, QString encoding, QString web_source, int version);

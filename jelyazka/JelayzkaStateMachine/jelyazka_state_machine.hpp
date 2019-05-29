@@ -49,9 +49,8 @@ public slots:
 
     void onStateChanged (const QString &event);
 
+    void onUpdateSettings ();
     void onUpdateRssData ();
-
-
 
 signals:
     void hideAboutWindow();
@@ -71,9 +70,12 @@ signals:
     void showTrayIcon();
 
     void startRssRefreshData ();
-    void stopRssRefreshData ();
+    void settingsUpdated     ();
+    void stopRssRefreshData  ();
 
     void updateRssData();
+    void updateSettings ();
+
 
 private:
     std::shared_ptr<AboutWindowState>       about_window_state_;

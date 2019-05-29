@@ -38,9 +38,7 @@ JelayzkaStateMachine::JelayzkaStateMachine ():
     transitions_.addTransition("HideHelpWindow"        , help_window_state_, main_window_state_);
 
     transitions_.addTransition("HideTrayIcon"          , tray_icon_state_, main_window_state_);
-    //transitions_.addTransition("ShowAboutWindow"       , tray_icon_state_, about_window_state_);
 
-    //transitions_.addTransition("HideAboutWindow"       , about_window_state_, tray_icon_state_);
 
     makeConnections();
 }
@@ -77,6 +75,12 @@ void JelayzkaStateMachine::makeConnections ()
             , SIGNAL(startRssRefreshData())
             , this
             , SLOT(onStartRssRefreshData())
+            , Qt::QueuedConnection);
+
+    connect( update_settings_state_.get()
+            , SIGNAL(updateSettings())
+            , this
+            , SLOT(onUpdateSettings())
             , Qt::QueuedConnection);
 
     /*
@@ -296,4 +300,10 @@ void JelayzkaStateMachine::onStopRssRefreshData ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
     emit (stopRssRefreshData());
+}
+
+void JelayzkaStateMachine::onUpdateSettings ()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    emit (updateSettings());
 }

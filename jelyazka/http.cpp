@@ -27,7 +27,7 @@ HTTP::~HTTP()
 }
 
 //http get query
-int HTTP::getQuery(QString url, QString &content ,int &type)
+int HTTP::getQuery(QString url, QString &content , int &type)
 {
     QTcpSocket socket;
     QString query_string="";
@@ -38,6 +38,16 @@ int HTTP::getQuery(QString url, QString &content ,int &type)
     queryPartAndURL(url,query_string);
     if (query_string == "")
         query_string += '/';
+
+    //ToDo: test it
+    if (Jelyazka::Settings::getIsProxyConnectionEnabled())
+    {
+        QNetworkProxy network_proxy;
+        network_proxy.setHostName(Jelyazka::Settings::getProxyIpAddress());
+        network_proxy.setPort(Jelyazka::Settings::getProxyPort().toInt());
+        socket.setProxy(network_proxy);
+    }
+
     socket.connectToHost(url,80,QIODevice::ReadWrite);
     if(!socket.waitForConnected())
     {
@@ -110,7 +120,7 @@ int HTTP::getQuery(QString url, QString &content ,int &type)
 }
 
 //http get query method with proxy argument
-int HTTP::getQuery(QString url, QString &content, QNetworkProxy *network_proxy)
+int HTTP::getQuery(QString url, QString &content)
 {
     QTcpSocket socket;
     QString query_string="";
@@ -123,9 +133,13 @@ int HTTP::getQuery(QString url, QString &content, QNetworkProxy *network_proxy)
         query_string += '/';
 
 
-    if (network_proxy!=NULL)
+    //ToDo: test it
+    if (Jelyazka::Settings::getIsProxyConnectionEnabled())
     {
-        socket.setProxy(*network_proxy);
+        QNetworkProxy network_proxy;
+        network_proxy.setHostName(Jelyazka::Settings::getProxyIpAddress());
+        network_proxy.setPort(Jelyazka::Settings::getProxyPort().toInt());
+        socket.setProxy(network_proxy);
     }
 
     socket.connectToHost(url,80,QIODevice::ReadWrite);
@@ -230,7 +244,7 @@ void HTTP::queryPartAndURL(QString &url, QString &query_part)
     url=tmp_url;
 }
 
-bool HTTP::checkInTheBeginning(QString url, QString http)
+bool HTTP::checkInTheBeginning(const QString &url, const QString &http)
 {
     int n = url.length();
     int n1 = http.length();
@@ -247,7 +261,7 @@ bool HTTP::checkInTheBeginning(QString url, QString http)
 }
 
 //check the middle of url for substring
-bool HTTP::checkInMiddle(QString url, QString substring, int begin_index) //0 - contain substring, 1- not contain
+bool HTTP::checkInMiddle(const QString &url, const QString &substring, int begin_index) //0 - contain substring, 1- not contain
 {
 
     int n = url.length();
@@ -284,7 +298,7 @@ void HTTP::checkAndChangeURL2(QString &url)
         url += url_tmp[index];
 }
 
-bool HTTP::checkForProtocol(QString url, int &index_after_protocol, QString &protocol)
+bool HTTP::checkForProtocol(const QString &url, int &index_after_protocol, QString &protocol)
 {
     protocol = "";
     index_after_protocol = 0;
@@ -306,7 +320,7 @@ bool HTTP::checkForProtocol(QString url, int &index_after_protocol, QString &pro
     return 1;
 }
 
-bool HTTP::checkForProtocol(QString url, QString &protocol)
+bool HTTP::checkForProtocol(const QString &url, QString &protocol)
 {
     protocol = "";
     for (int i=0; i<url.length(); i++)
@@ -325,7 +339,7 @@ bool HTTP::checkForProtocol(QString url, QString &protocol)
     return 1;
 }
 
-bool HTTP::checkForProtocol(QString url, int &index)
+bool HTTP::checkForProtocol(const QString &url, int &index)
 {
     index =0;
     for (int i=0; i<url.length(); i++)
@@ -345,7 +359,7 @@ bool HTTP::checkForProtocol(QString url, int &index)
     return 1;
 }
 
-bool HTTP::checkForProtocol(QString url)
+bool HTTP::checkForProtocol(const QString &url)
 {
     for (int i=0; i<url.length(); i++)
     {
@@ -361,7 +375,7 @@ bool HTTP::checkForProtocol(QString url)
     return 1;
 }
 
-bool HTTP::checkResponse(QString content, QString &response_num)
+bool HTTP::checkResponse(const QString &content, QString &response_num)
 {
     int size_string = content.length();
     if (size_string<6) //HTTP/<num version>
@@ -393,12 +407,12 @@ bool HTTP::checkResponse(QString content, QString &response_num)
     return 0;
 }
 
-void HTTP::addSubStringAtBeginning(QString &url, QString substring)
+void HTTP::addSubStringAtBeginning(QString &url, const QString &substring)
 {
     url = substring + url;
 }
 
-void HTTP::removeSubString(QString &url, QString substring)
+void HTTP::removeSubString(QString &url, const QString &substring)
 {
     Search cs;
     QString newURL="";
@@ -416,7 +430,7 @@ void HTTP::removeSubString(QString &url, QString substring)
     url = newURL;
 }
 
-void HTTP::changeUrl(QString &url, int option)
+void HTTP::changeUrl(QString &url, const int option)
 {
     switch(option)
     {
@@ -443,7 +457,7 @@ void HTTP::changeUrl(QString &url, int option)
 }
 
 //return: 1 (html), 2 (xml), 0 (ignore url)
-int HTTP::isHTMLorXML(QString content)
+int HTTP::isHTMLorXML(const QString &content)
 {
     Search cs;
     int index=0, n = content.length();
@@ -468,7 +482,7 @@ int HTTP::isHTMLorXML(QString content)
     return 0; //ignore url
 }
 
-void HTTP::getCorrectURL(QString content, QString &url)
+void HTTP::getCorrectURL(const QString &content, QString &url)
 {
     Search cs;
     int i=0;

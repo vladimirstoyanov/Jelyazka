@@ -1,20 +1,23 @@
 #include "jelyazkamanager.h"
 
 JelyazkaManager::JelyazkaManager():
-    about_window_  (std::make_shared<About> ())
-    , help_window_ (std::make_shared<Help> ())
-    , init_window_ (std::make_shared<InitWindow> ())
-    , main_window_ (std::make_shared<MainWindow> ())
-    , notification_window_ (std::make_shared<NotificationWindow> ())
-    , jelyazka_state_machine_(std::make_shared<JelayzkaStateMachine> ())
-    , option_window_ (std::make_shared<OptionsWindow> ())
-    , refresh_rss_data_(std::make_shared<RefreshRssDataTimer> ())
-    , rss_search_window_(std::make_shared<RSSSearchGUI> ())
-    , tray_icon_(std::make_shared<TrayIcon> ())
+    about_window_                   (std::make_shared<About> ())
+    , help_window_                  (std::make_shared<Help> ())
+    , init_window_                  (std::make_shared<InitWindow> ())
+    , main_window_                  (std::make_shared<MainWindow> ())
+    , notification_window_          (std::make_shared<NotificationWindow> ())
+    , jelyazka_state_machine_       (std::make_shared<JelayzkaStateMachine> ())
+    , option_window_                (std::make_shared<OptionsWindow> ())
+    , refresh_rss_data_             (std::make_shared<RefreshRssData> ())
+    , rss_search_window_            (std::make_shared<RSSSearchGUI> ())
+    , settings_                     ()
+    , tray_icon_                    (std::make_shared<TrayIcon> ())
+    , update_rss_data_              (std::make_shared <UpdateRssData> ())
 {
     tray_icon_->addIcon();
 
     makeConnections();
+
     emit (stateChanged("RemoveOldData"));
 }
 void JelyazkaManager::makeConnections ()
@@ -86,6 +89,13 @@ void JelyazkaManager::connectionsToJelyazkaStateMachine ()
             , jelyazka_state_machine_.get()
             , SLOT(onStateChanged(const QString &))
             , Qt::QueuedConnection);
+
+    //Rss data updated by UpdateRssData class
+    connect( update_rss_data_.get()
+            , SIGNAL(stateChanged(const QString &))
+            , jelyazka_state_machine_.get()
+            , SLOT(onStateChanged(const QString &))
+            , Qt::QueuedConnection);
 }
 
 void JelyazkaManager::connectionsFromJelyazkaStateMachine ()
@@ -94,7 +104,7 @@ void JelyazkaManager::connectionsFromJelyazkaStateMachine ()
     connect( jelyazka_state_machine_.get()
             , SIGNAL(updateRssData())
             , main_window_.get()
-            , SLOT(onUpdateRSSData())
+            , SLOT(onUpdateRSSData()) //downloads the last updates and upgrades main window widgets with the new rss data
             , Qt::QueuedConnection);
 
     //show window connections
@@ -209,6 +219,20 @@ void JelyazkaManager::connectionsFromJelyazkaStateMachine ()
             , refresh_rss_data_.get()
             , SLOT(onStopRssRefreshData())
             , Qt::QueuedConnection);
+
+    //
+    connect( jelyazka_state_machine_.get()
+            , SIGNAL(updateSettings())
+            , update_rss_data_.get()
+            , SLOT(onUpdateSettings())
+            , Qt::QueuedConnection);
+    //
+    connect( jelyazka_state_machine_.get()
+            , SIGNAL(settingsUpdated())
+            , main_window_.get()
+            , SLOT(onUpdateRSSData())
+            , Qt::QueuedConnection);
+
 }
 
 void JelyazkaManager::onShowOptionWindow ()
@@ -291,4 +315,10 @@ void JelyazkaManager::onHideAboutWindow()
 {
     qDebug()<<__PRETTY_FUNCTION__;
     about_window_->hide();
+}
+
+
+void JelyazkaManager::onUpdateSettings ()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
 }

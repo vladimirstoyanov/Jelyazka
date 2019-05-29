@@ -18,32 +18,23 @@
 */
 #include "rsssearchgui.h"
 
-RSSSearchGUI::RSSSearchGUI(QWidget *parent, MainWindow *main_window, std::shared_ptr<Data> data) :
+RSSSearchGUI::RSSSearchGUI(QWidget *parent) :
     QWidget(parent)
     , ui_(std::make_shared<Ui::RSSSearchGUI> ())
-    , data_ (data)
-    , parse_rss_ (std::make_shared<ParseRSS>(data_))
+    , parse_rss_ ()
     , thread_pool_ (std::make_shared<QThreadPool>(this))
     , model_ (std::make_shared<QStandardItemModel>(0,3,this))
     , thread_pool_2 (std::make_shared<QThreadPool>(this))
-    , main_window_ (main_window)
     , grid_ (std::make_shared<QGridLayout> ())
 {
     ui_->setupUi(this);
 
-
-
     this->setMinimumHeight(200);
     this->setMinimumWidth(350);
-
-
-
 
     thread_pool_->setMaxThreadCount(5);
 
     thread_pool_2->setMaxThreadCount(10);
-
-
 
     //init gryd layout
     grid_->addWidget(ui_->lineEdit,0,0);
@@ -92,7 +83,9 @@ RSSSearchGUI::~RSSSearchGUI()
 
 
     if (feeds_struct_tmp_.size()>0)
+    {
         feeds_struct_tmp_.clear();
+    }
     old_names_.clear();
 }
 
@@ -132,28 +125,34 @@ void RSSSearchGUI::paintRows()
         if (i%2 == 0)
         {
             for(int j = 0; j<model_->columnCount(); ++j)
+            {
                 model_->item(i,j)->setBackground(QBrush(QColor(255,255,255)));
+            }
             continue;
         }
         for(int j = 0; j<model_->columnCount(); ++j)
+        {
             model_->item(i,j)->setBackground(QBrush(QColor(200,249,253)));
+        }
     }
 }
 
 //check for existing url in tableView second column data
-int RSSSearchGUI::checkExistingURL(QString url)
+int RSSSearchGUI::checkExistingURL(const QString &url)
 {
     QString itemText = "";
     for(int i = 0; i<model_->rowCount(); ++i)
     {
        itemText =  model_->item(i,1)->text();
         if (url == itemText)
+        {
             return 1;
+        }
     }
     return 0;
 }
 
-int RSSSearchGUI::checkForExistingURL(QString url)
+int RSSSearchGUI::checkForExistingURL(const QString &url)
 {
     /*
     if (rss_thread_ == NULL)
@@ -403,7 +402,9 @@ void RSSSearchGUI::on_pushButton_2_clicked() //add RSS feeds button
     {
         int row=0;
         if (!isFeedChecked(feeds_struct_tmp_[i]->getURL(), row)) //if rss feed is unchecked
+        {
             continue;
+        }
 
         QModelIndex mi;
         QVariant v;
@@ -417,15 +418,19 @@ void RSSSearchGUI::on_pushButton_2_clicked() //add RSS feeds button
         data_base_.insertIntoCollectFeeds(feeds_struct_tmp_[i]->getSiteName(), feeds_struct_tmp_[i]->getURL(),version);
         data_base_.insertIntoFavoriteFeeds(feeds_struct_tmp_[i]->getSiteName(), feeds_struct_tmp_[i]->getURL(), version);
 
+        /*
         if (INT_MAX<=data_->size()) //prevent int overflow
         {
-            QMessageBox::critical(0,"Error","Size of RSS feeds must be less than from " + QString::number(INT_MAX) + "! Please remove any RSS feeds!");
+            QMessageBox::critical(0
+                                  ,"Error","Size of RSS feeds must be less than from " + QString::number(INT_MAX)
+                                  + "! Please remove any RSS feeds!");
             break;
         }
+        */
 
         //add to 'rss_thread_'
         //data_->pushBack(rss_thread_->initStruct(feeds_struct_tmp_[i]->getSiteName(),"RSS",feeds_struct_tmp_[i]->getURL()));
-        data_->at(data_->size()-1)->setVersion(version);
+        //data_->at(data_->size()-1)->setVersion(version);
 
         //adding data_ (titles, links, descriptions)
         RSSArticle art;
@@ -436,7 +441,7 @@ void RSSSearchGUI::on_pushButton_2_clicked() //add RSS feeds button
             art.setText(feeds_struct_tmp_[i]->articleAt(j).getText());
             art.setDate(feeds_struct_tmp_[i]->articleAt(j).getDate());
 
-            data_->at(data_->size()-1)->articlesPushBack(art);
+            //data_->at(data_->size()-1)->articlesPushBack(art);
         }
     }
     //There is no data in rss_thread_ without below row in MainWindow
@@ -448,7 +453,9 @@ void RSSSearchGUI::on_pushButton_2_clicked() //add RSS feeds button
     QApplication::restoreOverrideCursor();
 
     if (feeds_struct_tmp_.size()>0)
+    {
         feeds_struct_tmp_.clear();
+    }
 
     /*
     if (tree_node_!=NULL)
@@ -463,7 +470,7 @@ void RSSSearchGUI::on_pushButton_2_clicked() //add RSS feeds button
 }
 
 
-int RSSSearchGUI::isFeedChecked(QString url, int &index)
+int RSSSearchGUI::isFeedChecked(const QString &url, int &index)
 {
     for(int i = 0; i<model_->rowCount(); ++i)
     {
@@ -537,28 +544,29 @@ bool RSSSearchGUI::editNode(TreeNode *root, QString item, QString new_item)
    }
 }
 */
-QString RSSSearchGUI::change_name(QString name)
+QString RSSSearchGUI::changeName(const QString &name)
 {
-    if (name.length()<1)
+    QString result = name;
+    if (result.length()<1)
     {
-        name+="1";
-        return name;
+        result+="1";
+        return result;
     }
 
-    int n =  name[name.length()-1].unicode();
-    //qDebug()<<names[index];
+    int n =  result[result.length()-1].unicode();
+    //qDebug()<<result[index];
     if (n<48 || n>57)
     {
-        name+="1";
-        return name;
+        result+="1";
+        return result;
     }
 
     int number = 0;
     int multiple = 1;
     int num_len = 0;
-    for (int i=name.length()-1; i>=0; i--)
+    for (int i=result.length()-1; i>=0; i--)
     {
-        int num = name[i].unicode();
+        int num = result[i].unicode();
         if (num>47 && num<58)
         {
             num_len++;
@@ -574,15 +582,15 @@ QString RSSSearchGUI::change_name(QString name)
     QString num_str = QString::number(number);
 
     if (num_len<num_str.length())
-        name+="0";
+        result+="0";
 
-    int j=name.length()-1;
+    int j=result.length()-1;
     for (int i = num_str.length()-1; i>=0; i--)
     {
-        name[j--] = num_str[i];
+        result[j--] = num_str[i];
     }
 
-    return name;
+    return result;
 }
 
 void RSSSearchGUI::on_modelItemChanged(QStandardItem*item)
@@ -611,7 +619,7 @@ void RSSSearchGUI::on_modelItemChanged(QStandardItem*item)
         is_program_edit_ = false;
         */
 }
-QString RSSSearchGUI::insertName(QString name)
+QString RSSSearchGUI::insertName(const QString &name)
 {
     /*
     while(treeContains(tree_node_,name))
