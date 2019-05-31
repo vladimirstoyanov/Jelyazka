@@ -27,7 +27,8 @@
 
 #include "ui_about.h"
 
-namespace Ui {
+namespace Ui
+{
 class About;
 }
 
