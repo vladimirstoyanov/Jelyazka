@@ -44,6 +44,7 @@ void UpdateRssData::onDownloadFinished ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
     emit (stateChanged("SettingsUpdated"));
+    emit (stateChanged("RSSDataAdded"));
 }
 
 void UpdateRssData::makeConnections ()
@@ -111,4 +112,10 @@ void UpdateRssData::onUpdateSettings()
     qDebug()<<__PRETTY_FUNCTION__;
     loadRssUrls ();
     loadRssFeeds (); //start downloading of rss data
+}
+
+void UpdateRssData::onAddRssData ()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    onUpdateSettings ();
 }

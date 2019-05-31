@@ -7,6 +7,7 @@
 #include <QtDebug>
 
 #include "about_window_state.hpp"
+#include "add_rss_data_state.hpp"
 #include "help_window_state.hpp"
 #include "idle_state.hpp"
 #include "init_window_state.hpp"
@@ -28,6 +29,8 @@ public:
     virtual ~JelayzkaStateMachine ();
 
 public slots:
+    void onAddRssData ();
+
     void onHideAboutWindow ();
     void onHideHelpWindow ();
     void onHideInitWindow ();
@@ -53,6 +56,8 @@ public slots:
     void onUpdateRssData ();
 
 signals:
+    void addRssData ();
+
     void hideAboutWindow();
     void hideHelpWindow();
     void hideInitWindow();
@@ -79,6 +84,7 @@ signals:
 
 private:
     std::shared_ptr<AboutWindowState>       about_window_state_;
+    std::shared_ptr<AddRssDataState>        add_rss_data_state_;
     std::shared_ptr<Jelyazka::IState>       current_state_;
     std::shared_ptr<HelpWindowState>        help_window_state_;
     std::shared_ptr<IdleState>              idle_state_;

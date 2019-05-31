@@ -15,6 +15,7 @@ TEMPLATE = app
 CONFIG += c++11
 
 SOURCES += main.cpp\
+    JelayzkaStateMachine/add_rss_data_state.cpp \
     search.cpp \
     logger.cpp \
     InitWindow/initwindow.cpp \
@@ -53,6 +54,7 @@ SOURCES += main.cpp\
     InitWindow/download_rss_data_thread.cpp
 
 HEADERS  += \
+    JelayzkaStateMachine/add_rss_data_state.hpp \
     search.h \
     logger.h \
     InitWindow/initwindow.h \

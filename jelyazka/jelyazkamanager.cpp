@@ -96,6 +96,7 @@ void JelyazkaManager::connectionsToJelyazkaStateMachine ()
             , jelyazka_state_machine_.get()
             , SLOT(onStateChanged(const QString &))
             , Qt::QueuedConnection);
+
 }
 
 void JelyazkaManager::connectionsFromJelyazkaStateMachine ()
@@ -229,6 +230,19 @@ void JelyazkaManager::connectionsFromJelyazkaStateMachine ()
     //
     connect( jelyazka_state_machine_.get()
             , SIGNAL(settingsUpdated())
+            , main_window_.get()
+            , SLOT(onUpdateRSSData())
+            , Qt::QueuedConnection);
+
+    //
+    connect( jelyazka_state_machine_.get()
+            , SIGNAL(addRssData())
+            , update_rss_data_.get()
+            , SLOT(onAddRssData())
+            , Qt::QueuedConnection);
+    //
+    connect( jelyazka_state_machine_.get()
+            , SIGNAL(rssDataAdded())
             , main_window_.get()
             , SLOT(onUpdateRSSData())
             , Qt::QueuedConnection);

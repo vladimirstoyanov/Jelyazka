@@ -2,6 +2,7 @@
 
 JelayzkaStateMachine::JelayzkaStateMachine ():
     about_window_state_         (std::make_shared<AboutWindowState> ())
+    , add_rss_data_state_       (std::make_shared<AddRssDataState> ())
     , current_state_            (std::make_shared<IdleState> ())
     , help_window_state_        (std::make_shared<HelpWindowState> ())
     , idle_state_               (std::make_shared<IdleState> ())
@@ -34,6 +35,9 @@ JelayzkaStateMachine::JelayzkaStateMachine ():
     transitions_.addTransition("SettingsUpdated"       , update_settings_state_, main_window_state_);
 
     transitions_.addTransition("HideRssSearchWindow"   , rss_search_window_state_, main_window_state_);
+    transitions_.addTransition("AddNewRSSData"         , rss_search_window_state_, add_rss_data_state_);
+
+    transitions_.addTransition("RSSDataAdded"          , add_rss_data_state_, main_window_state_);
 
     transitions_.addTransition("HideHelpWindow"        , help_window_state_, main_window_state_);
 
@@ -81,6 +85,12 @@ void JelayzkaStateMachine::makeConnections ()
             , SIGNAL(updateSettings())
             , this
             , SLOT(onUpdateSettings())
+            , Qt::QueuedConnection);
+
+    connect( add_rss_data_state_.get()
+            , SIGNAL(addRssData())
+            , this
+            , SLOT(onAddRssData())
             , Qt::QueuedConnection);
 
     /*
@@ -306,4 +316,10 @@ void JelayzkaStateMachine::onUpdateSettings ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
     emit (updateSettings());
+}
+
+void JelayzkaStateMachine::onAddRssData ()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    emit (addRssData());
 }

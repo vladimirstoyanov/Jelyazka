@@ -337,22 +337,20 @@ void RSSSearchGUI::on_pushButton_2_clicked() //add RSS feeds button
 
     for(it = rss_data_.begin(); it!=rss_data_.end(); ++it)
     {
-        int row=0;
-        if (!isFeedChecked(it->second->getURL(), row)) //if rss feed is unchecked
-        {
-            continue;
-        }
-
         data_base_.insertIntoCollectFeeds(it->second->getSiteName(), it->second->getURL(),it->second->getVersion());
         data_base_.insertIntoFavoriteFeeds(it->second->getSiteName(), it->second->getURL(), it->second->getVersion());
     }
 
     QApplication::restoreOverrideCursor();
 
+    if (rss_data_.size()>0)
+    {
+        emit (stateChanged("AddNewRSSData")); //download the new rss data
+    }
+
     rss_data_.clear();
 
     this->setEnabled(true);
-    this->close();
 }
 
 
