@@ -71,34 +71,12 @@ private:
     void closeEvent(QCloseEvent *);
 
 private:
-    //ToDo: replace tree with std::map
-    /*
-    struct TreeNode {
-       QString item_;
-       TreeNode *left_;
-       TreeNode *right_;
-       TreeNode(QString str = "") {
-          item_ = str;
-          left_ = NULL;
-          right_ = NULL;
-       }
-    };
-    */
-    //typedef TreeNode treenode;
-    std::map <QString, RSSData> rss_data_;
-
-private:
     //void buidBinaryTreeFromDBData();
     QString changeName(const QString &name); //ToDo: rename this function
     int checkExistingURL(const QString &url);
     int checkForExistingURL(const QString &url);
     void clearSearchCache();
     void convertBigEndianToLittleEndian(QString &url);
-    //int countNodes(TreeNode *node);
-    //void deleteKey(QString key, TreeNode **T);
-    //void destroyTree(TreeNode *leaf);
-    //bool editNode(TreeNode *root, QString item, QString new_item);
-    //treenode* findMin(TreeNode *T);
     QString getEncodingFromRSS(const QString &content);
     QString insertName(const QString &name);
     void interateSite(QString url_addres/*, vector<QString>&result_urls*/);
@@ -106,18 +84,15 @@ private:
     void paintRows();
     void returnModifedString(QString &str);
     void setupGui ();
-    //void treeInsert(TreeNode *&root, QString newItem);
-    //bool treeContains( TreeNode *root, QString item );
 
 private:
     DataBase data_base_;
-    std::vector<std::shared_ptr<RSSData>> feeds_struct_tmp_;
     std::shared_ptr<QGridLayout> grid_;
     bool is_user_edit_;
     bool is_program_edit_;
     std::shared_ptr<QStandardItemModel> model_;
-    std::vector<QString> old_names_;
     std::shared_ptr<ParseRSS> parse_rss_;
+    std::map <QString, std::shared_ptr<RSSData >> rss_data_;
     RSSSearchGUIThread *rss_search_thread_;
     std::shared_ptr<QThreadPool> thread_pool_;
     std::shared_ptr<Ui::RSSSearchGUI> ui_;

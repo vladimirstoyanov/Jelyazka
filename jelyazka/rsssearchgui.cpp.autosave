@@ -248,7 +248,7 @@ void RSSSearchGUI::onFoundRSS(int type, QString name, QString url, QString encod
         is_user_edit_ = false;
         parse_rss_->convert_string(name, false);
 
-        //ToDo: insert name
+        
         it = rss_data_.find(name);
         while (it != rss_data_.end())
         {
