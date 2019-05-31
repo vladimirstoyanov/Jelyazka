@@ -74,13 +74,13 @@ private:
     int checkFinish();
 
 signals:  
-    void EndOfUrls();
-    void FoundRSS(int type,
-                  QString name,
-                  QString url,
-                  QString encoding,
-                  QString web_source,
-                  int version);
+    void changeUrlLabel (const QString &url);
+    void endOfUrls();
+    void foundRSS(const QString &name,
+                  const QString &url,
+                  const QString &encoding,
+                  const QString &web_source,
+                  const int version);
 };
 
 #endif // WEB_SEARCH_INTERFACE_THREAD_H

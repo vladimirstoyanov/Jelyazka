@@ -82,14 +82,14 @@ void RSSSearchGUIThread::run()
     if (l_url.size() == 0)
     {
         mutex->unlock();
-        emit EndOfUrls();//onEndOfUrls load new URLs in l_url if l_url2.size()>0
+        emit endOfUrls();//onEndOfUrls load new URLs in l_url if l_url2.size()>0
         return;
     }
     QString *url = new QString(*l_url.begin());
     l_url.erase(l_url.begin());
     mutex->unlock();
 
-    emit FoundRSS(1,*url,*url,"","",0); //this emit make ui->label->setText(url) from web_search_interface;
+    emit changeUrlLabel(*url); //this emit make ui->label->setText(url) from web_search_interface;
 
     int type = 0;
 
@@ -97,9 +97,9 @@ void RSSSearchGUIThread::run()
     {
             mutex->lock();
             if(checkFinish())
-                emit EndOfUrls();
+                emit endOfUrls();
             mutex->unlock();
-            emit FoundRSS (1,"Fail to connect!", "Fail to connect!","","",0);
+            emit changeUrlLabel ("Fail to connect!");
             delete url;
             return;
     }
@@ -125,11 +125,11 @@ void RSSSearchGUIThread::run()
                 *url = url->replace("\'","\"");
                 encoding = encoding.replace("\'","\"");
 
-                emit FoundRSS(0,title,*url, encoding, html, version);
+                emit foundRSS(title,*url, encoding, html, version);
         }
         mutex->lock();
         if (checkFinish())
-            emit EndOfUrls();
+            emit endOfUrls();
         mutex->unlock();
         delete url;
         return;
@@ -191,7 +191,7 @@ void RSSSearchGUIThread::run()
 
     mutex->lock();
     if(checkFinish())
-        emit EndOfUrls();
+        emit endOfUrls();
     mutex->unlock();
 
     delete url;

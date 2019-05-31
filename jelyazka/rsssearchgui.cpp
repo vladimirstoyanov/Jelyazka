@@ -216,11 +216,13 @@ void RSSSearchGUI::on_pushButton_clicked()
     }
 }
 
-void RSSSearchGUI::onFoundRSS(int type, QString name, QString url, QString encoding, QString web_source, int version) //event function, when found rss
+void RSSSearchGUI::onFoundRSS(QString name
+                              , const QString &url
+                              , const QString &encoding
+                              , const QString &web_source
+                              , const int version) //event function, when found rss
 {
     std::map<QString, std::shared_ptr<RSSData> >::iterator it;
-    if (type == 0 || type == -1)
-    {
 
         if (checkExistingURL(url))
             return;
@@ -275,13 +277,11 @@ void RSSSearchGUI::onFoundRSS(int type, QString name, QString url, QString encod
         ui_->tableView->scrollToBottom();
         ui_->tableView->resizeColumnToContents(0);
         is_user_edit_ = true;
-
-    }
-    if (type == 1)
-    {
-        returnModifedString(url);
-        ui_->label->setText(url);
-    }
+}
+void RSSSearchGUI::onChangeUrlLabel (QString url)
+{
+    returnModifedString(url);
+    ui_->label->setText(url);
 }
 
 //change string of label to be within a window size
@@ -476,8 +476,21 @@ void RSSSearchGUI::setupGui ()
      //start thread
      rss_search_thread_ = new RSSSearchGUIThread();
      rss_search_thread_->setAutoDelete(false);
-     connect(rss_search_thread_, SIGNAL(FoundRSS(int,QString, QString, QString, QString,int)), this, SLOT(onFoundRSS(int,QString,QString,QString, QString,int)),Qt::QueuedConnection);
-     connect(rss_search_thread_, SIGNAL(EndOfUrls()),this, SLOT(onEndOfUrls()));
+     connect(rss_search_thread_
+             , SIGNAL(changeUrlLabel(QString))
+             , this
+             , SLOT(onChangeUrlLabel(QString))
+             , Qt::QueuedConnection);
+
+     connect(rss_search_thread_
+             , SIGNAL(foundRSS(QString, const QString &, const QString &, const QString &, const int))
+             , this
+             , SLOT(onFoundRSS(QString, const QString &, const QString &, const QString &, const int))
+             , Qt::QueuedConnection);
+
+     connect(rss_search_thread_
+             , SIGNAL(endOfUrls())
+             ,this, SLOT(onEndOfUrls()));
 
      //init ui->tableView item changed event
      connect(model_.get(), SIGNAL(itemChanged(QStandardItem*)), this, SLOT(on_modelItemChanged(QStandardItem*)));

@@ -103,9 +103,13 @@ private slots:
     void on_pushButton_2_clicked(); //"add RSS feeds" button
 
 public slots:
+    void onChangeUrlLabel (QString url);
     void onEndOfUrls();
-    void onFoundRSS(int type, QString name, QString url, QString encoding, QString web_source, int version);
-
+    void onFoundRSS(QString name
+                    , const QString &url
+                    , const QString &encoding
+                    , const QString &web_source
+                    , const int version);
 signals:
     void stateChanged (const QString &);
 };
