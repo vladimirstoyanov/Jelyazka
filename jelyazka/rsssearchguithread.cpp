@@ -21,7 +21,7 @@
 
 RSSSearchGUIThread::RSSSearchGUIThread() :
     QRunnable()
-    , mutex (std::shared_ptr<QMutex>())
+    , mutex (std::make_shared<QMutex>())
     , stop_thread (false)
 {
 

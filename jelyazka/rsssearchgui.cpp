@@ -39,13 +39,6 @@ RSSSearchGUI::~RSSSearchGUI()
     rss_search_thread_->deleteLater();
 
     rss_data_.clear();
-    /*
-    if (tree_node_!=NULL)
-    {
-        destroyTree(tree_node_);
-        tree_node_=NULL;
-    }
-    */
 }
 
 void RSSSearchGUI::closeEvent(QCloseEvent * event)
@@ -107,20 +100,6 @@ int RSSSearchGUI::checkExistingURL(const QString &url)
     return 0;
 }
 
-int RSSSearchGUI::checkForExistingURL(const QString &url)
-{
-    /*
-    if (rss_thread_ == NULL)
-        return 1;
-
-    for (uint i=0; i<data_->size(); i++)
-        if (url == data_->at(i)->getURL())
-            return 1;
-    */
-
-    return 0;
-
-}
 
 void RSSSearchGUI::convertBigEndianToLittleEndian(QString &url)
 {
@@ -233,7 +212,7 @@ void RSSSearchGUI::on_pushButton_clicked()
             thread_pool_->clear();
 		#endif
         thread_pool_->releaseThread();
-        thread_pool_->start(    rss_search_thread_);
+        thread_pool_->start(rss_search_thread_);
     }
 }
 

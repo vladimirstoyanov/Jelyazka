@@ -71,10 +71,8 @@ private:
     void closeEvent(QCloseEvent *);
 
 private:
-    //void buidBinaryTreeFromDBData();
     QString changeName(const QString &name); //ToDo: rename this function
     int checkExistingURL(const QString &url);
-    int checkForExistingURL(const QString &url);
     void clearSearchCache();
     void convertBigEndianToLittleEndian(QString &url);
     QString getEncodingFromRSS(const QString &content);
