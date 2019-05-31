@@ -205,7 +205,7 @@ void RSSSearchGUI::on_pushButton_clicked()
         rss_search_thread_->l_flags.push_back(0);
         if (!rss_search_thread_->setUrlRoot(url))
         {
-            QMessageBox::critical(0,"Error","Invalid URL!");
+            QMessageBox::critical(nullptr, "Error",  "Invalid URL!");
             return;
         }
         #ifdef _WIN32
@@ -224,59 +224,62 @@ void RSSSearchGUI::onFoundRSS(QString name
 {
     std::map<QString, std::shared_ptr<RSSData> >::iterator it;
 
-        if (checkExistingURL(url))
-            return;
-        is_user_edit_ = false;
-        parse_rss_->convert_string(name, false);
+    if (checkExistingURL(url))
+    {
+        return;
+    }
 
-        //ToDo: insert name
+    is_user_edit_ = false;
+    parse_rss_->convert_string(name, false);
+
+    //ToDo: insert name
+    it = rss_data_.find(name);
+    while (it != rss_data_.end())
+    {
+        name = changeName (name);
         it = rss_data_.find(name);
-        while (it != rss_data_.end())
-        {
-            name = changeName (name);
-            it = rss_data_.find(name);
-        }
+    }
 
-        std::shared_ptr<RSSData> rss_data = std::make_shared<RSSData>();
-        rss_data->setSiteName(name);
-        rss_data->setURL(url);
+    std::shared_ptr<RSSData> rss_data = std::make_shared<RSSData>();
+    rss_data->setSiteName(name);
+    rss_data->setURL(url);
 
 
-        if (!version)
-        {
-            rss_data->setVersion(0);
-            rss_data->setEncoding(encoding);
-            parse_rss_->getArticlesFromRSSContent(web_source, rss_data);
-        }
-        else
-        {
-            rss_data->setVersion("2005");
-            parse_rss_->getArticlesFromRDFContent(web_source, rss_data);
-        }
-        rss_data_[name] = rss_data;
+    if (!version)
+    {
+        rss_data->setVersion(0);
+        rss_data->setEncoding(encoding);
+        parse_rss_->getArticlesFromRSSContent(web_source, rss_data);
+    }
+    else
+    {
+        rss_data->setVersion("2005");
+        parse_rss_->getArticlesFromRDFContent(web_source, rss_data);
+    }
+    rss_data_[name] = rss_data;
 
-        int row_count = model_->rowCount();
-        model_->setRowCount(row_count+1);
-        model_->setData(model_->index(row_count,0),name);
-        model_->setData(model_->index(row_count,1),url);
-        model_->setData(model_->index(row_count,2),encoding);
+    int row_count = model_->rowCount();
+    model_->setRowCount(row_count+1);
+    model_->setData(model_->index(row_count,0),name);
+    model_->setData(model_->index(row_count,1),url);
+    model_->setData(model_->index(row_count,2),encoding);
 
-        QStandardItem* item0 = new QStandardItem(true);
-        item0->setCheckable(true);
-        item0->setCheckState(Qt::Checked);
+    QStandardItem* item0 = new QStandardItem(true);
+    item0->setCheckable(true);
+    item0->setCheckState(Qt::Checked);
 
-        item0->setEditable(false);
-        model_->setItem(row_count, 3, item0);
+    item0->setEditable(false);
+    model_->setItem(row_count, 3, item0);
 
-        model_->item(model_->rowCount()-1,1)->setEditable(false);
-        model_->item(model_->rowCount()-1,2)->setEditable(false);
-        model_->item(model_->rowCount()-1,3)->setEditable(false);
+    model_->item(model_->rowCount()-1,1)->setEditable(false);
+    model_->item(model_->rowCount()-1,2)->setEditable(false);
+    model_->item(model_->rowCount()-1,3)->setEditable(false);
 
-        paintRows();
+    paintRows();
 
-        ui_->tableView->scrollToBottom();
-        ui_->tableView->resizeColumnToContents(0);
-        is_user_edit_ = true;
+    ui_->tableView->scrollToBottom();
+    ui_->tableView->resizeColumnToContents(0);
+    is_user_edit_ = true;
 }
 void RSSSearchGUI::onChangeUrlLabel (QString url)
 {

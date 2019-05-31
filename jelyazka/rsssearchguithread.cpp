@@ -129,7 +129,9 @@ void RSSSearchGUIThread::run()
         }
         mutex->lock();
         if (checkFinish())
+        {
             emit endOfUrls();
+        }
         mutex->unlock();
         delete url;
         return;
@@ -191,7 +193,9 @@ void RSSSearchGUIThread::run()
 
     mutex->lock();
     if(checkFinish())
+    {
         emit endOfUrls();
+    }
     mutex->unlock();
 
     delete url;
@@ -202,7 +206,9 @@ void RSSSearchGUIThread::getUrl (QString html_source, int &index, QString &retur
 {
     return_url ="";
     while(index< html_source.length() && html_source[index]!='\"') //vol
+    {
         index++;
+    }
     index++;
 
     while(index< html_source.length() && html_source[index]!='\"') //vol
@@ -215,7 +221,9 @@ void RSSSearchGUIThread::getUrl (QString html_source, int &index, QString &retur
     {
         QString return_url_tmp = "";
         for (int i=2 ; i<return_url.length(); i++)
+        {
             return_url_tmp+=return_url[i];
+        }
         return_url = return_url_tmp;
     }
 }
@@ -239,7 +247,9 @@ void RSSSearchGUIThread::buildUrl (QString url_root, QString url, QString &retur
             return;
         }
         if (url[i] == '\n' || url[i] == '\r')
+        {
             continue;
+        }
 
         return_url+=url[i];
     }
@@ -251,19 +261,27 @@ void RSSSearchGUIThread::buildUrl (QString url_root, QString url, QString &retur
     if (ret == -1 && ret1 == -1  && return_url.length()>0)
     {
         if (url_root[url_root.length()-1] == '/' && return_url[0]!='/')
+        {
             return_url = url_root + return_url;
+        }
         else if (url_root[url_root.length()-1] != '/' && return_url[0]!='/')
+        {
             return_url = url_root + '/' + return_url;
+        }
         else if (url_root[url_root.length()-1] == '/' && return_url[0]=='/')
         {
             QString return_url_tmp = return_url;
             return_url ="";
             for (int i=1; i<return_url_tmp.length(); i++) //without '/'
+            {
                 return_url+=return_url_tmp[i];
+            }
             return_url = url_root + return_url;
         }
         else
+        {
             return_url = url_root + return_url;
+        }
         return;
     }
     if (ret == -1)
@@ -277,7 +295,9 @@ void RSSSearchGUIThread::buildUrl (QString url_root, QString url, QString &retur
         return;
     }
     if (ret1!=-1)
+    {
         fixProtocol(return_url);
+    }
 }
 
 int RSSSearchGUIThread::fixProtocol(QString &url)
@@ -379,7 +399,9 @@ int RSSSearchGUIThread::lookForHref(QString source, int &index)
     while (source[index]!='>' && index<n)
     {
         if (j==n1) //found 'href' before '>'
+        {
             return 0;
+        }
 
         if (source[index]!=label[j])
         {
@@ -391,7 +413,9 @@ int RSSSearchGUIThread::lookForHref(QString source, int &index)
         index++;
     }
     if (index >= n) //if not found href= in entire html source
+    {
         index =-1;
+    }
 
     index = old_index;
     return 1;
@@ -400,12 +424,15 @@ int RSSSearchGUIThread::lookForHref(QString source, int &index)
 void RSSSearchGUIThread::addOrRemoveLastSymbolSlash(QString url, QString *new_url)
 {
     if (url[url.length()-1]!='/')
+    {
         *new_url = url + '/';
+    }
     else //without '/'
     {
-
-        for (int i=0; i<url.length()-1; i++)
+        for (int i=0; i<url.length()-1; i++)   
+        {
             *new_url+=url[i];
+        }
     }
 }
 
@@ -414,11 +441,17 @@ void RSSSearchGUIThread::addOrRemoveLastSymbolSlash(QString url, QString *new_ur
 int RSSSearchGUIThread::checkForRootURL(QString url, int i, int i1)
 {
     if (i==-1)
+    {
         i=0;
+    }
     while (i<url.length() && url[i]!='/')
+    {
         i++;
+    }
     if (i1 < i)
+    {
         return 0;
+    }
     return 1;
 }
 
@@ -437,7 +470,7 @@ int RSSSearchGUIThread::deleteAllFrom_all_url_table() //delete all_url table
     return data_base_.deleteAllFromAllURL();
 }
 
-QString RSSSearchGUIThread::getEncodingFromRSS(QString content) //+
+QString RSSSearchGUIThread::getEncodingFromRSS(QString content)
 {
     Search cs;
     QString encoding="";
@@ -446,24 +479,34 @@ QString RSSSearchGUIThread::getEncodingFromRSS(QString content) //+
     cs.searchAfter(content,"<?xml", &index1);
 
     if (index1 == -1)
+    {
         return "";
+    }
 
     cs.searchBefore(content, "?>", &index2);
 
     if (index2 == -1)
+    {
         return "";
+    }
 
     cs.searchAfter(content, "encoding=", &index1);
 
     if (index1 == -1 || index1>index2)
+    {
         return "";
+    }
 
     while (content[index1]!='\'' && content [index1]!='\"' && index1<index2)
+    {
         index1++;
+    }
 
     index1++;
     while (content[index1]!='\'' && content [index1]!='\"' && index1<index2)
+    {
         encoding += content[index1++];
+    }
 
     return encoding;
 }
@@ -484,7 +527,9 @@ int RSSSearchGUIThread::checkFinish()
     qDebug()<<QString::number(count) + "/" + QString::number(l_flags.size());
 
     if (count == l_flags.size())
+    {
         return 1;
+    }
 
     return 0;
 }
