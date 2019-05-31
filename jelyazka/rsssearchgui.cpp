@@ -20,12 +20,16 @@
 
 RSSSearchGUI::RSSSearchGUI(QWidget *parent) :
     QWidget(parent)
-    , ui_(std::make_shared<Ui::RSSSearchGUI> ())
-    , parse_rss_ ()
-    , thread_pool_ (std::make_shared<QThreadPool>(this))
-    , model_ (std::make_shared<QStandardItemModel>(0,3,this))
-    , thread_pool_2 (std::make_shared<QThreadPool>(this))
+    , data_base_()
     , grid_ (std::make_shared<QGridLayout> ())
+    , is_user_edit_ (false)
+    , is_program_edit_ (false)
+    , model_ (std::make_shared<QStandardItemModel>(0,3,this))
+    , parse_rss_ (std::make_shared <ParseRSS> ())
+    , thread_pool_ (std::make_shared<QThreadPool>(this))
+    , thread_pool_2 (std::make_shared<QThreadPool>(this))
+    , ui_(std::make_shared<Ui::RSSSearchGUI> ())
+
 {
     ui_->setupUi(this);
 
@@ -55,10 +59,10 @@ RSSSearchGUI::RSSSearchGUI(QWidget *parent) :
     ui_->tableView->setModel(model_.get());
 
     //start thread
-    mThread = new RSSSearchGUIThread();
-    mThread->setAutoDelete(false);
-    connect(mThread, SIGNAL(FoundRSS(int,QString, QString, QString, QString,int)), this, SLOT(onFoundRSS(int,QString,QString,QString, QString,int)),Qt::QueuedConnection);
-    connect(mThread, SIGNAL(EndOfUrls()),this, SLOT(onEndOfUrls()));
+    rss_search_thread_ = new RSSSearchGUIThread();
+    rss_search_thread_->setAutoDelete(false);
+    connect(rss_search_thread_, SIGNAL(FoundRSS(int,QString, QString, QString, QString,int)), this, SLOT(onFoundRSS(int,QString,QString,QString, QString,int)),Qt::QueuedConnection);
+    connect(rss_search_thread_, SIGNAL(EndOfUrls()),this, SLOT(onEndOfUrls()));
 
     //init ui->tableView item changed event
     connect(model_.get(), SIGNAL(itemChanged(QStandardItem*)), this, SLOT(on_modelItemChanged(QStandardItem*)));
@@ -71,7 +75,7 @@ RSSSearchGUI::RSSSearchGUI(QWidget *parent) :
 RSSSearchGUI::~RSSSearchGUI()
 {
     thread_pool_2->waitForDone();
-    mThread->deleteLater();
+    rss_search_thread_->deleteLater();
 
     /*
     if (tree_node_!=NULL)
@@ -94,7 +98,7 @@ void RSSSearchGUI::closeEvent(QCloseEvent * event)
     if (ui_->pushButton->text() == "Stop Searching")
     {
         QApplication::setOverrideCursor(Qt::WaitCursor);
-        mThread->stop_thread = true;
+        rss_search_thread_->stop_thread = true;
         thread_pool_2->waitForDone();
 		#ifdef _WIN32
             thread_pool_2->clear();
@@ -199,10 +203,10 @@ void RSSSearchGUI::showEvent(QShowEvent *)
 
 void RSSSearchGUI::clearSearchCache ()
 {
-    mThread->l_url.clear();
-    mThread->l_flags.clear();
-    mThread->l_url2.clear();
-    mThread->deleteAllFrom_all_url_table();
+    rss_search_thread_->l_url.clear();
+    rss_search_thread_->l_flags.clear();
+    rss_search_thread_->l_url2.clear();
+    rss_search_thread_->deleteAllFrom_all_url_table();
 }
 
 void RSSSearchGUI::onEndOfUrls()
@@ -213,9 +217,9 @@ void RSSSearchGUI::onEndOfUrls()
             thread_pool_2->clear();
 		#endif
     thread_pool_2->releaseThread();
-    mThread->l_flags.clear();
+    rss_search_thread_->l_flags.clear();
 
-    if (mThread->l_url2.size() == 0) //end of searching
+    if (rss_search_thread_->l_url2.size() == 0) //end of searching
     {
         ui_->pushButton->setText("Search");
         QString text = ui_->label->text();
@@ -223,21 +227,21 @@ void RSSSearchGUI::onEndOfUrls()
            ui_->label->setText("");
     }
 
-    if (mThread->l_url.size()>0)
-           qDebug()<<"Logical error: in RSSSearchGUI::onEndOfUrls() if (mThread->l_url.size()>0)";
+    if (rss_search_thread_->l_url.size()>0)
+           qDebug()<<"Logical error: in RSSSearchGUI::onEndOfUrls() if (rss_search_thread_->l_url.size()>0)";
 
     //std::vector<QString>::iterator l_url2_itr;
-    for (unsigned int i=0; i<mThread->l_url2.size(); i++)
+    for (unsigned int i=0; i<rss_search_thread_->l_url2.size(); i++)
     {
-        QString tmp = mThread->l_url2[i];
-        mThread->l_url.push_back(tmp);
-        mThread->l_flags.push_back(0);
+        QString tmp = rss_search_thread_->l_url2[i];
+        rss_search_thread_->l_url.push_back(tmp);
+        rss_search_thread_->l_flags.push_back(0);
     }
 
-    mThread->l_url2.clear();
-    qDebug()<<"Size: " + QString::number(mThread->l_url.size());
-    for (int i=0; i<mThread->l_flags.size(); i++)
-        thread_pool_2->start(mThread);
+    rss_search_thread_->l_url2.clear();
+    qDebug()<<"Size: " + QString::number(rss_search_thread_->l_url.size());
+    for (int i=0; i<rss_search_thread_->l_flags.size(); i++)
+        thread_pool_2->start(rss_search_thread_);
 }
 
 //'Search' button
@@ -246,7 +250,7 @@ void RSSSearchGUI::on_pushButton_clicked()
     if (ui_->pushButton->text() == "Stop Searching")
     {
         QApplication::setOverrideCursor(Qt::WaitCursor);
-        mThread->stop_thread = true;
+        rss_search_thread_->stop_thread = true;
         thread_pool_2->waitForDone();
         ui_->pushButton->setText("Search");
         ui_->label->setText("");
@@ -259,15 +263,15 @@ void RSSSearchGUI::on_pushButton_clicked()
     }
     else if (ui_->pushButton->text() == "Search")
     {
-        mThread->stop_thread = false; //if this flag is true, the threads stops
+        rss_search_thread_->stop_thread = false; //if this flag is true, the threads stops
         ui_->pushButton->setText("Stop Searching");
         QString url = ui_->lineEdit->text();
         convertBigEndianToLittleEndian(url);
         clearSearchCache();
-        mThread->l_url.push_back(url);
-        mThread->insertUrlDB(url);
-        mThread->l_flags.push_back(0);
-        if (!mThread->setUrlRoot(url))
+        rss_search_thread_->l_url.push_back(url);
+        rss_search_thread_->insertUrlDB(url);
+        rss_search_thread_->l_flags.push_back(0);
+        if (!rss_search_thread_->setUrlRoot(url))
         {
             QMessageBox::critical(0,"Error","Invalid URL!");
             return;
@@ -276,7 +280,7 @@ void RSSSearchGUI::on_pushButton_clicked()
             thread_pool_2->clear();
 		#endif
         thread_pool_2->releaseThread();
-        thread_pool_2->start(mThread);
+        thread_pool_2->start(    rss_search_thread_);
     }
 }
 

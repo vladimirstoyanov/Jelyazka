@@ -35,10 +35,8 @@ class RSSSearchGUIThread : public QObject, public QRunnable
 {
     Q_OBJECT
 public:
-    //boost::ptr_list<QString> l_url; //ToDO: move to private section
     std::vector<QString> l_url;
     std::vector<QString> l_url2;
-    //boost::ptr_list<QString> l_url2;
     QList<int> l_flags;
     std::shared_ptr<QMutex> mutex;
     bool stop_thread;
