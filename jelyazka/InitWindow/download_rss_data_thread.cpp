@@ -33,7 +33,6 @@ DownloadRssDataThread::DownloadRssDataThread()
 DownloadRssDataThread::~DownloadRssDataThread()
 {
     qDebug()<<__PRETTY_FUNCTION__;
-
 }
 
 void DownloadRssDataThread::run()

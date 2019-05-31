@@ -105,7 +105,7 @@ private:
     int isFeedChecked(const QString &url, int &index);
     void paintRows();
     void returnModifedString(QString &str);
-    RSSSearchGUIThread *rss_search_thread_;
+    void setupGui ();
     //void treeInsert(TreeNode *&root, QString newItem);
     //bool treeContains( TreeNode *root, QString item );
 
@@ -118,8 +118,8 @@ private:
     std::shared_ptr<QStandardItemModel> model_;
     std::vector<QString> old_names_;
     std::shared_ptr<ParseRSS> parse_rss_;
+    RSSSearchGUIThread *rss_search_thread_;
     std::shared_ptr<QThreadPool> thread_pool_;
-    std::shared_ptr<QThreadPool> thread_pool_2;
     std::shared_ptr<Ui::RSSSearchGUI> ui_;
 
 private slots:

@@ -27,54 +27,15 @@ RSSSearchGUI::RSSSearchGUI(QWidget *parent) :
     , model_ (std::make_shared<QStandardItemModel>(0,3,this))
     , parse_rss_ (std::make_shared <ParseRSS> ())
     , thread_pool_ (std::make_shared<QThreadPool>(this))
-    , thread_pool_2 (std::make_shared<QThreadPool>(this))
     , ui_(std::make_shared<Ui::RSSSearchGUI> ())
 
 {
-    ui_->setupUi(this);
-
-    this->setMinimumHeight(200);
-    this->setMinimumWidth(350);
-
-    thread_pool_->setMaxThreadCount(5);
-
-    thread_pool_2->setMaxThreadCount(10);
-
-    //init gryd layout
-    grid_->addWidget(ui_->lineEdit,0,0);
-    grid_->addWidget(ui_->pushButton,0,1);
-    grid_->addWidget(ui_->tableView,1,0);
-    grid_->addWidget(ui_->pushButton_2,3,0);
-    grid_->addWidget(ui_->pushButton_3,1,1);
-    grid_->addWidget(ui_->label,2,0);
-    this->setLayout(grid_.get());
-
-    //init QStandardItemModel and set it to ui->tableView (QTableView var)
-
-    model_->setHorizontalHeaderItem(0, new QStandardItem(QString("Name")));
-    model_->setHorizontalHeaderItem(1, new QStandardItem(QString("URL")));
-    model_->setHorizontalHeaderItem(2, new QStandardItem(QString("Encoding")));
-
-    model_->setHorizontalHeaderItem(3, new QStandardItem(QString("Add to list")));
-    ui_->tableView->setModel(model_.get());
-
-    //start thread
-    rss_search_thread_ = new RSSSearchGUIThread();
-    rss_search_thread_->setAutoDelete(false);
-    connect(rss_search_thread_, SIGNAL(FoundRSS(int,QString, QString, QString, QString,int)), this, SLOT(onFoundRSS(int,QString,QString,QString, QString,int)),Qt::QueuedConnection);
-    connect(rss_search_thread_, SIGNAL(EndOfUrls()),this, SLOT(onEndOfUrls()));
-
-    //init ui->tableView item changed event
-    connect(model_.get(), SIGNAL(itemChanged(QStandardItem*)), this, SLOT(on_modelItemChanged(QStandardItem*)));
-
-    ui_->label->setText("");
-    is_user_edit_ = true;
-    is_program_edit_ = false;
+    setupGui();
 }
 
 RSSSearchGUI::~RSSSearchGUI()
 {
-    thread_pool_2->waitForDone();
+    thread_pool_->waitForDone();
     rss_search_thread_->deleteLater();
 
     /*
@@ -99,11 +60,11 @@ void RSSSearchGUI::closeEvent(QCloseEvent * event)
     {
         QApplication::setOverrideCursor(Qt::WaitCursor);
         rss_search_thread_->stop_thread = true;
-        thread_pool_2->waitForDone();
+        thread_pool_->waitForDone();
 		#ifdef _WIN32
-            thread_pool_2->clear();
+            thread_pool_->clear();
 		#endif
-        thread_pool_2->releaseThread();
+        thread_pool_->releaseThread();
         clearSearchCache();
         ui_->pushButton->setText("Search");
         ui_->label->setText("");
@@ -211,12 +172,12 @@ void RSSSearchGUI::clearSearchCache ()
 
 void RSSSearchGUI::onEndOfUrls()
 {
-    thread_pool_2->waitForDone();
+    thread_pool_->waitForDone();
 	
     #ifdef _WIN32
-            thread_pool_2->clear();
+            thread_pool_->clear();
 		#endif
-    thread_pool_2->releaseThread();
+    thread_pool_->releaseThread();
     rss_search_thread_->l_flags.clear();
 
     if (rss_search_thread_->l_url2.size() == 0) //end of searching
@@ -241,7 +202,7 @@ void RSSSearchGUI::onEndOfUrls()
     rss_search_thread_->l_url2.clear();
     qDebug()<<"Size: " + QString::number(rss_search_thread_->l_url.size());
     for (int i=0; i<rss_search_thread_->l_flags.size(); i++)
-        thread_pool_2->start(rss_search_thread_);
+        thread_pool_->start(rss_search_thread_);
 }
 
 //'Search' button
@@ -251,14 +212,14 @@ void RSSSearchGUI::on_pushButton_clicked()
     {
         QApplication::setOverrideCursor(Qt::WaitCursor);
         rss_search_thread_->stop_thread = true;
-        thread_pool_2->waitForDone();
+        thread_pool_->waitForDone();
         ui_->pushButton->setText("Search");
         ui_->label->setText("");
         clearSearchCache();
         #ifdef _WIN32
-            thread_pool_2->clear();
+            thread_pool_->clear();
 		#endif
-        thread_pool_2->releaseThread();
+        thread_pool_->releaseThread();
         QApplication::restoreOverrideCursor();
     }
     else if (ui_->pushButton->text() == "Search")
@@ -277,10 +238,10 @@ void RSSSearchGUI::on_pushButton_clicked()
             return;
         }
         #ifdef _WIN32
-            thread_pool_2->clear();
+            thread_pool_->clear();
 		#endif
-        thread_pool_2->releaseThread();
-        thread_pool_2->start(    rss_search_thread_);
+        thread_pool_->releaseThread();
+        thread_pool_->start(    rss_search_thread_);
     }
 }
 
@@ -703,3 +664,43 @@ void RSSSearchGUI::destroyTree(TreeNode *leaf)
   }
 }
 */
+ void RSSSearchGUI::setupGui ()
+ {
+     ui_->setupUi(this);
+
+     this->setMinimumHeight(200);
+     this->setMinimumWidth(350);
+
+     thread_pool_->setMaxThreadCount(10);
+
+     //init gryd layout
+     grid_->addWidget(ui_->lineEdit,0,0);
+     grid_->addWidget(ui_->pushButton,0,1);
+     grid_->addWidget(ui_->tableView,1,0);
+     grid_->addWidget(ui_->pushButton_2,3,0);
+     grid_->addWidget(ui_->pushButton_3,1,1);
+     grid_->addWidget(ui_->label,2,0);
+     this->setLayout(grid_.get());
+
+     //init QStandardItemModel and set it to ui->tableView (QTableView var)
+
+     model_->setHorizontalHeaderItem(0, new QStandardItem(QString("Name")));
+     model_->setHorizontalHeaderItem(1, new QStandardItem(QString("URL")));
+     model_->setHorizontalHeaderItem(2, new QStandardItem(QString("Encoding")));
+
+     model_->setHorizontalHeaderItem(3, new QStandardItem(QString("Add to list")));
+     ui_->tableView->setModel(model_.get());
+
+     //start thread
+     rss_search_thread_ = new RSSSearchGUIThread();
+     rss_search_thread_->setAutoDelete(false);
+     connect(rss_search_thread_, SIGNAL(FoundRSS(int,QString, QString, QString, QString,int)), this, SLOT(onFoundRSS(int,QString,QString,QString, QString,int)),Qt::QueuedConnection);
+     connect(rss_search_thread_, SIGNAL(EndOfUrls()),this, SLOT(onEndOfUrls()));
+
+     //init ui->tableView item changed event
+     connect(model_.get(), SIGNAL(itemChanged(QStandardItem*)), this, SLOT(on_modelItemChanged(QStandardItem*)));
+
+     ui_->label->setText("");
+     is_user_edit_ = true;
+     is_program_edit_ = false;
+ }
