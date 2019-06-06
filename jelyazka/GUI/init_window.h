@@ -1,5 +1,5 @@
 /*
-    rssthread.h
+    initwindow.h
     Jelyazka RSS/RDF reader
     Copyright (C) 2014 Vladimir Stoyanov
     
@@ -16,45 +16,58 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef UpdateRssData_H
-#define UpdateRssData_H
+#ifndef INITWINDOW_H
+#define INITWINDOW_H
 
 #include <memory>
 
-#include <QObject>
+#include <QDesktopWidget>
 #include <QtDebug>
+#include <QImage>
+#include <QLabel>
+#include <QWidget>
 #include <QThreadPool>
 
 #include "database.h"
 #include "RSS/download_rss_data_thread.h"
-#include "rss_data.h"
+#include "ui_initwindow.h"
 
-class UpdateRssData : public QObject
+
+namespace Ui
+{
+    class InitWindow;
+}
+
+class InitWindow : public QWidget
 {
     Q_OBJECT
+
 public:
-    UpdateRssData();
-    virtual ~UpdateRssData();
+    explicit InitWindow(QWidget *parent = nullptr);
+    virtual  ~InitWindow();
 
 public slots:
-    void onAddRssData ();
     void onDownloadFinished ();
-    void onWriteData (const RSSData rss_data);
-    void onUpdateSettings();
+    void onWriteData(RSSData rss_data);
 
 signals:
-    void stateChanged (const QString &);
+    void stateChanged (const QString &event);
 
 private:
-    DataBase                        data_base_;
-    std::vector<Feed>               feeds_;
-    DownloadRssDataThread*          download_rss_data_thread_;
-    std::shared_ptr<QThreadPool>    thread_pool_;
+    DataBase                            data_base_;
+    std::vector<Feed>                   feeds_;
+    std::shared_ptr<QLabel>             image_init_label_;
+    std::shared_ptr<QImage>             init_image_;
+    DownloadRssDataThread*              download_rss_data_thread_;
+    std::shared_ptr<QThreadPool>        thread_pool_;
+    std::shared_ptr<Ui::InitWindow>     ui_;
 
 private:
-   void makeConnections ();
-   void loadRssFeeds();
-   void loadRssUrls ();
+    void loadRssFeeds();
+    void loadRssUrls();
+    void makeConnections ();
+    void setupGui();
+    void showEvent(QShowEvent *);
 };
 
-#endif // UpdateRssData_H
+#endif // INITWINDOW_H

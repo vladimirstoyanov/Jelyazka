@@ -88,7 +88,8 @@ std::map<QString, RSSData> DataBase::getRssData ()
 
         query.prepare( "SELECT * FROM rss_data" );
 
-        if( !query.exec() )        {
+        if( !query.exec() )
+        {
             qDebug()<<__PRETTY_FUNCTION__<<"Error:"<<query.lastError();
             closeDB();
             return result;
@@ -193,7 +194,9 @@ void DataBase::removeDataFromRSSTable(const QString &site_name, const bool all_d
 
         query.prepare(QString("delete from favorite_feeds where name=\'%1\'").arg(site_name));
         if (!query.exec())
+        {
             qDebug()<<"Fail:" + query.lastError().text();
+        }
     }
     closeDB();
 }
@@ -382,7 +385,9 @@ int DataBase::deleteAllFromAllURL()
         QSqlQuery query (q_sql_data_base_);
         query.prepare("delete from all_urls");
         if (!query.exec())
+        {
             qDebug()<<"Fail delete:" + query.lastError().text();
+        }
     }
     closeDB();
     return 1;

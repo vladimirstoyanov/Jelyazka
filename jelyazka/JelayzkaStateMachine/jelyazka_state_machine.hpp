@@ -39,6 +39,8 @@ public slots:
     void onHideRssSearchWindow ();
     void onHideTrayIcon ();
 
+    void onRssDataAdded ();
+
     void onShowAboutWindow ();
     void onShowHelpWindow ();
     void onShowInitWindow ();
@@ -65,6 +67,8 @@ signals:
     void hideOptionWindow();
     void hideRssSearchWindow();
     void hideTrayIcon();
+
+    void rssDataAdded ();
 
     void showAboutWindow();
     void showHelpWindow();

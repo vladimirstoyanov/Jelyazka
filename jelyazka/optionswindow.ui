@@ -34,7 +34,7 @@
     </property>
    </column>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="removeButton">
    <property name="geometry">
     <rect>
      <x>170</x>
@@ -47,7 +47,7 @@
     <string>PushButton</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="removeFromFavoriteFeedsButton">
    <property name="geometry">
     <rect>
      <x>170</x>
@@ -60,7 +60,7 @@
     <string>PushButton</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_3">
+  <widget class="QPushButton" name="addToFavoriteFeedsButton">
    <property name="geometry">
     <rect>
      <x>170</x>
@@ -73,7 +73,7 @@
     <string>PushButton</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="OK_Button">
+  <widget class="QPushButton" name="okButton">
    <property name="geometry">
     <rect>
      <x>300</x>
@@ -86,7 +86,7 @@
     <string>OK</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="Cancel_Button">
+  <widget class="QPushButton" name="cancelButton">
    <property name="geometry">
     <rect>
      <x>300</x>

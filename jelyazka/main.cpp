@@ -23,16 +23,9 @@
 
 #include <QApplication>
 
-#include "jelyazkamanager.h"
-#include "RSS/rssdata.h"
+#include "jelyazka_manager.h"
+#include "RSS/rss_data.h"
 
-/*
-void removeOldRssData ()
-{
-    DataBase data_base;
-    data_base.dropRssDataTable();
-}
-*/
 
 int main(int argc, char *argv[])
 {
@@ -43,7 +36,6 @@ int main(int argc, char *argv[])
     std::shared_ptr<JelyazkaManager> jelayzka_manager = std::make_shared <JelyazkaManager> ();
 
     jelayzka_manager->makeConnections();
-
 
     return a.exec();
 }

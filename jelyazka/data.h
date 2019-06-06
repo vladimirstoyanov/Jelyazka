@@ -4,8 +4,8 @@
 #include <memory>
 #include <vector>
 
-#include "RSS/rssarticle.h"
-#include "RSS/rssdata.h"
+#include "RSS/rss_article.h"
+#include "RSS/rss_data.h"
 
 
 class Data: public RSSData

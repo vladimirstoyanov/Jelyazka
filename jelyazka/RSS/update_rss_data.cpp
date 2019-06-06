@@ -20,7 +20,7 @@
 
 UpdateRssData::UpdateRssData():
     data_base_()
-    , download_rss_data_thread_(new DownloadRssDataThread ())
+    , download_rss_data_thread_(nullptr)
     , thread_pool_(std::make_shared <QThreadPool>(this))
 {
     makeConnections ();
@@ -35,9 +35,7 @@ UpdateRssData::~UpdateRssData()
 void UpdateRssData::onWriteData (const RSSData rss_data)
 {
     qDebug()<<__PRETTY_FUNCTION__;
-
     //data_base_.updateArticles(rss_data);
-
 }
 
 void UpdateRssData::onDownloadFinished ()
@@ -64,7 +62,6 @@ void UpdateRssData::makeConnections ()
             , Qt::QueuedConnection);
 }
 
-//FIXME: this code is the same like a code in initwindow.cpp.
 void UpdateRssData::loadRssUrls()
 {
     qDebug()<<__PRETTY_FUNCTION__<<": loading RSS URLs from DB...";
@@ -82,7 +79,6 @@ void UpdateRssData::loadRssUrls()
     }
 }
 
-//FIXME: this code is the same like a code in initwindow.cpp.
 void UpdateRssData::loadRssFeeds()
 {
     qDebug()<<__PRETTY_FUNCTION__;
@@ -92,6 +88,7 @@ void UpdateRssData::loadRssFeeds()
     {
         //FIXME: (when thread_pool finished with init_main_window, it removes the pointer)
         download_rss_data_thread_ = new DownloadRssDataThread ();
+        makeConnections();
         download_rss_data_thread_->setURLs(feeds_);
 
         for (unsigned int i=0; i<feeds_.size(); ++i)

@@ -1,5 +1,5 @@
 /*
-    rssthread.h
+    about.h
     Jelyazka RSS/RDF reader
     Copyright (C) 2014 Vladimir Stoyanov
     
@@ -16,45 +16,43 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef UpdateRssData_H
-#define UpdateRssData_H
+#ifndef ABOUT_H
+#define ABOUT_H
 
 #include <memory>
 
-#include <QObject>
-#include <QtDebug>
-#include <QThreadPool>
+#include <QCloseEvent>
+#include <QShowEvent>
+#include <QWidget>
 
-#include "database.h"
-#include "RSS/download_rss_data_thread.h"
-#include "rss_data.h"
+#include "ui_about.h"
 
-class UpdateRssData : public QObject
+namespace Ui
+{
+    class About;
+}
+
+class About : public QWidget
 {
     Q_OBJECT
-public:
-    UpdateRssData();
-    virtual ~UpdateRssData();
 
-public slots:
-    void onAddRssData ();
-    void onDownloadFinished ();
-    void onWriteData (const RSSData rss_data);
-    void onUpdateSettings();
+public:
+    explicit About(QWidget *parent = 0);
+    virtual ~About();
+
+private slots:
+    void OKButtonClicked(); //'OK' button
+
+private:
+    std::shared_ptr<Ui::About> ui_;
+
+private:
+    void closeEvent(QCloseEvent *); // Overriding the window's close event
+    void showEvent(QShowEvent *);
+    void setupGui ();
 
 signals:
-    void stateChanged (const QString &);
-
-private:
-    DataBase                        data_base_;
-    std::vector<Feed>               feeds_;
-    DownloadRssDataThread*          download_rss_data_thread_;
-    std::shared_ptr<QThreadPool>    thread_pool_;
-
-private:
-   void makeConnections ();
-   void loadRssFeeds();
-   void loadRssUrls ();
+    void stateChanged(const QString &);
 };
 
-#endif // UpdateRssData_H
+#endif // ABOUT_H

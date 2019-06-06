@@ -18,21 +18,9 @@ SOURCES += main.cpp\
     JelayzkaStateMachine/add_rss_data_state.cpp \
     search.cpp \
     logger.cpp \
-    InitWindow/initwindow.cpp \
-    Options/optionswindow.cpp \
-    help.cpp \
-    about.cpp \
-    RSS/rssdata.cpp \
-    RSS/rssarticle.cpp \
     http.cpp \
-    RSS/parserss.cpp \
     data.cpp \
-    notificationwindow.cpp \
     database.cpp \
-    rsssearchgui.cpp \
-    rsssearchguithread.cpp \
-    trayicon.cpp \
-    mainwindow.cpp \
     JelayzkaStateMachine/state.cpp \
     JelayzkaStateMachine/idle_state.cpp \
     JelayzkaStateMachine/init_window_state.cpp \
@@ -47,31 +35,31 @@ SOURCES += main.cpp\
     JelayzkaStateMachine/rss_search_window_state.cpp \
     JelayzkaStateMachine/tray_icon_state.cpp \
     JelayzkaStateMachine/about_window_state.cpp \
-    jelyazkamanager.cpp \
     RSS/refresh_rss_data.cpp \
-    Options/settings.cpp \
+    settings.cpp \
     RSS/update_rss_data.cpp \
-    InitWindow/download_rss_data_thread.cpp
+    RSS/download_rss_data_thread.cpp \
+    GUI/about_window.cpp \
+    GUI/help_window.cpp \
+    GUI/main_window.cpp \
+    GUI/init_window.cpp \
+    GUI/notification_window.cpp \
+    GUI/options_window.cpp \
+    GUI/rss_search_window.cpp \
+    GUI/tray_icon.cpp \
+    RSS/rss_search_thread.cpp \
+    RSS/rss_article.cpp \
+    RSS/rss_data.cpp \
+    RSS/parse_rss.cpp \
+    jelyazka_manager.cpp
 
 HEADERS  += \
     JelayzkaStateMachine/add_rss_data_state.hpp \
     search.h \
     logger.h \
-    InitWindow/initwindow.h \
-    Options/optionswindow.h \
-    help.h \
-    about.h \
-    RSS/rssdata.h \
-    RSS/rssarticle.h \
     http.h \
-    RSS/parserss.h \
     data.h \
-    notificationwindow.h \
     database.h \
-    rsssearchgui.h \
-    rsssearchthread.h \
-    trayicon.h \
-    mainwindow.h \
     JelayzkaStateMachine/state.hpp \
     JelayzkaStateMachine/idle_state.hpp \
     JelayzkaStateMachine/init_window_state.hpp \
@@ -86,11 +74,23 @@ HEADERS  += \
     JelayzkaStateMachine/rss_search_window_state.hpp \
     JelayzkaStateMachine/tray_icon_state.hpp \
     JelayzkaStateMachine/about_window_state.hpp \
-    jelyazkamanager.h \
     RSS/refresh_rss_data.h \
-    Options/settings.h \
+    settings.h \
     RSS/update_rss_data.h \
-    InitWindow/download_rss_data_thread.h
+    RSS/download_rss_data_thread.h \
+    GUI/about_window.h \
+    GUI/help_window.h \
+    GUI/init_window.h \
+    GUI/main_window.h \
+    GUI/notification_window.h \
+    GUI/options_window.h \
+    GUI/rss_search_window.h \
+    GUI/tray_icon.h \
+    RSS/rss_search_thread.h \
+    RSS/rss_article.h \
+    RSS/rss_data.h \
+    RSS/parse_rss.h \
+    jelyazka_manager.h
 
 FORMS    += \
     initwindow.ui \

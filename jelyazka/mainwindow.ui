@@ -22,7 +22,7 @@
   <property name="windowTitle">
    <string>Jelyazka</string>
   </property>
-  <widget class="QComboBox" name="comboBox">
+  <widget class="QComboBox" name="titleComboBox">
    <property name="geometry">
     <rect>
      <x>165</x>
@@ -32,7 +32,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="previousButton">
    <property name="geometry">
     <rect>
      <x>5</x>
@@ -45,7 +45,7 @@
     <string>&lt;</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="nextButton">
    <property name="geometry">
     <rect>
      <x>85</x>

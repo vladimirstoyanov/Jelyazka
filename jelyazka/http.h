@@ -27,7 +27,7 @@
 #include <QTcpSocket>
 #include <QTextCodec>
 
-#include "Options/settings.h"
+#include "settings.h"
 #include "search.h"
 
 
@@ -47,10 +47,10 @@ public:
     void removeSubString(QString &url, const QString &substring);
 
 public:
-    int getQuery(QString url, QString &content);
-    int getQuery(QString url, QString &content, int &type);
-    int isHTMLorXML(const QString &content);
-    int reconnect(QString url, QString &content, QTcpSocket &socket);
+    int  getQuery(QString url, QString &content);
+    int  getQuery(QString url, QString &content, int &type);
+    int  isHTMLorXML(const QString &content);
+    int  reconnect(QString url, QString &content, QTcpSocket &socket);
     bool checkInTheBeginning(const QString &url, const QString &http);
     bool checkForProtocol(const QString &url);
     bool checkForProtocol(const QString &url, QString &protocol);

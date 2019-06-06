@@ -27,7 +27,9 @@
 #include <QTimer>
 
 #include "database.h"
-#include "InitWindow/download_rss_data_thread.h"
+#include "RSS/download_rss_data_thread.h"
+#include "rss_data.h"
+#include "settings.h"
 
 class RefreshRssData : public QObject
 {
@@ -59,7 +61,6 @@ private:
     std::shared_ptr<QThreadPool>    thread_pool_;
     int                             time_msec_;
     std::shared_ptr<QTimer>         timer_;
-
 
 private:
    void makeConnections ();

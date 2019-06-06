@@ -8,8 +8,8 @@
 #include <QtSql/QtSql>
 
 #include "data.h"
-#include "RSS/rssdata.h"
-#include "RSS/rssarticle.h"
+#include "RSS/rss_data.h"
+#include "RSS/rss_article.h"
 
 class DataBase
 {

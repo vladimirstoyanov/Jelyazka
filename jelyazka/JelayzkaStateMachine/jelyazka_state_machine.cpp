@@ -93,6 +93,13 @@ void JelayzkaStateMachine::makeConnections ()
             , SLOT(onAddRssData())
             , Qt::QueuedConnection);
 
+    //rssDataAdded
+    connect( add_rss_data_state_.get()
+            , SIGNAL(rssDataAdded())
+            , this
+            , SLOT(onRssDataAdded())
+            , Qt::QueuedConnection);
+
     /*
     connect( main_window_state_.get()
             , SIGNAL(stopRssRefreshData())
@@ -322,4 +329,10 @@ void JelayzkaStateMachine::onAddRssData ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
     emit (addRssData());
+}
+
+void JelayzkaStateMachine::onRssDataAdded ()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    emit (rssDataAdded());
 }

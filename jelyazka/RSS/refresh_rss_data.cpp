@@ -20,7 +20,7 @@
 
 RefreshRssData::RefreshRssData():
     data_base_()
-    , download_rss_data_thread_(new DownloadRssDataThread ())
+    , download_rss_data_thread_(nullptr)
     , thread_pool_(std::make_shared <QThreadPool>(this))
     , time_msec_(60000) //1 minute
     , timer_ (std::make_shared<QTimer> ())
@@ -37,9 +37,9 @@ RefreshRssData::~RefreshRssData()
 
 void RefreshRssData::start()
 {
-    qDebug()<<__PRETTY_FUNCTION__;
+    qDebug()<<__PRETTY_FUNCTION__<<": refresh feeds time: "<<Jelyazka::Settings::getRefreshFeedsTime();
     loadRssFeeds();
-    //timer_->start(time_msec_);
+    timer_->start(Jelyazka::Settings::getRefreshFeedsTime()*60000);
 }
 
 void RefreshRssData::stop()
@@ -100,7 +100,6 @@ void RefreshRssData::makeConnections ()
             , Qt::QueuedConnection);
 }
 
-//FIXME: this code is the same like a code in initwindow.cpp.
 void RefreshRssData::loadRssUrls()
 {
     qDebug()<<__PRETTY_FUNCTION__<<": loading RSS URLs from DB...";
@@ -118,7 +117,6 @@ void RefreshRssData::loadRssUrls()
     }
 }
 
-//FIXME: this code is the same like a code in initwindow.cpp.
 void RefreshRssData::loadRssFeeds()
 {
     qDebug()<<__PRETTY_FUNCTION__;
@@ -128,6 +126,7 @@ void RefreshRssData::loadRssFeeds()
     {
         //FIXME: (when thread_pool finished with init_main_window, it removes the pointer)
         download_rss_data_thread_ = new DownloadRssDataThread ();
+        makeConnections ();
         download_rss_data_thread_->setURLs(feeds_);
 
         for (unsigned int i=0; i<feeds_.size(); ++i)
