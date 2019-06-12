@@ -93,10 +93,10 @@ HEADERS  += \
     jelyazka_manager.h
 
 FORMS    += \
-    initwindow.ui \
-    optionswindow.ui \
-    help.ui \
-    about.ui \
-    notificationwindow.ui \
-    rsssearchgui.ui \
-    mainwindow.ui
+    GUI/initwindow.ui \
+    GUI/optionswindow.ui \
+    GUI/help.ui \
+    GUI/about.ui \
+    GUI/notificationwindow.ui \
+    GUI/rsssearchgui.ui \
+    GUI/mainwindow.ui
