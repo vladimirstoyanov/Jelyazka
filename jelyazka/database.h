@@ -37,8 +37,10 @@ public:
                                 , const QString &description);
     void    insertRowToFiltersTable(const QString &filter_name);
     void    loadStrctureFromDB(std::shared_ptr<Data> data);
+    void    removeAllDataFromRssData();
     void    removeDataFromRSSTable(const QString &site_name, const bool all_data);
     void    removeDataFromFilters();
+    void    removeDataFromFavoriteFeeds(const QString &site_name);
     void    removeDataFromCollectFeeds(const QString &site_name);
     int     selectURLFromAllURLs(const QString &);
     void    updateArticles(RSSData rss_data);

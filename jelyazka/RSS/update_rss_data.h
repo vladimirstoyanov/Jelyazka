@@ -39,7 +39,7 @@ public:
 public slots:
     void onAddRssData ();
     void onDownloadFinished ();
-    void onWriteData (const RSSData rss_data);
+    void onWriteData (RSSData rss_data);
     void onUpdateSettings();
 
 signals:

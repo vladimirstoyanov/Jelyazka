@@ -98,7 +98,9 @@ void InitWindow::loadRssFeeds()
 
 void InitWindow::onWriteData(RSSData rss_data)
 {
-    qDebug()<<__PRETTY_FUNCTION__;
+    qDebug()<<__PRETTY_FUNCTION__<<":"<<rss_data.getSiteName();
+
+    ui_->label->setText(rss_data.getSiteName()); //FIXME: it doesn't set any text
 
     for (size_t i=0; i< rss_data.getArticlesSize(); ++i)
     {

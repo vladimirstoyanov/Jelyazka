@@ -175,6 +175,22 @@ void DataBase::getFeeds(std::vector<QString> *l_old_view_feed)
     closeDB();
 }
 
+void DataBase::removeAllDataFromRssData()
+{
+    {
+        openDB();
+        QSqlQuery query(q_sql_data_base_);
+
+
+            query.prepare("delete from rss_data");
+            if (!query.exec())
+            {
+                qDebug()<<"Fail:" + query.lastError().text();
+            }
+    }
+    closeDB();
+}
+
 void DataBase::removeDataFromRSSTable(const QString &site_name, const bool all_data)
 {
     {
@@ -491,6 +507,21 @@ void DataBase::removeDataFromCollectFeeds(const QString &site_name)
         if (!query.exec())
         {
             qDebug()<<"DB::removeDataFromCollectFeeds(QString site_name) fail delete from collect_feeds where filter... " + query.lastError().text();
+        }
+    }
+    closeDB();
+}
+
+void DataBase::removeDataFromFavoriteFeeds(const QString &site_name)
+{
+    {
+        openDB();
+        QSqlQuery query(q_sql_data_base_);
+
+        query.prepare(QString("delete from favorite_feeds where name=\"%1\"").arg(site_name));
+        if (!query.exec())
+        {
+            qDebug()<<"DB::removeDataFromFavoriteFeeds(QString site_name) fail delete from collect_feeds where filter... " + query.lastError().text();
         }
     }
     closeDB();

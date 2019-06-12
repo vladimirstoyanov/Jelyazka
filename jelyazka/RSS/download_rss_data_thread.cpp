@@ -68,7 +68,7 @@ void DownloadRssDataThread::downloadFeed (const unsigned int index)
 
      rss_data->setURL(feeds_[index].getFeedUrl());
 
-     /*
+
      //get the web content
      if (http.getQuery(feeds_[index].getFeedUrl(),web_source))
      {
@@ -79,10 +79,10 @@ void DownloadRssDataThread::downloadFeed (const unsigned int index)
 
      //pasrse web content to RSSData
      parse.getRSSDataByWebSource(web_source, rss_data);
-     */
+
 
      //ToDo: remove the below row. It has been added only for test reasons
-     test (rss_data);
+     //test (rss_data);
 
      emit writeData (*rss_data.get());
 

@@ -32,10 +32,17 @@ UpdateRssData::~UpdateRssData()
     //download_rss_data_thread_->deleteLater();
 }
 
-void UpdateRssData::onWriteData (const RSSData rss_data)
+void UpdateRssData::onWriteData (RSSData rss_data)
 {
     qDebug()<<__PRETTY_FUNCTION__;
     //data_base_.updateArticles(rss_data);
+    for (size_t i=0; i< rss_data.getArticlesSize(); ++i)
+    {
+         data_base_.insertIntoRssDataTable(rss_data.getSiteName()
+                                 , rss_data.articleAt(i).getTitle()
+                                 , rss_data.articleAt(i).getLink()
+                                 , rss_data.articleAt(i).getText());
+    }
 }
 
 void UpdateRssData::onDownloadFinished ()
@@ -82,6 +89,8 @@ void UpdateRssData::loadRssUrls()
 void UpdateRssData::loadRssFeeds()
 {
     qDebug()<<__PRETTY_FUNCTION__;
+
+    data_base_.removeAllDataFromRssData ();
 
     loadRssUrls();
     if (feeds_.size()>0)

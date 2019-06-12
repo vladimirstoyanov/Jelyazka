@@ -428,7 +428,7 @@ void OptionsWindow::on_cancelButton_clicked()
 }
 
 //'Removed' button has been clicked
-void OptionsWindow::on_addToFavoriteFeedsButton_clicked()
+void OptionsWindow::on_addToFavoriteFeedsButton_clicked() //ToDo: rename this slot to on_removeButton_clicked
 {
     if (collect_feeds_->currentItem()==NULL)
     {
@@ -446,6 +446,9 @@ void OptionsWindow::on_addToFavoriteFeedsButton_clicked()
     //remove item(s) from collect_feeds
     for (int i=l.size()-1; i>=0; i--)
     {
+        //remove from database
+        data_base_.removeDataFromCollectFeeds(l[i]->text());
+        data_base_.removeDataFromFavoriteFeeds(l[i]->text());
         for (int j = 0; j<favorite_feeds_->count(); j++)
         {
             QListWidgetItem *item = favorite_feeds_->item(j);
@@ -458,6 +461,8 @@ void OptionsWindow::on_addToFavoriteFeedsButton_clicked()
 
         delete l[i];
     }
+
+
 }
 
 void OptionsWindow::on_collect_feeds_DoubleClicked(QListWidgetItem *item)
