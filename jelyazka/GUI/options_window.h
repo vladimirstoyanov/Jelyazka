@@ -126,6 +126,7 @@ private:
     std::shared_ptr<QLabel>                 cf_label_search_;
     std::shared_ptr<QListWidget>            collect_feeds_;
     std::shared_ptr<QLabel>                 download_feed_status_;
+    std::shared_ptr<QListWidget>            favorite_feeds_;
     std::shared_ptr<QLabel>                 l_filter_list_;
     QList<bool>                             l_items_for_remove_;
     std::vector<QString>                    l_old_collect_feed_;
@@ -142,7 +143,6 @@ private:
     std::shared_ptr<QTextEdit>              te_proxy_url_;
     std::shared_ptr<QTextEdit>              te_proxy_port_;
     std::shared_ptr<QTextEdit>              te_add_filter_;
-    std::shared_ptr<QListWidget>            favorite_feeds_;
     std::shared_ptr<Ui::OptionsWindow>      ui_;
 
 
