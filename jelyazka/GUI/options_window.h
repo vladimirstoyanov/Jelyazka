@@ -59,12 +59,8 @@ public:
     virtual ~OptionsWindow();
 
 private slots:
-    void on_removeButton_clicked(); //'Remove' button clicked
-    void on_removeFromFavoriteFeedsButton_clicked(); // '<<' button clicked
     void on_okButton_clicked(); //'OK' button clicked
     void on_cancelButton_clicked(); //'Cancel' button clicked
-    void on_addToFavoriteFeedsButton_clicked(); // '>>' button clicked
-    void on_collect_feeds_DoubleClicked(QListWidgetItem*);
     void on_treeWidget_clicked(const QModelIndex &index);
     void on_cb_enable_proxy_clicked(bool);
     void on_cb_enable_filtering_clicked(bool);
@@ -80,8 +76,7 @@ private:
 
 private:
     void addItem(const QString &name);
-    void collect_feedsTableUpdate(); //ToDo: change the funtion name
-    void fillCollectListView();
+    void collect_feedsTableUpdate();
     void fillFilterListView();
     void fillFavoriteListView();
     void insertRowToRSSTable(const QString &site_name, const QString &url, const QString &version);
@@ -91,8 +86,8 @@ private:
     void removeDataFromRSSTable(const QString &site_name, const bool all_data);
     void returnModifedString(QString &str); //ToDo: change the function name
     void setupGui ();
-    void updateCollectFeedListView();
     void updateFiltersTable();
+    void positioningFeedsOptionWidgets();
 
 private:
     void loadSettings();
@@ -113,7 +108,7 @@ private:
 
 private:
     int addStringToFilterList(const QString &cur_text);
-    int addStringToWatchList(const QString &str);
+    //int addStringToWatchList(const QString &str);
     int addStringToFavoriteList(const QString &str);
     int cf_label_search_width(); //ToDo: change the function name
 
@@ -124,12 +119,12 @@ private:
     std::shared_ptr<QCheckBox>              cb_enable_proxy_;
     std::shared_ptr<QLineEdit>              cf_find_feed_;
     std::shared_ptr<QLabel>                 cf_label_search_;
-    std::shared_ptr<QListWidget>            collect_feeds_;
+    //std::shared_ptr<QListWidget>            collect_feeds_;
     std::shared_ptr<QLabel>                 download_feed_status_;
     std::shared_ptr<QListWidget>            favorite_feeds_;
     std::shared_ptr<QLabel>                 l_filter_list_;
     QList<bool>                             l_items_for_remove_;
-    std::vector<QString>                    l_old_collect_feed_;
+    //std::vector<QString>                    l_old_collect_feed_;
     std::vector<QString>                    l_old_favorite_feed_;
     std::vector<QString>                    l_old_filters_;
     std::shared_ptr<QLabel>                 l_proxy_url_;

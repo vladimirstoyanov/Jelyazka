@@ -1,0 +1,241 @@
+/****************************************************************************
+** Meta object code from reading C++ file 'jelyazka_manager.h'
+**
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.15.0)
+**
+** WARNING! All changes made in this file will be lost!
+*****************************************************************************/
+
+#include <memory>
+#include "../jelyazka/jelyazka_manager.h"
+#include <QtCore/qbytearray.h>
+#include <QtCore/qmetatype.h>
+#if !defined(Q_MOC_OUTPUT_REVISION)
+#error "The header file 'jelyazka_manager.h' doesn't include <QObject>."
+#elif Q_MOC_OUTPUT_REVISION != 67
+#error "This file was generated using the moc from 5.15.0. It"
+#error "cannot be used with the include files from this version of Qt."
+#error "(The moc has changed too much.)"
+#endif
+
+QT_BEGIN_MOC_NAMESPACE
+QT_WARNING_PUSH
+QT_WARNING_DISABLE_DEPRECATED
+struct qt_meta_stringdata_JelyazkaManager_t {
+    QByteArrayData data[20];
+    char stringdata0[336];
+};
+#define QT_MOC_LITERAL(idx, ofs, len) \
+    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
+    qptrdiff(offsetof(qt_meta_stringdata_JelyazkaManager_t, stringdata0) + ofs \
+        - idx * sizeof(QByteArrayData)) \
+    )
+static const qt_meta_stringdata_JelyazkaManager_t qt_meta_stringdata_JelyazkaManager = {
+    {
+QT_MOC_LITERAL(0, 0, 15), // "JelyazkaManager"
+QT_MOC_LITERAL(1, 16, 12), // "stateChanged"
+QT_MOC_LITERAL(2, 29, 0), // ""
+QT_MOC_LITERAL(3, 30, 19), // "startRssRefreshData"
+QT_MOC_LITERAL(4, 50, 18), // "stopRssRefreshData"
+QT_MOC_LITERAL(5, 69, 17), // "onHideAboutWindow"
+QT_MOC_LITERAL(6, 87, 16), // "onHideHelpWindow"
+QT_MOC_LITERAL(7, 104, 16), // "onHideInitWindow"
+QT_MOC_LITERAL(8, 121, 16), // "onHideMainWindow"
+QT_MOC_LITERAL(9, 138, 18), // "onHideOptionWindow"
+QT_MOC_LITERAL(10, 157, 21), // "onHideRssSearchWindow"
+QT_MOC_LITERAL(11, 179, 14), // "onHideTrayIcon"
+QT_MOC_LITERAL(12, 194, 17), // "onShowAboutWindow"
+QT_MOC_LITERAL(13, 212, 16), // "onShowHelpWindow"
+QT_MOC_LITERAL(14, 229, 16), // "onShowInitWindow"
+QT_MOC_LITERAL(15, 246, 16), // "onShowMainWindow"
+QT_MOC_LITERAL(16, 263, 18), // "onShowOptionWindow"
+QT_MOC_LITERAL(17, 282, 21), // "onShowRssSearchWindow"
+QT_MOC_LITERAL(18, 304, 14), // "onShowTrayIcon"
+QT_MOC_LITERAL(19, 319, 16) // "onUpdateSettings"
+
+    },
+    "JelyazkaManager\0stateChanged\0\0"
+    "startRssRefreshData\0stopRssRefreshData\0"
+    "onHideAboutWindow\0onHideHelpWindow\0"
+    "onHideInitWindow\0onHideMainWindow\0"
+    "onHideOptionWindow\0onHideRssSearchWindow\0"
+    "onHideTrayIcon\0onShowAboutWindow\0"
+    "onShowHelpWindow\0onShowInitWindow\0"
+    "onShowMainWindow\0onShowOptionWindow\0"
+    "onShowRssSearchWindow\0onShowTrayIcon\0"
+    "onUpdateSettings"
+};
+#undef QT_MOC_LITERAL
+
+static const uint qt_meta_data_JelyazkaManager[] = {
+
+ // content:
+       8,       // revision
+       0,       // classname
+       0,    0, // classinfo
+      18,   14, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+       0,    0, // constructors
+       0,       // flags
+       3,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags
+       1,    1,  104,    2, 0x06 /* Public */,
+       3,    0,  107,    2, 0x06 /* Public */,
+       4,    0,  108,    2, 0x06 /* Public */,
+
+ // slots: name, argc, parameters, tag, flags
+       5,    0,  109,    2, 0x0a /* Public */,
+       6,    0,  110,    2, 0x0a /* Public */,
+       7,    0,  111,    2, 0x0a /* Public */,
+       8,    0,  112,    2, 0x0a /* Public */,
+       9,    0,  113,    2, 0x0a /* Public */,
+      10,    0,  114,    2, 0x0a /* Public */,
+      11,    0,  115,    2, 0x0a /* Public */,
+      12,    0,  116,    2, 0x0a /* Public */,
+      13,    0,  117,    2, 0x0a /* Public */,
+      14,    0,  118,    2, 0x0a /* Public */,
+      15,    0,  119,    2, 0x0a /* Public */,
+      16,    0,  120,    2, 0x0a /* Public */,
+      17,    0,  121,    2, 0x0a /* Public */,
+      18,    0,  122,    2, 0x0a /* Public */,
+      19,    0,  123,    2, 0x0a /* Public */,
+
+ // signals: parameters
+    QMetaType::Void, QMetaType::QString,    2,
+    QMetaType::Void,
+    QMetaType::Void,
+
+ // slots: parameters
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+
+       0        // eod
+};
+
+void JelyazkaManager::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        auto *_t = static_cast<JelyazkaManager *>(_o);
+        Q_UNUSED(_t)
+        switch (_id) {
+        case 0: _t->stateChanged((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 1: _t->startRssRefreshData(); break;
+        case 2: _t->stopRssRefreshData(); break;
+        case 3: _t->onHideAboutWindow(); break;
+        case 4: _t->onHideHelpWindow(); break;
+        case 5: _t->onHideInitWindow(); break;
+        case 6: _t->onHideMainWindow(); break;
+        case 7: _t->onHideOptionWindow(); break;
+        case 8: _t->onHideRssSearchWindow(); break;
+        case 9: _t->onHideTrayIcon(); break;
+        case 10: _t->onShowAboutWindow(); break;
+        case 11: _t->onShowHelpWindow(); break;
+        case 12: _t->onShowInitWindow(); break;
+        case 13: _t->onShowMainWindow(); break;
+        case 14: _t->onShowOptionWindow(); break;
+        case 15: _t->onShowRssSearchWindow(); break;
+        case 16: _t->onShowTrayIcon(); break;
+        case 17: _t->onUpdateSettings(); break;
+        default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        {
+            using _t = void (JelyazkaManager::*)(const QString & );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&JelyazkaManager::stateChanged)) {
+                *result = 0;
+                return;
+            }
+        }
+        {
+            using _t = void (JelyazkaManager::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&JelyazkaManager::startRssRefreshData)) {
+                *result = 1;
+                return;
+            }
+        }
+        {
+            using _t = void (JelyazkaManager::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&JelyazkaManager::stopRssRefreshData)) {
+                *result = 2;
+                return;
+            }
+        }
+    }
+}
+
+QT_INIT_METAOBJECT const QMetaObject JelyazkaManager::staticMetaObject = { {
+    QMetaObject::SuperData::link<QObject::staticMetaObject>(),
+    qt_meta_stringdata_JelyazkaManager.data,
+    qt_meta_data_JelyazkaManager,
+    qt_static_metacall,
+    nullptr,
+    nullptr
+} };
+
+
+const QMetaObject *JelyazkaManager::metaObject() const
+{
+    return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
+}
+
+void *JelyazkaManager::qt_metacast(const char *_clname)
+{
+    if (!_clname) return nullptr;
+    if (!strcmp(_clname, qt_meta_stringdata_JelyazkaManager.stringdata0))
+        return static_cast<void*>(this);
+    return QObject::qt_metacast(_clname);
+}
+
+int JelyazkaManager::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = QObject::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 18)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 18;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 18)
+            *reinterpret_cast<int*>(_a[0]) = -1;
+        _id -= 18;
+    }
+    return _id;
+}
+
+// SIGNAL 0
+void JelyazkaManager::stateChanged(const QString & _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
+}
+
+// SIGNAL 1
+void JelyazkaManager::startRssRefreshData()
+{
+    QMetaObject::activate(this, &staticMetaObject, 1, nullptr);
+}
+
+// SIGNAL 2
+void JelyazkaManager::stopRssRefreshData()
+{
+    QMetaObject::activate(this, &staticMetaObject, 2, nullptr);
+}
+QT_WARNING_POP
+QT_END_MOC_NAMESPACE

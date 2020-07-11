@@ -25,12 +25,11 @@ OptionsWindow::OptionsWindow(QWidget *parent, std::shared_ptr<Data> data) :
     , cb_enable_filtering_ (std::make_shared<QCheckBox>(this))
     , cb_enable_notification_(std::make_shared<QCheckBox>(this))
     , cb_enable_proxy_ (std::make_shared<QCheckBox>(this))
-    , cf_find_feed_ (std::make_shared<QLineEdit>(this))
+    , cf_find_feed_ (std::make_shared<QLineEdit> (this))
     , cf_label_search_ (std::make_shared<QLabel>(this))
-    , collect_feeds_ (std::make_shared<QListWidget>(this))
     , download_feed_status_ (std::make_shared<QLabel>(this))
-    , l_filter_list_ (std::make_shared<QLabel>(this))
     , favorite_feeds_  (std::make_shared<QListWidget>(this))
+    , l_filter_list_ (std::make_shared<QLabel>(this))
     , l_proxy_url_ (std::make_shared<QLabel>(this))
     , l_proxy_port_ (std::make_shared<QLabel> (this))
     , l_refresh_time_ (std::make_shared<QLabel>(this))
@@ -50,7 +49,6 @@ OptionsWindow::OptionsWindow(QWidget *parent, std::shared_ptr<Data> data) :
 
 OptionsWindow::~OptionsWindow()
 {
-    l_old_collect_feed_.clear();
     l_old_favorite_feed_.clear();
     l_old_filters_.clear();
 }
@@ -88,31 +86,7 @@ void OptionsWindow::addItem(const QString &name)
     ui_->treeWidget->addTopLevelItem(item);
 }
 
-//add string to collect_feeds (QListWidget var)
-int OptionsWindow::addStringToWatchList(const QString &cur_text)
-{
-    int count = collect_feeds_->count(); //get count of listWidget
-    if (cur_text=="")
-    {
-        return 1;
-    }
-
-    //check for identical string
-    for(int row = 0; row < collect_feeds_->count(); row++)
-    {
-        QListWidgetItem *item = collect_feeds_->item(row);
-        if (cur_text == item->text())
-        {
-            return 1;
-        }
-    }
-
-    collect_feeds_->insertItem(count, cur_text); //insert new element to the end of list widget
-
-    return 0;
-}
-
-//fill favvorite_feeds (QListWidget var)
+//fill favorite_feeds (QListWidget var)
 void OptionsWindow::fillFavoriteListView()
 {
     std::vector<QString> tmp;
@@ -234,48 +208,6 @@ void OptionsWindow::saveSettings()
     Jelyazka::Settings::setIsFilteringEnabled(cb_enable_filtering_->isChecked());
 }
 
-//update collect_feeds (QListWidget var)
-void OptionsWindow::updateCollectFeedListView()
-{
-    if (collect_feeds_->count() == 0)
-    {
-        for (uint i=0; i<l_old_collect_feed_.size(); i++)
-        {
-            removeDataFromCollectFeeds(l_old_collect_feed_[i]);
-        }
-        return;
-    }
-
-    for (uint i=0; i<l_old_collect_feed_.size(); i++)
-    {
-        for (int j=0; j<collect_feeds_->count(); j++)
-        {
-            if (l_old_collect_feed_[i] == collect_feeds_->item(j)->text())
-            {
-                break;
-            }
-            if (j==collect_feeds_->count()-1)
-            {
-                removeDataFromCollectFeeds(l_old_collect_feed_[i]);
-            }
-        }
-    }
-}
-
-//fill collect_feed (QListWidget)
-void OptionsWindow::fillCollectListView()
-{
-    std::vector<QString>tmp;
-    data_base_.getCollectFeeds(&tmp);
-
-    l_old_collect_feed_.clear();
-
-    for (unsigned int i=0; i<tmp.size(); i++)
-    {
-        collect_feeds_->insertItem(collect_feeds_->count(), tmp[i]);
-        l_old_collect_feed_.push_back(tmp[i]);
-    }
-}
 
 void OptionsWindow::fillFilterListView()
 {
@@ -289,6 +221,31 @@ void OptionsWindow::fillFilterListView()
         addStringToFilterList(tmp[i]);
         l_old_filters_.push_back(tmp[i]);
     }
+}
+
+void OptionsWindow::positioningFeedsOptionWidgets()
+{
+    int width = (this->width() - (25 + ui_->treeWidget->width()));
+
+    cf_label_search_->setGeometry(ui_->treeWidget->x() + ui_->treeWidget->width()  + 5,
+                                 5,
+                                 50,
+                                 cf_label_search_->height());
+
+    cf_find_feed_->setGeometry(cf_label_search_->x() + cf_label_search_width()+5,
+                              5,
+                              width - (cf_label_search_width() + 5) ,
+                              cf_find_feed_->height());
+
+    favorite_feeds_->setGeometry(cf_label_search_->x(),
+                            cf_find_feed_->y() + cf_find_feed_->height()+10,
+                            width,
+                            this->height()-(20 +cf_find_feed_->height() + ui_->okButton->height()));
+
+    ui_->removeFromFavoriteFeedsButton->setGeometry(favorite_feeds_->x(),
+                                  ui_->okButton->y(),
+                                  ui_->removeFromFavoriteFeedsButton->width(),
+                                  ui_->removeFromFavoriteFeedsButton->height());
 }
 
 //resize window event
@@ -316,33 +273,7 @@ void OptionsWindow::resizeEvent(QResizeEvent *event)
 
     if (options_type_ == 1)
     {
-        int width = (this->width() - (25 + ui_->treeWidget->width() + ui_->removeButton->width()))/2;
-        collect_feeds_->setGeometry(ui_->treeWidget->x() + ui_->treeWidget->width()  + 5,
-                                   cf_find_feed_->height()+10,
-                                   width, this->height()-(20 +cf_find_feed_->height() + ui_->okButton->height()));
-        ui_->addToFavoriteFeedsButton->setGeometry(collect_feeds_->x(),
-                                       collect_feeds_->y() + collect_feeds_->height() + 5,
-                                       ui_->addToFavoriteFeedsButton->width(),
-                                       ui_->addToFavoriteFeedsButton->height());
-        cf_label_search_->setGeometry(ui_->treeWidget->x() + ui_->treeWidget->width()  + 5,
-                                     5,
-                                     50,
-                                     cf_label_search_->height());
-        cf_find_feed_->setGeometry(cf_label_search_->x() + cf_label_search_width()+5,
-                                  5,
-                                  width - (cf_label_search_width() + 5) ,
-                                  cf_find_feed_->height());
-        ui_->removeButton->setGeometry(collect_feeds_->x()+ collect_feeds_->width() +  5,
-                                    (ui_->addToFavoriteFeedsButton->height()+10) + (collect_feeds_->height()/2 - ( ui_->removeButton->height() + ui_->removeFromFavoriteFeedsButton->height() + 10)/2),
-                                    ui_->removeButton->width(),
-                                    ui_->removeButton->height());
-        ui_->removeFromFavoriteFeedsButton->setGeometry(ui_->removeButton->x(),
-                                      ui_->removeButton->y() + ui_->removeButton->height()+10,
-                                      ui_->removeFromFavoriteFeedsButton->width(),
-                                      ui_->removeFromFavoriteFeedsButton->height());
-        favorite_feeds_->setGeometry(ui_->removeButton->x() + ui_->removeButton->width() + 5,cf_find_feed_->height()+10 ,
-                                width,
-                                this->height()-(20 +cf_find_feed_->height() + ui_->okButton->height()));
+        positioningFeedsOptionWidgets();
     }
     else if (options_type_ == 2)
     {
@@ -365,47 +296,14 @@ void OptionsWindow::showEvent(QShowEvent *event)
     loadSettings();
 
     download_feed_status_->hide();
-    collect_feeds_->clear();
     favorite_feeds_->clear();
     lw_filter_list_->clear();
-    fillCollectListView();
     fillFavoriteListView();
     fillFilterListView();
 
     this->setEnabled(true);
 }
 
-//'>>' button has been clicked
-void OptionsWindow::on_removeButton_clicked()
-{
-    QList<QListWidgetItem*> l;
-    l = collect_feeds_->selectedItems();
-    if (l.size()==0)
-    {
-        return;
-    }
-
-    for(int i=0; i<l.size(); i++)
-    {
-        addStringToFavoriteList(l[i]->text());
-    }
-}
-
-//'<<' button has been clicked
-void OptionsWindow::on_removeFromFavoriteFeedsButton_clicked()
-{
-    QList<QListWidgetItem*> l;
-    l = favorite_feeds_->selectedItems();
-    if (l.size()==0)
-    {
-        return;
-    }
-
-    for (int i=l.size()-1; i>=0; i--)
-    {
-        delete l[i];
-    }
-}
 
 //'OK' button event
 void OptionsWindow::on_okButton_clicked()
@@ -415,8 +313,6 @@ void OptionsWindow::on_okButton_clicked()
     saveSettings(); //save current options in a file
 
     updateFiltersTable();
-    //ToDo: notify main window that there are changes related to RSS web sites list
-    updateCollectFeedListView();
     emit (stateChanged("UpdatingSettings"));
 }
 
@@ -424,50 +320,6 @@ void OptionsWindow::on_okButton_clicked()
 void OptionsWindow::on_cancelButton_clicked()
 {
     emit (stateChanged("HideOptionWindow"));
-    //this->close();
-}
-
-//'Removed' button has been clicked
-void OptionsWindow::on_addToFavoriteFeedsButton_clicked() //ToDo: rename this slot to on_removeButton_clicked
-{
-    if (collect_feeds_->currentItem()==NULL)
-    {
-        return;
-    }
-
-    //remove from list widget
-    QList<QListWidgetItem*> l;
-    l = collect_feeds_->selectedItems();
-    if (l.size()==0)
-    {
-        return;
-    }
-
-    //remove item(s) from collect_feeds
-    for (int i=l.size()-1; i>=0; i--)
-    {
-        //remove from database
-        data_base_.removeDataFromCollectFeeds(l[i]->text());
-        data_base_.removeDataFromFavoriteFeeds(l[i]->text());
-        for (int j = 0; j<favorite_feeds_->count(); j++)
-        {
-            QListWidgetItem *item = favorite_feeds_->item(j);
-            if (l[i]->text() == item->text())
-            {
-                delete item;
-                break;
-            }
-        }
-
-        delete l[i];
-    }
-
-
-}
-
-void OptionsWindow::on_collect_feeds_DoubleClicked(QListWidgetItem *item)
-{
-    addStringToFavoriteList(item->text());
 }
 
 //treeWidget has been clicked
@@ -610,12 +462,14 @@ void OptionsWindow::on_textChanged(const QString &text) //cf_find_feeds text cha
     std::vector<QString> tmp;
     data_base_.getCollectFeedsThatContainingText(text, &tmp);
 
-    collect_feeds_->clear();
+    //collect_feeds_->clear();
 
+    /*
     for (unsigned int i=0; i<tmp.size(); i++)
     {
         addStringToWatchList(tmp[i]);
     }
+    */
 }
 
 int OptionsWindow::cf_label_search_width()
@@ -630,40 +484,9 @@ int OptionsWindow::cf_label_search_width()
 void OptionsWindow::showCollectionFeeds()
 {
     options_type_ = 1;
-    int width = (this->width() - (25 + ui_->treeWidget->width() + ui_->removeButton->width()))/2;
-    collect_feeds_->setGeometry(ui_->treeWidget->x() + ui_->treeWidget->width()  + 5,
-                               cf_find_feed_->height()+10,
-                               width,
-                               this->height()-(20 +cf_find_feed_->height() + ui_->okButton->height()));
-    ui_->addToFavoriteFeedsButton->setGeometry(collect_feeds_->x(),
-                                  collect_feeds_->y() + collect_feeds_->height() + 5,
-                                  ui_->addToFavoriteFeedsButton->width(),
-                                  ui_->addToFavoriteFeedsButton->height());
-    cf_label_search_->setGeometry(ui_->treeWidget->x() + ui_->treeWidget->width()  + 5,
-                                 5,
-                                 50,
-                                 cf_label_search_->height());
-    cf_find_feed_->setGeometry(cf_label_search_->x() + cf_label_search_width()+5,
-                              5,
-                              width - (cf_label_search_width() + 5) ,
-                              cf_find_feed_->height());
-    ui_->removeButton->setGeometry(collect_feeds_->x()+ collect_feeds_->width() +  5,
-                                (ui_->addToFavoriteFeedsButton->height()+10) + (collect_feeds_->height()/2 - ( ui_->removeButton->height() + ui_->removeFromFavoriteFeedsButton->height() + 10)/2),
-                                ui_->removeButton->width(),
-                                ui_->removeButton->height());
-    ui_->removeFromFavoriteFeedsButton->setGeometry(ui_->removeButton->x(),
-                                  ui_->removeButton->y() + ui_->removeButton->height()+10,
-                                  ui_->removeFromFavoriteFeedsButton->width(),
-                                  ui_->removeFromFavoriteFeedsButton->height());
-    favorite_feeds_->setGeometry(ui_->removeButton->x() + ui_->removeButton->width() + 5,
-                            cf_find_feed_->height()+10 ,
-                            width,
-                            this->height()-(20 +cf_find_feed_->height() + ui_->okButton->height()));
+    positioningFeedsOptionWidgets();
 
-    collect_feeds_->show();
-    ui_->removeButton->show();
     ui_->removeFromFavoriteFeedsButton->show();
-    ui_->addToFavoriteFeedsButton->show();
     favorite_feeds_->show();
     cf_find_feed_->show();
     cf_label_search_->show();
@@ -705,10 +528,7 @@ void OptionsWindow::showProxyConnection()
 //hide widgets
 void OptionsWindow::hideCollectionFeeds()
 {
-    collect_feeds_->hide();
-    ui_->removeButton->hide();
     ui_->removeFromFavoriteFeedsButton->hide();
-    ui_->addToFavoriteFeedsButton->hide();
     favorite_feeds_->hide();
     cf_find_feed_->hide();
     cf_label_search_->hide();
@@ -780,56 +600,16 @@ void OptionsWindow::setupGui ()
                                ui_->okButton->height());
 
     //Collection feeds controls
-    collect_feeds_->setSelectionMode(QAbstractItemView::MultiSelection);
     favorite_feeds_->setSelectionMode(QAbstractItemView::MultiSelection);
 
     connect(cf_find_feed_.get(),SIGNAL(textChanged(QString)), this, SLOT(on_textChanged(QString)));
 
     cf_label_search_->setText("Search");
-    ui_->removeButton->setText(">>");
-    ui_->removeFromFavoriteFeedsButton->setText("<<");
-    ui_->addToFavoriteFeedsButton->setText("Remove");
+    positioningFeedsOptionWidgets();
 
-    int width = (this->width() - (25 + ui_->treeWidget->width() + ui_->removeButton->width()))/2;
-    cf_label_search_->setGeometry(ui_->treeWidget->x() + ui_->treeWidget->width()  + 5,
-                                 5,
-                                 50,
-                                 cf_label_search_->height());
-
-    cf_find_feed_->setGeometry(cf_label_search_->x() + cf_label_search_width()+5,
-                              5,
-                              width - (cf_label_search_width() + 5),
-                              cf_find_feed_->height());
-
-    collect_feeds_->setGeometry(ui_->treeWidget->x() + ui_->treeWidget->width()  + 5,
-                               cf_find_feed_->height()+10,
-                               width,
-                               this->height()-(20 +cf_find_feed_->height() + ui_->okButton->height()));
-
-    ui_->addToFavoriteFeedsButton->setGeometry(collect_feeds_->x(),
-                                  collect_feeds_->y()  + collect_feeds_->height() + 5,
-                                  ui_->addToFavoriteFeedsButton->width(),
-                                  ui_->addToFavoriteFeedsButton->height());
-    ui_->removeButton->setGeometry(collect_feeds_->x()+ collect_feeds_->width() +  5,
-                                (ui_->addToFavoriteFeedsButton->height()+10) + (collect_feeds_->height()/2 - (ui_->removeButton->height() + ui_->removeFromFavoriteFeedsButton->height() + 10)/2),
-                                ui_->removeButton->width(),
-                                ui_->removeButton->height());
-    ui_->removeFromFavoriteFeedsButton->setGeometry(ui_->removeButton->x(),
-                                  ui_->removeButton->y() + ui_->removeButton->height()+10,
-                                  ui_->removeFromFavoriteFeedsButton->width(),
-                                  ui_->removeFromFavoriteFeedsButton->height());
-    favorite_feeds_->setGeometry(ui_->removeButton->x() + ui_->removeButton->width() + 5,
-                            cf_find_feed_->height()+10,
-                            width,
-                            this->height()-(20 +cf_find_feed_->height() + ui_->okButton->height()));
-
-    collect_feeds_->show();
     favorite_feeds_->show();
     cf_find_feed_->show();
     cf_label_search_->show();
-
-
-    connect(collect_feeds_.get(), SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(on_collect_feeds_DoubleClicked(QListWidgetItem*)));
 
     //notification widgets
     l_refresh_time_->setGeometry(ui_->treeWidget->width() + 10,

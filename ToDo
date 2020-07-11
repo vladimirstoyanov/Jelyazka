@@ -1,4 +1,1 @@
-- RSSSearch, replace Tree with some stl structure;
-- update data when click on "Add RSS Feed(s)" button;	
-- refresh button in main windows (gray out main window, when click on the button);
-
+- "remove" button from options doesn't work;
