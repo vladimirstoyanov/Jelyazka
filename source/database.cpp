@@ -58,7 +58,7 @@ void DataBase::openDB()
     //qDebug()<<__PRETTY_FUNCTION__;
     //open db
     q_sql_data_base_ = QSqlDatabase::addDatabase("QSQLITE");
-    q_sql_data_base_.setDatabaseName("../resources/sites.db3");
+    q_sql_data_base_.setDatabaseName("../resources/jelyazka_db.db3");
     q_sql_data_base_.open();
 }
 
