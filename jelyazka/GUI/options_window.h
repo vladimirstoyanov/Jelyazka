@@ -76,12 +76,11 @@ private:
 
 private:
     void addItem(const QString &name);
-    void collect_feedsTableUpdate();
     void fillFilterListView();
-    void fillFavoriteListView();
+    void fillFeedListView();
     void insertRowToRSSTable(const QString &site_name, const QString &url, const QString &version);
     void insertRowToFiltersTable(const QString &filter_name);
-    void removeDataFromCollectFeeds(const QString &site_name);
+    //void removeDataFromCollectFeeds(const QString &site_name);
     void removeDataFromFilters(const QString &filter_name, const bool all_data);
     void removeDataFromRSSTable(const QString &site_name, const bool all_data);
     void returnModifedString(QString &str); //ToDo: change the function name
@@ -108,8 +107,7 @@ private:
 
 private:
     int addStringToFilterList(const QString &cur_text);
-    //int addStringToWatchList(const QString &str);
-    int addStringToFavoriteList(const QString &str);
+    int addToFeedList(const QString &str);
     int cf_label_search_width(); //ToDo: change the function name
 
 private:
@@ -119,13 +117,11 @@ private:
     std::shared_ptr<QCheckBox>              cb_enable_proxy_;
     std::shared_ptr<QLineEdit>              cf_find_feed_;
     std::shared_ptr<QLabel>                 cf_label_search_;
-    //std::shared_ptr<QListWidget>            collect_feeds_;
     std::shared_ptr<QLabel>                 download_feed_status_;
-    std::shared_ptr<QListWidget>            favorite_feeds_;
+    std::shared_ptr<QListWidget>            feed_list_;
     std::shared_ptr<QLabel>                 l_filter_list_;
     QList<bool>                             l_items_for_remove_;
-    //std::vector<QString>                    l_old_collect_feed_;
-    std::vector<QString>                    l_old_favorite_feed_;
+    std::vector<QString>                    l_old_feed_list_;
     std::vector<QString>                    l_old_filters_;
     std::shared_ptr<QLabel>                 l_proxy_url_;
     std::shared_ptr<QLabel>                 l_proxy_port_;

@@ -28,7 +28,7 @@ OptionsWindow::OptionsWindow(QWidget *parent, std::shared_ptr<Data> data) :
     , cf_find_feed_ (std::make_shared<QLineEdit> (this))
     , cf_label_search_ (std::make_shared<QLabel>(this))
     , download_feed_status_ (std::make_shared<QLabel>(this))
-    , favorite_feeds_  (std::make_shared<QListWidget>(this))
+    , feed_list_  (std::make_shared<QListWidget>(this))
     , l_filter_list_ (std::make_shared<QLabel>(this))
     , l_proxy_url_ (std::make_shared<QLabel>(this))
     , l_proxy_port_ (std::make_shared<QLabel> (this))
@@ -49,7 +49,7 @@ OptionsWindow::OptionsWindow(QWidget *parent, std::shared_ptr<Data> data) :
 
 OptionsWindow::~OptionsWindow()
 {
-    l_old_favorite_feed_.clear();
+    l_old_feed_list_.clear();
     l_old_filters_.clear();
 }
 
@@ -87,40 +87,40 @@ void OptionsWindow::addItem(const QString &name)
 }
 
 //fill favorite_feeds (QListWidget var)
-void OptionsWindow::fillFavoriteListView()
+void OptionsWindow::fillFeedListView()
 {
     std::vector<QString> tmp;
     data_base_.getFeeds(&tmp);
 
-    l_old_favorite_feed_.clear();
+    l_old_feed_list_.clear();
 
     for (unsigned int i=0; i<tmp.size(); i++)
     {
-        favorite_feeds_->insertItem(favorite_feeds_->count(), tmp[i]);
-        l_old_favorite_feed_.push_back(tmp[i]);
+        feed_list_->insertItem(feed_list_->count(), tmp[i]);
+        l_old_feed_list_.push_back(tmp[i]);
     }
 }
 
 //add string to favorite_feeds (QListWidget var)
-int OptionsWindow::addStringToFavoriteList(const QString &cur_text)
+int OptionsWindow::addToFeedList(const QString &cur_text)
 {
-    int count = favorite_feeds_->count(); //get count of listWidget
+    int count = feed_list_->count(); //get count of listWidget
     if (cur_text=="")
     {
         return 1;
     }
 
     //check for identical strings
-    for(int row = 0; row < favorite_feeds_->count(); row++)
+    for(int row = 0; row < feed_list_->count(); row++)
     {
-        QListWidgetItem *item = favorite_feeds_->item(row);
+        QListWidgetItem *item = feed_list_->item(row);
         if (cur_text == item->text())
         {
             return 1;
         }
     }
 
-    favorite_feeds_->insertItem(count, cur_text); //insert new element in the end of list widget
+    feed_list_->insertItem(count, cur_text); //insert new element in the end of list widget
 
     return 0;
 }
@@ -237,12 +237,12 @@ void OptionsWindow::positioningFeedsOptionWidgets()
                               width - (cf_label_search_width() + 5) ,
                               cf_find_feed_->height());
 
-    favorite_feeds_->setGeometry(cf_label_search_->x(),
+    feed_list_->setGeometry(cf_label_search_->x(),
                             cf_find_feed_->y() + cf_find_feed_->height()+10,
                             width,
                             this->height()-(20 +cf_find_feed_->height() + ui_->okButton->height()));
 
-    ui_->removeFromFavoriteFeedsButton->setGeometry(favorite_feeds_->x(),
+    ui_->removeFromFavoriteFeedsButton->setGeometry(feed_list_->x(),
                                   ui_->okButton->y(),
                                   ui_->removeFromFavoriteFeedsButton->width(),
                                   ui_->removeFromFavoriteFeedsButton->height());
@@ -296,9 +296,9 @@ void OptionsWindow::showEvent(QShowEvent *event)
     loadSettings();
 
     download_feed_status_->hide();
-    favorite_feeds_->clear();
+    feed_list_->clear();
     lw_filter_list_->clear();
-    fillFavoriteListView();
+    fillFeedListView();
     fillFilterListView();
 
     this->setEnabled(true);
@@ -428,11 +428,6 @@ void OptionsWindow::insertRowToFiltersTable(const QString &filter_name)
     data_base_.insertRowToFiltersTable(filter_name);
 }
 
-void OptionsWindow::removeDataFromCollectFeeds(const QString &site_name)
-{
-    data_base_.removeDataFromCollectFeeds(site_name);
-}
-
 //Filter option: adding string to filter list
 int OptionsWindow::addStringToFilterList(const QString &cur_text)
 {
@@ -487,7 +482,7 @@ void OptionsWindow::showCollectionFeeds()
     positioningFeedsOptionWidgets();
 
     ui_->removeFromFavoriteFeedsButton->show();
-    favorite_feeds_->show();
+    feed_list_->show();
     cf_find_feed_->show();
     cf_label_search_->show();
 
@@ -529,7 +524,7 @@ void OptionsWindow::showProxyConnection()
 void OptionsWindow::hideCollectionFeeds()
 {
     ui_->removeFromFavoriteFeedsButton->hide();
-    favorite_feeds_->hide();
+    feed_list_->hide();
     cf_find_feed_->hide();
     cf_label_search_->hide();
 }
@@ -574,7 +569,7 @@ void OptionsWindow::setupGui ()
 
     ui_->treeWidget->setHeaderLabel("Options");
 
-    addItem("Collection feeds");
+    addItem("Manage feeds");
     addItem("Filters");
     addItem("Notifications");
     addItem("Proxy connection");
@@ -600,14 +595,14 @@ void OptionsWindow::setupGui ()
                                ui_->okButton->height());
 
     //Collection feeds controls
-    favorite_feeds_->setSelectionMode(QAbstractItemView::MultiSelection);
+    feed_list_->setSelectionMode(QAbstractItemView::MultiSelection);
 
     connect(cf_find_feed_.get(),SIGNAL(textChanged(QString)), this, SLOT(on_textChanged(QString)));
 
     cf_label_search_->setText("Search");
     positioningFeedsOptionWidgets();
 
-    favorite_feeds_->show();
+    feed_list_->show();
     cf_find_feed_->show();
     cf_label_search_->show();
 
