@@ -62,6 +62,7 @@ private slots:
     void on_okButton_clicked(); //'OK' button clicked
     void on_cancelButton_clicked(); //'Cancel' button clicked
     void on_treeWidget_clicked(const QModelIndex &index);
+    void on_removeButton_clicked();
     void on_cb_enable_proxy_clicked(bool);
     void on_cb_enable_filtering_clicked(bool);
     void on_pb_add_filter_clicked();
@@ -80,7 +81,6 @@ private:
     void fillFeedListView();
     void insertRowToRSSTable(const QString &site_name, const QString &url, const QString &version);
     void insertRowToFiltersTable(const QString &filter_name);
-    //void removeDataFromCollectFeeds(const QString &site_name);
     void removeDataFromFilters(const QString &filter_name, const bool all_data);
     void removeDataFromRSSTable(const QString &site_name, const bool all_data);
     void returnModifedString(QString &str); //ToDo: change the function name

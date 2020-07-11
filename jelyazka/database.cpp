@@ -497,6 +497,7 @@ void DataBase::removeDataFromFilters()
     closeDB();
 }
 
+/*
 void DataBase::removeDataFromCollectFeeds(const QString &site_name)
 {
     {
@@ -511,8 +512,9 @@ void DataBase::removeDataFromCollectFeeds(const QString &site_name)
     }
     closeDB();
 }
+*/
 
-void DataBase::removeDataFromFavoriteFeeds(const QString &site_name)
+void DataBase::removeDataFromFeedList(const QString &site_name)
 {
     {
         openDB();
@@ -521,7 +523,7 @@ void DataBase::removeDataFromFavoriteFeeds(const QString &site_name)
         query.prepare(QString("delete from favorite_feeds where name=\"%1\"").arg(site_name));
         if (!query.exec())
         {
-            qDebug()<<"DB::removeDataFromFavoriteFeeds(QString site_name) fail delete from collect_feeds where filter... " + query.lastError().text();
+            qDebug()<<"DB::removeDataFromFavoriteFeeds(QString site_name) fail delete from favorite_feeds where filter... " + query.lastError().text();
         }
     }
     closeDB();

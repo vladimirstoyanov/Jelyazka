@@ -40,8 +40,8 @@ public:
     void    removeAllDataFromRssData();
     void    removeDataFromRSSTable(const QString &site_name, const bool all_data);
     void    removeDataFromFilters();
-    void    removeDataFromFavoriteFeeds(const QString &site_name);
-    void    removeDataFromCollectFeeds(const QString &site_name);
+    void    removeDataFromFeedList(const QString &site_name);
+    //void    removeDataFromCollectFeeds(const QString &site_name);
     int     selectURLFromAllURLs(const QString &);
     void    updateArticles(RSSData rss_data);
 

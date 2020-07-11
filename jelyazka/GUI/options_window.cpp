@@ -86,7 +86,7 @@ void OptionsWindow::addItem(const QString &name)
     ui_->treeWidget->addTopLevelItem(item);
 }
 
-//fill favorite_feeds (QListWidget var)
+//fill feed_list_ (QListWidget var)
 void OptionsWindow::fillFeedListView()
 {
     std::vector<QString> tmp;
@@ -101,7 +101,7 @@ void OptionsWindow::fillFeedListView()
     }
 }
 
-//add string to favorite_feeds (QListWidget var)
+//add string to feed_list (QListWidget var)
 int OptionsWindow::addToFeedList(const QString &cur_text)
 {
     int count = feed_list_->count(); //get count of listWidget
@@ -242,10 +242,10 @@ void OptionsWindow::positioningFeedsOptionWidgets()
                             width,
                             this->height()-(20 +cf_find_feed_->height() + ui_->okButton->height()));
 
-    ui_->removeFromFavoriteFeedsButton->setGeometry(feed_list_->x(),
+    ui_->removeButton->setGeometry(feed_list_->x(),
                                   ui_->okButton->y(),
-                                  ui_->removeFromFavoriteFeedsButton->width(),
-                                  ui_->removeFromFavoriteFeedsButton->height());
+                                  ui_->removeButton->width(),
+                                  ui_->removeButton->height());
 }
 
 //resize window event
@@ -304,6 +304,23 @@ void OptionsWindow::showEvent(QShowEvent *event)
     this->setEnabled(true);
 }
 
+//'Remove' button click event
+void OptionsWindow::on_removeButton_clicked()
+{
+    //get selected items
+    QModelIndexList list =feed_list_->selectionModel()->selectedIndexes();
+    QStringList slist;
+    foreach(const QModelIndex &index, list){
+        slist.append( index.data(Qt::DisplayRole ).toString());
+        feed_list_->takeItem(index.row());
+    }
+
+    //remove selected items from db
+    for (int i=0; i< slist.size(); ++i)
+    {
+        data_base_.removeDataFromFeedList(slist.at(i));
+    }
+}
 
 //'OK' button event
 void OptionsWindow::on_okButton_clicked()
@@ -481,7 +498,7 @@ void OptionsWindow::showCollectionFeeds()
     options_type_ = 1;
     positioningFeedsOptionWidgets();
 
-    ui_->removeFromFavoriteFeedsButton->show();
+    ui_->removeButton->show();
     feed_list_->show();
     cf_find_feed_->show();
     cf_label_search_->show();
@@ -523,7 +540,7 @@ void OptionsWindow::showProxyConnection()
 //hide widgets
 void OptionsWindow::hideCollectionFeeds()
 {
-    ui_->removeFromFavoriteFeedsButton->hide();
+    ui_->removeButton->hide();
     feed_list_->hide();
     cf_find_feed_->hide();
     cf_label_search_->hide();

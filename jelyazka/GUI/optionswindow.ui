@@ -34,7 +34,7 @@
     </property>
    </column>
   </widget>
-  <widget class="QPushButton" name="removeFromFavoriteFeedsButton">
+  <widget class="QPushButton" name="removeButton">
    <property name="geometry">
     <rect>
      <x>170</x>
