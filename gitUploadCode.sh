@@ -13,7 +13,7 @@ fi
 
 cd $2
 
-rm -rf build-fileCrypt-Desktop-Debug/
+rm -rf build-jelyazka-Desktop-Debug/
 rm source/*.pro.user
 
 echo "git add --all"
