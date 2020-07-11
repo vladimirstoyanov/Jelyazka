@@ -14,9 +14,8 @@ DataBase::~DataBase ()
 
 void DataBase::createTables()
 {
-    createCollectFeedsTable();
     createAllURLTable();
-    createFavoriteFeedsTable();
+    createFeedListTable();
     createFiltersTable();
     createRssDataTable();
 }
@@ -31,11 +30,11 @@ void DataBase::loadStrctureFromDB(std::shared_ptr<Data> data)
         createTables();
 
         //get all rss feeds urls
-        query.prepare( "SELECT * FROM favorite_feeds" );
+        query.prepare( "SELECT * FROM feed_list" );
 
         if( !query.exec() )
         {
-            qDebug()<<"Some error, when trying to read from \'favorite_feeds\' table...";
+            qDebug()<<"Some error, when trying to read from \'feed_list\' table...";
             closeDB();
             return;
         }
@@ -128,7 +127,7 @@ std::vector<QString> DataBase::getURLs()
         openDB();
         QSqlQuery query(q_sql_data_base_);
 
-        query.prepare( "SELECT * FROM favorite_feeds" );
+        query.prepare( "SELECT * FROM feed_list" );
 
         if( !query.exec() )
         {
@@ -155,11 +154,11 @@ void DataBase::getFeeds(std::vector<QString> *l_old_view_feed)
         openDB();
         QSqlQuery query(q_sql_data_base_);
 
-        query.prepare( "SELECT * FROM favorite_feeds" );
+        query.prepare( "SELECT * FROM feed_list" );
 
         if( !query.exec() )
         {
-            qDebug()<<"Some error, when trying to read from \'favorite_feeds' table...";
+            qDebug()<<"Some error, when trying to read from \'feed_list' table...";
             return;
         }
 
@@ -199,7 +198,7 @@ void DataBase::removeDataFromRSSTable(const QString &site_name, const bool all_d
 
         if (all_data)
         {
-            query.prepare("delete from favorite_feeds");
+            query.prepare("delete from feed_list");
             if (!query.exec())
             {
                 qDebug()<<"Fail:" + query.lastError().text();
@@ -208,7 +207,7 @@ void DataBase::removeDataFromRSSTable(const QString &site_name, const bool all_d
             return;
         }
 
-        query.prepare(QString("delete from favorite_feeds where name=\'%1\'").arg(site_name));
+        query.prepare(QString("delete from feed_list where name=\'%1\'").arg(site_name));
         if (!query.exec())
         {
             qDebug()<<"Fail:" + query.lastError().text();
@@ -217,30 +216,12 @@ void DataBase::removeDataFromRSSTable(const QString &site_name, const bool all_d
     closeDB();
 }
 
-void DataBase::insertIntoFavoriteFeeds(const QString &name, const QString &url, const QString &version)
+void DataBase::insertIntoFeedList(const QString &name, const QString &url, const QString &version)
 {
     {
         openDB();
         QSqlQuery query(q_sql_data_base_);
-        query.prepare("insert into favorite_feeds (name, url, version) values (?,?,?)");
-        query.addBindValue(name);
-        query.addBindValue(url);
-        query.addBindValue(version);
-
-        if (!query.exec())
-        {
-            qDebug()<<__PRETTY_FUNCTION__<<"Error:"<<query.lastError();
-        }
-    }
-    closeDB();
-}
-
-void DataBase::insertIntoCollectFeeds(const QString &name, const QString &url, const QString &version)
-{
-    {
-        openDB();
-        QSqlQuery query(q_sql_data_base_);
-        query.prepare("insert into collect_feeds (name, url, version) values (?,?,?)");
+        query.prepare("insert into feed_list (name, url, version) values (?,?,?)");
         query.addBindValue(name);
         query.addBindValue(url);
         query.addBindValue(version);
@@ -325,7 +306,7 @@ QString DataBase::getURLByName(const QString &name)
 
         if (q_sql_data_base_.isOpen())
         {
-            query.prepare(QString("SELECT * FROM collect_feeds WHERE name=\"%1\"").arg(name));
+            query.prepare(QString("SELECT * FROM feed_list WHERE name=\"%1\"").arg(name));
             if (!query.exec())
             {
                 qDebug()<<"Fail:" + query.lastError().text();
@@ -352,7 +333,7 @@ QString DataBase::getVersionByName(const QString &name)
 
         if (q_sql_data_base_.isOpen())
         {
-            query.prepare(QString("SELECT * FROM collect_feeds WHERE name=\"%1\"").arg(name));
+            query.prepare(QString("SELECT * FROM feed_list WHERE name=\"%1\"").arg(name));
             if (!query.exec())
             {
                 qDebug()<<"Fail:" + query.lastError().text();
@@ -407,33 +388,6 @@ int DataBase::deleteAllFromAllURL()
     }
     closeDB();
     return 1;
-}
-
-
-void DataBase::getCollectFeeds(std::vector<QString> *l_old_collect_feed)
-{
-    {
-        openDB();
-        QSqlQuery query(q_sql_data_base_);
-
-        query.prepare("SELECT * FROM collect_feeds");
-
-        if(!query.exec())
-        {
-            qDebug()<<"OptionsWindow::fillCollectListView(): Some error, when trying to read from \'site_name' table...";
-            closeDB();
-            return;
-        }
-        l_old_collect_feed->clear();
-
-        while( query.next() )
-        {
-            QString name;
-            name = query.value( 1 ).toByteArray().data();
-            l_old_collect_feed->push_back(name);
-        }
-    }
-    closeDB();
 }
 
 void DataBase::getFilterList(std::vector<QString> *l_old_filters)
@@ -497,75 +451,19 @@ void DataBase::removeDataFromFilters()
     closeDB();
 }
 
-/*
-void DataBase::removeDataFromCollectFeeds(const QString &site_name)
-{
-    {
-        openDB();
-        QSqlQuery query(q_sql_data_base_);
-
-        query.prepare(QString("delete from collect_feeds where name=\"%1\"").arg(site_name));
-        if (!query.exec())
-        {
-            qDebug()<<"DB::removeDataFromCollectFeeds(QString site_name) fail delete from collect_feeds where filter... " + query.lastError().text();
-        }
-    }
-    closeDB();
-}
-*/
-
 void DataBase::removeDataFromFeedList(const QString &site_name)
 {
     {
         openDB();
         QSqlQuery query(q_sql_data_base_);
 
-        query.prepare(QString("delete from favorite_feeds where name=\"%1\"").arg(site_name));
+        query.prepare(QString("delete from feed_list where name=\"%1\"").arg(site_name));
         if (!query.exec())
         {
-            qDebug()<<"DB::removeDataFromFavoriteFeeds(QString site_name) fail delete from favorite_feeds where filter... " + query.lastError().text();
+            qDebug()<<"DB::removeDataFromFavoriteFeeds(QString site_name) fail delete from feed_list where filter... " + query.lastError().text();
         }
     }
     closeDB();
-}
-
-void DataBase::getCollectFeedsThatContainingText(const QString &text, std::vector<QString> *l_favorite_rss) //cf_find_feeds text changed event
-{
-    {
-        openDB();
-        QSqlQuery query(q_sql_data_base_);
-
-        query.prepare( "SELECT * FROM collect_feeds" );
-
-        if( !query.exec() )
-        {
-            qDebug()<<"Some error, when trying to read from \'site_name' table...";
-            closeDB();
-            return;
-        }
-
-        while( query.next() )
-        {
-            QString name = query.value( 1 ).toByteArray().data();
-            if (name.contains(text))
-            {
-                l_favorite_rss->push_back(name);
-            }
-        }
-    }
-
-    closeDB();
-}
-
-
-void DataBase::createCollectFeedsTable()
-{
-    createTable ("collect_feeds",
-                 "create table collect_feeds "
-                 "(id integer PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, "
-                 "name varchar, "
-                 "url varchar, "
-                 "version integer)");
 }
 
 void DataBase::createAllURLTable()
@@ -576,10 +474,10 @@ void DataBase::createAllURLTable()
                  "url varchar)");
 }
 
-void DataBase::createFavoriteFeedsTable()
+void DataBase::createFeedListTable()
 {
-    createTable ("favorite_feeds",
-                 "create table favorite_feeds "
+    createTable ("feed_list",
+                 "create table feed_list "
                  "(id integer PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, "
                  "name varchar, "
                  "url varchar, "

@@ -135,7 +135,7 @@ void OptionsWindow::removeDataFromRSSTable(const QString &site_name, const bool 
 //insert row to 'rss' DB table
 void OptionsWindow::insertRowToRSSTable(const QString &name, const QString &url, const QString &version)
 {
-    data_base_.insertIntoFavoriteFeeds(name, url, version);
+    data_base_.insertIntoFeedList(name, url, version);
 }
 
 void OptionsWindow::updateFiltersTable()
@@ -472,7 +472,7 @@ int OptionsWindow::addStringToFilterList(const QString &cur_text)
 void OptionsWindow::on_textChanged(const QString &text) //cf_find_feeds text changed event
 {
     std::vector<QString> tmp;
-    data_base_.getCollectFeedsThatContainingText(text, &tmp);
+    //data_base_.getCollectFeedsThatContainingText(text, &tmp);
 
     //collect_feeds_->clear();
 
