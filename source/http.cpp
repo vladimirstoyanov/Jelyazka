@@ -27,6 +27,7 @@ HTTP::~HTTP()
 }
 
 //http get query
+//ToDo: refactor it
 int HTTP::getQuery(QString url, QString &content , int &type)
 {
     QTcpSocket socket;
@@ -129,6 +130,7 @@ int HTTP::getQuery(QString url, QString &content , int &type)
     return 0;
 }
 
+//ToDo: refactor it
 //http get query method with proxy argument
 int HTTP::getQuery(QString url, QString &content)
 {
