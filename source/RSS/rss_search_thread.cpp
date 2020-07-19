@@ -38,7 +38,7 @@ RSSSearchGUIThread::~RSSSearchGUIThread()
 
 bool RSSSearchGUIThread::setUrlRoot(QString url)
 {
-    HTTP http;
+    Http http;
     Search cs;
 
     QString query_part="";
@@ -76,7 +76,7 @@ void RSSSearchGUIThread::run()
 
     Search cs;
     QString html;
-    HTTP http;
+    Http http;
 
     mutex->lock();
     if (l_url.size() == 0)

@@ -1,13 +1,13 @@
 /*
-    network_manager.h
+    http_data.h
     Jelyazka RSS/RDF reader
     Copyright (C) 2020 Vladimir Stoyanov
-    
+
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -16,31 +16,37 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef NETWORK_MANAGER_H
-#define NETWORK_MANAGER_H
+
+#ifndef JELYAZKA_HTTP_DATA_H
+#define JELYAZKA_HTTP_DATA_H
 
 #include <QString>
 
-#include <memory>
-
-#include "http.h"
-#include "http_data.h"
-#include "https.h"
-
-class NetworkManager
+class HttpData
 {
 public:
-    NetworkManager ();
-    virtual ~NetworkManager();
+    HttpData ();
+    virtual ~HttpData ();
 
-    void getHttpRequest (const QString &url);
-public slots:
-    void onHttpRequestResult (const HttpData httpData);
+    QString getData () const
+    {
+        return data_;
+    }
+
+    bool isResponseSuccessful () const
+    {
+        return is_response_successful_;
+    }
+
+    bool isXml () const
+    {
+        return is_xml_;
+    }
+
 private:
-    void setupConnections();
-private:
-    std::shared_ptr<Http> http;
-    std::shared_ptr<Https> https;
+    QString data_;
+    bool is_xml_;
+    bool is_response_successful_;
 };
 
-#endif // NETWORK_MANAGER_H
+#endif // JELYAZKA_HTTP_DATA_H

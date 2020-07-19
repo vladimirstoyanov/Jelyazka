@@ -17,3 +17,36 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "network_manager.h"
+
+NetworkManager::NetworkManager ():
+    http (std::make_shared<Http> ()),
+    https (std::make_shared<Https> ())
+{
+}
+
+NetworkManager::~NetworkManager()
+{
+}
+
+void NetworkManager::getHttpRequest (const QString &url)
+{
+    if (https->checkIsProtolHttps(url))
+    {
+        https->getRequest(url);
+    }
+    else
+    {
+        http->getRequest(url);
+    }
+}
+
+//Slot: onHttpRequestResult
+void NetworkManager::onHttpRequestResult (const HttpData httpData)
+{
+
+}
+
+void NetworkManager::setupConnections()
+{
+
+}

@@ -20,6 +20,7 @@ SOURCES += main.cpp\
     search.cpp \
     logger.cpp \
     Network/http.cpp \
+    Network/http_data.cpp \
     Network/network_manager.cpp \
     Network/http_protocol.cpp \
     data.cpp \
@@ -62,6 +63,7 @@ HEADERS  += \
     search.h \
     logger.h \
     Network/http.h \
+    Network/http_data.h \
     Network/network_manager.h \
     Network/http_protocol.h \
     data.h \

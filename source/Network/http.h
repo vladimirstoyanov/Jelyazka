@@ -1,7 +1,7 @@
 /*
-    net.h
+    http.h
     Jelyazka RSS/RDF reader
-    Copyright (C) 2014 Vladimir Stoyanov
+    Copyright (C) 2020 Vladimir Stoyanov
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,15 +27,17 @@
 #include <QTcpSocket>
 #include <QTextCodec>
 
+#include "http_protocol.h"
 #include "settings.h"
 #include "search.h"
 
 
-class HTTP
+class Http : public IHttpProtocol
 {
+        Q_OBJECT
 public:
-    HTTP();
-    virtual ~HTTP();
+    Http();
+    virtual ~Http();
 
     void addSubStringAtBeginning(QString &url, const QString &substring);
     void addOrRemoveWWW(QString &url); //ToDo: rename this funtion
@@ -47,6 +49,7 @@ public:
     void removeSubString(QString &url, const QString &substring);
 
 public:
+    void getRequest(const QString &url);
     int  getRequest(const QString &url, QString &content);
     int  getRequest(const QString &url, QString &content, int &type);
     int  isHTMLorXML(const QString &content);
@@ -58,6 +61,8 @@ public:
     bool checkForProtocol(const QString &url, int &index, QString &protocol);
     bool checkInMiddle(const QString &url, const QString &substring, int begin_index);
     bool checkResponse(const QString &content, QString &response_num);
+
+    void postRequest (const QString &) {}
 
 private:
     int url_option_;

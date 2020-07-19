@@ -62,7 +62,7 @@ void DownloadRssDataThread::downloadFeed (const unsigned int index)
 {
      qDebug()<<__PRETTY_FUNCTION__;
      ParseRSS parse;
-     HTTP http;
+     Http http;
      QString web_source;
      std::shared_ptr<RSSData> rss_data = std::make_shared<RSSData> ();
 

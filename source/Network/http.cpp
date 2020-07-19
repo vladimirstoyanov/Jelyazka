@@ -1,7 +1,7 @@
 /*
-    HTTP.cpp
+    http.cpp
     Jelyazka RSS/RDF reader
-    Copyright (C) 2014 Vladimir Stoyanov
+    Copyright (C) 2020 Vladimir Stoyanov
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,17 +18,126 @@
 */
 #include "http.h"
 
-HTTP::HTTP()
+Http::Http()
 {
     url_option_ =0;
 }
-HTTP::~HTTP()
+Http::~Http()
 {
+}
+
+void Http::getRequest(const QString &urlParam)
+{
+    QTcpSocket socket;
+    QString query_string="";
+    int result = 0;
+    int type = 0;
+    QString url = urlParam;
+    QString content = "";
+
+    url_option_=1;
+    checkAndChangeURL2(url);
+
+    queryPartAndURL(url,query_string);
+    if (query_string == "")
+    {
+        query_string += '/';
+    }
+
+    //ToDo: test it
+    if (Jelyazka::Settings::getIsProxyConnectionEnabled())
+    {
+        QNetworkProxy network_proxy;
+        network_proxy.setHostName(Jelyazka::Settings::getProxyIpAddress());
+        network_proxy.setPort(Jelyazka::Settings::getProxyPort().toInt());
+        socket.setProxy(network_proxy);
+    }
+
+    socket.connectToHost(url,80,QIODevice::ReadWrite);
+    if(!socket.waitForConnected())
+    {
+        socket.close();
+        result = 1;
+        return;
+    }
+    QString http_query = "GET " +query_string + " HTTP/1.1\r\nHost: " + url + "\r\nConnection: close\r\n\r\n";
+    QByteArray ba2;
+    ba2 = http_query.toLocal8Bit();
+    socket.write(ba2.data());
+
+    QByteArray ba1;
+    content ="";
+
+    socket.waitForReadyRead();
+    ba1=socket.readAll();
+    content += ba1.data();
+
+    QString response_num = "";
+    float r_num = 0;
+    int try_num = 0;
+    int try_count = 10;
+
+    checkResponse(content, response_num);
+
+    if (response_num.length() == 3)
+    {
+        r_num = response_num.toFloat();
+    }
+
+    if (r_num>307) //trying to add or remove www (400 bad request)
+    {
+        addOrRemoveWWW(url);
+    }
+
+    while((r_num<200 || r_num>300) && try_num<try_count)
+    {
+        getCorrectURL(content, url);
+        content="";
+        socket.close();
+
+        reconnect(url, content, socket);
+
+        response_num = "";
+        checkResponse(content, response_num);
+        if (response_num.length() == 3)
+        {
+            r_num = response_num.toFloat();//return 0, if it cat't convert QString to float
+        }
+
+        if (r_num>307)
+        {
+            addOrRemoveWWW(url);
+        }
+
+        try_num++;
+    }
+    if (r_num!=200)
+    {
+        socket.close();
+        result = 1;
+        return;
+    }
+
+    type = isHTMLorXML(content);
+    if (!type)
+    {
+        socket.close();
+        result = 1;
+        return;
+    }
+
+    while(socket.waitForReadyRead())
+    {
+        ba1=socket.readAll();
+        content += ba1.data();
+    }
+    socket.close();
+
 }
 
 //http get query
 //ToDo: refactor it
-int HTTP::getRequest(const QString &urlParam, QString &content , int &type)
+int Http::getRequest(const QString &urlParam, QString &content , int &type)
 {
     QTcpSocket socket;
     QString query_string="";
@@ -133,7 +242,7 @@ int HTTP::getRequest(const QString &urlParam, QString &content , int &type)
 
 //ToDo: refactor it
 //http get query method with proxy argument
-int HTTP::getRequest(const QString &urlParam, QString &content)
+int Http::getRequest(const QString &urlParam, QString &content)
 {
     QTcpSocket socket;
     QString query_string="";
@@ -218,7 +327,7 @@ int HTTP::getRequest(const QString &urlParam, QString &content)
 }
 
 
-int HTTP::reconnect(QString url, QString &content, QTcpSocket &socket)
+int Http::reconnect(QString url, QString &content, QTcpSocket &socket)
 {
     QString query_string="";
     content = "";
@@ -248,7 +357,7 @@ int HTTP::reconnect(QString url, QString &content, QTcpSocket &socket)
     return 0;
 }
 
-void HTTP::queryPartAndURL(QString &url, QString &query_part)
+void Http::queryPartAndURL(QString &url, QString &query_part)
 {
     Search cs;
     QString tmp_url="";
@@ -274,7 +383,7 @@ void HTTP::queryPartAndURL(QString &url, QString &query_part)
     url=tmp_url;
 }
 
-bool HTTP::checkInTheBeginning(const QString &url, const QString &http)
+bool Http::checkInTheBeginning(const QString &url, const QString &http)
 {
     int n = url.length();
     int n1 = http.length();
@@ -295,7 +404,7 @@ bool HTTP::checkInTheBeginning(const QString &url, const QString &http)
 }
 
 //check the middle of url for substring
-bool HTTP::checkInMiddle(const QString &url, const QString &substring, int begin_index) //0 - contain substring, 1- not contain
+bool Http::checkInMiddle(const QString &url, const QString &substring, int begin_index) //0 - contain substring, 1- not contain
 {
 
     int n = url.length();
@@ -322,7 +431,7 @@ bool HTTP::checkInMiddle(const QString &url, const QString &substring, int begin
     return 1;
 }
 
-void HTTP::checkAndChangeURL2(QString &url)
+void Http::checkAndChangeURL2(QString &url)
 {
     int index=0;
     QString url_tmp = url;
@@ -342,7 +451,7 @@ void HTTP::checkAndChangeURL2(QString &url)
     }
 }
 
-bool HTTP::checkForProtocol(const QString &url, int &index_after_protocol, QString &protocol)
+bool Http::checkForProtocol(const QString &url, int &index_after_protocol, QString &protocol)
 {
     protocol = "";
     index_after_protocol = 0;
@@ -368,7 +477,7 @@ bool HTTP::checkForProtocol(const QString &url, int &index_after_protocol, QStri
     return 1;
 }
 
-bool HTTP::checkForProtocol(const QString &url, QString &protocol)
+bool Http::checkForProtocol(const QString &url, QString &protocol)
 {
     protocol = "";
     for (int i=0; i<url.length(); i++)
@@ -391,7 +500,7 @@ bool HTTP::checkForProtocol(const QString &url, QString &protocol)
     return 1;
 }
 
-bool HTTP::checkForProtocol(const QString &url, int &index)
+bool Http::checkForProtocol(const QString &url, int &index)
 {
     index =0;
     for (int i=0; i<url.length(); i++)
@@ -415,7 +524,7 @@ bool HTTP::checkForProtocol(const QString &url, int &index)
     return 1;
 }
 
-bool HTTP::checkForProtocol(const QString &url)
+bool Http::checkForProtocol(const QString &url)
 {
     for (int i=0; i<url.length(); i++)
     {
@@ -435,10 +544,10 @@ bool HTTP::checkForProtocol(const QString &url)
     return 1;
 }
 
-bool HTTP::checkResponse(const QString &content, QString &response_num)
+bool Http::checkResponse(const QString &content, QString &response_num)
 {
     int size_string = content.length();
-    if (size_string<6) //HTTP/<num version>
+    if (size_string<6) //Http/<num version>
     {
         return 1;
     }
@@ -477,12 +586,12 @@ bool HTTP::checkResponse(const QString &content, QString &response_num)
     return 0;
 }
 
-void HTTP::addSubStringAtBeginning(QString &url, const QString &substring)
+void Http::addSubStringAtBeginning(QString &url, const QString &substring)
 {
     url = substring + url;
 }
 
-void HTTP::removeSubString(QString &url, const QString &substring)
+void Http::removeSubString(QString &url, const QString &substring)
 {
     Search cs;
     QString newURL="";
@@ -504,7 +613,7 @@ void HTTP::removeSubString(QString &url, const QString &substring)
     url = newURL;
 }
 
-void HTTP::changeUrl(QString &url, const int option)
+void Http::changeUrl(QString &url, const int option)
 {
     switch(option)
     {
@@ -541,7 +650,7 @@ void HTTP::changeUrl(QString &url, const int option)
 }
 
 //return: 1 (html), 2 (xml), 0 (ignore url)
-int HTTP::isHTMLorXML(const QString &content)
+int Http::isHTMLorXML(const QString &content)
 {
     Search cs;
     int index=0, n = content.length();
@@ -576,7 +685,7 @@ int HTTP::isHTMLorXML(const QString &content)
     return 0; //ignore url
 }
 
-void HTTP::getCorrectURL(const QString &content, QString &url)
+void Http::getCorrectURL(const QString &content, QString &url)
 {
     Search cs;
     int i=0;
@@ -602,7 +711,7 @@ void HTTP::getCorrectURL(const QString &content, QString &url)
     url = url_tmp;
 }
 
-void HTTP::addOrRemoveWWW(QString &url)
+void Http::addOrRemoveWWW(QString &url)
 {
     QString url_tmp = "";
     Search cs;
