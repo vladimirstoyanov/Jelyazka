@@ -17,7 +17,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "rss_search_thread.h"
-#include "http.h"
+#include "Network/http.h"
 
 RSSSearchGUIThread::RSSSearchGUIThread() :
     QRunnable()
@@ -93,7 +93,7 @@ void RSSSearchGUIThread::run()
 
     int type = 0;
 
-    if (http.getQuery(*url, html, type)) //if can't connect
+    if (http.getRequest(*url, html, type)) //if can't connect
     {
             mutex->lock();
             if(checkFinish())

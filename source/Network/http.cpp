@@ -28,10 +28,11 @@ HTTP::~HTTP()
 
 //http get query
 //ToDo: refactor it
-int HTTP::getQuery(QString url, QString &content , int &type)
+int HTTP::getRequest(const QString &urlParam, QString &content , int &type)
 {
     QTcpSocket socket;
     QString query_string="";
+    QString url = urlParam;
 
     url_option_=1;
     checkAndChangeURL2(url);
@@ -132,10 +133,11 @@ int HTTP::getQuery(QString url, QString &content , int &type)
 
 //ToDo: refactor it
 //http get query method with proxy argument
-int HTTP::getQuery(QString url, QString &content)
+int HTTP::getRequest(const QString &urlParam, QString &content)
 {
     QTcpSocket socket;
     QString query_string="";
+    QString url = urlParam;
 
     url_option_=1;
     checkAndChangeURL2(url);

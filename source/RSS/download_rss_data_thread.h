@@ -25,7 +25,7 @@
 #include <QRunnable>
 #include <QtDebug>
 
-#include "http.h"
+#include "Network/http.h"
 #include "RSS/parse_rss.h"
 
 enum DownloadState

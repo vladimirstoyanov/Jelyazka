@@ -47,8 +47,8 @@ public:
     void removeSubString(QString &url, const QString &substring);
 
 public:
-    int  getQuery(QString url, QString &content);
-    int  getQuery(QString url, QString &content, int &type);
+    int  getRequest(const QString &url, QString &content);
+    int  getRequest(const QString &url, QString &content, int &type);
     int  isHTMLorXML(const QString &content);
     int  reconnect(QString url, QString &content, QTcpSocket &socket);
     bool checkInTheBeginning(const QString &url, const QString &http);

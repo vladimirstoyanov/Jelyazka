@@ -271,7 +271,7 @@ void MainWindow::refreshFeed()
         QApplication::restoreOverrideCursor();
         return;
     }
-    if (!http.getQuery(data_->at(current_site_index_)->getURL(),content))
+    if (!http.getRequest(data_->at(current_site_index_)->getURL(),content))
     {
         rss_thread_->synchronizeData(current_site_index_, content);
         if (data_->at(current_site_index_)->getArticlesSize()<=current_article_index_)

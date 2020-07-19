@@ -70,7 +70,7 @@ void DownloadRssDataThread::downloadFeed (const unsigned int index)
 
 
      //get the web content
-     if (http.getQuery(feeds_[index].getFeedUrl(),web_source))
+     if (http.getRequest(feeds_[index].getFeedUrl(),web_source))
      {
          qDebug()<<__PRETTY_FUNCTION__<<": web content of "<<feeds_[index].getFeedUrl()<<" hasn't download!";
          feeds_[index].setDownloadState(DOWNLOADED);
@@ -79,10 +79,6 @@ void DownloadRssDataThread::downloadFeed (const unsigned int index)
 
      //pasrse web content to RSSData
      parse.getRSSDataByWebSource(web_source, rss_data);
-
-
-     //ToDo: remove the below row. It has been added only for test reasons
-     //test (rss_data);
 
      emit writeData (*rss_data.get());
 

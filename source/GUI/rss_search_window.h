@@ -43,7 +43,7 @@
 #include <QTextCodec>
 #include <QThreadPool>
 
-#include "http.h"
+#include "Network/http.h"
 #include "logger.h"
 #include "RSS/parse_rss.h"
 #include "RSS/rss_search_thread.h"
