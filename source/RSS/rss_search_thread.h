@@ -32,6 +32,7 @@
 #include "logger.h"
 #include "Network/network_manager.h"
 
+//ToDo: refactor it
 class RSSSearchGUIThread : public QObject, public QRunnable
 {
     Q_OBJECT
@@ -66,7 +67,8 @@ public:
 
 private:
     DataBase    data_base_;
-    std::shared_ptr<NetworkManager> network_manager_;
+    bool        is_search_finished_; //FIXME
+    //std::shared_ptr<NetworkManager> network_manager_;
     Logger      log_;
     QString     url_root_;
 

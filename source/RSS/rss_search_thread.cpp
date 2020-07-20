@@ -18,13 +18,14 @@
 */
 #include "rss_search_thread.h"
 
+#include <unistd.h>
+
 RSSSearchGUIThread::RSSSearchGUIThread() :
     QRunnable()
-    , mutex (std::make_shared<QMutex>())
+    , mutex (std::make_shared<QMutex>()) 
     , stop_thread (false)
-    , network_manager_(std::make_shared<NetworkManager> ())
+    , is_search_finished_ (false)
 {
-    setupConnections();
 }
 
 RSSSearchGUIThread::~RSSSearchGUIThread()
@@ -90,8 +91,21 @@ void RSSSearchGUIThread::run()
 
     emit changeUrlLabel(*url);
 
+    std::shared_ptr<NetworkManager> network_manager_ = std::make_shared<NetworkManager> ();
+    connect( network_manager_.get()
+            , SIGNAL(httpRequestReceived(const HttpData))
+            , this
+            , SLOT(onHttpRequestReceived(const HttpData))
+            , Qt::QueuedConnection);
+
+    //setupConnections();
     network_manager_->getHttpRequest(*url);
     delete url;
+
+    while(!is_search_finished_)
+    {
+        usleep(10000);
+    }
 }
 
 //get url from html_source after index
@@ -421,6 +435,7 @@ int RSSSearchGUIThread::checkFinish()
 
     if (count == l_flags.size())
     {
+        is_search_finished_ = true;
         return 1;
     }
 
@@ -429,6 +444,7 @@ int RSSSearchGUIThread::checkFinish()
 
 void RSSSearchGUIThread::onHttpRequestReceived(const HttpData httpData)
 {
+    qDebug()<<__PRETTY_FUNCTION__;
     Search cs;
     QString url = httpData.getUrl();
 
@@ -533,10 +549,12 @@ void RSSSearchGUIThread::onHttpRequestReceived(const HttpData httpData)
 
 void RSSSearchGUIThread::setupConnections ()
 {
+    /*
     connect( network_manager_.get()
             , SIGNAL(httpRequestReceived(const HttpData))
             , this
             , SLOT(onHttpRequestReceived(const HttpData))
             , Qt::QueuedConnection);
 
+    */
 }

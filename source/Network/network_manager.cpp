@@ -32,7 +32,7 @@ NetworkManager::~NetworkManager()
 void NetworkManager::getHttpRequest (const QString &url)
 {
     qDebug()<<__PRETTY_FUNCTION__;
-    if (https->checkIsProtolHttps(url))
+    if (https->isHttpsProtocol(url))
     {
         qDebug()<<__PRETTY_FUNCTION__<<": https";
         https->getRequest(url);

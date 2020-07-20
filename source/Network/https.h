@@ -40,17 +40,19 @@ class Https: public IHttpProtocol
 public:
     Https ();
     virtual ~Https ();
-    bool checkIsProtolHttps(const QString &url);
+    bool isHttpsProtocol(const QString &url);
     void getRequest (const QString &url);
     void postRequest (const QString &) {}
 public slots:
     void replyFinished(QNetworkReply* reply);
 private:
+    QSslConfiguration config_;
     std::shared_ptr<QNetworkAccessManager> manager_;
     QString https_prefix_name_;
+    QNetworkRequest request_;
 
 signals:
-    void httpRequestResult (const HttpData httpData);
+    void httpsRequestResult (const HttpData httpData);
 };
 
 #endif // HTTPSGETCUSTOM_H

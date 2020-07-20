@@ -22,6 +22,15 @@ Https::Https():
     manager_ (std::make_shared<QNetworkAccessManager> ()),
     https_prefix_name_("https")
 {
+    qDebug()<<__PRETTY_FUNCTION__;
+
+    QSslConfiguration config = QSslConfiguration::defaultConfiguration();
+    config_.setProtocol(QSsl::TlsV1_2);
+    request_.setSslConfiguration(config_);
+
+    connect(manager_.get(),
+            SIGNAL(finished(QNetworkReply*)), this,
+            SLOT(replyFinished(QNetworkReply*)));
 }
 
 Https::~Https()
@@ -30,23 +39,18 @@ Https::~Https()
 
 void Https::getRequest(const QString &url)
 {
-    QNetworkRequest request;
+    qDebug()<<__PRETTY_FUNCTION__;
 
-    QSslConfiguration config = QSslConfiguration::defaultConfiguration();
-    config.setProtocol(QSsl::TlsV1_2);
-    request.setSslConfiguration(config);
-    request.setUrl(QUrl(url));
-    request.setHeader(QNetworkRequest::ServerHeader, "application/json");
+    request_.setUrl(QUrl(url));
+    request_.setHeader(QNetworkRequest::ServerHeader, "application/json");
 
-    connect(manager_.get(),
-            SIGNAL(finished(QNetworkReply*)), this,
-            SLOT(replyFinished(QNetworkReply*)));
-
-    manager_->get(request);
+    manager_->get(request_);
 }
 
 void Https::replyFinished(QNetworkReply* reply)
 {
+    qDebug()<<__PRETTY_FUNCTION__;
+
     HttpData httpData;
     HttpRequestResultAnalyzer httpRequestResultAnalyzer;
     QString response_code = "";
@@ -62,11 +66,11 @@ void Https::replyFinished(QNetworkReply* reply)
     ContentType contentType = httpRequestResultAnalyzer.getContentType(httpData.getData());
     httpData.setContentType(contentType);
 
-    emit(httpRequestResult(httpData));
+    emit(httpsRequestResult(httpData));
 }
 
 
-bool Https::checkIsProtolHttps(const QString &url)
+bool Https::isHttpsProtocol(const QString &url)
 {
     bool result = false;
     QString prefix = url.mid(0,https_prefix_name_.size());
