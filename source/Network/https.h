@@ -29,6 +29,7 @@
 #include <memory>
 
 #include "http_data.h"
+#include "http_request_result_analyzer.h"
 #include "http_protocol.h"
 
 using namespace std;

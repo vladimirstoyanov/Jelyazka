@@ -444,7 +444,7 @@ void RSSSearchGUIThread::onHttpRequestReceived(const HttpData httpData)
         return;
     }
 
-    if (httpData.isXml()) //xml
+    if (ContentType::XML == httpData.getContentType()) //xml
     {
         QString title = "";
         int version = 0;

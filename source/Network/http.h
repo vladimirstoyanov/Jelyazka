@@ -28,9 +28,11 @@
 #include <QTextCodec>
 
 #include "http_data.h"
+#include "http_request_result_analyzer.h"
 #include "http_protocol.h"
 #include "settings.h"
 #include "search.h"
+
 
 
 class Http : public IHttpProtocol
@@ -51,9 +53,9 @@ public:
 
 public:
     void getRequest(const QString &url);
-    int  getRequest(const QString &url, QString &content);
-    int  getRequest(const QString &url, QString &content, int &type);
-    int  isHTMLorXML(const QString &content);
+    //int  getRequest(const QString &url, QString &content);
+    //int  getRequest(const QString &url, QString &content, int &type);
+    //int  isHTMLorXML(const QString &content);
     int  reconnect(QString url, QString &content, QTcpSocket &socket);
     bool checkInTheBeginning(const QString &url, const QString &http);
     bool checkForProtocol(const QString &url);
@@ -61,7 +63,7 @@ public:
     bool checkForProtocol(const QString &url, int &index);
     bool checkForProtocol(const QString &url, int &index, QString &protocol);
     bool checkInMiddle(const QString &url, const QString &substring, int begin_index);
-    bool checkResponse(const QString &content, QString &response_num);
+    //bool checkResponse(const QString &content, QString &response_num);
 
     void postRequest (const QString &) {}
 

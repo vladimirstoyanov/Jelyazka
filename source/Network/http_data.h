@@ -22,6 +22,13 @@
 
 #include <QString>
 
+enum ContentType
+{
+    XML,
+    HTML,
+    OTHER
+};
+
 class HttpData
 {
 public:
@@ -43,9 +50,9 @@ public:
         return this->is_response_successful_;
     }
 
-    bool isXml () const
+    ContentType getContentType () const
     {
-        return this->is_xml_;
+        return this->content_type_;
     }
 
     void setData (const QString &data)
@@ -53,9 +60,9 @@ public:
         this->data_ = data;
     }
 
-    void setIsXml(const bool is_xml)
+    void setContentType(const ContentType content_type)
     {
-        this->is_xml_ = is_xml;
+        this->content_type_ = content_type;
     }
 
     void setIsResponseSuccessful (const bool is_response_successful)
@@ -70,7 +77,7 @@ public:
 
 private:
     QString data_;
-    bool is_xml_;
+    ContentType content_type_;
     bool is_response_successful_;
     QString url_;
 };

@@ -38,7 +38,6 @@ void Https::getRequest(const QString &url)
     request.setUrl(QUrl(url));
     request.setHeader(QNetworkRequest::ServerHeader, "application/json");
 
-
     connect(manager_.get(),
             SIGNAL(finished(QNetworkReply*)), this,
             SLOT(replyFinished(QNetworkReply*)));
@@ -48,7 +47,22 @@ void Https::getRequest(const QString &url)
 
 void Https::replyFinished(QNetworkReply* reply)
 {
-    qDebug() << reply->readAll();
+    HttpData httpData;
+    HttpRequestResultAnalyzer httpRequestResultAnalyzer;
+    QString response_code = "";
+    httpData.setData(reply->readAll());
+    httpRequestResultAnalyzer.checkResponse(httpData.getData(),response_code);
+
+    if (response_code == "200")
+    {
+        httpData.setIsResponseSuccessful(true);
+    }
+
+
+    ContentType contentType = httpRequestResultAnalyzer.getContentType(httpData.getData());
+    httpData.setContentType(contentType);
+
+    emit(httpRequestResult(httpData));
 }
 
 

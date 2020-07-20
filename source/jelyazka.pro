@@ -23,6 +23,7 @@ SOURCES += main.cpp\
     Network/http_data.cpp \
     Network/network_manager.cpp \
     Network/http_protocol.cpp \
+    Network/http_request_result_analyzer.cpp \
     data.cpp \
     database.cpp \
     JelayzkaStateMachine/state.cpp \
@@ -66,6 +67,7 @@ HEADERS  += \
     Network/http_data.h \
     Network/network_manager.h \
     Network/http_protocol.h \
+    Network/http_request_result_analyzer.h \
     data.h \
     database.h \
     JelayzkaStateMachine/state.hpp \

@@ -34,6 +34,8 @@ void Http::getRequest(const QString &urlParam)
     QString url = urlParam;
     QString content = "";
     HttpData httpData;
+    HttpRequestResultAnalyzer httpRequestResultAnalyzer;
+
     httpData.setUrl(urlParam);
 
     url_option_=1;
@@ -45,7 +47,7 @@ void Http::getRequest(const QString &urlParam)
         query_string += '/';
     }
 
-    //ToDo: test it
+    //ToDo: move this one in NetworkManager class
     if (Jelyazka::Settings::getIsProxyConnectionEnabled())
     {
         QNetworkProxy network_proxy;
@@ -79,7 +81,7 @@ void Http::getRequest(const QString &urlParam)
     int try_num = 0;
     int try_count = 10;
 
-    checkResponse(content, response_num);
+    httpRequestResultAnalyzer.checkResponse(content, response_num);
 
     if (response_num.length() == 3)
     {
@@ -100,7 +102,7 @@ void Http::getRequest(const QString &urlParam)
         reconnect(url, content, socket);
 
         response_num = "";
-        checkResponse(content, response_num);
+        httpRequestResultAnalyzer.checkResponse(content, response_num);
         if (response_num.length() == 3)
         {
             r_num = response_num.toFloat();//return 0, if it cat't convert QString to float
@@ -120,8 +122,8 @@ void Http::getRequest(const QString &urlParam)
         return;
     }
 
-    httpData.setIsXml(isHTMLorXML(content));
-    if (!httpData.isXml())
+    httpData.setContentType(httpRequestResultAnalyzer.getContentType(content));
+    if (ContentType::OTHER == httpData.getContentType())
     {
         socket.close();
         emit(httpRequestResult(httpData));
@@ -550,48 +552,6 @@ bool Http::checkForProtocol(const QString &url)
     return 1;
 }
 
-bool Http::checkResponse(const QString &content, QString &response_num)
-{
-    int size_string = content.length();
-    if (size_string<6) //Http/<num version>
-    {
-        return 1;
-    }
-
-    int i = 5;
-    while (content[i]!= ' ') //after num version
-    {
-        i++;
-        if (i>=size_string)
-        {
-            return 1;
-        }
-    }
-    i++;
-    if (i>=size_string)
-    {
-        return 1;
-    }
-
-    response_num=""; //response number of http response
-
-    while (content[i]!=' ')
-    {
-        response_num+=content[i];
-        i++;
-        if (i>=size_string)
-        {
-            return 1;
-        }
-    }
-
-    if (response_num!="200") //200 OK
-    {
-        return 1;
-    }
-    return 0;
-}
-
 void Http::addSubStringAtBeginning(QString &url, const QString &substring)
 {
     url = substring + url;
@@ -653,42 +613,6 @@ void Http::changeUrl(QString &url, const int option)
             break;
         }
     }
-}
-
-//return: 1 (html), 2 (xml), 0 (ignore url)
-int Http::isHTMLorXML(const QString &content)
-{
-    Search cs;
-    int index=0, n = content.length();
-    QString content_type="";
-    cs.searchAfter(content, "Content-Type:", &index);
-
-    if (index==-1 || index >= n)
-    {
-        return 0;
-    }
-
-    while(content[index]==' ' && index<n) //ignore spaces
-    {
-        index++;
-    }
-
-    while(content[index]!=';' && content[index]!='\r' && index<n)
-    {
-        content_type+=content[index++];
-    }
-
-    if (content_type=="text/html")
-    {
-        return 1; //html
-    }
-
-    if (content_type == "text/xml"|| content_type=="text/rss+xml" || content_type == "application/rss+xml" || content_type == "application/xml")
-    {
-        return 2; //xml
-    }
-
-    return 0; //ignore url
 }
 
 void Http::getCorrectURL(const QString &content, QString &url)
