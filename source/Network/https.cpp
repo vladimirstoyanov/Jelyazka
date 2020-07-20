@@ -28,15 +28,45 @@ Https::Https():
     config_.setProtocol(QSsl::TlsV1_2);
     request_.setSslConfiguration(config_);
 
-    connect(manager_.get(),
-            SIGNAL(finished(QNetworkReply*)), this,
-            SLOT(replyFinished(QNetworkReply*)));
+    setupConnections();
 }
 
 Https::~Https()
 {
 }
 
+void Https::setupConnections ()
+{
+    connect(manager_.get(),
+            SIGNAL(finished(QNetworkReply*)),
+            this,
+            SLOT(replyFinished(QNetworkReply*)));
+
+    connect(manager_.get(),
+            SIGNAL(authenticationRequired(QNetworkReply *, QAuthenticator *)),
+            this,
+            SLOT(onAuthenticationRequired(QNetworkReply *, QAuthenticator *)));
+
+    connect(manager_.get(),
+            SIGNAL(encrypted(QNetworkReply *)),
+            this,
+            SLOT(onEncrypted(QNetworkReply *)));
+
+    connect(manager_.get(),
+            SIGNAL(preSharedKeyAuthenticationRequired(QNetworkReply *, QSslPreSharedKeyAuthenticator *)),
+            this,
+            SLOT(onPreSharedKeyAuthenticationRequired(QNetworkReply *, QSslPreSharedKeyAuthenticator *)));
+
+    connect(manager_.get(),
+            SIGNAL(proxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *)),
+            this,
+            SLOT(onProxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *)));
+
+    connect(manager_.get(),
+            SIGNAL(sslErrors(QNetworkReply *, const QList<QSslError> &)),
+            this,
+            SLOT(onSslErrors(QNetworkReply *, const QList<QSslError> &)));
+}
 void Https::getRequest(const QString &url)
 {
     qDebug()<<__PRETTY_FUNCTION__;
@@ -79,4 +109,25 @@ bool Https::isHttpsProtocol(const QString &url)
         result = true;
     }
     return result;
+}
+
+void Https::onAuthenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator)
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+}
+void Https::onEncrypted(QNetworkReply *reply)
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+}
+void Https::onPreSharedKeyAuthenticationRequired(QNetworkReply *reply, QSslPreSharedKeyAuthenticator *authenticator)
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+}
+void Https::onProxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator)
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+}
+void Https::onSslErrors(QNetworkReply *reply, const QList<QSslError> &errors)
+{
+    qDebug()<<__PRETTY_FUNCTION__;
 }

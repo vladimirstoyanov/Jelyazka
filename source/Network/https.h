@@ -45,6 +45,15 @@ public:
     void postRequest (const QString &) {}
 public slots:
     void replyFinished(QNetworkReply* reply);
+    void onAuthenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator);
+    void onEncrypted(QNetworkReply *reply);
+    void onPreSharedKeyAuthenticationRequired(QNetworkReply *reply, QSslPreSharedKeyAuthenticator *authenticator);
+    void onProxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator);
+    void onSslErrors(QNetworkReply *reply, const QList<QSslError> &errors);
+
+
+private:
+    void setupConnections();
 private:
     QSslConfiguration config_;
     std::shared_ptr<QNetworkAccessManager> manager_;
