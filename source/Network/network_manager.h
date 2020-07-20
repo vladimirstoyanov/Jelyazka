@@ -19,6 +19,7 @@
 #ifndef NETWORK_MANAGER_H
 #define NETWORK_MANAGER_H
 
+#include <QObject>
 #include <QString>
 
 #include <memory>
@@ -27,8 +28,9 @@
 #include "http_data.h"
 #include "https.h"
 
-class NetworkManager
+class NetworkManager: public QObject
 {
+    Q_OBJECT
 public:
     NetworkManager ();
     virtual ~NetworkManager();
@@ -36,6 +38,9 @@ public:
     void getHttpRequest (const QString &url);
 public slots:
     void onHttpRequestResult (const HttpData httpData);
+
+signals:
+    void httpRequestReceived (const HttpData httpData);
 private:
     void setupConnections();
 private:

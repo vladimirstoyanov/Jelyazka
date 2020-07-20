@@ -28,6 +28,7 @@
 
 #include <memory>
 
+#include "http_data.h"
 #include "http_protocol.h"
 
 using namespace std;
@@ -46,6 +47,9 @@ public slots:
 private:
     std::shared_ptr<QNetworkAccessManager> manager_;
     QString https_prefix_name_;
+
+signals:
+    void httpRequestResult (const HttpData httpData);
 };
 
 #endif // HTTPSGETCUSTOM_H

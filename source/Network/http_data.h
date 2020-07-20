@@ -30,23 +30,49 @@ public:
 
     QString getData () const
     {
-        return data_;
+        return this->data_;
+    }
+
+    QString getUrl () const
+    {
+        return this->url_;
     }
 
     bool isResponseSuccessful () const
     {
-        return is_response_successful_;
+        return this->is_response_successful_;
     }
 
     bool isXml () const
     {
-        return is_xml_;
+        return this->is_xml_;
+    }
+
+    void setData (const QString &data)
+    {
+        this->data_ = data;
+    }
+
+    void setIsXml(const bool is_xml)
+    {
+        this->is_xml_ = is_xml;
+    }
+
+    void setIsResponseSuccessful (const bool is_response_successful)
+    {
+        this->is_response_successful_ = is_response_successful;
+    }
+
+    void setUrl (const QString &url)
+    {
+        this->url_ = url;
     }
 
 private:
     QString data_;
     bool is_xml_;
     bool is_response_successful_;
+    QString url_;
 };
 
 #endif // JELYAZKA_HTTP_DATA_H

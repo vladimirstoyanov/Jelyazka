@@ -22,6 +22,7 @@ NetworkManager::NetworkManager ():
     http (std::make_shared<Http> ()),
     https (std::make_shared<Https> ())
 {
+    setupConnections();
 }
 
 NetworkManager::~NetworkManager()
@@ -30,12 +31,15 @@ NetworkManager::~NetworkManager()
 
 void NetworkManager::getHttpRequest (const QString &url)
 {
+    qDebug()<<__PRETTY_FUNCTION__;
     if (https->checkIsProtolHttps(url))
     {
+        qDebug()<<__PRETTY_FUNCTION__<<": https";
         https->getRequest(url);
     }
     else
     {
+        qDebug()<<__PRETTY_FUNCTION__<<": http";
         http->getRequest(url);
     }
 }
@@ -43,10 +47,22 @@ void NetworkManager::getHttpRequest (const QString &url)
 //Slot: onHttpRequestResult
 void NetworkManager::onHttpRequestResult (const HttpData httpData)
 {
-
+    qDebug()<<__PRETTY_FUNCTION__;
+    httpRequestReceived(httpData);
 }
 
 void NetworkManager::setupConnections()
 {
+    qDebug()<<__PRETTY_FUNCTION__;
+    connect( http.get()
+            , SIGNAL(httpRequestResult(const HttpData))
+            , this
+            , SLOT(onHttpRequestResult(const HttpData))
+            , Qt::QueuedConnection);
 
+    connect( https.get()
+            , SIGNAL(httpsRequestResult(const HttpData))
+            , this
+            , SLOT(onHttpRequestResult(const HttpData))
+            , Qt::QueuedConnection);
 }

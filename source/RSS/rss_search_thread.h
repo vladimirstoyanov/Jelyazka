@@ -1,7 +1,7 @@
 /*
-    rsssearchthread.h
+    rss_searcht_hread.h
     Jelyazka RSS/RDF reader
-    Copyright (C) 2014 Vladimir Stoyanov
+    Copyright (C) 2020 Vladimir Stoyanov
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 
 #include "database.h"
 #include "logger.h"
+#include "Network/network_manager.h"
 
 class RSSSearchGUIThread : public QObject, public QRunnable
 {
@@ -61,10 +62,12 @@ public:
     int     insertUrlDB                 (const QString &url);
     int     lookForHref                 (const QString &source, int &index);
     bool    setUrlRoot                  (QString url); //this method changes url variable
+    void    setupConnections            ();
 
 private:
-    Logger      log_;
     DataBase    data_base_;
+    std::shared_ptr<NetworkManager> network_manager_;
+    Logger      log_;
     QString     url_root_;
 
 private:
@@ -73,6 +76,8 @@ private:
     int     checkFinish             ();
     QString getEncodingFromRSS      (const QString &content);
 
+public slots:
+    void onHttpRequestReceived(const HttpData);
 signals:  
     void changeUrlLabel (const QString &url);
     void endOfUrls      ();

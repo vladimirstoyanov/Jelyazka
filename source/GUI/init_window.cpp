@@ -120,7 +120,7 @@ void InitWindow::onDownloadFinished ()
     emit (stateChanged("RSSDataDownloaded"));
 }
 
-void InitWindow::makeConnections ()
+void InitWindow::setupConnections ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
 
@@ -140,6 +140,6 @@ void InitWindow::makeConnections ()
 void InitWindow::showEvent(QShowEvent *event)
 {
     qDebug()<<__PRETTY_FUNCTION__;
-    makeConnections();
+    setupConnections();
     loadRssFeeds();
 }

@@ -21,7 +21,8 @@
 HttpData::HttpData():
     data_ (""),
     is_xml_(false),
-    is_response_successful_(false)
+    is_response_successful_(false),
+    url_ ("")
 {
 }
 

@@ -25,6 +25,7 @@
 
 #include "jelyazka_manager.h"
 #include "RSS/rss_data.h"
+#include "Network/http_data.h"
 
 
 int main(int argc, char *argv[])
@@ -32,6 +33,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     qRegisterMetaType<RSSData>("RSSData"); //RSSData is used as parameter by a SLOT function
+    qRegisterMetaType<HttpData>("HttpData"); //HttpData is used as parameter by a SLOT function
 
     std::shared_ptr<JelyazkaManager> jelayzka_manager = std::make_shared <JelyazkaManager> ();
 

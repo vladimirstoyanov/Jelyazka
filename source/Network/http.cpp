@@ -26,14 +26,15 @@ Http::~Http()
 {
 }
 
+//ToDo: refactor this method
 void Http::getRequest(const QString &urlParam)
 {
     QTcpSocket socket;
     QString query_string="";
-    int result = 0;
-    int type = 0;
     QString url = urlParam;
     QString content = "";
+    HttpData httpData;
+    httpData.setUrl(urlParam);
 
     url_option_=1;
     checkAndChangeURL2(url);
@@ -57,7 +58,8 @@ void Http::getRequest(const QString &urlParam)
     if(!socket.waitForConnected())
     {
         socket.close();
-        result = 1;
+        httpData.setIsResponseSuccessful(false);
+        emit (httpRequestResult(httpData));
         return;
     }
     QString http_query = "GET " +query_string + " HTTP/1.1\r\nHost: " + url + "\r\nConnection: close\r\n\r\n";
@@ -114,15 +116,15 @@ void Http::getRequest(const QString &urlParam)
     if (r_num!=200)
     {
         socket.close();
-        result = 1;
+        emit(httpRequestResult(httpData));
         return;
     }
 
-    type = isHTMLorXML(content);
-    if (!type)
+    httpData.setIsXml(isHTMLorXML(content));
+    if (!httpData.isXml())
     {
         socket.close();
-        result = 1;
+        emit(httpRequestResult(httpData));
         return;
     }
 
@@ -133,8 +135,12 @@ void Http::getRequest(const QString &urlParam)
     }
     socket.close();
 
+    httpData.setData(content);
+    httpData.setIsResponseSuccessful(true);
+    emit(httpRequestResult(httpData));
 }
 
+/*
 //http get query
 //ToDo: refactor it
 int Http::getRequest(const QString &urlParam, QString &content , int &type)
@@ -325,7 +331,7 @@ int Http::getRequest(const QString &urlParam, QString &content)
     socket.close();
     return 0;
 }
-
+*/
 
 int Http::reconnect(QString url, QString &content, QTcpSocket &socket)
 {

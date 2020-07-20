@@ -27,6 +27,7 @@
 #include <QTcpSocket>
 #include <QTextCodec>
 
+#include "http_data.h"
 #include "http_protocol.h"
 #include "settings.h"
 #include "search.h"
@@ -63,6 +64,9 @@ public:
     bool checkResponse(const QString &content, QString &response_num);
 
     void postRequest (const QString &) {}
+
+signals:
+    void httpRequestResult (const HttpData httpData);
 
 private:
     int url_option_;

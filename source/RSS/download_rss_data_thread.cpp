@@ -18,6 +18,8 @@
 */
 #include "download_rss_data_thread.h"
 
+#include <unistd.h>
+
 Feed::Feed ()
     : feed_url_ ("")
     , download_state_ (NONE)
@@ -26,8 +28,10 @@ Feed::Feed ()
 
 
 DownloadRssDataThread::DownloadRssDataThread()
-    : QRunnable()
+    : QRunnable(),
+      network_manager_(std::make_shared<NetworkManager> ())
 {
+    setupConnections();
 }
 
 DownloadRssDataThread::~DownloadRssDataThread()
@@ -50,39 +54,25 @@ void DownloadRssDataThread::run()
 
     downloadFeed (index);
 
+    //FIXME
+    while (feeds_[index].getDownloadState() != DOWNLOADED)
+    {
+        usleep(10000);
+    }
+
     if (isDownloadingFinished())
     {
         qDebug()<<__PRETTY_FUNCTION__<<": download has been finished.";
         emit (downloadFinished());
     }
+    qDebug()<<__PRETTY_FUNCTION__<<" finished";
 
 }
 
 void DownloadRssDataThread::downloadFeed (const unsigned int index)
 {
      qDebug()<<__PRETTY_FUNCTION__;
-     ParseRSS parse;
-     Http http;
-     QString web_source;
-     std::shared_ptr<RSSData> rss_data = std::make_shared<RSSData> ();
-
-     rss_data->setURL(feeds_[index].getFeedUrl());
-
-
-     //get the web content
-     if (http.getRequest(feeds_[index].getFeedUrl(),web_source))
-     {
-         qDebug()<<__PRETTY_FUNCTION__<<": web content of "<<feeds_[index].getFeedUrl()<<" hasn't download!";
-         feeds_[index].setDownloadState(DOWNLOADED);
-         return;
-     }
-
-     //pasrse web content to RSSData
-     parse.getRSSDataByWebSource(web_source, rss_data);
-
-     emit writeData (*rss_data.get());
-
-     feeds_[index].setDownloadState(DOWNLOADED);
+     network_manager_->getHttpRequest(feeds_[index].getFeedUrl());
 }
 
 int DownloadRssDataThread::getFreeFeedIndex ()
@@ -133,4 +123,45 @@ void DownloadRssDataThread::test (std::shared_ptr<RSSData> rss_data)
         rss_article.setDate ("date "     + QString::number(i));
         rss_data->articlesPushBack(rss_article);
     }
+}
+
+void DownloadRssDataThread::setFeedStateToDownloaded (const QString &url)
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    for (unsigned int i=0; i<feeds_.size(); ++i)
+    {
+        if (url == feeds_[i].getFeedUrl())
+        {
+            feeds_[i].setDownloadState(DOWNLOADED);
+            break;
+        }
+    }
+}
+
+void DownloadRssDataThread::onHttpRequestReceived (const HttpData httpData)
+{
+    qDebug()<<__PRETTY_FUNCTION__<<"!!!!!!!!!!!!!!!!!!!!!";
+    if (httpData.isResponseSuccessful())
+    {
+        ParseRSS parse;
+        std::shared_ptr<RSSData> rss_data = std::make_shared<RSSData> ();
+        rss_data->setURL(httpData.getUrl());
+
+        //pasrse web content to RSSData
+        parse.getRSSDataByWebSource(httpData.getData(), rss_data);
+
+        emit writeData (*rss_data.get());
+    }
+    setFeedStateToDownloaded(httpData.getUrl());
+}
+
+void DownloadRssDataThread::setupConnections ()
+{
+    qDebug()<<__PRETTY_FUNCTION__<<"!!!!!!!!!!!!!!";
+    connect( network_manager_.get()
+            , SIGNAL(httpRequestReceived(const HttpData))
+            , this
+            , SLOT(onHttpRequestReceived(const HttpData))
+            , Qt::QueuedConnection);
+
 }

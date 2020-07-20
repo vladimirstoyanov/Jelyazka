@@ -1,7 +1,7 @@
 /*
-    init_window_thread.h
+    download_rss_data_thread.h
     Jelyazka RSS/RDF reader
-    Copyright (C) 2014 Vladimir Stoyanov
+    Copyright (C) 2020 Vladimir Stoyanov
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,7 +25,9 @@
 #include <QRunnable>
 #include <QtDebug>
 
-#include "Network/http.h"
+//#include "Network/http.h"
+#include "Network/network_manager.h"
+#include "Network/http_data.h"
 #include "RSS/parse_rss.h"
 
 enum DownloadState
@@ -61,12 +63,18 @@ public:
     void         run            ();
     void         setURLs        (std::vector<Feed> const &feeds);
 
+public slots:
+    void onHttpRequestReceived (const HttpData httpData);
+
 private:
         std::vector<Feed>       feeds_;
+        std::shared_ptr<NetworkManager> network_manager_;
 
 private:
        bool isDownloadingFinished();
        void downloadFeed (const unsigned int index);
+       void setFeedStateToDownloaded (const QString &url);
+       void setupConnections ();
        int  getFreeFeedIndex ();
        void test (std::shared_ptr<RSSData> rss_data);
 

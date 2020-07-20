@@ -65,7 +65,7 @@ private:
 private:
     void loadRssFeeds();
     void loadRssUrls();
-    void makeConnections ();
+    void setupConnections ();
     void setupGui();
     void showEvent(QShowEvent *);
 };
