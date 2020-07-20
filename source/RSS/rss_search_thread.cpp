@@ -25,7 +25,9 @@ RSSSearchGUIThread::RSSSearchGUIThread() :
     , mutex (std::make_shared<QMutex>()) 
     , stop_thread (false)
     , is_search_finished_ (false)
+    , network_manager_(std::make_shared<NetworkManager> ())
 {
+    setupConnections ();
 }
 
 RSSSearchGUIThread::~RSSSearchGUIThread()
@@ -91,18 +93,13 @@ void RSSSearchGUIThread::run()
 
     emit changeUrlLabel(*url);
 
-    std::shared_ptr<NetworkManager> network_manager_ = std::make_shared<NetworkManager> ();
-    connect( network_manager_.get()
-            , SIGNAL(httpRequestReceived(const HttpData))
-            , this
-            , SLOT(onHttpRequestReceived(const HttpData))
-            , Qt::QueuedConnection);
-
     //setupConnections();
-    network_manager_->getHttpRequest(*url);
+    //network_manager_->getHttpRequest(*url);
+    emit (httpGetRequest(*url));
+
     delete url;
 
-    while(!is_search_finished_)
+    while(!is_search_finished_ && !stop_thread)
     {
         usleep(10000);
     }
@@ -549,12 +546,15 @@ void RSSSearchGUIThread::onHttpRequestReceived(const HttpData httpData)
 
 void RSSSearchGUIThread::setupConnections ()
 {
-    /*
+    connect( this
+            , SIGNAL(httpGetRequest(const QString &))
+            , network_manager_.get()
+            , SLOT(onHttpGetRequest(const QString &))
+            , Qt::QueuedConnection);
+
     connect( network_manager_.get()
             , SIGNAL(httpRequestReceived(const HttpData))
             , this
             , SLOT(onHttpRequestReceived(const HttpData))
             , Qt::QueuedConnection);
-
-    */
 }

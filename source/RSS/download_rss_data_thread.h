@@ -81,6 +81,7 @@ private:
 signals:
        void downloadFinished();
        void writeData (RSSData rss_data);
+       void httpGetRequest (const QString &);
 };
 
 #endif // DOWNLOADRSSDATATHREAD_H

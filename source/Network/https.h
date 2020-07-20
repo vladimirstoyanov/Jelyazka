@@ -50,8 +50,9 @@ public slots:
     void onPreSharedKeyAuthenticationRequired(QNetworkReply *reply, QSslPreSharedKeyAuthenticator *authenticator);
     void onProxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator);
     void onSslErrors(QNetworkReply *reply, const QList<QSslError> &errors);
-
-
+    void onReadyRead();
+    void onError(QNetworkReply::NetworkError code);
+    void onSslErrorsNetworkReply(const QList<QSslError> &errors);
 private:
     void setupConnections();
 private:

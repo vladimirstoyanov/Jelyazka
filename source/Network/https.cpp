@@ -74,7 +74,15 @@ void Https::getRequest(const QString &url)
     request_.setUrl(QUrl(url));
     request_.setHeader(QNetworkRequest::ServerHeader, "application/json");
 
-    manager_->get(request_);
+    QNetworkReply * reply = manager_->get(request_);
+
+
+    connect(reply, &QIODevice::readyRead, this, &Https::onReadyRead);
+    connect(reply, &QNetworkReply::errorOccurred,
+            this, &Https::onError);
+    connect(reply, &QNetworkReply::sslErrors,
+            this, &Https::onSslErrorsNetworkReply);
+
 }
 
 void Https::replyFinished(QNetworkReply* reply)
@@ -87,10 +95,10 @@ void Https::replyFinished(QNetworkReply* reply)
     httpData.setData(reply->readAll());
     httpRequestResultAnalyzer.checkResponse(httpData.getData(),response_code);
 
-    if (response_code == "200")
-    {
+    //if (response_code == "200")
+    //{
         httpData.setIsResponseSuccessful(true);
-    }
+    //}
 
 
     ContentType contentType = httpRequestResultAnalyzer.getContentType(httpData.getData());
@@ -128,6 +136,22 @@ void Https::onProxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthentic
     qDebug()<<__PRETTY_FUNCTION__;
 }
 void Https::onSslErrors(QNetworkReply *reply, const QList<QSslError> &errors)
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+}
+
+void Https::onReadyRead()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+}
+
+void Https::onError(QNetworkReply::NetworkError code)
+{
+    qDebug()<<__PRETTY_FUNCTION__<<": code: "<<code;
+
+}
+
+void Https::onSslErrorsNetworkReply(const QList<QSslError> &errors)
 {
     qDebug()<<__PRETTY_FUNCTION__;
 }

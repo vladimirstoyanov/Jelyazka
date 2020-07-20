@@ -72,7 +72,8 @@ void DownloadRssDataThread::run()
 void DownloadRssDataThread::downloadFeed (const unsigned int index)
 {
      qDebug()<<__PRETTY_FUNCTION__;
-     network_manager_->getHttpRequest(feeds_[index].getFeedUrl());
+     //network_manager_->getHttpRequest(feeds_[index].getFeedUrl());
+     emit (httpGetRequest(feeds_[index].getFeedUrl()));
 }
 
 int DownloadRssDataThread::getFreeFeedIndex ()
@@ -158,6 +159,12 @@ void DownloadRssDataThread::onHttpRequestReceived (const HttpData httpData)
 void DownloadRssDataThread::setupConnections ()
 {
     qDebug()<<__PRETTY_FUNCTION__<<"!!!!!!!!!!!!!!";
+    connect( this
+            , SIGNAL(httpGetRequest(const QString &))
+            , network_manager_.get()
+            , SLOT(onHttpGetRequest(const QString &))
+            , Qt::QueuedConnection);
+
     connect( network_manager_.get()
             , SIGNAL(httpRequestReceived(const HttpData))
             , this

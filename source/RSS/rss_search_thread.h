@@ -68,7 +68,7 @@ public:
 private:
     DataBase    data_base_;
     bool        is_search_finished_; //FIXME
-    //std::shared_ptr<NetworkManager> network_manager_;
+    std::shared_ptr<NetworkManager> network_manager_;
     Logger      log_;
     QString     url_root_;
 
@@ -88,6 +88,7 @@ signals:
                          const QString &encoding,
                          const QString &web_source,
                          const int version);
+    void httpGetRequest (const QString &);
 };
 
 #endif // WEB_SEARCH_INTERFACE_THREAD_H

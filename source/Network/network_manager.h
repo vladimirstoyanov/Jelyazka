@@ -35,10 +35,10 @@ public:
     NetworkManager ();
     virtual ~NetworkManager();
 
-    void getHttpRequest (const QString &url);
+    //void getHttpRequest (const QString &url);
 public slots:
     void onHttpRequestResult (const HttpData httpData);
-
+    void onHttpGetRequest       (const QString &);
 signals:
     void httpRequestReceived (const HttpData httpData);
 private:

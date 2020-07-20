@@ -28,7 +28,21 @@ NetworkManager::NetworkManager ():
 NetworkManager::~NetworkManager()
 {
 }
-
+void NetworkManager::onHttpGetRequest(const QString &url)
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    if (https->isHttpsProtocol(url))
+    {
+        qDebug()<<__PRETTY_FUNCTION__<<": https";
+        https->getRequest(url);
+    }
+    else
+    {
+        qDebug()<<__PRETTY_FUNCTION__<<": http";
+        http->getRequest(url);
+    }
+}
+/*
 void NetworkManager::getHttpRequest (const QString &url)
 {
     qDebug()<<__PRETTY_FUNCTION__;
@@ -43,6 +57,7 @@ void NetworkManager::getHttpRequest (const QString &url)
         http->getRequest(url);
     }
 }
+*/
 
 //Slot: onHttpRequestResult
 void NetworkManager::onHttpRequestResult (const HttpData httpData)
