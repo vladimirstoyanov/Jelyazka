@@ -95,13 +95,30 @@ void Https::replyFinished(QNetworkReply* reply)
     httpData.setData(reply->readAll());
     httpRequestResultAnalyzer.checkResponse(httpData.getData(),response_code);
 
-    //if (response_code == "200")
-    //{
-        httpData.setIsResponseSuccessful(true);
-    //}
+    QVariant statusCode = reply->attribute( QNetworkRequest::HttpStatusCodeAttribute );
+    if ( statusCode.isValid() )
+    {
+        int status = statusCode.toInt();
+
+        if ( status != 200 )
+        {
+            QString reason = reply->attribute( QNetworkRequest::HttpReasonPhraseAttribute ).toString();
+            qDebug()<<__PRETTY_FUNCTION__<<", failed with reason: "<<reason;
+        }
+        else
+        {
+            qDebug()<<__PRETTY_FUNCTION__<<", reposnse is successful";
+            httpData.setIsResponseSuccessful(true);
+        }
+    }
 
 
-    ContentType contentType = httpRequestResultAnalyzer.getContentType(httpData.getData());
+    QVariant contentMimeType = reply->header(QNetworkRequest::ContentTypeHeader);
+    QString contentTypeStr = "Content-Type:" + QVariant(contentMimeType).toString();
+    qDebug() <<"Content type"<< contentTypeStr;
+
+    //FIXME: Get the content type. The below funtion is not working.
+    ContentType contentType = httpRequestResultAnalyzer.getContentType(contentTypeStr);
     httpData.setContentType(contentType);
 
     emit(httpsRequestResult(httpData));
@@ -119,25 +136,26 @@ bool Https::isHttpsProtocol(const QString &url)
     return result;
 }
 
+
 void Https::onAuthenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator)
 {
-    qDebug()<<__PRETTY_FUNCTION__;
+    qDebug()<<__PRETTY_FUNCTION__<<reply<<", "<<authenticator;
 }
 void Https::onEncrypted(QNetworkReply *reply)
 {
-    qDebug()<<__PRETTY_FUNCTION__;
+    qDebug()<<__PRETTY_FUNCTION__<<reply;
 }
 void Https::onPreSharedKeyAuthenticationRequired(QNetworkReply *reply, QSslPreSharedKeyAuthenticator *authenticator)
 {
-    qDebug()<<__PRETTY_FUNCTION__;
+    qDebug()<<__PRETTY_FUNCTION__<<reply<<", "<<authenticator;
 }
 void Https::onProxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator)
 {
-    qDebug()<<__PRETTY_FUNCTION__;
+    qDebug()<<__PRETTY_FUNCTION__<<proxy<<", "<<authenticator;
 }
 void Https::onSslErrors(QNetworkReply *reply, const QList<QSslError> &errors)
 {
-    qDebug()<<__PRETTY_FUNCTION__;
+    qDebug()<<__PRETTY_FUNCTION__<<reply<<", "<<errors;
 }
 
 void Https::onReadyRead()
@@ -153,5 +171,5 @@ void Https::onError(QNetworkReply::NetworkError code)
 
 void Https::onSslErrorsNetworkReply(const QList<QSslError> &errors)
 {
-    qDebug()<<__PRETTY_FUNCTION__;
+    qDebug()<<__PRETTY_FUNCTION__<<errors;
 }
