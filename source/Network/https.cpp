@@ -117,7 +117,6 @@ void Https::replyFinished(QNetworkReply* reply)
     QString contentTypeStr = "Content-Type:" + QVariant(contentMimeType).toString();
     qDebug() <<"Content type"<< contentTypeStr;
 
-    //FIXME: Get the content type. The below funtion is not working.
     ContentType contentType = httpRequestResultAnalyzer.getContentType(contentTypeStr);
     httpData.setContentType(contentType);
 

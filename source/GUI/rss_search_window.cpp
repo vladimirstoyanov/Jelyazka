@@ -75,12 +75,14 @@ void RSSSearchGUI::paintRows()
             for(int j = 0; j<model_->columnCount(); ++j)
             {
                 model_->item(i,j)->setBackground(QBrush(QColor(255,255,255)));
+                model_->item(i,j)->setForeground(QBrush(QColor(0,0,0)));
             }
             continue;
         }
         for(int j = 0; j<model_->columnCount(); ++j)
         {
             model_->item(i,j)->setBackground(QBrush(QColor(200,249,253)));
+            model_->item(i,j)->setForeground(QBrush(QColor(0,0,0)));
         }
     }
 }
