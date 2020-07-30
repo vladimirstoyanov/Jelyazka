@@ -41,6 +41,7 @@ public slots:
 
     void onRssDataAdded ();
 
+    void onSettingsUpdated ();
     void onShowAboutWindow ();
     void onShowHelpWindow ();
     void onShowInitWindow ();

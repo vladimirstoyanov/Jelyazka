@@ -87,6 +87,13 @@ void JelayzkaStateMachine::makeConnections ()
             , SLOT(onUpdateSettings())
             , Qt::QueuedConnection);
 
+
+    connect( update_settings_state_.get()
+            , SIGNAL(settingsUpdated())
+            , this
+            , SLOT(onSettingsUpdated())
+            , Qt::QueuedConnection);
+
     connect( add_rss_data_state_.get()
             , SIGNAL(addRssData())
             , this
@@ -325,6 +332,11 @@ void JelayzkaStateMachine::onUpdateSettings ()
     emit (updateSettings());
 }
 
+void JelayzkaStateMachine::onSettingsUpdated ()
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    emit (settingsUpdated());
+}
 void JelayzkaStateMachine::onAddRssData ()
 {
     qDebug()<<__PRETTY_FUNCTION__;

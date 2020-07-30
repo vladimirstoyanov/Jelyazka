@@ -118,6 +118,7 @@ void UpdateRssData::onUpdateSettings()
     qDebug()<<__PRETTY_FUNCTION__;
     loadRssUrls ();
     loadRssFeeds (); //start downloading of rss data
+    //onUpdateRSSData
 }
 
 void UpdateRssData::onAddRssData ()
