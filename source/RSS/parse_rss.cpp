@@ -1,4 +1,5 @@
 #include "RSS/parse_rss.h"
+//#include "logger.h"
 
 //ToDo: remove the below constructor
 ParseRSS::ParseRSS(std::shared_ptr<Data> data_tmp):
@@ -38,7 +39,7 @@ int ParseRSS::checkWebSourceForRSSContent(const QString &web_source, QString &ti
         Search cs;
         QString begin="<?xml";
         //Logger log;
-
+        //log.write(web_source, "web_source");
         if (web_source.length()<4)
         {
             //log.write("CheckForRss funtion: source.length()<4!");
@@ -117,8 +118,8 @@ void ParseRSS::getRSSDataByWebSource (const QString &web_source, std::shared_ptr
 {
     qDebug()<<__PRETTY_FUNCTION__;
 
-    QString title;
-    int version;
+    QString title="";
+    int version=0;
 
     if (checkWebSourceForRSSContent(web_source, title, version)) //found rss
     {

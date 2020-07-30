@@ -37,12 +37,12 @@ ContentType HttpRequestResultAnalyzer::getContentType(const QString &content)
         return ContentType::OTHER;
     }
 
-    while(content[index]==' ' && index<n) //ignore spaces
+    while(index<n && content[index]==' ') //ignore spaces
     {
         index++;
     }
 
-    while(content[index]!=';' && content[index]!='\r' && index<n)
+    while(index<n && content[index]!=';' && content[index]!='\r')
     {
         content_type+=content[index++];
     }
