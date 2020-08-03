@@ -12,6 +12,7 @@ class RSSData: public RSSArticle
 {
 public:
     RSSData();
+    virtual ~RSSData () = default;
 
     void        articlesPushFront(const RSSArticle rss_article);
     void        articlesPushBack(const RSSArticle rss_article);

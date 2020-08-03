@@ -24,7 +24,7 @@ class JelyazkaManager: public QObject
         Q_OBJECT
 public:
     JelyazkaManager();
-    virtual ~JelyazkaManager () {}
+    virtual ~JelyazkaManager () = default;
 
     void makeConnections ();
 

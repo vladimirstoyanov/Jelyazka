@@ -52,10 +52,7 @@ public:
     void removeSubString(QString &url, const QString &substring);
 
 public:
-    void getRequest(const QString &url);
-    //int  getRequest(const QString &url, QString &content);
-    //int  getRequest(const QString &url, QString &content, int &type);
-    //int  isHTMLorXML(const QString &content);
+    void getRequest(const QString &url) override;
     int  reconnect(QString url, QString &content, QTcpSocket &socket);
     bool checkInTheBeginning(const QString &url, const QString &http);
     bool checkForProtocol(const QString &url);
@@ -65,7 +62,7 @@ public:
     bool checkInMiddle(const QString &url, const QString &substring, int begin_index);
     //bool checkResponse(const QString &content, QString &response_num);
 
-    void postRequest (const QString &) {}
+    void postRequest (const QString &) override {}
 
 signals:
     void httpRequestResult (const HttpData httpData);

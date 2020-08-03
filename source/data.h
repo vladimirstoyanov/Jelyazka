@@ -12,6 +12,7 @@ class Data: public RSSData
 {
 public:
     Data();
+    virtual ~Data () = default;
     std::shared_ptr<RSSData> at(const unsigned int index);
 
     void erase(int index);

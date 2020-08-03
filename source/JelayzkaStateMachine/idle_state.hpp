@@ -6,11 +6,12 @@
 class IdleState: public Jelyazka::IState
 {
     public:
-        IdleState () {}
-        virtual QString   getName() const { return "IdleState"; }
-        virtual void onEntry(const QString &event);
-        virtual void onState(const QString &event);
-        virtual void onExit (const QString &event);
+        IdleState () = default;
+        virtual ~IdleState () = default;
+        virtual QString   getName() const override { return "IdleState"; }
+        virtual void onEntry(const QString &event) override;
+        virtual void onState(const QString &event) override;
+        virtual void onExit (const QString &event) override;
 };
 
 #endif

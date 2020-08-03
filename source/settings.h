@@ -15,7 +15,7 @@ class Settings
 {
 public:
     Settings();
-    ~Settings ();
+    virtual ~Settings ();
 
     //get methods
     static std::vector<QString> getCollectionFeeds ()

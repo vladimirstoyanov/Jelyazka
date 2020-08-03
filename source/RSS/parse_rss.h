@@ -17,7 +17,7 @@ class ParseRSS
 public:
     ParseRSS(std::shared_ptr<Data> data_tmp); //ToDo: remove this constructor
     ParseRSS();
-    virtual ~ParseRSS() {}
+    virtual ~ParseRSS() = default;
 
     void convertString (QString &str, const bool link);
     void findFeedDataRSS(int &index, const QString &content, RSSArticle &ar);

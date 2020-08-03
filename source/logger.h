@@ -27,7 +27,7 @@ class Logger
 {
 public:
     Logger();
-    virtual ~Logger(){}
+    virtual ~Logger() = default;
     static void write(QString message, QString filename);
     void writeHTMLSourceToFile(QString file_name, QString html_source);
 };

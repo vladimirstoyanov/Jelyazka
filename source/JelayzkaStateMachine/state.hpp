@@ -11,8 +11,8 @@ class IState: public QObject
 {
     Q_OBJECT
 public:
-      IState () {}
-      virtual ~IState () {}
+      IState () = default;
+      virtual ~IState () = default;
 
       virtual QString   getName() const = 0;
       virtual void      onEntry(const QString &event) = 0;

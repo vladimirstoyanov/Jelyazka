@@ -7,7 +7,7 @@ class RSSArticle
 {
 public:
     RSSArticle();
-
+    virtual ~RSSArticle () = default;
     void setTitle(const QString &title);
     void setLink(const QString &link);
     void setText(const QString &text);

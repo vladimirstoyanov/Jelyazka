@@ -41,8 +41,8 @@ public:
     Https ();
     virtual ~Https ();
     bool isHttpsProtocol(const QString &url);
-    void getRequest (const QString &url);
-    void postRequest (const QString &) {}
+    void getRequest (const QString &url) override;
+    void postRequest (const QString &) override {}
 public slots:
     void replyFinished(QNetworkReply* reply);
     void onAuthenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator);
