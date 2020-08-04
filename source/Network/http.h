@@ -60,9 +60,6 @@ public:
     bool checkForProtocol(const QString &url, int &index);
     bool checkForProtocol(const QString &url, int &index, QString &protocol);
     bool checkInMiddle(const QString &url, const QString &substring, int begin_index);
-    //bool checkResponse(const QString &content, QString &response_num);
-
-    void postRequest (const QString &) override {}
 
 signals:
     void httpRequestResult (const HttpData httpData);

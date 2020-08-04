@@ -31,7 +31,6 @@ public:
     IHttpProtocol () = default;
     virtual ~IHttpProtocol () = default;
     virtual void getRequest (const QString &url) = 0;
-    virtual void postRequest (const QString &url) = 0;
 };
 
 #endif // JELYAZKA_HTTP_PROTOCOL_H
