@@ -534,7 +534,6 @@ void RSSSearchGUIThread::onHttpRequestReceived(const HttpData httpData)
                 mutex->unlock();
             }
     }
-    //l_url.erase(l_url.begin()); //delete first element from vector
 
     mutex->lock();
     if(checkFinish())

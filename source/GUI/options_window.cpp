@@ -469,21 +469,6 @@ int OptionsWindow::addStringToFilterList(const QString &cur_text)
     return 0;
 }
 
-void OptionsWindow::on_textChanged(const QString &text) //cf_find_feeds text changed event
-{
-    std::vector<QString> tmp;
-    //data_base_.getCollectFeedsThatContainingText(text, &tmp);
-
-    //collect_feeds_->clear();
-
-    /*
-    for (unsigned int i=0; i<tmp.size(); i++)
-    {
-        addStringToWatchList(tmp[i]);
-    }
-    */
-}
-
 int OptionsWindow::cf_label_search_width()
 {
     QFontMetrics fm(cf_label_search_->font());

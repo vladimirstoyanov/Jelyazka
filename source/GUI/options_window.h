@@ -67,7 +67,6 @@ private slots:
     void on_cb_enable_filtering_clicked(bool);
     void on_pb_add_filter_clicked();
     void on_pb_remove_filter();
-    void on_textChanged(const QString &text);
 
 
 private:

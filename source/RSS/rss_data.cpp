@@ -38,12 +38,12 @@ QString RSSData::getVersion() const
     return version_;
 }
 
-size_t RSSData::getArticlesSize()
+size_t RSSData::getArticlesSize() const
 {
     return rss_articles_.size();
 }
 
-RSSArticle RSSData::articleAt(unsigned int index)
+RSSArticle RSSData::articleAt(unsigned int index) const
 {
     RSSArticle default_value;
     if (index >= rss_articles_.size())

@@ -508,83 +508,6 @@ void MainWindow::paintEvent(QPaintEvent *e) //paint backgraund image
    }
 }
 
-/*
-int MainWindow::checkForFilters(QString &title, QString &article)
-{
-    if (filters_qlist.size() == 0)
-        return 1;
-
-    bool isHave = false;
-    for (int i=0; i<filters_qlist.size(); i++)
-    {
-        QStringList sl = title.split(filters_qlist[i]);
-        if(sl.size()>1)
-        {
-            title = "";
-    bool isHave = false;
-    for (int i=0; i<filters_qlist.size(); i++)
-            for (int j=0; j<sl.size(); j++)
-            {
-                isHave = true;
-                if (j == sl.size()-1)
-                {
-                    title+=sl.value(j);
-                    break;
-                }
-                if (checkForFontTag(sl.value(j+1)))
-                    title+=sl.value(j) + "<FONT style=\"BACKGROUND-COLOR: yellow\">" + filters_qlist[i] + "</FONT>";
-                else
-                    title+=sl.value(j) + filters_qlist[i];
-            }
-        }
-        sl = article.split(filters_qlist[i]);
-        if (sl.size()>1)
-        {
-            article = "";
-            for (int j=0; j<sl.size(); j++)
-            {
-                isHave = true;
-                if (j == sl.size()-1)
-                {
-                    article+=sl.value(j);
-                    break;
-                }
-                if (checkForFontTag(sl.value(j+1)))
-                    article+=sl.value(j) + "<FONT style=\"BACKGROUND-COLOR: yellow\">" + filters_qlist[i] + "</FONT>";
-                else
-                    article+=sl.value(j) + filters_qlist[i];
-            }
-        }
-    }
-    if (isHave)
-        return 1;
-    return 0;
-}
-
-int MainWindow::checkForFontTag(const QString &str1)
-{
-    QString font = "</FONT>";
-    for (int i=0; i<str1.length(); i++)
-    {
-        if (i==font.length())
-            return 0;
-        if (str1[i]!=font[i])
-            return 1;
-    }
-    return 1;
-}
-
-void MainWindow::initFilters()
-{
-    std::vector<QString>::iterator it;
-    std::vector<QString> tmp;
-    data_base.getFilterList(&tmp);
-
-    for (it=tmp.begin(); it!=tmp.end(); ++it)
-        filters_qlist.append(*it);
-}
-*/
-
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     int key = event->key();
@@ -625,7 +548,7 @@ void MainWindow::onUpdateRSSData()
     this->show();
 }
 
-void MainWindow::onRssDataUpdated (std::vector<RSSData> updated_rss_data)
+void MainWindow::onRssDataUpdated (const std::vector<RSSData> &updated_rss_data)
 {
     std::map<QString, RSSData>::iterator it;
     for (unsigned int i=0; i<updated_rss_data.size(); ++i)

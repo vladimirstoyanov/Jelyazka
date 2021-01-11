@@ -27,13 +27,13 @@ public:
     void        setVersion(const QString &version);
 
 public:
-    size_t      getArticlesSize();
+    size_t      getArticlesSize() const;
     QString     getEncoding () const;
     QString     getSiteName() const;
     QString     getType () const;
     QString     getURL() const;
     QString     getVersion() const;
-    RSSArticle  articleAt(unsigned int index);
+    RSSArticle  articleAt(unsigned int index) const;
 
 private:
     int               current_index_rss_articles_;

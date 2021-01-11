@@ -54,7 +54,7 @@ public:
 
 public slots:
     void onHideAnimationFinished();
-    void onRssDataUpdated(std::vector<RSSData>);
+    void onRssDataUpdated(const std::vector<RSSData>&);
     void onShowAnimateWindow(const QString &);
     void onShowAnimationFinished();
 

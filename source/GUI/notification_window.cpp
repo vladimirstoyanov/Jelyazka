@@ -237,7 +237,7 @@ void NotificationWindow::gradientRect(const int x, const int y, const int width,
 
 }
 
-void NotificationWindow::onRssDataUpdated(std::vector<RSSData> updated_rss_data)
+void NotificationWindow::onRssDataUpdated(const std::vector<RSSData> &updated_rss_data)
 {
     QString html_source="";
 
