@@ -90,7 +90,7 @@ void RefreshRssData::makeConnections ()
     connect(download_rss_data_thread_
             , SIGNAL(writeData(RSSData))
             , this
-            , SLOT(onWriteData(RSSData))
+            , SLOT(onWriteData(const RSSData &))
             , Qt::QueuedConnection);
 
     connect(download_rss_data_thread_

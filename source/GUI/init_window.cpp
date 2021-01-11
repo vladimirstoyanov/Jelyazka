@@ -96,7 +96,7 @@ void InitWindow::loadRssFeeds()
     }
 }
 
-void InitWindow::onWriteData(RSSData rss_data)
+void InitWindow::onWriteData(const RSSData &rss_data)
 {
     qDebug()<<__PRETTY_FUNCTION__<<":"<<rss_data.getSiteName();
 
@@ -127,7 +127,7 @@ void InitWindow::setupConnections ()
     connect(download_rss_data_thread_
             , SIGNAL(writeData(RSSData))
             , this
-            , SLOT(onWriteData(RSSData))
+            , SLOT(onWriteData(const RSSData &))
             , Qt::QueuedConnection);
 
     connect(download_rss_data_thread_

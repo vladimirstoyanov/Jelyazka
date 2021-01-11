@@ -48,7 +48,7 @@ public:
 
 public slots:
     void onDownloadFinished ();
-    void onWriteData(RSSData rss_data);
+    void onWriteData(const RSSData &rss_data);
 
 signals:
     void stateChanged (const QString &event);

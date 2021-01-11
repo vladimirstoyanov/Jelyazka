@@ -32,7 +32,7 @@ UpdateRssData::~UpdateRssData()
     //download_rss_data_thread_->deleteLater();
 }
 
-void UpdateRssData::onWriteData (RSSData rss_data)
+void UpdateRssData::onWriteData (const RSSData &rss_data)
 {
     qDebug()<<__PRETTY_FUNCTION__;
     //data_base_.updateArticles(rss_data);
@@ -59,7 +59,7 @@ void UpdateRssData::makeConnections ()
     connect(download_rss_data_thread_
             , SIGNAL(writeData(RSSData))
             , this
-            , SLOT(onWriteData(RSSData))
+            , SLOT(onWriteData(const RSSData &))
             , Qt::QueuedConnection);
 
     connect(download_rss_data_thread_
