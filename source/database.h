@@ -7,7 +7,6 @@
 
 #include <QtSql/QtSql>
 
-#include "data.h"
 #include "RSS/rss_data.h"
 #include "RSS/rss_article.h"
 
@@ -33,7 +32,6 @@ public:
                                 , const QString &link
                                 , const QString &description);
     void    insertRowToFiltersTable(const QString &filter_name);
-    void    loadStrctureFromDB(std::shared_ptr<Data> data);
     void    removeAllDataFromRssData();
     void    removeDataFromRSSTable(const QString &site_name, const bool all_data);
     void    removeDataFromFilters();

@@ -1,12 +1,4 @@
 #include "RSS/parse_rss.h"
-//#include "logger.h"
-
-//ToDo: remove the below constructor
-ParseRSS::ParseRSS(std::shared_ptr<Data> data_tmp):
-    data_ (data_tmp)
-{
-
-}
 
 ParseRSS::ParseRSS()
 {

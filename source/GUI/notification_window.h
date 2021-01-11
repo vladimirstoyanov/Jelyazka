@@ -32,7 +32,7 @@
 #include <QTime>
 #include <QWidget>
 
-#include "data.h"
+#include "RSS/rss_data.h"
 #include "ui_notificationwindow.h"
 
 namespace Ui
@@ -49,8 +49,6 @@ class NotificationWindow : public QWidget
 public:
     explicit NotificationWindow(QWidget *parent = 0);
     virtual ~NotificationWindow();
-
-    void setSignal(std::shared_ptr<RSSThread> rssThread , std::shared_ptr<Data> data); //ToDo: move to the private section
 
 public slots:
     void onHideAnimationFinished();

@@ -24,7 +24,6 @@ SOURCES += main.cpp\
     Network/network_manager.cpp \
     Network/http_protocol.cpp \
     Network/http_request_result_analyzer.cpp \
-    data.cpp \
     database.cpp \
     JelayzkaStateMachine/state.cpp \
     JelayzkaStateMachine/idle_state.cpp \
@@ -68,7 +67,6 @@ HEADERS  += \
     Network/network_manager.h \
     Network/http_protocol.h \
     Network/http_request_result_analyzer.h \
-    data.h \
     database.h \
     JelayzkaStateMachine/state.hpp \
     JelayzkaStateMachine/idle_state.hpp \

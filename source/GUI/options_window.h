@@ -53,8 +53,7 @@ class OptionsWindow : public QWidget
     Q_OBJECT
 public:
     explicit OptionsWindow(
-            QWidget *parent = nullptr
-            , std::shared_ptr<Data> data = nullptr);
+            QWidget *parent = nullptr);
 
     virtual ~OptionsWindow();
 

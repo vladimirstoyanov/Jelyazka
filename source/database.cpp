@@ -20,39 +20,6 @@ void DataBase::createTables()
     createRssDataTable();
 }
 
-void DataBase::loadStrctureFromDB(std::shared_ptr<Data> data)
-{
-    {
-        //open data base
-        openDB();
-        QSqlQuery query(q_sql_data_base_);
-
-        createTables();
-
-        //get all rss feeds urls
-        query.prepare( "SELECT * FROM feed_list" );
-
-        if( !query.exec() )
-        {
-            qDebug()<<"Some error, when trying to read from \'feed_list\' table...";
-            closeDB();
-            return;
-        }
-
-        while( query.next() )
-        {
-            std::shared_ptr<RSSData> rssData = std::make_shared<RSSData>();
-            rssData->setSiteName(query.value( 1 ).toByteArray().data());
-            rssData->setURL(query.value( 2 ).toByteArray().data());
-            rssData->setType("RSS");
-            rssData->setVersion(query.value(3).toByteArray().data());
-            data->pushBack(rssData);
-        }
-    }
-    //close data base
-    closeDB();
-}
-
 void DataBase::openDB()
 {
     //qDebug()<<__PRETTY_FUNCTION__;

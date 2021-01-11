@@ -75,16 +75,12 @@ private slots:
 private:
     void addToCombobox(const QString &str);
     void closeEvent(QCloseEvent *);
-    //int checkForFilters(QString &title, QString &article);
-    //int checkForFontTag(const QString &str1);
     bool eventFilter(QObject *, QEvent *);
     void gradientRect(const int x, const int y, const int width, const int height);
-    //void initFilters();
     void mouseButtonPressed(QPoint p , QObject *o);
     void mouseDblClicked(QMouseEvent * mouseEvent);
     bool mouseInGrip(QPoint mousePos);
     void mouseMove(QPoint p, QMouseEvent *e, QObject *o);
-    //void refreshFeed();
     void resizeEvent(QResizeEvent *event);
     void paintEvent(QPaintEvent *);
     void setupGui ();

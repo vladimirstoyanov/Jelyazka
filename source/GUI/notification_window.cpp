@@ -161,14 +161,6 @@ QList<unsigned int> NotificationWindow::getIndexes(const QString &data_str)
     return indexes;
 }
 
-//make connection to RSSThread instance.
-void NotificationWindow::setSignal(std::shared_ptr<RSSThread> rssThread, std::shared_ptr<Data> data)
-{
-    //rss_thread_ = rssThread;
-    //data_ = data;
-    //connect(rss_thread_.get(), SIGNAL(showAnimateWindow(QString)), this, SLOT(onShowAnimateWindow(QString)));
-}
-
 //This method is similar of 'Sleep(mseconds)' function in 'windows.h'
 void NotificationWindow::delay(const int seconds)
 {

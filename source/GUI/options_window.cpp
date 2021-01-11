@@ -20,7 +20,7 @@
 #include "options_window.h"
 
 
-OptionsWindow::OptionsWindow(QWidget *parent, std::shared_ptr<Data> data) :
+OptionsWindow::OptionsWindow(QWidget *parent) :
     QWidget(parent)
     , cb_enable_filtering_ (std::make_shared<QCheckBox>(this))
     , cb_enable_notification_(std::make_shared<QCheckBox>(this))
