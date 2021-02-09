@@ -11,7 +11,7 @@
 #include "GUI/init_window.h"
 #include "GUI/main_window.h"
 #include "GUI/notification_window.h"
-#include "GUI/options_window.h"
+#include "GUI/Options/options_window.h"
 #include "GUI/rss_search_window.h"
 #include "GUI/tray_icon.h"
 #include "JelayzkaStateMachine/jelyazka_state_machine.hpp"

@@ -48,7 +48,7 @@ SOURCES += main.cpp\
     GUI/main_window.cpp \
     GUI/init_window.cpp \
     GUI/notification_window.cpp \
-    GUI/options_window.cpp \
+    GUI/Options/options_window.cpp \
     GUI/rss_search_window.cpp \
     GUI/tray_icon.cpp \
     RSS/rss_search_thread.cpp \
@@ -91,7 +91,7 @@ HEADERS  += \
     GUI/init_window.h \
     GUI/main_window.h \
     GUI/notification_window.h \
-    GUI/options_window.h \
+    GUI/Options/options_window.h \
     GUI/rss_search_window.h \
     GUI/tray_icon.h \
     RSS/rss_search_thread.h \
@@ -102,7 +102,7 @@ HEADERS  += \
 
 FORMS    += \
     GUI/initwindow.ui \
-    GUI/optionswindow.ui \
+    GUI/Options/optionswindow.ui \
     GUI/help.ui \
     GUI/about.ui \
     GUI/notificationwindow.ui \
