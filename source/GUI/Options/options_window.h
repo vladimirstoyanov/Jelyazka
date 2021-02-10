@@ -38,6 +38,8 @@
 #include <QWidget>
 
 #include "database.h"
+#include "filters_options.h"
+#include "options.h"
 #include "settings.h"
 #include "ui_optionswindow.h"
 
@@ -63,9 +65,9 @@ private slots:
     void on_treeWidget_clicked(const QModelIndex &index);
     void on_removeButton_clicked();
     void on_cb_enable_proxy_clicked(bool);
-    void on_cb_enable_filtering_clicked(bool);
-    void on_pb_add_filter_clicked();
-    void on_pb_remove_filter();
+    //void on_cb_enable_filtering_clicked(bool);
+    //void on_pb_add_filter_clicked();
+    //void on_pb_remove_filter();
 
 
 private:
@@ -75,15 +77,15 @@ private:
 
 private:
     void addItem(const QString &name);
-    void fillFilterListView();
+    //void fillFilterListView();
     void fillFeedListView();
     void insertRowToRSSTable(const QString &site_name, const QString &url, const QString &version);
-    void insertRowToFiltersTable(const QString &filter_name);
+    //void insertRowToFiltersTable(const QString &filter_name);
     void removeDataFromFilters(const QString &filter_name, const bool all_data);
     void removeDataFromRSSTable(const QString &site_name, const bool all_data);
     void returnModifedString(QString &str); //ToDo: change the function name
     void setupGui ();
-    void updateFiltersTable();
+    //void updateFiltersTable();
     void positioningFeedsOptionWidgets();
 
 private:
@@ -93,46 +95,48 @@ private:
 private:
     //hide widgets
     void hideCollectionFeeds();
-    void hideFilters();
+    //void hideFilters();
     void hideNotifications();
     void hideProxyConnection();
 
     //show widgets
     void showCollectionFeeds();
-    void showFilters();
+    //void showFilters();
     void showNotifications();
     void showProxyConnection();
 
 private:
-    int addStringToFilterList(const QString &cur_text);
+    //int addStringToFilterList(const QString &cur_text);
     int addToFeedList(const QString &str);
     int cf_label_search_width(); //ToDo: change the function name
 
 private:
     DataBase                                data_base_;
-    std::shared_ptr<QCheckBox>              cb_enable_filtering_;
+    //std::shared_ptr<QCheckBox>              cb_enable_filtering_;
     std::shared_ptr<QCheckBox>              cb_enable_notification_;
     std::shared_ptr<QCheckBox>              cb_enable_proxy_;
     std::shared_ptr<QLineEdit>              cf_find_feed_;
     std::shared_ptr<QLabel>                 cf_label_search_;
     std::shared_ptr<QLabel>                 download_feed_status_;
     std::shared_ptr<QListWidget>            feed_list_;
-    std::shared_ptr<QLabel>                 l_filter_list_;
+    //std::shared_ptr<QLabel>                 l_filter_list_;
     QList<bool>                             l_items_for_remove_;
     std::vector<QString>                    l_old_feed_list_;
-    std::vector<QString>                    l_old_filters_;
+    //std::vector<QString>                    l_old_filters_;
     std::shared_ptr<QLabel>                 l_proxy_url_;
     std::shared_ptr<QLabel>                 l_proxy_port_;
     std::shared_ptr<QLabel>                 l_refresh_time_;
-    std::shared_ptr<QListWidget>            lw_filter_list_;
+    //std::shared_ptr<QListWidget>            lw_filter_list_;
+    std::vector<std::shared_ptr<IOptions>>  options;
     int                                     options_type_;
-    std::shared_ptr<QPushButton>            pb_add_filter_;
-    std::shared_ptr<QPushButton>            pb_remove_filter_;
+    //std::shared_ptr<QPushButton>            pb_add_filter_;
+    //std::shared_ptr<QPushButton>            pb_remove_filter_;
     std::shared_ptr<QSpinBox>               sb_refresh_time_;
     std::shared_ptr<QTextEdit>              te_proxy_url_;
     std::shared_ptr<QTextEdit>              te_proxy_port_;
-    std::shared_ptr<QTextEdit>              te_add_filter_;
+    //std::shared_ptr<QTextEdit>              te_add_filter_;
     std::shared_ptr<Ui::OptionsWindow>      ui_;
+
 
 
 signals:

@@ -22,25 +22,25 @@
 
 OptionsWindow::OptionsWindow(QWidget *parent) :
     QWidget(parent)
-    , cb_enable_filtering_ (std::make_shared<QCheckBox>(this))
+    //, cb_enable_filtering_ (std::make_shared<QCheckBox>(this))
     , cb_enable_notification_(std::make_shared<QCheckBox>(this))
     , cb_enable_proxy_ (std::make_shared<QCheckBox>(this))
     , cf_find_feed_ (std::make_shared<QLineEdit> (this))
     , cf_label_search_ (std::make_shared<QLabel>(this))
     , download_feed_status_ (std::make_shared<QLabel>(this))
     , feed_list_  (std::make_shared<QListWidget>(this))
-    , l_filter_list_ (std::make_shared<QLabel>(this))
+    //, l_filter_list_ (std::make_shared<QLabel>(this))
     , l_proxy_url_ (std::make_shared<QLabel>(this))
     , l_proxy_port_ (std::make_shared<QLabel> (this))
     , l_refresh_time_ (std::make_shared<QLabel>(this))
-    , lw_filter_list_ (std::make_shared<QListWidget>(this))
-    , options_type_ (1)
-    , pb_add_filter_ (std::make_shared<QPushButton>(this))
-    , pb_remove_filter_ (std::make_shared<QPushButton>(this))
+  //, lw_filter_list_ (std::make_shared<QListWidget>(this))
+  , options_type_ (1)
+    //, pb_add_filter_ (std::make_shared<QPushButton>(this))
+    //, pb_remove_filter_ (std::make_shared<QPushButton>(this))
     , sb_refresh_time_ (std::make_shared<QSpinBox> (this))
     , te_proxy_url_ (std::make_shared<QTextEdit>(this))
     , te_proxy_port_ (std::make_shared<QTextEdit>(this))
-    , te_add_filter_ (std::make_shared<QTextEdit>(this))
+    //, te_add_filter_ (std::make_shared<QTextEdit>(this))
     , ui_(std::make_shared<Ui::OptionsWindow> ())
 {
 
@@ -50,7 +50,7 @@ OptionsWindow::OptionsWindow(QWidget *parent) :
 OptionsWindow::~OptionsWindow()
 {
     l_old_feed_list_.clear();
-    l_old_filters_.clear();
+    //l_old_filters_.clear();
 }
 
 //modify label string to fit in the window size
@@ -138,17 +138,6 @@ void OptionsWindow::insertRowToRSSTable(const QString &name, const QString &url,
     data_base_.insertIntoFeedList(name, url, version);
 }
 
-void OptionsWindow::updateFiltersTable()
-{
-     //main_window_->filters_qlist.clear();
-     data_base_.removeDataFromFilters(); //delete all old filters data
-
-     for (int i=0;  i<lw_filter_list_->count(); i++)
-     {
-         insertRowToFiltersTable(lw_filter_list_->item(i)->text());
-     }
-}
-
 
 void OptionsWindow::loadSettings()
 {
@@ -175,24 +164,34 @@ void OptionsWindow::loadSettings()
     te_proxy_url_->setText(Jelyazka::Settings::getProxyIpAddress());
     te_proxy_port_->setText(Jelyazka::Settings::getProxyPort());
 
+    /*
     //filters
     if (Jelyazka::Settings::getIsFilteringEnabled())
     {
+
         cb_enable_filtering_->setChecked(false);
         pb_add_filter_->setEnabled(false);
         te_add_filter_->setEnabled(false);
         lw_filter_list_->setEnabled(false);
         l_filter_list_->setEnabled(false);
         pb_remove_filter_->setEnabled(false);
+
     }
     else
     {
+
         cb_enable_filtering_->setChecked(true);
         pb_add_filter_->setEnabled(true);
         te_add_filter_->setEnabled(true);
         lw_filter_list_->setEnabled(true);
         l_filter_list_->setEnabled(true);
         pb_remove_filter_->setEnabled(true);
+
+    }
+    */
+    for (unsigned int i=0; i<options.size(); ++i)
+    {
+        options[i]->loadSettings();
     }
 
     //ToDo: add notification window
@@ -205,10 +204,15 @@ void OptionsWindow::saveSettings()
     Jelyazka::Settings::setIsProxyConnectionEnabled(cb_enable_proxy_->isChecked());
     Jelyazka::Settings::setProxyPort(te_proxy_port_->toPlainText());
     Jelyazka::Settings::setProxyIpAddress(te_proxy_url_->toPlainText());
-    Jelyazka::Settings::setIsFilteringEnabled(cb_enable_filtering_->isChecked());
+    //Jelyazka::Settings::setIsFilteringEnabled(cb_enable_filtering_->isChecked());
+    for (unsigned int i=0; i<options.size(); ++i)
+    {
+        options[i]->saveSettings();
+    }
 }
 
 
+/*
 void OptionsWindow::fillFilterListView()
 {
     std::vector <QString> tmp;
@@ -222,6 +226,7 @@ void OptionsWindow::fillFilterListView()
         l_old_filters_.push_back(tmp[i]);
     }
 }
+*/
 
 void OptionsWindow::positioningFeedsOptionWidgets()
 {
@@ -277,7 +282,7 @@ void OptionsWindow::resizeEvent(QResizeEvent *event)
     }
     else if (options_type_ == 2)
     {
-
+        /*
         te_add_filter_->setGeometry(pb_add_filter_->x() + pb_add_filter_->width() + 5,
                                    5,
                                    this->width() - (pb_add_filter_->x() + pb_add_filter_->width() + 10),
@@ -286,6 +291,7 @@ void OptionsWindow::resizeEvent(QResizeEvent *event)
                                     l_filter_list_->y()+l_filter_list_->height()+5,
                                     this->width() - (l_filter_list_->x()+5),
                                     this->height() - (l_filter_list_->y()+ l_filter_list_->height()+15+ ui_->okButton->height()));
+        */
     }
 }
 
@@ -297,9 +303,9 @@ void OptionsWindow::showEvent(QShowEvent *event)
 
     download_feed_status_->hide();
     feed_list_->clear();
-    lw_filter_list_->clear();
+    //lw_filter_list_->clear();
     fillFeedListView();
-    fillFilterListView();
+    //fillFilterListView();
 
     this->setEnabled(true);
 }
@@ -329,7 +335,7 @@ void OptionsWindow::on_okButton_clicked()
     this->setEnabled(false); //it's gray out the "Option Window"
     saveSettings(); //save current options in a file
 
-    updateFiltersTable();
+    //updateFiltersTable();
     emit (stateChanged("UpdatingSettings"));
 }
 
@@ -349,11 +355,14 @@ void OptionsWindow::on_treeWidget_clicked(const QModelIndex &index)
         showCollectionFeeds();
         hideNotifications();
         hideProxyConnection();
-        hideFilters();
+        //hideFilters();
+        options[0]->hide();
     }
     else if (t == "Filters")
     {
-        showFilters();
+        options[0]->show();
+        options_type_ = 2;
+        //showFilters();
         hideCollectionFeeds();
         hideNotifications();
         hideProxyConnection();
@@ -363,14 +372,16 @@ void OptionsWindow::on_treeWidget_clicked(const QModelIndex &index)
         showNotifications();
         hideCollectionFeeds();
         hideProxyConnection();
-        hideFilters();
+        //hideFilters();
+        options[0]->hide();
     }
     else if (t == "Proxy connection")
     {
         showProxyConnection();
         hideCollectionFeeds();
         hideNotifications();
-        hideFilters();
+        //hideFilters();
+        options[0]->hide();
     }
 }
 
@@ -392,83 +403,6 @@ void OptionsWindow::on_cb_enable_proxy_clicked(bool state)
     }
 }
 
-void OptionsWindow::on_cb_enable_filtering_clicked(bool state)
-{
-    if (state)
-    {
-        pb_add_filter_->setEnabled(true);
-        te_add_filter_->setEnabled(true);
-        lw_filter_list_->setEnabled(true);
-        l_filter_list_->setEnabled(true);
-        pb_remove_filter_->setEnabled(true);
-    }
-    else
-    {
-        pb_add_filter_->setEnabled(false);
-        te_add_filter_->setEnabled(false);
-        lw_filter_list_->setEnabled(false);
-        l_filter_list_->setEnabled(false);
-        pb_remove_filter_->setEnabled(false);
-    }
-}
-
-void OptionsWindow::on_pb_add_filter_clicked()
-{
-    if (addStringToFilterList(te_add_filter_->toPlainText()))
-    {
-        te_add_filter_->setText("");
-        return;
-    }
-    te_add_filter_->setText("");
-}
-
-//remove selected item in filter option
-void OptionsWindow::on_pb_remove_filter()
-{
-    if (lw_filter_list_->currentItem()==NULL)
-    {
-        return;
-    }
-
-    QList<QListWidgetItem*> l;
-    l = lw_filter_list_->selectedItems();
-    if (l.size()==0)
-    {
-        return;
-    }
-
-    delete l[0];
-}
-
-void OptionsWindow::insertRowToFiltersTable(const QString &filter_name)
-{
-    data_base_.insertRowToFiltersTable(filter_name);
-}
-
-//Filter option: adding string to filter list
-int OptionsWindow::addStringToFilterList(const QString &cur_text)
-{
-    int count = lw_filter_list_->count(); //get count of listWidget
-    if (cur_text=="")
-    {
-        return 1;
-    }
-
-    //check for identical string
-    for(int row = 0; row < lw_filter_list_->count(); row++)
-    {
-        QListWidgetItem *item = lw_filter_list_->item(row);
-        // process item
-        if (cur_text == item->text())
-        {
-            return 1;
-        }
-    }
-
-    lw_filter_list_->insertItem(count, cur_text); //insert new element in the end of list widget
-    return 0;
-}
-
 int OptionsWindow::cf_label_search_width()
 {
     QFontMetrics fm(cf_label_search_->font());
@@ -488,18 +422,6 @@ void OptionsWindow::showCollectionFeeds()
     cf_find_feed_->show();
     cf_label_search_->show();
 
-}
-
-void OptionsWindow::showFilters()
-{
-    cb_enable_filtering_->show();
-    pb_add_filter_->show();
-    te_add_filter_->show();
-    lw_filter_list_->show();
-    l_filter_list_->show();
-    pb_remove_filter_->show();
-
-    options_type_ = 2;
 }
 
 void OptionsWindow::showNotifications()
@@ -531,16 +453,6 @@ void OptionsWindow::hideCollectionFeeds()
     cf_label_search_->hide();
 }
 
-void OptionsWindow::hideFilters()
-{
-    cb_enable_filtering_->hide();
-    pb_add_filter_->hide();
-    te_add_filter_->hide();
-    lw_filter_list_->hide();
-    l_filter_list_->hide();
-    pb_remove_filter_->hide();
-}
-
 void OptionsWindow::hideNotifications()
 {
     sb_refresh_time_->hide();
@@ -568,6 +480,9 @@ void OptionsWindow::closeEvent (QCloseEvent *event)
 void OptionsWindow::setupGui ()
 {
     ui_->setupUi(this);
+
+    std::shared_ptr<IOptions> filtersOptions = std::make_shared<FiltersOptions> (this, ui_->treeWidget->width(), ui_->okButton->height());
+    options.push_back(filtersOptions);
 
     ui_->treeWidget->setHeaderLabel("Options");
 
@@ -665,46 +580,8 @@ void OptionsWindow::setupGui ()
     te_proxy_url_->hide();
     te_proxy_port_->hide();
 
-    //filter options widgets
-    cb_enable_filtering_->setGeometry(ui_->treeWidget->width() + 10,
-                                      5,
-                                      cb_enable_filtering_->width()+50,
-                                      cb_enable_filtering_->height());
-    pb_add_filter_->setGeometry(cb_enable_filtering_->x(),
-                                cb_enable_filtering_->y()+cb_enable_filtering_->height() + 5,
-                                pb_add_filter_->width(),
-                                pb_add_filter_->height());
-    te_add_filter_->setGeometry(pb_add_filter_->x() + pb_add_filter_->width() + 5,
-                                pb_add_filter_->y(),
-                                this->width() - (pb_add_filter_->x() + pb_add_filter_->width() + 10),
-                                te_add_filter_->height());
-    l_filter_list_->setGeometry(te_add_filter_->x(),
-                                te_add_filter_->y() + te_add_filter_->height() + 5,
-                                l_filter_list_->width(),
-                                l_filter_list_->height());
-    lw_filter_list_->setGeometry(te_add_filter_->x(),
-                                 l_filter_list_->y()+l_filter_list_->height()+5,
-                                 this->width() - (l_filter_list_->x()+5),
-                                 this->height() - (l_filter_list_->y()+ l_filter_list_->height()+15+ ui_->okButton->height()));
-    pb_remove_filter_->setGeometry(ui_->treeWidget->width()+10,
-                                  lw_filter_list_->y(),
-                                  pb_remove_filter_->width(),
-                                  pb_remove_filter_->height());
-
-    cb_enable_filtering_->setChecked(false);
-    cb_enable_filtering_->setText("Enable filtering");
-    pb_add_filter_->setText("Add");
-    pb_remove_filter_->setText("Remove");
-    l_filter_list_->setText("Filter List:");
-
-    connect(cb_enable_filtering_.get(), SIGNAL(clicked(bool)), this, SLOT(on_cb_enable_filtering_clicked(bool)));
-    connect(pb_add_filter_.get(), SIGNAL(clicked()), this, SLOT(on_pb_add_filter_clicked()));
-    connect(pb_remove_filter_.get(), SIGNAL(clicked()), this, SLOT(on_pb_remove_filter()));
-
-    cb_enable_filtering_->hide();
-    pb_add_filter_->hide();
-    te_add_filter_->hide();
-    lw_filter_list_->hide();
-    l_filter_list_->hide();
-    pb_remove_filter_->hide();
+    for (unsigned int i=0; i<options.size(); ++i)
+    {
+        options[i]->setupGui();
+    }
 }
