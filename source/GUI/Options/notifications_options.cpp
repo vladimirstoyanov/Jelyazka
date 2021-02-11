@@ -1,10 +1,10 @@
 #include "GUI/Options/notifications_options.h"
 
-NotificationsOptions::NotificationsOptions(QWidget *parent, const int tree_widget_width, const int ok_button_high):
+NotificationsOptions::NotificationsOptions(QWidget *parent, const int tree_widget_width, const int ok_button_height):
     cb_enable_notification_(std::make_shared<QCheckBox>(parent))
     , l_refresh_time_ (std::make_shared<QLabel>(parent))
     , sb_refresh_time_ (std::make_shared<QSpinBox> (parent))
-    , ok_button_high_ (ok_button_high)
+    , ok_button_height_ (ok_button_height)
     , tree_widget_width_ (tree_widget_width)
     , parent (parent)
 {

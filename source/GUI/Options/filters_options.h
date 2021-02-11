@@ -19,7 +19,7 @@ class FiltersOptions : public QWidget, public IOptions
 {
     Q_OBJECT
 public:
-    FiltersOptions(QWidget *parent, const int tree_widget_width, const int ok_button_high);
+    FiltersOptions(QWidget *parent, const int tree_widget_width, const int ok_button_height);
 
     virtual ~FiltersOptions();
 
@@ -42,7 +42,7 @@ private:
 private:
      DataBase                                data_base_;
      std::vector<QString>                    l_old_filters_;
-     int                                     ok_button_high_;
+     int                                     ok_button_height_;
      int                                     tree_widget_width_;
      QWidget *                               parent;
 

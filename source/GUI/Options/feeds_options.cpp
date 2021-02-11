@@ -1,10 +1,10 @@
 #include "GUI/Options/feeds_options.h"
 
-FeedsOptions::FeedsOptions(QWidget *parent, const int tree_widget_width, const int ok_button_high):
+FeedsOptions::FeedsOptions(QWidget *parent, const int tree_widget_width, const int ok_button_height):
      cf_find_feed_ (std::make_shared<QLineEdit> (parent))
     , cf_label_search_ (std::make_shared<QLabel>(parent))
     , feed_list_  (std::make_shared<QListWidget>(parent))
-    , ok_button_high_ (ok_button_high)
+    , ok_button_height_ (ok_button_height)
     , tree_widget_width_ (tree_widget_width)
     , parent (parent)
 {
@@ -79,7 +79,7 @@ void FeedsOptions::positioningFeedsOptionWidgets()
     feed_list_->setGeometry(cf_label_search_->x(),
                             cf_find_feed_->y() + cf_find_feed_->height()+10,
                             width,
-                            parent->height()-(20 +cf_find_feed_->height() + ok_button_high_));
+                            parent->height()-(20 +cf_find_feed_->height() + ok_button_height_));
 
     /*
     ui_->removeButton->setGeometry(feed_list_->x(),

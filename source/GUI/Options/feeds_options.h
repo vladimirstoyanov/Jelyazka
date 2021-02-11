@@ -17,7 +17,7 @@ class FeedsOptions : public QWidget, public IOptions
 {
     Q_OBJECT
 public:
-    FeedsOptions(QWidget *parent, const int tree_widget_width, const int ok_button_high);
+    FeedsOptions(QWidget *parent, const int tree_widget_width, const int ok_button_height);
 
     virtual ~FeedsOptions();
 
@@ -45,7 +45,7 @@ private:
 
 private:
      DataBase                                data_base_;
-     int                                     ok_button_high_;
+     int                                     ok_button_height_;
      int                                     tree_widget_width_;
      QWidget *                               parent;
 };

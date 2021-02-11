@@ -38,7 +38,7 @@ private:
     std::shared_ptr<QTextEdit>              te_proxy_port_;
 
 private:
-     int                                     ok_button_high_;
+     int                                     ok_button_height_;
      int                                     tree_widget_width_;
      QWidget *                               parent;
 };

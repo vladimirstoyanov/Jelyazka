@@ -1,13 +1,13 @@
 #include "GUI/Options/filters_options.h"
 
-FiltersOptions::FiltersOptions(QWidget *parent, const int tree_widget_width, const int ok_button_high):
+FiltersOptions::FiltersOptions(QWidget *parent, const int tree_widget_width, const int ok_button_height):
     cb_enable_filtering_ (std::make_shared<QCheckBox>(parent))
     , l_filter_list_ (std::make_shared<QLabel>(parent))
     , lw_filter_list_ (std::make_shared<QListWidget>(parent))
     , pb_add_filter_ (std::make_shared<QPushButton>(parent))
     , pb_remove_filter_ (std::make_shared<QPushButton>(parent))
     , te_add_filter_ (std::make_shared<QTextEdit>(parent))
-    , ok_button_high_ (ok_button_high)
+    , ok_button_height_ (ok_button_height)
     , tree_widget_width_ (tree_widget_width)
     , parent (parent)
 {
@@ -42,7 +42,7 @@ void FiltersOptions::setupGui ()
     lw_filter_list_->setGeometry(te_add_filter_->x(),
                                  l_filter_list_->y()+l_filter_list_->height()+5,
                                  parent->width() - (l_filter_list_->x()+5),
-                                 parent->height() - (l_filter_list_->y()+ l_filter_list_->height()+15+ ok_button_high_));
+                                 parent->height() - (l_filter_list_->y()+ l_filter_list_->height()+15+ ok_button_height_));
     pb_remove_filter_->setGeometry(cb_enable_filtering_->x(),
                                   lw_filter_list_->y(),
                                   pb_remove_filter_->width(),
@@ -95,7 +95,7 @@ void FiltersOptions::resize ()
     lw_filter_list_->setGeometry(te_add_filter_->x(),
                                 l_filter_list_->y()+l_filter_list_->height()+5,
                                 parent->width() - (l_filter_list_->x()+5),
-                                parent->height() - (l_filter_list_->y()+ l_filter_list_->height()+15+ ok_button_high_));
+                                parent->height() - (l_filter_list_->y()+ l_filter_list_->height()+15+ ok_button_height_));
 
 }
 

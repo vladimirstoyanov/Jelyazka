@@ -23,18 +23,12 @@
 #include <vector>
 
 #include <QApplication>
-//#include <QCheckBox>
 #include <QCloseEvent>
 #include <QDebug>
 #include <QDesktopWidget>
 #include <QLabel>
-//#include <QLineEdit>
-//#include <QListWidget>
 #include <QMessageBox>
 #include <QResizeEvent>
-//#include <QSpinBox>
-//#include <QTextEdit>
-//#include <QThreadPool>
 #include <QWidget>
 
 #include "database.h"

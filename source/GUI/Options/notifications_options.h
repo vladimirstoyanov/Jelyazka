@@ -18,7 +18,7 @@ class NotificationsOptions : public QWidget, public IOptions
 {
     Q_OBJECT
 public:
-    NotificationsOptions(QWidget *parent, const int tree_widget_width, const int ok_button_high);
+    NotificationsOptions(QWidget *parent, const int tree_widget_width, const int ok_button_height);
 
     virtual ~NotificationsOptions();
 
@@ -36,7 +36,7 @@ private:
     std::shared_ptr<QSpinBox>               sb_refresh_time_;
 
 private:
-     int                                     ok_button_high_;
+     int                                     ok_button_height_;
      int                                     tree_widget_width_;
      QWidget *                               parent;
 };

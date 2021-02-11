@@ -1,12 +1,12 @@
 #include "GUI/Options/proxy_options.h"
 
-ProxyOptions::ProxyOptions(QWidget *parent, const int tree_widget_width, const int ok_button_high):
+ProxyOptions::ProxyOptions(QWidget *parent, const int tree_widget_width, const int ok_button_height):
     cb_enable_proxy_ (std::make_shared<QCheckBox>(parent))
     , l_proxy_url_ (std::make_shared<QLabel>(parent))
     , l_proxy_port_ (std::make_shared<QLabel> (parent))
     , te_proxy_url_ (std::make_shared<QTextEdit>(parent))
     , te_proxy_port_ (std::make_shared<QTextEdit>(parent))
-    , ok_button_high_ (ok_button_high)
+    , ok_button_height_ (ok_button_height)
     , tree_widget_width_ (tree_widget_width)
     , parent (parent)
 {
