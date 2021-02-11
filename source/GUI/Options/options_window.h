@@ -23,18 +23,18 @@
 #include <vector>
 
 #include <QApplication>
-#include <QCheckBox>
+//#include <QCheckBox>
 #include <QCloseEvent>
 #include <QDebug>
 #include <QDesktopWidget>
 #include <QLabel>
-#include <QLineEdit>
-#include <QListWidget>
+//#include <QLineEdit>
+//#include <QListWidget>
 #include <QMessageBox>
 #include <QResizeEvent>
-#include <QSpinBox>
-#include <QTextEdit>
-#include <QThreadPool>
+//#include <QSpinBox>
+//#include <QTextEdit>
+//#include <QThreadPool>
 #include <QWidget>
 
 #include "database.h"
@@ -43,7 +43,7 @@
 #include "notifications_options.h"
 #include "options.h"
 #include "proxy_options.h"
-#include "settings.h"
+
 #include "ui_optionswindow.h"
 
 namespace Ui
@@ -66,9 +66,6 @@ private slots:
     void on_okButton_clicked(); //'OK' button clicked
     void on_cancelButton_clicked(); //'Cancel' button clicked
     void on_treeWidget_clicked(const QModelIndex &index);
-    //void on_removeButton_clicked();
-    //void on_cb_enable_proxy_clicked(bool);
-
 
 private:
      void closeEvent (QCloseEvent *);
@@ -76,29 +73,18 @@ private:
      void showEvent(QShowEvent *);
 
 private:
-    void addItem(const QString &name);
-    void fillFeedListView();
+    void addItemToTreeView(const QString &name);
+    void createOptions ();
     void insertRowToRSSTable(const QString &site_name, const QString &url, const QString &version);
-    void removeDataFromFilters(const QString &filter_name, const bool all_data);
     void removeDataFromRSSTable(const QString &site_name, const bool all_data);
     void returnModifedString(QString &str); //ToDo: change the function name
     void setupGui ();
-    //void positioningFeedsOptionWidgets();
+    void treeWidgetSetup ();
+    void widgetsSetup ();
 
 private:
     void loadSettings();
     void saveSettings();
-
-private:
-    //hide widgets
-    void hideCollectionFeeds();
-    void hideNotifications();
-    void hideProxyConnection();
-
-    //show widgets
-    void showCollectionFeeds();
-    void showNotifications();
-    void showProxyConnection();
 
 private:
     int addToFeedList(const QString &str);
@@ -106,25 +92,11 @@ private:
 
 private:
     DataBase                                data_base_;
-    //std::shared_ptr<QCheckBox>              cb_enable_notification_;
-    //std::shared_ptr<QCheckBox>              cb_enable_proxy_;
-    //std::shared_ptr<QLineEdit>              cf_find_feed_;
-    //std::shared_ptr<QLabel>                 cf_label_search_;
     std::shared_ptr<QLabel>                 download_feed_status_;
-    //std::shared_ptr<QListWidget>            feed_list_;
     QList<bool>                             l_items_for_remove_;
-    //std::vector<QString>                    l_old_feed_list_;
-    //std::shared_ptr<QLabel>                 l_proxy_url_;
-    //std::shared_ptr<QLabel>                 l_proxy_port_;
-    //std::shared_ptr<QLabel>                 l_refresh_time_;
     std::vector<std::shared_ptr<IOptions>>  options;
     int                                     options_type_;
-    //std::shared_ptr<QSpinBox>               sb_refresh_time_;
-    //std::shared_ptr<QTextEdit>              te_proxy_url_;
-    //std::shared_ptr<QTextEdit>              te_proxy_port_;
     std::shared_ptr<Ui::OptionsWindow>      ui_;
-
-
 
 signals:
     void stateChanged   (const QString &);

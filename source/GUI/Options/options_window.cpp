@@ -21,25 +21,8 @@
 
 OptionsWindow::OptionsWindow(QWidget *parent) :
     QWidget(parent)
-    //, cb_enable_filtering_ (std::make_shared<QCheckBox>(this))
-    //, cb_enable_notification_(std::make_shared<QCheckBox>(this))
-    //, cb_enable_proxy_ (std::make_shared<QCheckBox>(this))
-    //, cf_find_feed_ (std::make_shared<QLineEdit> (this))
-    //, cf_label_search_ (std::make_shared<QLabel>(this))
     , download_feed_status_ (std::make_shared<QLabel>(this))
-    //, feed_list_  (std::make_shared<QListWidget>(this))
-    //, l_filter_list_ (std::make_shared<QLabel>(this))
-    //, l_proxy_url_ (std::make_shared<QLabel>(this))
-    //, l_proxy_port_ (std::make_shared<QLabel> (this))
-    //, l_refresh_time_ (std::make_shared<QLabel>(this))
-    //, lw_filter_list_ (std::make_shared<QListWidget>(this))
     , options_type_ (1)
-    //, pb_add_filter_ (std::make_shared<QPushButton>(this))
-    //, pb_remove_filter_ (std::make_shared<QPushButton>(this))
-    //, sb_refresh_time_ (std::make_shared<QSpinBox> (this))
-    //, te_proxy_url_ (std::make_shared<QTextEdit>(this))
-    //, te_proxy_port_ (std::make_shared<QTextEdit>(this))
-    //, te_add_filter_ (std::make_shared<QTextEdit>(this))
     , ui_(std::make_shared<Ui::OptionsWindow> ())
 {
 
@@ -78,54 +61,12 @@ void OptionsWindow::returnModifedString(QString &str)
 }
 
 //add an item to tree widget
-void OptionsWindow::addItem(const QString &name)
+void OptionsWindow::addItemToTreeView(const QString &name)
 {
     QTreeWidgetItem *item = new QTreeWidgetItem();
     item->setText(0,name);
     ui_->treeWidget->addTopLevelItem(item);
 }
-
-//fill feed_list_ (QListWidget var)
-
-/*void OptionsWindow::fillFeedListView()
-{
-    std::vector<QString> tmp;
-    data_base_.getFeeds(&tmp);
-
-    l_old_feed_list_.clear();
-
-    for (unsigned int i=0; i<tmp.size(); i++)
-    {
-        feed_list_->insertItem(feed_list_->count(), tmp[i]);
-        l_old_feed_list_.push_back(tmp[i]);
-    }
-}
-*/
-/*
-//add string to feed_list (QListWidget var)
-int OptionsWindow::addToFeedList(const QString &cur_text)
-{
-    int count = feed_list_->count(); //get count of listWidget
-    if (cur_text=="")
-    {
-        return 1;
-    }
-
-    //check for identical strings
-    for(int row = 0; row < feed_list_->count(); row++)
-    {
-        QListWidgetItem *item = feed_list_->item(row);
-        if (cur_text == item->text())
-        {
-            return 1;
-        }
-    }
-
-    feed_list_->insertItem(count, cur_text); //insert new element in the end of list widget
-
-    return 0;
-}
-*/
 
 //remove site_name data from 'rss' table in 'sites.db3'. If all_data == 1,
 //then remove all data from 'rss' table
@@ -143,60 +84,10 @@ void OptionsWindow::insertRowToRSSTable(const QString &name, const QString &url,
 
 void OptionsWindow::loadSettings()
 {
-    //sb_refresh_time_->setValue(Jelyazka::Settings::getRefreshFeedsTime());
-    //cb_enable_notification_->setChecked(Jelyazka::Settings::getIsNotificationsEnabled());
-    /*
-    //proxy settings
-    if (Jelyazka::Settings::getIsProxyConnectionEnabled())
-    {
-        cb_enable_proxy_->setChecked(false);
-        l_proxy_url_->setEnabled(false);
-        l_proxy_port_->setEnabled(false);
-        te_proxy_url_->setEnabled(false);
-        te_proxy_port_->setEnabled(false);
-    }
-    else
-    {
-        cb_enable_proxy_->setChecked(true);
-        l_proxy_url_->setEnabled(true);
-        l_proxy_port_->setEnabled(true);
-        te_proxy_url_->setEnabled(true);
-        te_proxy_port_->setEnabled(true);
-    }
-    te_proxy_url_->setText(Jelyazka::Settings::getProxyIpAddress());
-    te_proxy_port_->setText(Jelyazka::Settings::getProxyPort());
-    */
-    /*
-    //filters
-    if (Jelyazka::Settings::getIsFilteringEnabled())
-    {
-
-        cb_enable_filtering_->setChecked(false);
-        pb_add_filter_->setEnabled(false);
-        te_add_filter_->setEnabled(false);
-        lw_filter_list_->setEnabled(false);
-        l_filter_list_->setEnabled(false);
-        pb_remove_filter_->setEnabled(false);
-
-    }
-    else
-    {
-
-        cb_enable_filtering_->setChecked(true);
-        pb_add_filter_->setEnabled(true);
-        te_add_filter_->setEnabled(true);
-        lw_filter_list_->setEnabled(true);
-        l_filter_list_->setEnabled(true);
-        pb_remove_filter_->setEnabled(true);
-
-    }
-    */
     for (unsigned int i=0; i<options.size(); ++i)
     {
         options[i]->loadSettings();
     }
-
-    //ToDo: add notification window
 }
 
 void OptionsWindow::saveSettings()
@@ -230,13 +121,9 @@ void OptionsWindow::resizeEvent(QResizeEvent *event)
                                       download_feed_status_->width(),
                                       download_feed_status_->height());
 
-    if (options_type_ == 1)
+    for (unsigned int i=0; i<options.size(); ++i)
     {
-        options[0]->resize();
-    }
-    else if (options_type_ == 2)
-    {
-        options[1]->resize();
+        options[i]->resize();
     }
 }
 
@@ -260,7 +147,7 @@ void OptionsWindow::showEvent(QShowEvent *event)
 void OptionsWindow::on_okButton_clicked()
 {
     download_feed_status_->show();
-    this->setEnabled(false); //it's gray out the "Option Window"
+    this->setEnabled(false); //gray out the "Option Window"
     saveSettings(); //save current options in a file
 
     emit (stateChanged("UpdatingSettings"));
@@ -296,11 +183,8 @@ void OptionsWindow::closeEvent (QCloseEvent *event)
     emit (stateChanged("HideOptionWindow"));
 }
 
-
-void OptionsWindow::setupGui ()
+void OptionsWindow::createOptions ()
 {
-    ui_->setupUi(this);
-
     std::shared_ptr<IOptions> feedsOptions = std::make_shared<FeedsOptions> (this,
                                                                                  ui_->treeWidget->x() + ui_->treeWidget->width(),
                                                                                  ui_->okButton->height());
@@ -318,32 +202,49 @@ void OptionsWindow::setupGui ()
     options.push_back(notificationsOptions);
     options.push_back(proxyOptions);
 
+}
+
+void OptionsWindow::treeWidgetSetup ()
+{
     ui_->treeWidget->setHeaderLabel("Options");
 
-    addItem("Manage feeds");
-    addItem("Filters");
-    addItem("Notifications");
-    addItem("Proxy connection");
+    addItemToTreeView("Manage feeds");
+    addItemToTreeView("Filters");
+    addItemToTreeView("Notifications");
+    addItemToTreeView("Proxy connection");
 
-
-    download_feed_status_->setGeometry(5,
-                                      this->height() - (5+ ui_->okButton->height()),
-                                      download_feed_status_->width(),
-                                      download_feed_status_->height());
 
     //treewidget set geometry
     ui_->treeWidget->setGeometry(5,
                                 5,
                                 130,
                                 this->height()- (15 + ui_->okButton->height()));
+}
+void OptionsWindow::widgetsSetup ()
+{
+    treeWidgetSetup();
+
+    download_feed_status_->setGeometry(5,
+                                      this->height() - (5+ ui_->okButton->height()),
+                                      download_feed_status_->width(),
+                                      download_feed_status_->height());
+
     ui_->cancelButton->setGeometry(this->width() - (5+ui_->cancelButton->width()),
                                    this->height() - (5+ ui_->cancelButton->height()),
                                    ui_->cancelButton->width(),
                                    ui_->cancelButton->height());
+
     ui_->okButton->setGeometry(ui_->cancelButton->x()-(5+ui_->okButton->width()),
                                ui_->cancelButton->y(),
                                ui_->okButton->width(),
                                ui_->okButton->height());
+}
+void OptionsWindow::setupGui ()
+{
+    ui_->setupUi(this);
+
+    createOptions();
+    widgetsSetup();
 
     for (unsigned int i=0; i<options.size(); ++i)
     {

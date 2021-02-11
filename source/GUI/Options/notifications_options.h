@@ -11,15 +11,8 @@
 #include <QSpinBox>
 #include <QTextEdit>
 
-#include "database.h"
 #include "options.h"
 #include "settings.h"
-#include "ui_optionswindow.h"
-
-namespace Ui
-{
-    class OptionsWindow;
-}
 
 class NotificationsOptions : public QWidget, public IOptions
 {
@@ -29,13 +22,13 @@ public:
 
     virtual ~NotificationsOptions();
 
-    virtual void initilize ();
-    virtual void resize ();
-    virtual void saveSettings ();
-    virtual void loadSettings ();
-    virtual void setupGui ();
-    virtual void show ();
-    virtual void hide ();
+    void initilize () override;
+    void loadSettings () override;
+    void hide () override;
+    void resize () override;
+    void saveSettings () override;
+    void setupGui () override;
+    void show () override;
 
 private:
     std::shared_ptr<QCheckBox>              cb_enable_notification_;
@@ -43,7 +36,6 @@ private:
     std::shared_ptr<QSpinBox>               sb_refresh_time_;
 
 private:
-     DataBase                                data_base_;
      int                                     ok_button_high_;
      int                                     tree_widget_width_;
      QWidget *                               parent;

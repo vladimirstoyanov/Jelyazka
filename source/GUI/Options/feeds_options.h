@@ -5,21 +5,13 @@
 #include <vector>
 
 #include <QApplication>
-#include <QCheckBox>
 #include <QLabel>
 #include <QLineEdit>
 #include <QListWidget>
-#include <QTextEdit>
 
 #include "database.h"
 #include "options.h"
 #include "settings.h"
-#include "ui_optionswindow.h"
-
-namespace Ui
-{
-    class OptionsWindow;
-}
 
 class FeedsOptions : public QWidget, public IOptions
 {
@@ -29,26 +21,27 @@ public:
 
     virtual ~FeedsOptions();
 
-    virtual void initilize ();
-    virtual void resize ();
-    virtual void saveSettings ();
-    virtual void loadSettings ();
-    virtual void setupGui ();
-    virtual void show ();
-    virtual void hide ();
+    void initilize () override;
+    void loadSettings () override;
+    void hide () override;
+    void resize () override;
+    void saveSettings () override;
+    void setupGui () override;
+    void show () override;
 
 private slots:
     void on_removeButton_clicked();
 private:
     int addToFeedList(const QString &feed_name);
-    void positioningFeedsOptionWidgets();
     int cf_label_search_width();
     void fillFeedListView();
+    void positioningFeedsOptionWidgets();
+
 private:
     std::shared_ptr<QLineEdit>              cf_find_feed_;
     std::shared_ptr<QLabel>                 cf_label_search_;
-    std::vector<QString>                    l_old_feed_list_;
     std::shared_ptr<QListWidget>            feed_list_;
+    std::vector<QString>                    l_old_feed_list_;
 
 private:
      DataBase                                data_base_;

@@ -26,6 +26,7 @@ void FeedsOptions::saveSettings ()
 {
 
 }
+
 void FeedsOptions::loadSettings ()
 {
 
