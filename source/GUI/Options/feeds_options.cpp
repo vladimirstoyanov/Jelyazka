@@ -45,11 +45,8 @@ void FeedsOptions::setupGui ()
     connect(cf_find_feed_.get(),SIGNAL(textChanged(QString)), this, SLOT(on_textChanged(QString)));
 
     cf_label_search_->setText("Search");
-    positioningFeedsOptionWidgets();
 
-    feed_list_->show();
-    cf_find_feed_->show();
-    cf_label_search_->show();
+    show();
 }
 void FeedsOptions::show ()
 {

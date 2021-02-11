@@ -7,6 +7,7 @@ ProxyOptions::ProxyOptions(QWidget *parent, const int tree_widget_width, const i
     , te_proxy_url_ (std::make_shared<QTextEdit>(parent))
     , te_proxy_port_ (std::make_shared<QTextEdit>(parent))
     , ok_button_height_ (ok_button_height)
+    , offset_between_widgets_ (5)
     , tree_widget_width_ (tree_widget_width)
     , parent (parent)
 {
@@ -30,62 +31,43 @@ void ProxyOptions::saveSettings ()
 }
 void ProxyOptions::loadSettings ()
 {
-    if (Jelyazka::Settings::getIsProxyConnectionEnabled())
-    {
-        cb_enable_proxy_->setChecked(false);
-        l_proxy_url_->setEnabled(false);
-        l_proxy_port_->setEnabled(false);
-        te_proxy_url_->setEnabled(false);
-        te_proxy_port_->setEnabled(false);
-    }
-    else
-    {
-        cb_enable_proxy_->setChecked(true);
-        l_proxy_url_->setEnabled(true);
-        l_proxy_port_->setEnabled(true);
-        te_proxy_url_->setEnabled(true);
-        te_proxy_port_->setEnabled(true);
-    }
+    cb_enable_proxy_->setChecked(Jelyazka::Settings::getIsProxyConnectionEnabled());
+    on_cb_enable_proxy_clicked(Jelyazka::Settings::getIsProxyConnectionEnabled());
     te_proxy_url_->setText(Jelyazka::Settings::getProxyIpAddress());
     te_proxy_port_->setText(Jelyazka::Settings::getProxyPort());
 }
 
 void ProxyOptions::setupGui ()
 {
-    //proxy options
-    cb_enable_proxy_->setChecked(false);
     cb_enable_proxy_->setText("Enable proxy connection");
     connect(cb_enable_proxy_.get(), SIGNAL(clicked(bool)), this, SLOT(on_cb_enable_proxy_clicked(bool)));
     l_proxy_url_->setText("Proxy address:");
     l_proxy_port_->setText("Proxy port:");
 
-    cb_enable_proxy_->setGeometry(tree_widget_width_ + 10,
-                                  5,
+    cb_enable_proxy_->setGeometry(tree_widget_width_ + offset_between_widgets_,
+                                  offset_between_widgets_,
                                   cb_enable_proxy_->width()+50,
                                   cb_enable_proxy_->height());
-    l_proxy_url_->setGeometry(tree_widget_width_ + 10,
-                              cb_enable_proxy_->y() + cb_enable_proxy_->height()+5,
+    l_proxy_url_->setGeometry(tree_widget_width_ + offset_between_widgets_,
+                              cb_enable_proxy_->y() + cb_enable_proxy_->height()+offset_between_widgets_,
                               l_proxy_url_->width(),
                               l_proxy_url_->height());
     te_proxy_url_->setGeometry(tree_widget_width_ + 10,
-                               l_proxy_url_->y() +l_proxy_url_->height() + 5,
+                               l_proxy_url_->y() +l_proxy_url_->height() + offset_between_widgets_,
                                te_proxy_url_->width(),
                                te_proxy_url_->height());
     l_proxy_port_->setGeometry(tree_widget_width_ + 10,
-                               te_proxy_url_->y() + te_proxy_url_->height() + 5,
+                               te_proxy_url_->y() + te_proxy_url_->height() + offset_between_widgets_,
                                l_proxy_port_->width(),
                                l_proxy_port_->height());
     te_proxy_port_->setGeometry(tree_widget_width_ + 10,
-                                l_proxy_port_->y() + l_proxy_port_->height() + 5,
+                                l_proxy_port_->y() + l_proxy_port_->height() + offset_between_widgets_,
                                 te_proxy_port_->width(),
                                 te_proxy_port_->height());
 
-    cb_enable_proxy_->hide();
-    l_proxy_url_->hide();
-    l_proxy_port_->hide();
-    te_proxy_url_->hide();
-    te_proxy_port_->hide();
+    on_cb_enable_proxy_clicked(Jelyazka::Settings::getIsProxyConnectionEnabled());
 
+    hide();
 }
 void ProxyOptions::show ()
 {
@@ -106,23 +88,13 @@ void ProxyOptions::hide ()
 
 void ProxyOptions::on_cb_enable_proxy_clicked(bool enabled)
 {
-    if (enabled)
-    {
-        l_proxy_url_->setEnabled(true);
-        l_proxy_port_->setEnabled(true);
-        te_proxy_url_->setEnabled(true);
-        te_proxy_port_->setEnabled(true);
-    }
-    else
-    {
-        l_proxy_url_->setEnabled(false);
-        l_proxy_port_->setEnabled(false);
-        te_proxy_url_->setEnabled(false);
-        te_proxy_port_->setEnabled(false);
-    }
+    l_proxy_url_->setEnabled(enabled);
+    l_proxy_port_->setEnabled(enabled);
+    te_proxy_url_->setEnabled(enabled);
+    te_proxy_port_->setEnabled(enabled);
 }
 
 void ProxyOptions::initilize ()
 {
-
+    on_cb_enable_proxy_clicked(Jelyazka::Settings::getIsProxyConnectionEnabled());
 }

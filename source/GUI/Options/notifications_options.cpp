@@ -32,6 +32,7 @@ void NotificationsOptions::loadSettings ()
 {
     sb_refresh_time_->setValue(Jelyazka::Settings::getRefreshFeedsTime());
     cb_enable_notification_->setChecked(Jelyazka::Settings::getIsNotificationsEnabled());
+    on_cb_enable_notification (Jelyazka::Settings::getIsNotificationsEnabled());
 }
 
 void NotificationsOptions::setupGui ()
@@ -42,7 +43,6 @@ void NotificationsOptions::setupGui ()
                                  l_refresh_time_->width()+50,
                                  l_refresh_time_->height());
     l_refresh_time_->setText("Refresh feeds time (minutes):");
-    l_refresh_time_->hide();
 
     sb_refresh_time_->setGeometry(tree_widget_width_  + 10,
                                   l_refresh_time_->y()+l_refresh_time_->height() + 5,
@@ -50,15 +50,19 @@ void NotificationsOptions::setupGui ()
                                   sb_refresh_time_->height());
     sb_refresh_time_->setMinimum(1);
     sb_refresh_time_->setMaximum(60);
-    sb_refresh_time_->hide();
 
     cb_enable_notification_->setGeometry(tree_widget_width_  + 10,sb_refresh_time_->y() + sb_refresh_time_->height() + 5,
                                          cb_enable_notification_->width()+50,
                                          cb_enable_notification_->height());
-    cb_enable_notification_->hide();
+
     cb_enable_notification_->setText("Enable notification window");
     cb_enable_notification_->setChecked(true);
 
+    connect(cb_enable_notification_.get(),
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(on_cb_enable_notification(bool)));
+    hide();
 }
 
 void NotificationsOptions::show ()
@@ -72,6 +76,12 @@ void NotificationsOptions::hide ()
     sb_refresh_time_->hide();
     l_refresh_time_->hide();
     cb_enable_notification_->hide();
+}
+
+void NotificationsOptions::on_cb_enable_notification(bool enabled)
+{
+    sb_refresh_time_->setEnabled(enabled);
+    l_refresh_time_->setEnabled(enabled);
 }
 
 void NotificationsOptions::initilize ()
