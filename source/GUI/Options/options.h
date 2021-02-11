@@ -8,7 +8,8 @@ public:
 
     virtual ~IOptions() = default;
 
-    virtual void resize (const int width, const int height) = 0;
+    virtual void initilize ()=0;
+    virtual void resize () = 0;
     virtual void saveSettings () = 0;
     virtual void loadSettings () = 0;
     virtual void setupGui () = 0;

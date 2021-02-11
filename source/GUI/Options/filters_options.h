@@ -28,7 +28,8 @@ public:
 
     virtual ~FiltersOptions();
 
-    virtual void resize (const int width, const int height);
+    virtual void initilize ();
+    virtual void resize ();
     virtual void saveSettings ();
     virtual void loadSettings ();
     virtual void setupGui ();
@@ -47,7 +48,7 @@ private:
      std::vector<QString>                    l_old_filters_;
      int                                     ok_button_high_;
      int                                     tree_widget_width_;
-
+     QWidget *                               parent;
 private:
     void fillFilterListView();
     int addStringToFilterList(const QString &current_text);

@@ -1,30 +1,19 @@
-/*
-    optionswindow.h
-    Jelyazka RSS/RDF reader
-    Copyright (C) 2014 Vladimir Stoyanov
-    
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-#ifndef FEEDOPTIONS_H
-#define FEEDOPTIONS_H
+#ifndef FEEDSOPTIONS_H
+#define FEEDSOPTIONS_H
 
 #include <memory>
 #include <vector>
 
 #include <QApplication>
+#include <QCheckBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QListWidget>
+#include <QTextEdit>
 
+#include "database.h"
 #include "options.h"
+#include "settings.h"
 #include "ui_optionswindow.h"
 
 namespace Ui
@@ -36,12 +25,35 @@ class FeedsOptions : public QWidget, public IOptions
 {
     Q_OBJECT
 public:
-    explicit FeedsOptions() {}
+    FeedsOptions(QWidget *parent, const int tree_widget_width, const int ok_button_high);
 
-    virtual ~FeedsOptions() = default;
+    virtual ~FeedsOptions();
 
+    virtual void initilize ();
+    virtual void resize ();
+    virtual void saveSettings ();
+    virtual void loadSettings ();
     virtual void setupGui ();
     virtual void show ();
     virtual void hide ();
+
+private slots:
+    void on_removeButton_clicked();
+private:
+    int addToFeedList(const QString &feed_name);
+    void positioningFeedsOptionWidgets();
+    int cf_label_search_width();
+    void fillFeedListView();
+private:
+    std::shared_ptr<QLineEdit>              cf_find_feed_;
+    std::shared_ptr<QLabel>                 cf_label_search_;
+    std::vector<QString>                    l_old_feed_list_;
+    std::shared_ptr<QListWidget>            feed_list_;
+
+private:
+     DataBase                                data_base_;
+     int                                     ok_button_high_;
+     int                                     tree_widget_width_;
+     QWidget *                               parent;
 };
-#endif // FEEDOPTIONS_H
+#endif // FEEDSOPTIONS_H

@@ -9,6 +9,7 @@ FiltersOptions::FiltersOptions(QWidget *parent, const int tree_widget_width, con
     , te_add_filter_ (std::make_shared<QTextEdit>(parent))
     , ok_button_high_ (ok_button_high)
     , tree_widget_width_ (tree_widget_width)
+    , parent (parent)
 {
 
 
@@ -22,7 +23,7 @@ FiltersOptions::~FiltersOptions()
 void FiltersOptions::setupGui ()
 {
     //filter options widgets
-    cb_enable_filtering_->setGeometry(tree_widget_width_ + 10,
+    cb_enable_filtering_->setGeometry(tree_widget_width_ + 5,
                                       5,
                                       cb_enable_filtering_->width()+50,
                                       cb_enable_filtering_->height());
@@ -32,7 +33,7 @@ void FiltersOptions::setupGui ()
                                 pb_add_filter_->height());
     te_add_filter_->setGeometry(pb_add_filter_->x() + pb_add_filter_->width() + 5,
                                 pb_add_filter_->y(),
-                                this->width() - (pb_add_filter_->x() + pb_add_filter_->width() + 10),
+                                parent->width() - (pb_add_filter_->x() + pb_add_filter_->width() + 10),
                                 te_add_filter_->height());
     l_filter_list_->setGeometry(te_add_filter_->x(),
                                 te_add_filter_->y() + te_add_filter_->height() + 5,
@@ -40,9 +41,9 @@ void FiltersOptions::setupGui ()
                                 l_filter_list_->height());
     lw_filter_list_->setGeometry(te_add_filter_->x(),
                                  l_filter_list_->y()+l_filter_list_->height()+5,
-                                 this->width() - (l_filter_list_->x()+5),
-                                 this->height() - (l_filter_list_->y()+ l_filter_list_->height()+15+ ok_button_high_));
-    pb_remove_filter_->setGeometry(tree_widget_width_+10,
+                                 parent->width() - (l_filter_list_->x()+5),
+                                 parent->height() - (l_filter_list_->y()+ l_filter_list_->height()+15+ ok_button_high_));
+    pb_remove_filter_->setGeometry(cb_enable_filtering_->x(),
                                   lw_filter_list_->y(),
                                   pb_remove_filter_->width(),
                                   pb_remove_filter_->height());
@@ -76,20 +77,25 @@ void FiltersOptions::show ()
 }
 void FiltersOptions::hide ()
 {
-
+    cb_enable_filtering_->hide();
+    pb_add_filter_->hide();
+    te_add_filter_->hide();
+    lw_filter_list_->hide();
+    l_filter_list_->hide();
+    pb_remove_filter_->hide();
 }
 
-void FiltersOptions::resize (const int width, const int height)
+void FiltersOptions::resize ()
 {
     te_add_filter_->setGeometry(pb_add_filter_->x() + pb_add_filter_->width() + 5,
                                5,
-                               width - (pb_add_filter_->x() + pb_add_filter_->width() + 10),
+                               parent->width() - (pb_add_filter_->x() + pb_add_filter_->width() + 10),
                                te_add_filter_->height());
 
     lw_filter_list_->setGeometry(te_add_filter_->x(),
                                 l_filter_list_->y()+l_filter_list_->height()+5,
-                                width - (l_filter_list_->x()+5),
-                                height - (l_filter_list_->y()+ l_filter_list_->height()+15+ 100/*ui_->okButton->height()*/));
+                                parent->width() - (l_filter_list_->x()+5),
+                                parent->height() - (l_filter_list_->y()+ l_filter_list_->height()+15+ ok_button_high_));
 
 }
 
@@ -205,4 +211,10 @@ void FiltersOptions::fillFilterListView()
         addStringToFilterList(tmp[i]);
         l_old_filters_.push_back(tmp[i]);
     }
+}
+
+void FiltersOptions::initilize ()
+{
+    lw_filter_list_->clear();
+    fillFilterListView();
 }

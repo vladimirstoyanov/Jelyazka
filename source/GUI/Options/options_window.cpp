@@ -19,27 +19,26 @@
 
 #include "options_window.h"
 
-
 OptionsWindow::OptionsWindow(QWidget *parent) :
     QWidget(parent)
     //, cb_enable_filtering_ (std::make_shared<QCheckBox>(this))
-    , cb_enable_notification_(std::make_shared<QCheckBox>(this))
-    , cb_enable_proxy_ (std::make_shared<QCheckBox>(this))
-    , cf_find_feed_ (std::make_shared<QLineEdit> (this))
-    , cf_label_search_ (std::make_shared<QLabel>(this))
+    //, cb_enable_notification_(std::make_shared<QCheckBox>(this))
+    //, cb_enable_proxy_ (std::make_shared<QCheckBox>(this))
+    //, cf_find_feed_ (std::make_shared<QLineEdit> (this))
+    //, cf_label_search_ (std::make_shared<QLabel>(this))
     , download_feed_status_ (std::make_shared<QLabel>(this))
-    , feed_list_  (std::make_shared<QListWidget>(this))
+    //, feed_list_  (std::make_shared<QListWidget>(this))
     //, l_filter_list_ (std::make_shared<QLabel>(this))
-    , l_proxy_url_ (std::make_shared<QLabel>(this))
-    , l_proxy_port_ (std::make_shared<QLabel> (this))
-    , l_refresh_time_ (std::make_shared<QLabel>(this))
-  //, lw_filter_list_ (std::make_shared<QListWidget>(this))
-  , options_type_ (1)
+    //, l_proxy_url_ (std::make_shared<QLabel>(this))
+    //, l_proxy_port_ (std::make_shared<QLabel> (this))
+    //, l_refresh_time_ (std::make_shared<QLabel>(this))
+    //, lw_filter_list_ (std::make_shared<QListWidget>(this))
+    , options_type_ (1)
     //, pb_add_filter_ (std::make_shared<QPushButton>(this))
     //, pb_remove_filter_ (std::make_shared<QPushButton>(this))
-    , sb_refresh_time_ (std::make_shared<QSpinBox> (this))
-    , te_proxy_url_ (std::make_shared<QTextEdit>(this))
-    , te_proxy_port_ (std::make_shared<QTextEdit>(this))
+    //, sb_refresh_time_ (std::make_shared<QSpinBox> (this))
+    //, te_proxy_url_ (std::make_shared<QTextEdit>(this))
+    //, te_proxy_port_ (std::make_shared<QTextEdit>(this))
     //, te_add_filter_ (std::make_shared<QTextEdit>(this))
     , ui_(std::make_shared<Ui::OptionsWindow> ())
 {
@@ -49,7 +48,7 @@ OptionsWindow::OptionsWindow(QWidget *parent) :
 
 OptionsWindow::~OptionsWindow()
 {
-    l_old_feed_list_.clear();
+    //l_old_feed_list_.clear();
     //l_old_filters_.clear();
 }
 
@@ -87,7 +86,8 @@ void OptionsWindow::addItem(const QString &name)
 }
 
 //fill feed_list_ (QListWidget var)
-void OptionsWindow::fillFeedListView()
+
+/*void OptionsWindow::fillFeedListView()
 {
     std::vector<QString> tmp;
     data_base_.getFeeds(&tmp);
@@ -100,7 +100,8 @@ void OptionsWindow::fillFeedListView()
         l_old_feed_list_.push_back(tmp[i]);
     }
 }
-
+*/
+/*
 //add string to feed_list (QListWidget var)
 int OptionsWindow::addToFeedList(const QString &cur_text)
 {
@@ -124,6 +125,7 @@ int OptionsWindow::addToFeedList(const QString &cur_text)
 
     return 0;
 }
+*/
 
 //remove site_name data from 'rss' table in 'sites.db3'. If all_data == 1,
 //then remove all data from 'rss' table
@@ -141,9 +143,9 @@ void OptionsWindow::insertRowToRSSTable(const QString &name, const QString &url,
 
 void OptionsWindow::loadSettings()
 {
-    sb_refresh_time_->setValue(Jelyazka::Settings::getRefreshFeedsTime());
-    cb_enable_notification_->setChecked(Jelyazka::Settings::getIsNotificationsEnabled());
-
+    //sb_refresh_time_->setValue(Jelyazka::Settings::getRefreshFeedsTime());
+    //cb_enable_notification_->setChecked(Jelyazka::Settings::getIsNotificationsEnabled());
+    /*
     //proxy settings
     if (Jelyazka::Settings::getIsProxyConnectionEnabled())
     {
@@ -163,7 +165,7 @@ void OptionsWindow::loadSettings()
     }
     te_proxy_url_->setText(Jelyazka::Settings::getProxyIpAddress());
     te_proxy_port_->setText(Jelyazka::Settings::getProxyPort());
-
+    */
     /*
     //filters
     if (Jelyazka::Settings::getIsFilteringEnabled())
@@ -199,58 +201,10 @@ void OptionsWindow::loadSettings()
 
 void OptionsWindow::saveSettings()
 {
-    Jelyazka::Settings::setRefreshFeedsTime(sb_refresh_time_->value());
-    Jelyazka::Settings::setIsNotificationsEnabled(cb_enable_notification_->isChecked());
-    Jelyazka::Settings::setIsProxyConnectionEnabled(cb_enable_proxy_->isChecked());
-    Jelyazka::Settings::setProxyPort(te_proxy_port_->toPlainText());
-    Jelyazka::Settings::setProxyIpAddress(te_proxy_url_->toPlainText());
-    //Jelyazka::Settings::setIsFilteringEnabled(cb_enable_filtering_->isChecked());
     for (unsigned int i=0; i<options.size(); ++i)
     {
         options[i]->saveSettings();
     }
-}
-
-
-/*
-void OptionsWindow::fillFilterListView()
-{
-    std::vector <QString> tmp;
-    data_base_.getFilterList(&tmp);
-
-    l_old_filters_.clear();
-
-    for (unsigned int i=0; i<tmp.size(); i++)
-    {
-        addStringToFilterList(tmp[i]);
-        l_old_filters_.push_back(tmp[i]);
-    }
-}
-*/
-
-void OptionsWindow::positioningFeedsOptionWidgets()
-{
-    int width = (this->width() - (25 + ui_->treeWidget->width()));
-
-    cf_label_search_->setGeometry(ui_->treeWidget->x() + ui_->treeWidget->width()  + 5,
-                                 5,
-                                 50,
-                                 cf_label_search_->height());
-
-    cf_find_feed_->setGeometry(cf_label_search_->x() + cf_label_search_width()+5,
-                              5,
-                              width - (cf_label_search_width() + 5) ,
-                              cf_find_feed_->height());
-
-    feed_list_->setGeometry(cf_label_search_->x(),
-                            cf_find_feed_->y() + cf_find_feed_->height()+10,
-                            width,
-                            this->height()-(20 +cf_find_feed_->height() + ui_->okButton->height()));
-
-    ui_->removeButton->setGeometry(feed_list_->x(),
-                                  ui_->okButton->y(),
-                                  ui_->removeButton->width(),
-                                  ui_->removeButton->height());
 }
 
 //resize window event
@@ -278,20 +232,11 @@ void OptionsWindow::resizeEvent(QResizeEvent *event)
 
     if (options_type_ == 1)
     {
-        positioningFeedsOptionWidgets();
+        options[0]->resize();
     }
     else if (options_type_ == 2)
     {
-        /*
-        te_add_filter_->setGeometry(pb_add_filter_->x() + pb_add_filter_->width() + 5,
-                                   5,
-                                   this->width() - (pb_add_filter_->x() + pb_add_filter_->width() + 10),
-                                   te_add_filter_->height());
-        lw_filter_list_->setGeometry(te_add_filter_->x(),
-                                    l_filter_list_->y()+l_filter_list_->height()+5,
-                                    this->width() - (l_filter_list_->x()+5),
-                                    this->height() - (l_filter_list_->y()+ l_filter_list_->height()+15+ ui_->okButton->height()));
-        */
+        options[1]->resize();
     }
 }
 
@@ -302,30 +247,13 @@ void OptionsWindow::showEvent(QShowEvent *event)
     loadSettings();
 
     download_feed_status_->hide();
-    feed_list_->clear();
-    //lw_filter_list_->clear();
-    fillFeedListView();
-    //fillFilterListView();
+
+    for (unsigned int i=0; i<options.size(); ++i)
+    {
+        options[i]->initilize();
+    }
 
     this->setEnabled(true);
-}
-
-//'Remove' button click event
-void OptionsWindow::on_removeButton_clicked()
-{
-    //get selected items
-    QModelIndexList list =feed_list_->selectionModel()->selectedIndexes();
-    QStringList slist;
-    foreach(const QModelIndex &index, list){
-        slist.append( index.data(Qt::DisplayRole ).toString());
-        feed_list_->takeItem(index.row());
-    }
-
-    //remove selected items from db
-    for (int i=0; i< slist.size(); ++i)
-    {
-        data_base_.removeDataFromFeedList(slist.at(i));
-    }
 }
 
 //'OK' button event
@@ -335,7 +263,6 @@ void OptionsWindow::on_okButton_clicked()
     this->setEnabled(false); //it's gray out the "Option Window"
     saveSettings(); //save current options in a file
 
-    //updateFiltersTable();
     emit (stateChanged("UpdatingSettings"));
 }
 
@@ -349,124 +276,17 @@ void OptionsWindow::on_cancelButton_clicked()
 void OptionsWindow::on_treeWidget_clicked(const QModelIndex &index)
 {
     QString t = index.data().toByteArray().data();
+    int row = index.row();
+    options[row]->show();
 
-    if (t == "Collection feeds")
+    for (unsigned int i=0; i<options.size(); ++i)
     {
-        showCollectionFeeds();
-        hideNotifications();
-        hideProxyConnection();
-        //hideFilters();
-        options[0]->hide();
+        if (row==i)
+        {
+            continue;
+        }
+        options[i]->hide();
     }
-    else if (t == "Filters")
-    {
-        options[0]->show();
-        options_type_ = 2;
-        //showFilters();
-        hideCollectionFeeds();
-        hideNotifications();
-        hideProxyConnection();
-    }
-    else if (t == "Notifications")
-    {
-        showNotifications();
-        hideCollectionFeeds();
-        hideProxyConnection();
-        //hideFilters();
-        options[0]->hide();
-    }
-    else if (t == "Proxy connection")
-    {
-        showProxyConnection();
-        hideCollectionFeeds();
-        hideNotifications();
-        //hideFilters();
-        options[0]->hide();
-    }
-}
-
-void OptionsWindow::on_cb_enable_proxy_clicked(bool state)
-{
-    if (state)
-    {
-        l_proxy_url_->setEnabled(true);
-        l_proxy_port_->setEnabled(true);
-        te_proxy_url_->setEnabled(true);
-        te_proxy_port_->setEnabled(true);
-    }
-    else
-    {
-        l_proxy_url_->setEnabled(false);
-        l_proxy_port_->setEnabled(false);
-        te_proxy_url_->setEnabled(false);
-        te_proxy_port_->setEnabled(false);
-    }
-}
-
-int OptionsWindow::cf_label_search_width()
-{
-    QFontMetrics fm(cf_label_search_->font());
-    QRect rect = fm.boundingRect(cf_label_search_->text());
-
-    return rect.width();
-}
-
-//show widgets
-void OptionsWindow::showCollectionFeeds()
-{
-    options_type_ = 1;
-    positioningFeedsOptionWidgets();
-
-    ui_->removeButton->show();
-    feed_list_->show();
-    cf_find_feed_->show();
-    cf_label_search_->show();
-
-}
-
-void OptionsWindow::showNotifications()
-{
-    options_type_ = 3;
-
-    sb_refresh_time_->show();
-    l_refresh_time_->show();
-    cb_enable_notification_->show();
-}
-
-void OptionsWindow::showProxyConnection()
-{
-    options_type_ = 4;
-
-    cb_enable_proxy_->show();
-    l_proxy_url_->show();
-    l_proxy_port_->show();
-    te_proxy_url_->show();
-    te_proxy_port_->show();
-}
-
-//hide widgets
-void OptionsWindow::hideCollectionFeeds()
-{
-    ui_->removeButton->hide();
-    feed_list_->hide();
-    cf_find_feed_->hide();
-    cf_label_search_->hide();
-}
-
-void OptionsWindow::hideNotifications()
-{
-    sb_refresh_time_->hide();
-    l_refresh_time_->hide();
-    cb_enable_notification_->hide();
-}
-void OptionsWindow::hideProxyConnection()
-{
-
-    cb_enable_proxy_->hide();
-    l_proxy_url_->hide();
-    l_proxy_port_->hide();
-    te_proxy_url_->hide();
-    te_proxy_port_->hide();
 }
 
 void OptionsWindow::closeEvent (QCloseEvent *event)
@@ -481,8 +301,22 @@ void OptionsWindow::setupGui ()
 {
     ui_->setupUi(this);
 
-    std::shared_ptr<IOptions> filtersOptions = std::make_shared<FiltersOptions> (this, ui_->treeWidget->width(), ui_->okButton->height());
+    std::shared_ptr<IOptions> feedsOptions = std::make_shared<FeedsOptions> (this,
+                                                                                 ui_->treeWidget->x() + ui_->treeWidget->width(),
+                                                                                 ui_->okButton->height());
+    std::shared_ptr<IOptions> filtersOptions = std::make_shared<FiltersOptions> (this,
+                                                                                 ui_->treeWidget->x() + ui_->treeWidget->width(),
+                                                                                 ui_->okButton->height());
+    std::shared_ptr<IOptions> notificationsOptions = std::make_shared<NotificationsOptions> (this,
+                                                                                 ui_->treeWidget->x() + ui_->treeWidget->width(),
+                                                                                 ui_->okButton->height());
+    std::shared_ptr<IOptions> proxyOptions = std::make_shared<ProxyOptions> (this,
+                                                                                 ui_->treeWidget->x() + ui_->treeWidget->width(),
+                                                                                 ui_->okButton->height());
+    options.push_back(feedsOptions);
     options.push_back(filtersOptions);
+    options.push_back(notificationsOptions);
+    options.push_back(proxyOptions);
 
     ui_->treeWidget->setHeaderLabel("Options");
 
@@ -510,75 +344,6 @@ void OptionsWindow::setupGui ()
                                ui_->cancelButton->y(),
                                ui_->okButton->width(),
                                ui_->okButton->height());
-
-    //Collection feeds controls
-    feed_list_->setSelectionMode(QAbstractItemView::MultiSelection);
-
-    connect(cf_find_feed_.get(),SIGNAL(textChanged(QString)), this, SLOT(on_textChanged(QString)));
-
-    cf_label_search_->setText("Search");
-    positioningFeedsOptionWidgets();
-
-    feed_list_->show();
-    cf_find_feed_->show();
-    cf_label_search_->show();
-
-    //notification widgets
-    l_refresh_time_->setGeometry(ui_->treeWidget->width() + 10,
-                                 5,
-                                 l_refresh_time_->width()+50,
-                                 l_refresh_time_->height());
-    l_refresh_time_->setText("Refresh feeds time (minutes):");
-    l_refresh_time_->hide();
-
-    sb_refresh_time_->setGeometry(ui_->treeWidget->width() + 10,
-                                  l_refresh_time_->y()+l_refresh_time_->height() + 5,
-                                  sb_refresh_time_->width(),
-                                  sb_refresh_time_->height());
-    sb_refresh_time_->setMinimum(1);
-    sb_refresh_time_->setMaximum(60);
-    sb_refresh_time_->hide();
-
-    cb_enable_notification_->setGeometry(ui_->treeWidget->width() + 10,sb_refresh_time_->y() + sb_refresh_time_->height() + 5,
-                                         cb_enable_notification_->width()+50,
-                                         cb_enable_notification_->height());
-    cb_enable_notification_->hide();
-    cb_enable_notification_->setText("Enable notification window");
-    cb_enable_notification_->setChecked(true);
-
-    //proxy options
-    cb_enable_proxy_->setChecked(false);
-    cb_enable_proxy_->setText("Enable proxy connection");
-    connect(cb_enable_proxy_.get(), SIGNAL(clicked(bool)), this, SLOT(on_cb_enable_proxy_clicked(bool)));
-    l_proxy_url_->setText("Proxy address:");
-    l_proxy_port_->setText("Proxy port:");
-
-    cb_enable_proxy_->setGeometry(ui_->treeWidget->width() + 10,
-                                  5,
-                                  cb_enable_proxy_->width()+50,
-                                  cb_enable_proxy_->height());
-    l_proxy_url_->setGeometry(ui_->treeWidget->width() + 10,
-                              cb_enable_proxy_->y() + cb_enable_proxy_->height()+5,
-                              l_proxy_url_->width(),
-                              l_proxy_url_->height());
-    te_proxy_url_->setGeometry(ui_->treeWidget->width() + 10,
-                               l_proxy_url_->y() +l_proxy_url_->height() + 5,
-                               te_proxy_url_->width(),
-                               te_proxy_url_->height());
-    l_proxy_port_->setGeometry(ui_->treeWidget->width() + 10,
-                               te_proxy_url_->y() + te_proxy_url_->height() + 5,
-                               l_proxy_port_->width(),
-                               l_proxy_port_->height());
-    te_proxy_port_->setGeometry(ui_->treeWidget->width() + 10,
-                                l_proxy_port_->y() + l_proxy_port_->height() + 5,
-                                te_proxy_port_->width(),
-                                te_proxy_port_->height());
-
-    cb_enable_proxy_->hide();
-    l_proxy_url_->hide();
-    l_proxy_port_->hide();
-    te_proxy_url_->hide();
-    te_proxy_port_->hide();
 
     for (unsigned int i=0; i<options.size(); ++i)
     {
