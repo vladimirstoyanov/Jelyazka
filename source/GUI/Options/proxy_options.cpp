@@ -89,11 +89,11 @@ void ProxyOptions::setupGui ()
 }
 void ProxyOptions::show ()
 {
-        cb_enable_proxy_->show();
-        l_proxy_url_->show();
-        l_proxy_port_->show();
-        te_proxy_url_->show();
-        te_proxy_port_->show();
+    cb_enable_proxy_->show();
+    l_proxy_url_->show();
+    l_proxy_port_->show();
+    te_proxy_url_->show();
+    te_proxy_port_->show();
 }
 void ProxyOptions::hide ()
 {

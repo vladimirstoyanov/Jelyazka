@@ -22,17 +22,14 @@
 OptionsWindow::OptionsWindow(QWidget *parent) :
     QWidget(parent)
     , download_feed_status_ (std::make_shared<QLabel>(this))
-    , options_type_ (1)
+    , offset_between_widgets_ (5)
     , ui_(std::make_shared<Ui::OptionsWindow> ())
 {
-
     setupGui();
 }
 
 OptionsWindow::~OptionsWindow()
 {
-    //l_old_feed_list_.clear();
-    //l_old_filters_.clear();
 }
 
 //modify label string to fit in the window size
@@ -60,7 +57,7 @@ void OptionsWindow::returnModifedString(QString &str)
     str = str_tmp + add_str;
 }
 
-//add an item to tree widget
+//add an item to 'treeWidget'
 void OptionsWindow::addItemToTreeView(const QString &name)
 {
     QTreeWidgetItem *item = new QTreeWidgetItem();
@@ -68,19 +65,15 @@ void OptionsWindow::addItemToTreeView(const QString &name)
     ui_->treeWidget->addTopLevelItem(item);
 }
 
-//remove site_name data from 'rss' table in 'sites.db3'. If all_data == 1,
-//then remove all data from 'rss' table
 void OptionsWindow::removeDataFromRSSTable(const QString &site_name, const bool all_data)
 {
     data_base_.removeDataFromRSSTable(site_name, all_data);
 }
 
-//insert row to 'rss' DB table
 void OptionsWindow::insertRowToRSSTable(const QString &name, const QString &url, const QString &version)
 {
     data_base_.insertIntoFeedList(name, url, version);
 }
-
 
 void OptionsWindow::loadSettings()
 {
@@ -143,7 +136,7 @@ void OptionsWindow::showEvent(QShowEvent *event)
     this->setEnabled(true);
 }
 
-//'OK' button event
+//'OK' button clicked event
 void OptionsWindow::on_okButton_clicked()
 {
     download_feed_status_->show();
@@ -153,13 +146,13 @@ void OptionsWindow::on_okButton_clicked()
     emit (stateChanged("UpdatingSettings"));
 }
 
-//'Cancel' button has been clicked
+//'Cancel' button clicked event
 void OptionsWindow::on_cancelButton_clicked()
 {
     emit (stateChanged("HideOptionWindow"));
 }
 
-//treeWidget has been clicked
+//treeWidget clicked event
 void OptionsWindow::on_treeWidget_clicked(const QModelIndex &index)
 {
     QString t = index.data().toByteArray().data();
@@ -176,6 +169,7 @@ void OptionsWindow::on_treeWidget_clicked(const QModelIndex &index)
     }
 }
 
+//"Option window" close event
 void OptionsWindow::closeEvent (QCloseEvent *event)
 {
     qDebug()<<__PRETTY_FUNCTION__;
@@ -187,7 +181,8 @@ void OptionsWindow::createOptions ()
 {
     std::shared_ptr<IOptions> feedsOptions = std::make_shared<FeedsOptions> (this,
                                                                                  ui_->treeWidget->x() + ui_->treeWidget->width(),
-                                                                                 ui_->okButton->height());
+                                                                                 ui_->okButton->height(),
+                                                                                 ui_->okButton->y());
     std::shared_ptr<IOptions> filtersOptions = std::make_shared<FiltersOptions> (this,
                                                                                  ui_->treeWidget->x() + ui_->treeWidget->width(),
                                                                                  ui_->okButton->height());
@@ -201,7 +196,6 @@ void OptionsWindow::createOptions ()
     options.push_back(filtersOptions);
     options.push_back(notificationsOptions);
     options.push_back(proxyOptions);
-
 }
 
 void OptionsWindow::treeWidgetSetup ()
@@ -211,40 +205,41 @@ void OptionsWindow::treeWidgetSetup ()
     addItemToTreeView("Manage feeds");
     addItemToTreeView("Filters");
     addItemToTreeView("Notifications");
-    addItemToTreeView("Proxy connection");
-
+    addItemToTreeView("Proxy");
 
     //treewidget set geometry
-    ui_->treeWidget->setGeometry(5,
-                                5,
+    ui_->treeWidget->setGeometry(offset_between_widgets_,
+                                offset_between_widgets_,
                                 130,
                                 this->height()- (15 + ui_->okButton->height()));
 }
+
 void OptionsWindow::widgetsSetup ()
 {
     treeWidgetSetup();
 
-    download_feed_status_->setGeometry(5,
-                                      this->height() - (5+ ui_->okButton->height()),
+    download_feed_status_->setGeometry(offset_between_widgets_,
+                                      this->height() - (offset_between_widgets_+ ui_->okButton->height()),
                                       download_feed_status_->width(),
                                       download_feed_status_->height());
 
-    ui_->cancelButton->setGeometry(this->width() - (5+ui_->cancelButton->width()),
-                                   this->height() - (5+ ui_->cancelButton->height()),
+    ui_->cancelButton->setGeometry(this->width() - (offset_between_widgets_ +ui_->cancelButton->width()),
+                                   this->height() - (offset_between_widgets_ + ui_->cancelButton->height()),
                                    ui_->cancelButton->width(),
                                    ui_->cancelButton->height());
 
-    ui_->okButton->setGeometry(ui_->cancelButton->x()-(5+ui_->okButton->width()),
+    ui_->okButton->setGeometry(ui_->cancelButton->x()-(offset_between_widgets_+ui_->okButton->width()),
                                ui_->cancelButton->y(),
                                ui_->okButton->width(),
                                ui_->okButton->height());
 }
+
 void OptionsWindow::setupGui ()
 {
     ui_->setupUi(this);
 
-    createOptions();
     widgetsSetup();
+    createOptions();
 
     for (unsigned int i=0; i<options.size(); ++i)
     {

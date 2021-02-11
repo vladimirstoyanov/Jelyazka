@@ -1,10 +1,16 @@
 #include "GUI/Options/feeds_options.h"
 
-FeedsOptions::FeedsOptions(QWidget *parent, const int tree_widget_width, const int ok_button_height):
+FeedsOptions::FeedsOptions(QWidget *parent,
+                           const int tree_widget_width,
+                           const int ok_button_height,
+                           const int ok_button_y):
      cf_find_feed_ (std::make_shared<QLineEdit> (parent))
     , cf_label_search_ (std::make_shared<QLabel>(parent))
     , feed_list_  (std::make_shared<QListWidget>(parent))
+    , remove_button_ (std::make_shared<QPushButton> ("Remove", parent))
     , ok_button_height_ (ok_button_height)
+    , ok_button_y_(ok_button_y)
+    , offset_between_widgets_(5)
     , tree_widget_width_ (tree_widget_width)
     , parent (parent)
 {
@@ -49,14 +55,14 @@ void FeedsOptions::show ()
 {
     positioningFeedsOptionWidgets();
 
-    //ui_->removeButton->show(); //ToDo: add this object
+    remove_button_->show();
     feed_list_->show();
     cf_find_feed_->show();
     cf_label_search_->show();
 }
 void FeedsOptions::hide ()
 {
-    //ui_->removeButton->hide(); //ToDo: add this object
+    remove_button_->hide();
     feed_list_->hide();
     cf_find_feed_->hide();
     cf_label_search_->hide();
@@ -64,29 +70,27 @@ void FeedsOptions::hide ()
 
 void FeedsOptions::positioningFeedsOptionWidgets()
 {
-    int width = (parent->width() - (25 + tree_widget_width_));
+    int width = parent->width() - (offset_between_widgets_*2 + tree_widget_width_);
 
-    cf_label_search_->setGeometry(tree_widget_width_  + 5,
-                                 5,
-                                 50,
-                                 cf_label_search_->height());
+    cf_label_search_->setGeometry(tree_widget_width_ + offset_between_widgets_,
+                                    offset_between_widgets_,
+                                    50,
+                                    cf_label_search_->height());
 
-    cf_find_feed_->setGeometry(cf_label_search_->x() + cf_label_search_width()+5,
-                              5,
-                              width - (cf_label_search_width() + 5) ,
-                              cf_find_feed_->height());
+    cf_find_feed_->setGeometry(cf_label_search_->x() + cf_label_search_width()+offset_between_widgets_,
+                                offset_between_widgets_,
+                                width - (cf_label_search_width() + offset_between_widgets_) ,
+                                cf_find_feed_->height());
 
     feed_list_->setGeometry(cf_label_search_->x(),
-                            cf_find_feed_->y() + cf_find_feed_->height()+10,
-                            width,
-                            parent->height()-(20 +cf_find_feed_->height() + ok_button_height_));
+                                cf_find_feed_->y() + cf_find_feed_->height()+10,
+                                width,
+                                parent->height()-(20 +cf_find_feed_->height() + ok_button_height_));
 
-    /*
-    ui_->removeButton->setGeometry(feed_list_->x(),
-                                  ui_->okButton->y(),
-                                  ui_->removeButton->width(),
-                                  ui_->removeButton->height());
-                                  */
+    remove_button_->setGeometry(feed_list_->x(),
+                                  ok_button_y_,
+                                  remove_button_->width(),
+                                  ok_button_height_);
 }
 
 
@@ -112,17 +116,16 @@ void FeedsOptions::fillFeedListView()
     }
 }
 
-//add string to feed_list (QListWidget var)
 int FeedsOptions::addToFeedList(const QString &feed_name)
 {
-    int count = feed_list_->count(); //get count of listWidget
+    int count = feed_list_->count();
     if (feed_name=="")
     {
         return 1;
     }
 
     //check for identical strings
-    for(int row = 0; row < feed_list_->count(); row++)
+    for(int row = 0; row < feed_list_->count(); ++row)
     {
         QListWidgetItem *item = feed_list_->item(row);
         if (feed_name == item->text())
@@ -131,7 +134,7 @@ int FeedsOptions::addToFeedList(const QString &feed_name)
         }
     }
 
-    feed_list_->insertItem(count, feed_name); //insert new element in the end of list widget
+    feed_list_->insertItem(count, feed_name); //insert a new element in the end of 'feed_list_' widget
 
     return 0;
 }

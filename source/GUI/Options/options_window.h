@@ -71,7 +71,7 @@ private:
     void createOptions ();
     void insertRowToRSSTable(const QString &site_name, const QString &url, const QString &version);
     void removeDataFromRSSTable(const QString &site_name, const bool all_data);
-    void returnModifedString(QString &str); //ToDo: change the function name
+    void returnModifedString(QString &str);
     void setupGui ();
     void treeWidgetSetup ();
     void widgetsSetup ();
@@ -88,8 +88,8 @@ private:
     DataBase                                data_base_;
     std::shared_ptr<QLabel>                 download_feed_status_;
     QList<bool>                             l_items_for_remove_;
+    const unsigned int                      offset_between_widgets_;
     std::vector<std::shared_ptr<IOptions>>  options;
-    int                                     options_type_;
     std::shared_ptr<Ui::OptionsWindow>      ui_;
 
 signals:

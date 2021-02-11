@@ -8,6 +8,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QListWidget>
+#include <QPushButton>
 
 #include "database.h"
 #include "options.h"
@@ -17,7 +18,10 @@ class FeedsOptions : public QWidget, public IOptions
 {
     Q_OBJECT
 public:
-    FeedsOptions(QWidget *parent, const int tree_widget_width, const int ok_button_height);
+    FeedsOptions(QWidget *parent,
+                 const int tree_widget_width,
+                 const int ok_button_height,
+                 const int ok_button_y);
 
     virtual ~FeedsOptions();
 
@@ -42,10 +46,13 @@ private:
     std::shared_ptr<QLabel>                 cf_label_search_;
     std::shared_ptr<QListWidget>            feed_list_;
     std::vector<QString>                    l_old_feed_list_;
+    std::shared_ptr<QPushButton>            remove_button_;
 
 private:
      DataBase                                data_base_;
      int                                     ok_button_height_;
+     int                                     ok_button_y_;
+     const unsigned int                      offset_between_widgets_;
      int                                     tree_widget_width_;
      QWidget *                               parent;
 };

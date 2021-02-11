@@ -28,7 +28,7 @@ public:
     void show () override;
 
 private slots:
-     void on_cb_enable_proxy_clicked(bool state);
+     void on_cb_enable_proxy_clicked(bool enabled);
 
 private:
     std::shared_ptr<QCheckBox>              cb_enable_proxy_;

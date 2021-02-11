@@ -34,19 +34,6 @@
     </property>
    </column>
   </widget>
-  <widget class="QPushButton" name="removeButton">
-   <property name="geometry">
-    <rect>
-     <x>170</x>
-     <y>60</y>
-     <width>75</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Remove</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="okButton">
    <property name="geometry">
     <rect>
