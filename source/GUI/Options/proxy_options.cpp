@@ -104,9 +104,9 @@ void ProxyOptions::hide ()
     te_proxy_port_->hide();
 }
 
-void ProxyOptions::on_cb_enable_proxy_clicked(bool state)
+void ProxyOptions::on_cb_enable_proxy_clicked(bool enabled)
 {
-    if (state)
+    if (enabled)
     {
         l_proxy_url_->setEnabled(true);
         l_proxy_port_->setEnabled(true);
