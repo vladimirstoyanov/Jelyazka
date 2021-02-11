@@ -89,6 +89,8 @@ void OptionsWindow::saveSettings()
     {
         options[i]->saveSettings();
     }
+
+    Jelyazka::Settings::saveSettings();
 }
 
 //resize window event

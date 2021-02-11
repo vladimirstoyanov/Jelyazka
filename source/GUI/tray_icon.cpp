@@ -39,8 +39,15 @@ void TrayIcon::makeActionsConnection()
 {
     connect(main_.get(),  SIGNAL(triggered()), this, SLOT(mainWindow()));
     connect(about_.get(), SIGNAL(triggered()), this, SLOT(showAbout()));
-    connect(close_.get(), SIGNAL(triggered()), qApp, SLOT(quit()));
+    //connect(close_.get(), SIGNAL(triggered()), qApp, SLOT(quit()));
+    connect(close_.get(), SIGNAL(triggered()), this, SLOT(quitApplication()));
 }
+
+void TrayIcon::quitApplication()
+{
+    qApp->quit();
+}
+
 void TrayIcon::createTrayIcon()
 {
     tray_icon_menu_->addAction(main_.get());

@@ -1,4 +1,5 @@
 #include "settings.h"
+#include <QMessageBox>
 
 namespace Jelyazka
 {
@@ -17,7 +18,6 @@ Settings::Settings()
 
 Settings::~Settings ()
 {
-    saveSettings();
 }
 
 void Settings::loadSettings()
@@ -203,9 +203,15 @@ void Settings::loadSettings()
 
 void Settings::saveSettings ()
 {
-    QFile file("../resouce/Options");
+    QFile file("../resources/Options");
     file.open(QIODevice::WriteOnly);
     QTextStream out(&file);
+
+    if(!file.isOpen())
+    {
+        QMessageBox::critical(0, "Error!", "Couldn't open \'Options\' file: " + file.errorString());
+        return;
+    }
 
     //notifications
     out << "Refresh time: " << refresh_feeds_time_ <<'\n';

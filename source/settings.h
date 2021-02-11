@@ -121,7 +121,8 @@ public:
         is_filtering_enabled_ = is_filtering_enabled;
     }
 
-
+public:
+    static void saveSettings ();
 
 private:
     static std::vector<QString> collection_feeds_;
@@ -136,7 +137,6 @@ private:
 
 private:
     static void loadSettings();
-    static void saveSettings ();
 };
 
 } //namespace Jelyazka

@@ -259,29 +259,6 @@ void MainWindow::mouseButtonPressed(QPoint p , QObject *o)
         is_resizing_ = 0;
     }
 }
-/*
-void MainWindow::refreshFeed()
-{
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    QString content="";
-
-    HTTP http;
-    if (data_->size()<=current_site_index_ || current_site_index_<0 || data_->size() == 0)
-    {
-        QApplication::restoreOverrideCursor();
-        return;
-    }
-    if (!http.getRequest(data_->at(current_site_index_)->getURL(),content))
-    {
-        rss_thread_->synchronizeData(current_site_index_, content);
-        if (data_->at(current_site_index_)->getArticlesSize()<=current_article_index_)
-            current_article_index_ = 0;
-        showArticle(current_site_index_,current_article_index_);
-
-    }
-    QApplication::restoreOverrideCursor();
-}
-*/
 
 void MainWindow::mouseDblClicked(QMouseEvent * mouseEvent)
 {

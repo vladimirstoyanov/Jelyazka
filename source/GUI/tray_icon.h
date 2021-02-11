@@ -10,6 +10,7 @@
 #include <QWidget>
 
 #include "GUI/about_window.h"
+#include "settings.h"
 
 class TrayIcon : public QWidget
 {
@@ -24,6 +25,7 @@ private slots:
     void mainWindow();
     void showAbout();
     void trayIconClicked(QSystemTrayIcon::ActivationReason);
+    void quitApplication();
 
 private:
     void closeEvent(QCloseEvent *);
