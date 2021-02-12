@@ -73,11 +73,11 @@ void InitWindow::loadRssFeeds()
 
     if (0 == urls_size_)
     {
-        onDownloadFinished();
+        downloadFinished();
     }
 }
 
-void InitWindow::onWriteData(const RSSData &rss_data)
+void InitWindow::writeData(const RSSData &rss_data)
 {
     qDebug()<<__PRETTY_FUNCTION__<<":"<<rss_data.getSiteName();
 
@@ -92,11 +92,10 @@ void InitWindow::onWriteData(const RSSData &rss_data)
     }
 }
 
-void InitWindow::onDownloadFinished ()
+void InitWindow::downloadFinished ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
 
-    //send an event to window state machine
     this->hide();
     emit (stateChanged("RSSDataDownloaded"));
 }
@@ -131,11 +130,11 @@ void InitWindow::onHttpRequestReceived (const HttpData httpData)
 
         //pasrse web content to RSSData
         parse.getRSSDataByWebSource(httpData.getData(), rss_data);
-        onWriteData(*rss_data.get());
+        writeData(*rss_data.get());
     }
     if (response_number_ == urls_size_)
     {
-        onDownloadFinished();
+        downloadFinished();
     }
 }
 

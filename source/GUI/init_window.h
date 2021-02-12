@@ -48,9 +48,9 @@ public:
     explicit InitWindow(QWidget *parent = nullptr);
     virtual  ~InitWindow();
 
-public slots:
-    void onDownloadFinished ();
-    void onWriteData(const RSSData &rss_data);
+private:
+    void downloadFinished ();
+    void writeData(const RSSData &rss_data);
 
 private slots:
     void onHttpRequestReceived (const HttpData httpData);

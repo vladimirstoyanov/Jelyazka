@@ -25,17 +25,16 @@ UpdateRssData::UpdateRssData():
     urls_size_ (0)
 
 {
-    makeConnections ();
+    setupConnections ();
 }
 
 UpdateRssData::~UpdateRssData()
 {
 }
 
-void UpdateRssData::onWriteData (const RSSData &rss_data)
+void UpdateRssData::writeData (const RSSData &rss_data)
 {
     qDebug()<<__PRETTY_FUNCTION__;
-    //data_base_.updateArticles(rss_data);
     for (size_t i=0; i< rss_data.getArticlesSize(); ++i)
     {
          data_base_.insertIntoRssDataTable(rss_data.getSiteName()
@@ -45,14 +44,14 @@ void UpdateRssData::onWriteData (const RSSData &rss_data)
     }
 }
 
-void UpdateRssData::onDownloadFinished ()
+void UpdateRssData::downloadFinished ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
     emit (stateChanged("SettingsUpdated"));
     emit (stateChanged("RSSDataAdded"));
 }
 
-void UpdateRssData::makeConnections ()
+void UpdateRssData::setupConnections ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
 
@@ -67,10 +66,6 @@ void UpdateRssData::makeConnections ()
             , this
             , SLOT(onHttpRequestReceived(const HttpData))
             , Qt::QueuedConnection);
-}
-
-void UpdateRssData::loadRssUrls()
-{
 }
 
 void UpdateRssData::loadRssFeeds()
@@ -89,14 +84,13 @@ void UpdateRssData::loadRssFeeds()
 
     if (0 == urls_size_)
     {
-        onDownloadFinished();
+        downloadFinished();
     }
 }
 
 void UpdateRssData::onUpdateSettings()
 {
     qDebug()<<__PRETTY_FUNCTION__;
-    loadRssUrls ();
     loadRssFeeds (); //start downloading of rss data
 }
 
@@ -118,10 +112,10 @@ void UpdateRssData::onHttpRequestReceived (const HttpData httpData)
 
         //pasrse web content to RSSData
         parse.getRSSDataByWebSource(httpData.getData(), rss_data);
-        onWriteData(*rss_data.get());
+        writeData(*rss_data.get());
     }
     if (response_number_ == urls_size_)
     {
-        onDownloadFinished();
+        downloadFinished();
     }
 }

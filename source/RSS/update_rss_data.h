@@ -40,8 +40,6 @@ public:
 
 public slots:
     void onAddRssData ();
-    void onDownloadFinished ();
-    void onWriteData (const RSSData &rss_data);
     void onUpdateSettings();
 
 signals:
@@ -57,11 +55,12 @@ private:
     unsigned int                    response_number_;
     unsigned int                    urls_size_;
 
-
 private:
-   void makeConnections ();
+   void downloadFinished ();
    void loadRssFeeds();
    void loadRssUrls ();
+   void setupConnections ();
+   void writeData (const RSSData &rss_data);
 };
 
 #endif // UpdateRssData_H

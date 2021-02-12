@@ -26,7 +26,7 @@ RefreshRssData::RefreshRssData():
     , timer_ (std::make_shared<QTimer> ())
     , urls_size_ (0)
 {
-    makeConnections ();
+    setupConnections ();
 }
 
 RefreshRssData::~RefreshRssData()
@@ -69,7 +69,7 @@ void RefreshRssData::onFavoriteFeedsChanged ()
     qDebug()<<__PRETTY_FUNCTION__;
 }
 
-void RefreshRssData::onWriteData (const RSSData rss_data)
+void RefreshRssData::writeData (const RSSData rss_data)
 {
     qDebug()<<__PRETTY_FUNCTION__;
 
@@ -77,12 +77,12 @@ void RefreshRssData::onWriteData (const RSSData rss_data)
     new_articles_.push_back(rss_data);
 }
 
-void RefreshRssData::onDownloadFinished ()
+void RefreshRssData::downloadFinished ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
 }
 
-void RefreshRssData::makeConnections ()
+void RefreshRssData::setupConnections ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
 
@@ -114,7 +114,7 @@ void RefreshRssData::loadRssFeeds()
 
     if (0 == urls_size_)
     {
-        onDownloadFinished();
+        downloadFinished();
     }
 }
 
@@ -130,11 +130,11 @@ void RefreshRssData::onHttpRequestReceived (const HttpData httpData)
 
         //pasrse web content to RSSData
         parse.getRSSDataByWebSource(httpData.getData(), rss_data);
-        onWriteData(*rss_data.get());
+        writeData(*rss_data.get());
     }
     if (response_number_ == urls_size_)
     {
-        onDownloadFinished();
+        downloadFinished();
     }
 }
 

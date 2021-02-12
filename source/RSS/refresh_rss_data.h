@@ -44,13 +44,11 @@ public:
     void stop  ();
 
 public slots:
-    void onDownloadFinished ();
     void onFavoriteFeedsChanged ();
     void onStartRssRefreshData ();
     void onStopRssRefreshData ();
     void onTimeout();
     void onTimeValueChanged (const int time_msec);
-    void onWriteData (const RSSData rss_data);
 
 signals:
     void httpGetRequest (const QString &);
@@ -71,8 +69,11 @@ private:
 
 
 private:
-   void makeConnections ();
+   void downloadFinished ();
+   void setupConnections ();
    void loadRssFeeds();
+   void writeData (const RSSData rss_data);
+
 };
 
 #endif // REFRESHRSSDATATIMER_H
