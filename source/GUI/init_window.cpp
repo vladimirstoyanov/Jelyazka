@@ -23,10 +23,8 @@ InitWindow::InitWindow(QWidget *parent) :
     , data_base_ ()
     , image_init_label_ (std::make_shared <QLabel>(this))
     , init_image_ (std::make_shared<QImage>("../resources/jelyazka_02_end.png"))
-    //, download_rss_data_thread_ (new DownloadRssDataThread ())
-    , response_number_(0)
     , network_manager_(std::make_shared<NetworkManager> ())
-    , thread_pool_(std::make_shared <QThreadPool>(this))
+    , response_number_(0)
     , ui_(new Ui::InitWindow)
     , urls_size_ (0)
 {
@@ -36,10 +34,6 @@ InitWindow::InitWindow(QWidget *parent) :
 
 InitWindow::~InitWindow()
 {
-    qDebug()<<__PRETTY_FUNCTION__;
-
-    thread_pool_->waitForDone();
-    //download_rss_data_thread_->deleteLater();
 }
 
 void InitWindow::setupGui()
@@ -61,14 +55,6 @@ void InitWindow::setupGui()
     image_init_label_->setGeometry(QRect(0,0,300,300));
     image_init_label_->show();
     image_init_label_->lower();
-}
-
-void InitWindow::loadRssUrls()
-{
-    qDebug()<<__PRETTY_FUNCTION__<<": loading RSS URLs from DB...";
-
-    std::vector<QString> urls;
-    urls = data_base_.getURLs();
 }
 
 void InitWindow::loadRssFeeds()
@@ -95,7 +81,7 @@ void InitWindow::onWriteData(const RSSData &rss_data)
 {
     qDebug()<<__PRETTY_FUNCTION__<<":"<<rss_data.getSiteName();
 
-    ui_->label->setText(rss_data.getSiteName()); //FIXME: it doesn't set any text
+    ui_->label->setText(rss_data.getSiteName());
 
     for (size_t i=0; i< rss_data.getArticlesSize(); ++i)
     {

@@ -60,20 +60,19 @@ private slots:
     void onHttpRequestReceived (const HttpData httpData);
 
 private:
-    DataBase                        data_base_;
-    std::vector<RSSData>            new_articles_;
+    DataBase                            data_base_;
+    std::vector<RSSData>                new_articles_;
     std::shared_ptr<NetworkManager>     network_manager_;
-    unsigned int                    response_number_;
-    std::shared_ptr<QThreadPool>    thread_pool_;
-    int                             time_msec_;
-    std::shared_ptr<QTimer>         timer_;
-    unsigned int                    urls_size_;
+    unsigned int                        response_number_;
+    std::shared_ptr<QThreadPool>        thread_pool_;
+    int                                 time_msec_;
+    std::shared_ptr<QTimer>             timer_;
+    unsigned int                        urls_size_;
 
 
 private:
    void makeConnections ();
    void loadRssFeeds();
-   void loadRssUrls ();
 };
 
 #endif // REFRESHRSSDATATIMER_H

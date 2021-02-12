@@ -26,7 +26,6 @@
 #include <QImage>
 #include <QLabel>
 #include <QWidget>
-#include <QThreadPool>
 
 #include "database.h"
 #include "Network/network_manager.h"
@@ -66,14 +65,12 @@ private:
     std::shared_ptr<QImage>             init_image_;
     std::shared_ptr<NetworkManager>     network_manager_;
     unsigned int                        response_number_;
-    std::shared_ptr<QThreadPool>        thread_pool_;
     std::shared_ptr<Ui::InitWindow>     ui_;
     unsigned int                        urls_size_;
 
 
 private:
     void loadRssFeeds();
-    void loadRssUrls();
     void setupConnections ();
     void setupGui();
     void showEvent(QShowEvent *);

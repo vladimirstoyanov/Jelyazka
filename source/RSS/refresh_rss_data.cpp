@@ -99,14 +99,6 @@ void RefreshRssData::makeConnections ()
             , Qt::QueuedConnection);
 }
 
-void RefreshRssData::loadRssUrls()
-{
-    qDebug()<<__PRETTY_FUNCTION__<<": loading RSS URLs from DB...";
-
-    std::vector<QString> urls;
-    urls = data_base_.getURLs();
-}
-
 void RefreshRssData::loadRssFeeds()
 {
     qDebug()<<__PRETTY_FUNCTION__;
