@@ -60,7 +60,7 @@ void NetworkManager::getHttpRequest (const QString &url)
 */
 
 //Slot: onHttpRequestResult
-void NetworkManager::onHttpRequestResult (const HttpData httpData)
+void NetworkManager::onHttpRequestResult (const HttpData &httpData)
 {
     qDebug()<<__PRETTY_FUNCTION__;
     httpRequestReceived(httpData);
@@ -70,14 +70,14 @@ void NetworkManager::setupConnections()
 {
     qDebug()<<__PRETTY_FUNCTION__;
     connect( http.get()
-            , SIGNAL(httpRequestResult(const HttpData))
+            , SIGNAL(httpRequestResult(const HttpData &))
             , this
-            , SLOT(onHttpRequestResult(const HttpData))
+            , SLOT(onHttpRequestResult(const HttpData &))
             , Qt::QueuedConnection);
 
     connect( https.get()
-            , SIGNAL(httpsRequestResult(const HttpData))
+            , SIGNAL(httpsRequestResult(const HttpData &))
             , this
-            , SLOT(onHttpRequestResult(const HttpData))
+            , SLOT(onHttpRequestResult(const HttpData &))
             , Qt::QueuedConnection);
 }

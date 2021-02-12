@@ -62,9 +62,9 @@ void UpdateRssData::setupConnections ()
             , Qt::QueuedConnection);
 
     connect( network_manager_.get()
-            , SIGNAL(httpRequestReceived(const HttpData))
+            , SIGNAL(httpRequestReceived(const HttpData &))
             , this
-            , SLOT(onHttpRequestReceived(const &HttpData))
+            , SLOT(onHttpRequestReceived(const HttpData &))
             , Qt::QueuedConnection);
 }
 

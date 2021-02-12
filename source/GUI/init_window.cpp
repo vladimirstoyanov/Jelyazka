@@ -111,7 +111,7 @@ void InitWindow::setupConnections ()
             , Qt::QueuedConnection);
 
     connect( network_manager_.get()
-            , SIGNAL(httpRequestReceived(const HttpData))
+            , SIGNAL(httpRequestReceived(const HttpData &))
             , this
             , SLOT(onHttpRequestReceived(const HttpData &))
             , Qt::QueuedConnection);
@@ -121,7 +121,7 @@ void InitWindow::setupConnections ()
 void InitWindow::onHttpRequestReceived (const HttpData & httpData)
 {
     ++response_number_;
-    qDebug()<<__PRETTY_FUNCTION__<<"!!!!!!!!!!!!!!!!!!!!!";
+    qDebug()<<__PRETTY_FUNCTION__;
     if (httpData.isResponseSuccessful())
     {
         ParseRSS parse;

@@ -37,10 +37,10 @@ public:
 
     //void getHttpRequest (const QString &url);
 public slots:
-    void onHttpRequestResult (const HttpData httpData);
+    void onHttpRequestResult (const HttpData &httpData);
     void onHttpGetRequest       (const QString &);
 signals:
-    void httpRequestReceived (const HttpData httpData);
+    void httpRequestReceived (const HttpData &httpData);
 private:
     void setupConnections();
 private:
