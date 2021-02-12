@@ -2,12 +2,12 @@
     rss_search_thread.cpp
     Jelyazka RSS/RDF reader
     Copyright (C) 2020 Vladimir Stoyanov
-    
+
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -18,12 +18,9 @@
 */
 #include "rss_search_thread.h"
 
-#include <unistd.h>
-
 RSSSearchGUIThread::RSSSearchGUIThread() :
-    QRunnable()
-    , mutex (std::make_shared<QMutex>()) 
-    , stop_thread (false)
+    pending_urls_(0)
+    , stop_thread_ (false)
     , is_search_finished_ (false)
     , network_manager_(std::make_shared<NetworkManager> ())
 {
@@ -32,11 +29,137 @@ RSSSearchGUIThread::RSSSearchGUIThread() :
 
 RSSSearchGUIThread::~RSSSearchGUIThread()
 {
-    if  (l_url.size()>0)
-    {
-        l_url.clear();
-    }
     deleteAllFrom_all_url_table();
+}
+void RSSSearchGUIThread::stopThread ()
+{
+  stop_thread_ = true;
+  pending_urls_ = 0;
+  deleteAllFrom_all_url_table();
+  while (!url_queue_.empty())
+  {
+      url_queue_.pop();
+  }
+}
+
+void RSSSearchGUIThread::setInitialUrl (const QString &url)
+{
+  stop_thread_ = false;
+  is_search_finished_  = false;
+  url_queue_.push(url);
+}
+
+void RSSSearchGUIThread::run()
+{
+  while (1)
+  {
+      if (stop_thread_)
+      {
+          return;
+      }
+
+      if (!url_queue_.empty())
+      {
+        QString url = url_queue_.front();
+        url_queue_.pop();
+
+        emit (httpGetRequest(url));
+
+        ++pending_urls_;
+      }
+
+      if (0 >= pending_urls_)
+      {
+          emit endOfUrls();
+          return;
+      }
+      usleep(100000); //100 milliseconds
+  }
+}
+
+void RSSSearchGUIThread::onHttpRequestReceived(const HttpData httpData)
+{
+    qDebug()<<__PRETTY_FUNCTION__;
+    Search cs;
+    QString url = httpData.getUrl();
+
+    --pending_urls_;
+
+    if (!httpData.isResponseSuccessful())
+    {
+        emit changeUrlLabel ("Fail to connect!");
+        return;
+    }
+
+    emit changeUrlLabel(url);
+
+    if (ContentType::XML == httpData.getContentType()) //xml
+    {
+        QString title = "";
+        int version = 0;
+        if (!checkForRss(httpData.getData(), title, version)) //found rss
+        {
+                QString encoding  = getEncodingFromRSS(httpData.getData());
+                if (encoding =="")
+                {
+                    encoding = "UTF-8";
+                }
+
+                title = title.replace("\'","\"");
+                url = url.replace("\'","\"");
+                encoding = encoding.replace("\'","\"");
+
+                emit foundRSS(title, url, encoding, httpData.getData(), version);
+        }
+
+        return;
+    }
+
+    int index = 0;
+
+    while(index != -1)
+    {
+            if (stop_thread_)
+            {
+                return;
+            }
+
+            cs.searchAfter(httpData.getData(), "<a ",&index); //search for links
+
+            while (lookForHref(httpData.getData(),index) && index!=-1)
+                cs.searchAfter(httpData.getData(), "<a ",&index); //in case in tag 'a' haven't 'href'
+
+            //found an url
+            if (index!=-1)
+            {
+                getUrl(httpData.getData(),index, url); //get url
+                QString return_url;
+
+                buildUrl(url_root_, url, return_url);
+                if (return_url == "") // if fail to build url
+                {
+                    log_.write(url  + "\n","ignore.txt");
+                    continue;
+                }
+
+                if (!findUrlDB(return_url))
+                {
+                     log_.write(return_url, "log.txt");
+                     QString url_tmp = return_url;
+
+                     if (return_url.length()>2047)
+                     {
+                         qDebug()<<"Lenght > 2047 !!!";
+                     }
+                     else
+                     {
+                         insertUrlDB(return_url);
+                     }
+
+                     url_queue_.push(url_tmp);
+                }
+            }
+    }
 }
 
 bool RSSSearchGUIThread::setUrlRoot(QString url)
@@ -70,40 +193,6 @@ bool RSSSearchGUIThread::setUrlRoot(QString url)
     return 1;
 }
 
-void RSSSearchGUIThread::run()
-{
-    if (stop_thread)
-    {
-        return;
-    }
-
-    //Search cs;
-    //QString html;
-
-    mutex->lock();
-    if (l_url.size() == 0)
-    {
-        mutex->unlock();
-        emit endOfUrls();
-        return;
-    }
-    QString *url = new QString(*l_url.begin());
-    l_url.erase(l_url.begin());
-    mutex->unlock();
-
-    emit changeUrlLabel(*url);
-
-    //setupConnections();
-    //network_manager_->getHttpRequest(*url);
-    emit (httpGetRequest(*url));
-
-    delete url;
-
-    while(!is_search_finished_ && !stop_thread)
-    {
-        usleep(10000);
-    }
-}
 
 //get url from html_source after index
 void RSSSearchGUIThread::getUrl (const QString &html_source, int &index, QString &return_url)
@@ -298,7 +387,6 @@ int RSSSearchGUIThread::lookForHref(const QString &source, int &index)
     int n = source.length();
     int n1 = label.length();
 
-
     int j = 0;
     while (source[index]!='>' && index<n)
     {
@@ -333,7 +421,7 @@ void RSSSearchGUIThread::addOrRemoveLastSymbolSlash(const QString &url, QString 
     }
     else //without '/'
     {
-        for (int i=0; i<url.length()-1; i++)   
+        for (int i=0; i<url.length()-1; i++)
         {
             *new_url+=url[i];
         }
@@ -415,133 +503,7 @@ QString RSSSearchGUIThread::getEncodingFromRSS(const QString &content)
     return encoding;
 }
 
-int RSSSearchGUIThread::checkFinish()
-{
-    int count = 0;
-    for (int i = 0; i<l_flags.size(); i++)
-    {
-        if(l_flags[i] == 0)
-        {
-            l_flags[i] = 1;
-            count++;
-            break;
-        }
-        count++;
-    }
-    qDebug()<<QString::number(count) + "/" + QString::number(l_flags.size());
 
-    if (count == l_flags.size())
-    {
-        is_search_finished_ = true;
-        return 1;
-    }
-
-    return 0;
-}
-
-void RSSSearchGUIThread::onHttpRequestReceived(const HttpData httpData)
-{
-    qDebug()<<__PRETTY_FUNCTION__;
-    Search cs;
-    QString url = httpData.getUrl();
-
-    if (!httpData.isResponseSuccessful())
-    {
-        mutex->lock();
-        if(checkFinish())
-        {
-            emit endOfUrls();
-        }
-        mutex->unlock();
-        emit changeUrlLabel ("Fail to connect!");
-        return;
-    }
-
-    if (ContentType::XML == httpData.getContentType()) //xml
-    {
-        QString title = "";
-        int version = 0;
-        if (!checkForRss(httpData.getData(), title, version)) //found rss
-        {
-                QString encoding  = getEncodingFromRSS(httpData.getData());
-                if (encoding =="")
-                {
-                    encoding = "UTF-8";
-                }
-
-                title = title.replace("\'","\"");
-                url = url.replace("\'","\"");
-                encoding = encoding.replace("\'","\"");
-
-                emit foundRSS(title, url, encoding, httpData.getData(), version);
-        }
-        mutex->lock();
-        if (checkFinish())
-        {
-            emit endOfUrls();
-        }
-        mutex->unlock();
-        return;
-    }
-
-    int index = 0;
-
-    while(index != -1)
-    {
-            if (stop_thread)
-            {
-                return;
-            }
-
-            cs.searchAfter(httpData.getData(), "<a ",&index); //search for links
-
-            while (lookForHref(httpData.getData(),index) && index!=-1)
-                cs.searchAfter(httpData.getData(), "<a ",&index); //in case in tag 'a' haven't 'href'
-
-
-
-            if (index!=-1)
-            {
-                getUrl(httpData.getData(),index, url); //get url
-                QString return_url;
-
-                mutex->lock();
-
-                buildUrl(url_root_, url, return_url);
-                if (return_url == "") // if fail to build url
-                {
-
-                    log_.write(url  + "\n","ignore.txt");
-                    mutex->unlock();
-                    continue;
-
-                }
-
-                if (!findUrlDB(return_url))
-                {
-
-                     log_.write(return_url, "log.txt");
-                     QString url_tmp = return_url;
-                     l_url2.push_back(url_tmp);
-                     if (return_url.length()>2047)
-                         qDebug()<<"Lenght > 2047 !!!";
-                     else
-                     {
-                         insertUrlDB(return_url);
-                         //qDebug()<<"Added " + return_url;
-                     }
-                }
-                mutex->unlock();
-            }
-    }
-
-    mutex->lock();
-    if(checkFinish())
-    {
-        emit endOfUrls();
-    }
-    mutex->unlock();
-}
 
 void RSSSearchGUIThread::setupConnections ()
 {

@@ -41,7 +41,7 @@
 #include <QtCore>
 #include <QTableView>
 #include <QTextCodec>
-#include <QThreadPool>
+//#include <QThreadPool>
 
 #include "Network/http.h"
 #include "logger.h"
@@ -80,7 +80,7 @@ private:
     QString     changeName(const QString &name);
     void        closeEvent(QCloseEvent *);
     int         checkExistingURL(const QString &url);
-    void        clearSearchCache();
+    //void        clearSearchCache();
     void        convertBigEndianToLittleEndian(QString &url);
     QString     getEncodingFromRSS(const QString &content);
     QString     insertName(const QString &name);
@@ -99,7 +99,7 @@ private:
     std::shared_ptr<ParseRSS>                       parse_rss_;
     std::map <QString, std::shared_ptr<RSSData >>   rss_data_;
     RSSSearchGUIThread                              *rss_search_thread_;
-    std::shared_ptr<QThreadPool>                    thread_pool_;
+    //std::shared_ptr<QThreadPool>                    thread_pool_;
     std::shared_ptr<Ui::RSSSearchGUI>               ui_;
 
 private slots:

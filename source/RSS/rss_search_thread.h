@@ -2,12 +2,12 @@
     rss_searcht_hread.h
     Jelyazka RSS/RDF reader
     Copyright (C) 2020 Vladimir Stoyanov
-    
+
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -21,10 +21,11 @@
 
 
 #include <memory>
+#include <queue>
+#include <unistd.h>
 
 #include <QList>
-#include <QMutex>
-#include <QRunnable>
+#include <QThread>
 #include <QString>
 #include <QThread>
 
@@ -32,24 +33,25 @@
 #include "logger.h"
 #include "Network/network_manager.h"
 
-//ToDo: refactor it
-class RSSSearchGUIThread : public QObject, public QRunnable
-{
-    Q_OBJECT
-public:
-    std::vector<QString>        l_url;
-    std::vector<QString>        l_url2;
-    QList<int>                  l_flags;
-    std::shared_ptr<QMutex>     mutex;
-    bool                        stop_thread;
 
+class RSSSearchGUIThread : public QThread
+{
+     Q_OBJECT
+public:
     explicit RSSSearchGUIThread();
     virtual ~RSSSearchGUIThread();
+
+private:
+    std::queue<QString>         url_queue_;
+    int                         pending_urls_;
+    bool                        stop_thread_;
 
 public:
     void run();
 
 public:
+    void    setInitialUrl (const QString & url);
+    void    stopThread ();
     void    addOrRemoveLastSymbolSlash  (const QString &url, QString *new_url);
     void    buildUrl                    (const QString &url_root, const QString &url, QString &return_url);
     int     checkForRootURL             (const QString &url, int i, int i1);
@@ -75,12 +77,11 @@ private:
 private:
     void    addOrRemoveWWW          (const QString &url, QString *new_url);
     void    allURLVariants          (const QString &url);
-    int     checkFinish             ();
     QString getEncodingFromRSS      (const QString &content);
 
 public slots:
     void onHttpRequestReceived(const HttpData);
-signals:  
+signals:
     void changeUrlLabel (const QString &url);
     void endOfUrls      ();
     void foundRSS       (const QString &name,

@@ -375,6 +375,13 @@ void Http::queryPartAndURL(QString &url, QString &query_part)
     {
         i=0;
     }
+
+    //write the protocol part
+    for (int j=0; j<i;++j)
+    {
+        tmp_url+=url[j];
+    }
+
     for (; i<url.length(); i++)
     {
         if (url[i]=='/')
