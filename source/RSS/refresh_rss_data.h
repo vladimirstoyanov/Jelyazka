@@ -27,9 +27,11 @@
 #include <QTimer>
 
 #include "database.h"
-#include "RSS/download_rss_data_thread.h"
+#include "Network/network_manager.h"
 #include "rss_data.h"
+#include "RSS/parse_rss.h"
 #include "settings.h"
+
 
 class RefreshRssData : public QObject
 {
@@ -51,16 +53,22 @@ public slots:
     void onWriteData (const RSSData rss_data);
 
 signals:
+    void httpGetRequest (const QString &);
     void rssDataUpdated (std::vector<RSSData>);
+
+private slots:
+    void onHttpRequestReceived (const HttpData httpData);
 
 private:
     DataBase                        data_base_;
-    std::vector<Feed>               feeds_;
-    DownloadRssDataThread*          download_rss_data_thread_;
     std::vector<RSSData>            new_articles_;
+    std::shared_ptr<NetworkManager>     network_manager_;
+    unsigned int                    response_number_;
     std::shared_ptr<QThreadPool>    thread_pool_;
     int                             time_msec_;
     std::shared_ptr<QTimer>         timer_;
+    unsigned int                    urls_size_;
+
 
 private:
    void makeConnections ();

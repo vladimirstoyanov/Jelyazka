@@ -42,7 +42,6 @@ SOURCES += main.cpp\
     RSS/refresh_rss_data.cpp \
     settings.cpp \
     RSS/update_rss_data.cpp \
-    RSS/download_rss_data_thread.cpp \
     GUI/about_window.cpp \
     GUI/help_window.cpp \
     GUI/main_window.cpp \
@@ -89,7 +88,6 @@ HEADERS  += \
     RSS/refresh_rss_data.h \
     settings.h \
     RSS/update_rss_data.h \
-    RSS/download_rss_data_thread.h \
     GUI/about_window.h \
     GUI/help_window.h \
     GUI/init_window.h \

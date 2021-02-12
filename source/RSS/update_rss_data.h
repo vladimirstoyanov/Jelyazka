@@ -26,8 +26,10 @@
 #include <QThreadPool>
 
 #include "database.h"
-#include "RSS/download_rss_data_thread.h"
+#include "Network/network_manager.h"
 #include "rss_data.h"
+#include "RSS/parse_rss.h"
+
 
 class UpdateRssData : public QObject
 {
@@ -43,13 +45,18 @@ public slots:
     void onUpdateSettings();
 
 signals:
+    void httpGetRequest (const QString &);
     void stateChanged (const QString &);
+
+private slots:
+    void onHttpRequestReceived (const HttpData httpData);
 
 private:
     DataBase                        data_base_;
-    std::vector<Feed>               feeds_;
-    DownloadRssDataThread*          download_rss_data_thread_;
-    std::shared_ptr<QThreadPool>    thread_pool_;
+    std::shared_ptr<NetworkManager> network_manager_;
+    unsigned int                    response_number_;
+    unsigned int                    urls_size_;
+
 
 private:
    void makeConnections ();

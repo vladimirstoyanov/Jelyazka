@@ -20,10 +20,11 @@
 
 RefreshRssData::RefreshRssData():
     data_base_()
-    , download_rss_data_thread_(nullptr)
-    , thread_pool_(std::make_shared <QThreadPool>(this))
+    , network_manager_(std::make_shared<NetworkManager> ())
+    , response_number_ (0)
     , time_msec_(60000) //1 minute
     , timer_ (std::make_shared<QTimer> ())
+    , urls_size_ (0)
 {
     makeConnections ();
 }
@@ -31,8 +32,6 @@ RefreshRssData::RefreshRssData():
 RefreshRssData::~RefreshRssData()
 {
     stop();
-    thread_pool_->waitForDone();
-    //download_rss_data_thread_->deleteLater();
 }
 
 void RefreshRssData::start()
@@ -87,16 +86,16 @@ void RefreshRssData::makeConnections ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
 
-    connect(download_rss_data_thread_
-            , SIGNAL(writeData(RSSData))
-            , this
-            , SLOT(onWriteData(const RSSData &))
+    connect( this
+            , SIGNAL(httpGetRequest(const QString &))
+            , network_manager_.get()
+            , SLOT(onHttpGetRequest(const QString &))
             , Qt::QueuedConnection);
 
-    connect(download_rss_data_thread_
-            , SIGNAL(downloadFinished())
+    connect( network_manager_.get()
+            , SIGNAL(httpRequestReceived(const HttpData))
             , this
-            , SLOT(onDownloadFinished())
+            , SLOT(onHttpRequestReceived(const HttpData))
             , Qt::QueuedConnection);
 }
 
@@ -106,37 +105,42 @@ void RefreshRssData::loadRssUrls()
 
     std::vector<QString> urls;
     urls = data_base_.getURLs();
-    feeds_.clear();
-
-    for (unsigned int i=0; i<urls.size(); ++i)
-    {
-        qDebug()<<"URL["<<i<<"] = "<<urls[i];
-        Feed feed;
-        feed.setFeedUrl(urls[i]);
-        feeds_.push_back(feed);
-    }
 }
 
 void RefreshRssData::loadRssFeeds()
 {
     qDebug()<<__PRETTY_FUNCTION__;
+    std::vector<QString> urls;
+    urls = data_base_.getURLs();
 
-    loadRssUrls();
-    if (feeds_.size()>0)
+
+    for (unsigned int i=0; i<urls_size_; ++i)
     {
-        //FIXME: (when thread_pool finished with init_main_window, it removes the pointer)
-        download_rss_data_thread_ = new DownloadRssDataThread ();
-        makeConnections ();
-        download_rss_data_thread_->setURLs(feeds_);
-
-        for (unsigned int i=0; i<feeds_.size(); ++i)
-        {
-            thread_pool_->start(download_rss_data_thread_);
-            qDebug()<<__PRETTY_FUNCTION__<<": after";
-        }
+        emit (httpGetRequest(urls[i]));
+        qDebug()<<__PRETTY_FUNCTION__<<": after";
     }
 
-    if (feeds_.size() == 0)
+    if (0 == urls_size_)
+    {
+        onDownloadFinished();
+    }
+}
+
+void RefreshRssData::onHttpRequestReceived (const HttpData httpData)
+{
+    ++response_number_;
+    qDebug()<<__PRETTY_FUNCTION__<<"!!!!!!!!!!!!!!!!!!!!!";
+    if (httpData.isResponseSuccessful())
+    {
+        ParseRSS parse;
+        std::shared_ptr<RSSData> rss_data = std::make_shared<RSSData> ();
+        rss_data->setURL(httpData.getUrl());
+
+        //pasrse web content to RSSData
+        parse.getRSSDataByWebSource(httpData.getData(), rss_data);
+        onWriteData(*rss_data.get());
+    }
+    if (response_number_ == urls_size_)
     {
         onDownloadFinished();
     }

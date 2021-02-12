@@ -29,7 +29,10 @@
 #include <QThreadPool>
 
 #include "database.h"
-#include "RSS/download_rss_data_thread.h"
+#include "Network/network_manager.h"
+#include "Network/http_data.h"
+#include "RSS/parse_rss.h"
+
 #include "ui_initwindow.h"
 
 
@@ -50,17 +53,23 @@ public slots:
     void onDownloadFinished ();
     void onWriteData(const RSSData &rss_data);
 
+private slots:
+    void onHttpRequestReceived (const HttpData httpData);
+
 signals:
     void stateChanged (const QString &event);
+    void httpGetRequest (const QString &);
 
 private:
     DataBase                            data_base_;
-    std::vector<Feed>                   feeds_;
     std::shared_ptr<QLabel>             image_init_label_;
     std::shared_ptr<QImage>             init_image_;
-    DownloadRssDataThread*              download_rss_data_thread_;
+    std::shared_ptr<NetworkManager>     network_manager_;
+    unsigned int                        response_number_;
     std::shared_ptr<QThreadPool>        thread_pool_;
     std::shared_ptr<Ui::InitWindow>     ui_;
+    unsigned int                        urls_size_;
+
 
 private:
     void loadRssFeeds();

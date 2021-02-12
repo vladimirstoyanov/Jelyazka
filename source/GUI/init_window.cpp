@@ -23,9 +23,12 @@ InitWindow::InitWindow(QWidget *parent) :
     , data_base_ ()
     , image_init_label_ (std::make_shared <QLabel>(this))
     , init_image_ (std::make_shared<QImage>("../resources/jelyazka_02_end.png"))
-    , download_rss_data_thread_ (new DownloadRssDataThread ())
+    //, download_rss_data_thread_ (new DownloadRssDataThread ())
+    , response_number_(0)
+    , network_manager_(std::make_shared<NetworkManager> ())
     , thread_pool_(std::make_shared <QThreadPool>(this))
     , ui_(new Ui::InitWindow)
+    , urls_size_ (0)
 {
     qDebug()<<__PRETTY_FUNCTION__;
     setupGui();
@@ -66,31 +69,23 @@ void InitWindow::loadRssUrls()
 
     std::vector<QString> urls;
     urls = data_base_.getURLs();
-
-    for (unsigned int i=0; i<urls.size(); ++i)
-    {
-        qDebug()<<"URL["<<i<<"] = "<<urls[i];
-        Feed feed;
-        feed.setFeedUrl(urls[i]);
-        feeds_.push_back(feed);
-    }
 }
 
 void InitWindow::loadRssFeeds()
 {
     qDebug()<<__PRETTY_FUNCTION__;
 
-    loadRssUrls();
-    download_rss_data_thread_->setURLs(feeds_);
+    std::vector<QString> urls;
+    urls = data_base_.getURLs();
+    urls_size_ = urls.size();
 
-
-    for (unsigned int i=0; i<feeds_.size(); ++i)
+    for (unsigned int i=0; i<urls_size_; ++i)
     {
-        thread_pool_->start(download_rss_data_thread_);
+        emit (httpGetRequest(urls[i]));
         qDebug()<<__PRETTY_FUNCTION__<<": after";
     }
 
-    if (feeds_.size() == 0)
+    if (0 == urls_size_)
     {
         onDownloadFinished();
     }
@@ -124,17 +119,38 @@ void InitWindow::setupConnections ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
 
-    connect(download_rss_data_thread_
-            , SIGNAL(writeData(RSSData))
-            , this
-            , SLOT(onWriteData(const RSSData &))
+    connect( this
+            , SIGNAL(httpGetRequest(const QString &))
+            , network_manager_.get()
+            , SLOT(onHttpGetRequest(const QString &))
             , Qt::QueuedConnection);
 
-    connect(download_rss_data_thread_
-            , SIGNAL(downloadFinished())
+    connect( network_manager_.get()
+            , SIGNAL(httpRequestReceived(const HttpData))
             , this
-            , SLOT(onDownloadFinished())
+            , SLOT(onHttpRequestReceived(const HttpData))
             , Qt::QueuedConnection);
+}
+
+
+void InitWindow::onHttpRequestReceived (const HttpData httpData)
+{
+    ++response_number_;
+    qDebug()<<__PRETTY_FUNCTION__<<"!!!!!!!!!!!!!!!!!!!!!";
+    if (httpData.isResponseSuccessful())
+    {
+        ParseRSS parse;
+        std::shared_ptr<RSSData> rss_data = std::make_shared<RSSData> ();
+        rss_data->setURL(httpData.getUrl());
+
+        //pasrse web content to RSSData
+        parse.getRSSDataByWebSource(httpData.getData(), rss_data);
+        onWriteData(*rss_data.get());
+    }
+    if (response_number_ == urls_size_)
+    {
+        onDownloadFinished();
+    }
 }
 
 void InitWindow::showEvent(QShowEvent *event)
