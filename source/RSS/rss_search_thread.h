@@ -1,7 +1,7 @@
 /*
-    rss_searcht_hread.h
+    rss_search_thread.h
     Jelyazka RSS/RDF reader
-    Copyright (C) 2020 Vladimir Stoyanov
+    Copyright (C) 2021 Vladimir Stoyanov
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,16 +16,14 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef WEB_SEARCH_INTERFACE_THREAD_H
-#define WEB_SEARCH_INTERFACE_THREAD_H
+#ifndef RSS_SEARCH_THREAD_H
+#define RSS_SEARCH_THREAD_H
 
 
 #include <memory>
 #include <queue>
 #include <unistd.h>
 
-#include <QList>
-#include <QThread>
 #include <QString>
 #include <QThread>
 
@@ -41,17 +39,11 @@ public:
     explicit RSSSearchGUIThread();
     virtual ~RSSSearchGUIThread();
 
-private:
-    std::queue<QString>         url_queue_;
-    int                         pending_urls_;
-    bool                        stop_thread_;
 
 public:
     void run();
 
 public:
-    void    setInitialUrl (const QString & url);
-    void    stopThread ();
     void    addOrRemoveLastSymbolSlash  (const QString &url, QString *new_url);
     void    buildUrl                    (const QString &url_root, const QString &url, QString &return_url);
     int     checkForRootURL             (const QString &url, int i, int i1);
@@ -64,15 +56,21 @@ public:
     void    getUrl                      (const QString &html_source, int &index, QString &return_url);
     int     insertUrlDB                 (const QString &url);
     int     lookForHref                 (const QString &source, int &index);
+    void    setInitialUrl               (const QString & url);
+    void    stopThread                  ();
     bool    setUrlRoot                  (QString url); //this method changes url variable
     void    setupConnections            ();
 
+
 private:
-    DataBase    data_base_;
-    bool        is_search_finished_; //FIXME
+    DataBase                        data_base_;
+    bool                            is_search_finished_;
     std::shared_ptr<NetworkManager> network_manager_;
-    Logger      log_;
-    QString     url_root_;
+    Logger                          log_;
+    int                             pending_urls_;
+    bool                            stop_thread_;
+    std::queue<QString>             url_queue_;
+    QString                         url_root_;
 
 private:
     void    addOrRemoveWWW          (const QString &url, QString *new_url);
@@ -80,7 +78,7 @@ private:
     QString getEncodingFromRSS      (const QString &content);
 
 public slots:
-    void onHttpRequestReceived(const HttpData);
+    void onHttpRequestReceived(const HttpData &);
 signals:
     void changeUrlLabel (const QString &url);
     void endOfUrls      ();
@@ -92,4 +90,4 @@ signals:
     void httpGetRequest (const QString &);
 };
 
-#endif // WEB_SEARCH_INTERFACE_THREAD_H
+#endif // RSS_SEARCH_THREAD_H

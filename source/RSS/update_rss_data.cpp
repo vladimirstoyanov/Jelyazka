@@ -64,7 +64,7 @@ void UpdateRssData::setupConnections ()
     connect( network_manager_.get()
             , SIGNAL(httpRequestReceived(const HttpData))
             , this
-            , SLOT(onHttpRequestReceived(const HttpData))
+            , SLOT(onHttpRequestReceived(const &HttpData))
             , Qt::QueuedConnection);
 }
 
@@ -100,10 +100,10 @@ void UpdateRssData::onAddRssData ()
     onUpdateSettings ();
 }
 
-void UpdateRssData::onHttpRequestReceived (const HttpData httpData)
+void UpdateRssData::onHttpRequestReceived (const HttpData &httpData)
 {
     ++response_number_;
-    qDebug()<<__PRETTY_FUNCTION__<<"!!!!!!!!!!!!!!!!!!!!!";
+    qDebug()<<__PRETTY_FUNCTION__;
     if (httpData.isResponseSuccessful())
     {
         ParseRSS parse;

@@ -95,7 +95,7 @@ void RefreshRssData::setupConnections ()
     connect( network_manager_.get()
             , SIGNAL(httpRequestReceived(const HttpData))
             , this
-            , SLOT(onHttpRequestReceived(const HttpData))
+            , SLOT(onHttpRequestReceived(const HttpData &))
             , Qt::QueuedConnection);
 }
 
@@ -118,7 +118,7 @@ void RefreshRssData::loadRssFeeds()
     }
 }
 
-void RefreshRssData::onHttpRequestReceived (const HttpData httpData)
+void RefreshRssData::onHttpRequestReceived (const HttpData &httpData)
 {
     ++response_number_;
     qDebug()<<__PRETTY_FUNCTION__<<"!!!!!!!!!!!!!!!!!!!!!";

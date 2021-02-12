@@ -1,7 +1,7 @@
 /*
     search.cpp
     Jelyazka RSS/RDF reader
-    Copyright (C) 2014 Vladimir Stoyanov
+    Copyright (C) 2021 Vladimir Stoyanov
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,9 +16,6 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef __SEARCH_CPP__
-#define __SEARCH_CPP__
-
 #include "search.h"
 
 Search::Search()
@@ -37,10 +34,13 @@ void Search::searchBefore(const QString &text, const QString &subtext, int *inde
         *index = -1;
         return;
     }
-    for(int i = 1; i <= subtext.length(); i++)
+    for(int i = 1; i <= subtext.length(); ++i)
     {
         int pos = T[i - 1];
-        while(pos != -1 && subtext[pos] != subtext[i - 1]) pos = T[pos];
+        while(pos != -1 && subtext[pos] != subtext[i - 1])
+        {
+            pos = T[pos];
+        }
         T[i] = pos + 1;
     }
 
@@ -48,12 +48,14 @@ void Search::searchBefore(const QString &text, const QString &subtext, int *inde
     int kp = 0;
     while(sp < text.length())
     {
-        while(kp != -1 && (kp == subtext.length() || subtext[kp] != text[sp])) kp = T[kp];
-        kp++;
-        sp++;
+        while(kp != -1 && (kp == subtext.length() || subtext[kp] != text[sp]))
+        {
+            kp = T[kp];
+        }
+        ++kp;
+        ++sp;
         if(kp == subtext.length())
         {
-            //matches.push_back(sp - K.size());
             *index = sp - subtext.length();
             return;
         }
@@ -73,7 +75,10 @@ void Search::searchAfter(const QString &text, const QString &subtext, int *index
     for(int i = 1; i <= subtext.length(); i++)
     {
         int pos = T[i - 1];
-        while(pos != -1 && subtext[pos] != subtext[i - 1]) pos = T[pos];
+        while(pos != -1 && subtext[pos] != subtext[i - 1])
+        {
+            pos = T[pos];
+        }
         T[i] = pos + 1;
     }
 
@@ -81,12 +86,14 @@ void Search::searchAfter(const QString &text, const QString &subtext, int *index
     int kp = 0;
     while(sp < text.length())
     {
-        while(kp != -1 && (kp == subtext.length() || subtext[kp] != text[sp])) kp = T[kp];
-        kp++;
-        sp++;
+        while(kp != -1 && (kp == subtext.length() || subtext[kp] != text[sp]))
+        {
+            kp = T[kp];
+        }
+        ++kp;
+        ++sp;
         if(kp == subtext.length())
         {
-            //matches.push_back(sp - K.size());
             *index = sp;
             return;
         }
@@ -94,5 +101,3 @@ void Search::searchAfter(const QString &text, const QString &subtext, int *index
 
     *index = -1;
 }
-
-#endif

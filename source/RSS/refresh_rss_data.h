@@ -55,7 +55,7 @@ signals:
     void rssDataUpdated (std::vector<RSSData>);
 
 private slots:
-    void onHttpRequestReceived (const HttpData httpData);
+    void onHttpRequestReceived (const HttpData &httpData);
 
 private:
     DataBase                            data_base_;

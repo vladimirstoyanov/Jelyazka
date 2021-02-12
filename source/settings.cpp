@@ -20,6 +20,7 @@ Settings::~Settings ()
 {
 }
 
+//ToDo: refactor the funtion
 void Settings::loadSettings()
 {
     QFile file("../resources/Options");
@@ -201,6 +202,7 @@ void Settings::loadSettings()
     file.close();
 }
 
+//ToDo: refactor the funtion
 void Settings::saveSettings ()
 {
     QFile file("../resources/Options");

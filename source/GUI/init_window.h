@@ -53,7 +53,7 @@ private:
     void writeData(const RSSData &rss_data);
 
 private slots:
-    void onHttpRequestReceived (const HttpData httpData);
+    void onHttpRequestReceived (const HttpData &httpData);
 
 signals:
     void stateChanged (const QString &event);

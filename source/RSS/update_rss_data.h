@@ -47,7 +47,7 @@ signals:
     void stateChanged (const QString &);
 
 private slots:
-    void onHttpRequestReceived (const HttpData httpData);
+    void onHttpRequestReceived (const HttpData &httpData);
 
 private:
     DataBase                        data_base_;

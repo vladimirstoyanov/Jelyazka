@@ -77,7 +77,7 @@ void RSSSearchGUIThread::run()
   }
 }
 
-void RSSSearchGUIThread::onHttpRequestReceived(const HttpData httpData)
+void RSSSearchGUIThread::onHttpRequestReceived(const HttpData & httpData)
 {
     qDebug()<<__PRETTY_FUNCTION__;
     Search cs;
@@ -516,6 +516,6 @@ void RSSSearchGUIThread::setupConnections ()
     connect( network_manager_.get()
             , SIGNAL(httpRequestReceived(const HttpData))
             , this
-            , SLOT(onHttpRequestReceived(const HttpData))
+            , SLOT(onHttpRequestReceived(const HttpData &))
             , Qt::QueuedConnection);
 }
