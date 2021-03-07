@@ -6,7 +6,7 @@ NotificationsOptions::NotificationsOptions(QWidget *parent, const int tree_widge
     , sb_refresh_time_ (std::make_shared<QSpinBox> (parent))
     , ok_button_height_ (ok_button_height)
     , tree_widget_width_ (tree_widget_width)
-    , parent (parent)
+    , parent_ (parent)
 {
 
 

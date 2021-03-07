@@ -10,7 +10,7 @@ FiltersOptions::FiltersOptions(QWidget *parent, const int tree_widget_width, con
     , ok_button_height_ (ok_button_height)
     , offset_between_widgets_ (5)
     , tree_widget_width_ (tree_widget_width)
-    , parent (parent)
+    , parent_ (parent)
 {
 
 
@@ -34,7 +34,7 @@ void FiltersOptions::setupGui ()
                                 pb_add_filter_->height());
     te_add_filter_->setGeometry(pb_add_filter_->x() + pb_add_filter_->width() + offset_between_widgets_,
                                 pb_add_filter_->y(),
-                                parent->width() - (pb_add_filter_->x() + pb_add_filter_->width() + 10),
+                                parent_->width() - (pb_add_filter_->x() + pb_add_filter_->width() + 10),
                                 te_add_filter_->height());
     l_filter_list_->setGeometry(te_add_filter_->x(),
                                 te_add_filter_->y() + te_add_filter_->height() + offset_between_widgets_,
@@ -42,8 +42,8 @@ void FiltersOptions::setupGui ()
                                 l_filter_list_->height());
     lw_filter_list_->setGeometry(te_add_filter_->x(),
                                  l_filter_list_->y()+l_filter_list_->height()+offset_between_widgets_,
-                                 parent->width() - (l_filter_list_->x()+offset_between_widgets_),
-                                 parent->height() - (l_filter_list_->y()+ l_filter_list_->height()+15+ ok_button_height_));
+                                 parent_->width() - (l_filter_list_->x()+offset_between_widgets_),
+                                 parent_->height() - (l_filter_list_->y()+ l_filter_list_->height()+15+ ok_button_height_));
     pb_remove_filter_->setGeometry(cb_enable_filtering_->x(),
                                   lw_filter_list_->y(),
                                   pb_remove_filter_->width(),
@@ -94,13 +94,13 @@ void FiltersOptions::resize ()
 {
     te_add_filter_->setGeometry(pb_add_filter_->x() + pb_add_filter_->width() + offset_between_widgets_,
                                pb_add_filter_->y(),
-                               parent->width() - (pb_add_filter_->x() + pb_add_filter_->width() + 10),
+                               parent_->width() - (pb_add_filter_->x() + pb_add_filter_->width() + 10),
                                te_add_filter_->height());
 
     lw_filter_list_->setGeometry(te_add_filter_->x(),
                                 l_filter_list_->y()+l_filter_list_->height()+offset_between_widgets_,
-                                parent->width() - (l_filter_list_->x()+offset_between_widgets_),
-                                parent->height() - (l_filter_list_->y()+ l_filter_list_->height()+15+ ok_button_height_));
+                                parent_->width() - (l_filter_list_->x()+offset_between_widgets_),
+                                parent_->height() - (l_filter_list_->y()+ l_filter_list_->height()+15+ ok_button_height_));
 
 }
 

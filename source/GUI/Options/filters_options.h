@@ -45,7 +45,7 @@ private:
      int                                     ok_button_height_;
      const unsigned int                      offset_between_widgets_;
      int                                     tree_widget_width_;
-     QWidget *                               parent;
+     std::unique_ptr<QWidget>                parent_;
 
 private:
     int addStringToFilterList(const QString &current_text);

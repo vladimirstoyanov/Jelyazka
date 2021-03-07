@@ -12,7 +12,7 @@ FeedsOptions::FeedsOptions(QWidget *parent,
     , ok_button_y_(ok_button_y)
     , offset_between_widgets_(5)
     , tree_widget_width_ (tree_widget_width)
-    , parent (parent)
+    , parent_ (parent)
 {
 
 
@@ -67,7 +67,8 @@ void FeedsOptions::hide ()
 
 void FeedsOptions::positioningFeedsOptionWidgets()
 {
-    int width = parent->width() - (offset_between_widgets_*2 + tree_widget_width_);
+    int width = parent_->width();
+    width -= (offset_between_widgets_*2 + tree_widget_width_);
 
     cf_label_search_->setGeometry(tree_widget_width_ + offset_between_widgets_,
                                     offset_between_widgets_,
@@ -82,7 +83,7 @@ void FeedsOptions::positioningFeedsOptionWidgets()
     feed_list_->setGeometry(cf_label_search_->x(),
                                 cf_find_feed_->y() + cf_find_feed_->height()+10,
                                 width,
-                                parent->height()-(20 +cf_find_feed_->height() + ok_button_height_));
+                                parent_->height()-(20 +cf_find_feed_->height() + ok_button_height_));
 
     remove_button_->setGeometry(feed_list_->x(),
                                   ok_button_y_,

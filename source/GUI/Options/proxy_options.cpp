@@ -9,7 +9,7 @@ ProxyOptions::ProxyOptions(QWidget *parent, const int tree_widget_width, const i
     , ok_button_height_ (ok_button_height)
     , offset_between_widgets_ (5)
     , tree_widget_width_ (tree_widget_width)
-    , parent (parent)
+    , parent_ (parent)
 {
 
 }
