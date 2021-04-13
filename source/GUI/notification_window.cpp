@@ -238,15 +238,15 @@ void NotificationWindow::onRssDataUpdated(const std::vector<RSSData> &updated_rs
         return;
     }
 
-    for (unsigned int i=0; i<updated_rss_data.size(); i++)
+    for (const RSSData &item: updated_rss_data)
     {
-                html_source+="<a href = \""
-                        + updated_rss_data[i].articleAt(0).getLink()
-                        + "\" style=\"color: #000000\">"
-                        + updated_rss_data[i].getSiteName()
-                        + ": "
-                        + updated_rss_data[i].articleAt(0).getTitle()
-                        + "</a><br><hr>";
+        html_source+="<a href = \""
+                + item.articleAt(0).getLink()
+                + "\" style=\"color: #000000\">"
+                + item.getSiteName()
+                + ": "
+                + item.articleAt(0).getTitle()
+                + "</a><br><hr>";
     }
 
     ui_->textBrowser->setHtml(html_source);

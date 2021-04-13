@@ -22,7 +22,6 @@
 #include <limits.h>
 #include <map>
 #include <memory>
-#include <vector>
 
 #include <QApplication>
 #include <QCloseEvent>
@@ -80,11 +79,9 @@ private:
     QString     changeName(const QString &name);
     void        closeEvent(QCloseEvent *);
     int         checkExistingURL(const QString &url);
-    //void        clearSearchCache();
     void        convertBigEndianToLittleEndian(QString &url);
     QString     getEncodingFromRSS(const QString &content);
     QString     insertName(const QString &name);
-    void        interateSite(QString url_addres/*, vector<QString>&result_urls*/);
     int         isFeedChecked(const QString &url, int &index);
     void        paintRows();
     void        returnModifedString(QString &str);

@@ -528,16 +528,17 @@ void MainWindow::onUpdateRSSData()
 void MainWindow::onRssDataUpdated (const std::vector<RSSData> &updated_rss_data)
 {
     std::map<QString, RSSData>::iterator it;
-    for (unsigned int i=0; i<updated_rss_data.size(); ++i)
+
+    for (const RSSData &item: updated_rss_data)
     {
-        it = rss_data_.find(updated_rss_data[i].getSiteName());
-        if (it!=rss_data_.end())
-        {
-            for (size_t j=0; j<updated_rss_data[i].getArticlesSize(); ++i)
-            {
-                it->second.articlesPushFront(updated_rss_data[i].articleAt(j));
-            }
-        }
+         it = rss_data_.find(item.getSiteName());
+         if (it!=rss_data_.end())
+         {
+             for (size_t j=0; j<item.getArticlesSize(); ++j)
+             {
+                 it->second.articlesPushFront(item.articleAt(j));
+             }
+         }
     }
 }
 
