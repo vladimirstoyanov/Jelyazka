@@ -491,7 +491,7 @@ void DataBase::createTable (const QString &table_name, const QString &query_stri
     closeDB();
 }
 
-void DataBase::updateArticles(RSSData rss_data)
+void DataBase::updateArticles(const RSSData &rss_data)
 {
     std::map<QString, RSSData>::iterator it;
     std::map<QString, RSSData> all_rss_data =  getRssData ();
