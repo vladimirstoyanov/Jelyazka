@@ -88,15 +88,3 @@ void NotificationsOptions::initilize ()
 {
 
 }
-
-//Options->OK button clicked
-void NotificationsOptions::confirmSettngs ()
-{
-
-}
-
-//Options->Cancel button clicked
-void NotificationsOptions::rollbackSettings ()
-{
-
-}

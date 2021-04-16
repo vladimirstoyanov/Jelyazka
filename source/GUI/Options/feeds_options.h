@@ -32,8 +32,6 @@ public:
     void saveSettings () override;
     void setupGui () override;
     void show () override;
-    void confirmSettngs () override;
-    void rollbackSettings () override;
 
 
 

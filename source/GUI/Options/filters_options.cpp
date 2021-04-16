@@ -214,15 +214,3 @@ void FiltersOptions::initilize ()
     lw_filter_list_->clear();
     fillFilterListView();
 }
-
-//Options->OK button clicked
-void FiltersOptions::confirmSettngs ()
-{
-
-}
-
-//Options->Cancel button clicked
-void FiltersOptions::rollbackSettings ()
-{
-
-}

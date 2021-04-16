@@ -85,9 +85,9 @@ void OptionsWindow::loadSettings()
 
 void OptionsWindow::saveSettings()
 {
-    for (unsigned int i=0; i<options.size(); ++i)
+    for (auto option: options)
     {
-        options[i]->saveSettings();
+        option->saveSettings();
     }
 
     Jelyazka::Settings::saveSettings();
@@ -145,22 +145,12 @@ void OptionsWindow::on_okButton_clicked()
     this->setEnabled(false); //gray out the "Option Window"
     saveSettings(); //save current options in a file
 
-    for (auto item: options)
-    {
-      item->confirmSettngs();
-    }
-
     emit (stateChanged("UpdatingSettings"));
 }
 
 //'Cancel' button clicked event
 void OptionsWindow::on_cancelButton_clicked()
-{
-    for (auto item: options)
-    {
-      item->rollbackSettings();
-    }
-    
+{   
     emit (stateChanged("HideOptionWindow"));
 }
 

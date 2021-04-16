@@ -28,7 +28,10 @@ void FeedsOptions::resize()
 
 void FeedsOptions::saveSettings ()
 {
-
+    for (int i=0; i< removed_feeds_.size(); ++i)
+    {
+        data_base_.removeDataFromFeedList(removed_feeds_.at(i));
+    }
 }
 
 void FeedsOptions::loadSettings ()
@@ -158,19 +161,4 @@ void FeedsOptions::on_removeButton_clicked()
         removed_feeds_.append( index.data(Qt::DisplayRole ).toString());
         feed_list_->takeItem(index.row());
     }
-}
-
-//Options->OK button clicked
-void FeedsOptions::confirmSettngs ()
-{
-    for (int i=0; i< removed_feeds_.size(); ++i)
-    {
-        data_base_.removeDataFromFeedList(removed_feeds_.at(i));
-    }
-}
-
-//Options->Cancel button clicked
-void FeedsOptions::rollbackSettings ()
-{
-
 }
