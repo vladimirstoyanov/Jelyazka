@@ -70,7 +70,6 @@ private:
     void addItemToTreeView(const QString &name);
     void createOptions ();
     void insertRowToRSSTable(const QString &site_name, const QString &url, const QString &version);
-    void removeDataFromRSSTable(const QString &site_name, const bool all_data);
     void returnModifedString(QString &str);
     void setupGui ();
     void treeWidgetSetup ();

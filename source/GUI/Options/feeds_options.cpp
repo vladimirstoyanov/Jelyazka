@@ -31,6 +31,7 @@ void FeedsOptions::saveSettings ()
     for (int i=0; i< removed_feeds_.size(); ++i)
     {
         data_base_.removeDataFromFeedList(removed_feeds_.at(i));
+        data_base_.removeDataFromRssData(removed_feeds_.at(i));
     }
 }
 

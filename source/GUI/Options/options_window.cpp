@@ -65,11 +65,6 @@ void OptionsWindow::addItemToTreeView(const QString &name)
     ui_->treeWidget->addTopLevelItem(item);
 }
 
-void OptionsWindow::removeDataFromRSSTable(const QString &site_name, const bool all_data)
-{
-    data_base_.removeDataFromRSSTable(site_name, all_data);
-}
-
 void OptionsWindow::insertRowToRSSTable(const QString &name, const QString &url, const QString &version)
 {
     data_base_.insertIntoFeedList(name, url, version);

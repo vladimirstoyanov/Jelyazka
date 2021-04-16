@@ -90,10 +90,8 @@ void UpdateRssData::loadRssFeeds()
 
 void UpdateRssData::onUpdateSettings()
 {
-    //ToDo: optimize it to download only the new RSS feeds
     qDebug()<<__PRETTY_FUNCTION__;
-    data_base_.removeAllDataFromRssData();
-    loadRssFeeds (); //start downloading of rss data
+    emit (stateChanged("SettingsUpdated"));
 }
 
 void UpdateRssData::onAddRssData ()

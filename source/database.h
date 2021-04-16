@@ -32,7 +32,7 @@ public:
                                 , const QString &description);
     void    insertRowToFiltersTable(const QString &filter_name);
     void    removeAllDataFromRssData();
-    void    removeDataFromRSSTable(const QString &site_name, const bool all_data);
+    void    removeDataFromRssData(const QString &site_name);
     void    removeDataFromFilters();
     void    removeDataFromFeedList(const QString &site_name);
     int     selectURLFromAllURLs(const QString &);

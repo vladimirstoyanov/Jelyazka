@@ -157,24 +157,13 @@ void DataBase::removeAllDataFromRssData()
     closeDB();
 }
 
-void DataBase::removeDataFromRSSTable(const QString &site_name, const bool all_data)
+void DataBase::removeDataFromRssData(const QString &site_name)
 {
     {
         openDB();
         QSqlQuery query(q_sql_data_base_);
 
-        if (all_data)
-        {
-            query.prepare("delete from feed_list");
-            if (!query.exec())
-            {
-                qDebug()<<"Fail:" + query.lastError().text();
-            }
-            closeDB();
-            return;
-        }
-
-        query.prepare(QString("delete from feed_list where name=\'%1\'").arg(site_name));
+        query.prepare(QString("delete from rss_data where name=\'%1\'").arg(site_name));
         if (!query.exec())
         {
             qDebug()<<"Fail:" + query.lastError().text();
@@ -432,6 +421,7 @@ void DataBase::removeDataFromFeedList(const QString &site_name)
     }
     closeDB();
 }
+
 
 void DataBase::createAllURLTable()
 {
