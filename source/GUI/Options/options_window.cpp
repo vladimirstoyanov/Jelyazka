@@ -77,9 +77,9 @@ void OptionsWindow::insertRowToRSSTable(const QString &name, const QString &url,
 
 void OptionsWindow::loadSettings()
 {
-    for (unsigned int i=0; i<options.size(); ++i)
+    for (auto option: options)
     {
-        options[i]->loadSettings();
+        option->loadSettings();
     }
 }
 
@@ -116,9 +116,9 @@ void OptionsWindow::resizeEvent(QResizeEvent *event)
                                       download_feed_status_->width(),
                                       download_feed_status_->height());
 
-    for (unsigned int i=0; i<options.size(); ++i)
+    for (auto option: options)
     {
-        options[i]->resize();
+        option->resize();
     }
 }
 
@@ -130,9 +130,9 @@ void OptionsWindow::showEvent(QShowEvent *event)
 
     download_feed_status_->hide();
 
-    for (unsigned int i=0; i<options.size(); ++i)
+    for (auto option: options)
     {
-        options[i]->initilize();
+         option->initilize();
     }
 
     this->setEnabled(true);
@@ -243,8 +243,8 @@ void OptionsWindow::setupGui ()
     widgetsSetup();
     createOptions();
 
-    for (unsigned int i=0; i<options.size(); ++i)
+    for (auto option: options)
     {
-        options[i]->setupGui();
+        option->setupGui();
     }
 }
