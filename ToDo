@@ -1,8 +1,2 @@
 - Can't resize Saerch RSS feeds window while searching for feeds;
 - When click on Stop search button from Search RSS feed window it continues to search;
-- Optimize it to load only new added rss feeds
-new_rss_feeds
-  []-    void    removeAllDataFromNewRssFeeds();]
-  []void    insertIntoNewRssFeeds(const QString &name, const QString &url, const QString &version);
-  - std::vector<QString> getNewUrls();
-- When you mark many feeds to remove, it doesn't remove them;
