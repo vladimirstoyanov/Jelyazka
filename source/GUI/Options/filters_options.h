@@ -30,6 +30,8 @@ public:
     void saveSettings () override;
     void setupGui () override;
     void show () override;
+    void confirmSettngs () override;
+    void rollbackSettings () override;
 
 private:
     std::shared_ptr<QCheckBox>              cb_enable_filtering_;

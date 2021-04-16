@@ -98,3 +98,15 @@ void ProxyOptions::initilize ()
 {
     on_cb_enable_proxy_clicked(Jelyazka::Settings::getIsProxyConnectionEnabled());
 }
+
+//Options->OK button clicked
+void ProxyOptions::confirmSettngs ()
+{
+
+}
+
+//Options->Cancel button clicked
+void ProxyOptions::rollbackSettings ()
+{
+
+}

@@ -144,6 +144,7 @@ int FeedsOptions::addToFeedList(const QString &feed_name)
 void FeedsOptions::initilize ()
 {
     feed_list_->clear();
+    removed_feeds_.clear();
     fillFeedListView();
 }
 
@@ -152,16 +153,24 @@ void FeedsOptions::on_removeButton_clicked()
 {
     //get selected items
     QModelIndexList list =feed_list_->selectionModel()->selectedIndexes();
-    QStringList slist;
+
     foreach(const QModelIndex &index, list){
-        slist.append( index.data(Qt::DisplayRole ).toString());
+        removed_feeds_.append( index.data(Qt::DisplayRole ).toString());
         feed_list_->takeItem(index.row());
     }
+}
 
-    //FIXME: this should remove data from DB if Option->Okay button is clicked
-    //remove selected items from db
-    for (int i=0; i< slist.size(); ++i)
+//Options->OK button clicked
+void FeedsOptions::confirmSettngs ()
+{
+    for (int i=0; i< removed_feeds_.size(); ++i)
     {
-        data_base_.removeDataFromFeedList(slist.at(i));
+        data_base_.removeDataFromFeedList(removed_feeds_.at(i));
     }
+}
+
+//Options->Cancel button clicked
+void FeedsOptions::rollbackSettings ()
+{
+
 }

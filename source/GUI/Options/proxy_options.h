@@ -26,6 +26,8 @@ public:
     void saveSettings () override;
     void setupGui () override;
     void show () override;
+    void confirmSettngs () override;
+    void rollbackSettings () override;
 
 private slots:
      void on_cb_enable_proxy_clicked(bool enabled);

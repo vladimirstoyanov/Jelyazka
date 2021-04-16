@@ -32,6 +32,10 @@ public:
     void saveSettings () override;
     void setupGui () override;
     void show () override;
+    void confirmSettngs () override;
+    void rollbackSettings () override;
+
+
 
 private slots:
     void on_removeButton_clicked();
@@ -47,6 +51,7 @@ private:
     std::shared_ptr<QListWidget>            feed_list_;
     std::vector<QString>                    l_old_feed_list_;
     std::shared_ptr<QPushButton>            remove_button_;
+    QStringList                             removed_feeds_;
 
 private:
      DataBase                                data_base_;
