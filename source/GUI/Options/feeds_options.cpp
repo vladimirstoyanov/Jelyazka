@@ -125,11 +125,12 @@ void FeedsOptions::initilize ()
 //'Remove' button click event
 void FeedsOptions::on_removeButton_clicked()
 {
-    //get selected items
-    QModelIndexList list =feed_list_->selectionModel()->selectedIndexes();
+    removed_feeds_.clear();
 
-    foreach(const QModelIndex &index, list){
-        removed_feeds_.append( index.data(Qt::DisplayRole ).toString());
-        feed_list_->takeItem(index.row());
+    //remove selected items
+    QModelIndexList indexes;
+    while((indexes = feed_list_->selectionModel()->selectedIndexes()).size()) {
+        removed_feeds_.append( indexes.first().data(Qt::DisplayRole ).toString());
+        feed_list_->takeItem(indexes.first().row());
     }
 }

@@ -75,7 +75,7 @@ void UpdateRssData::loadRssFeeds()
     std::vector<QString> urls;
     urls = data_base_.getNewUrls();
     urls_size_ = urls.size();
-
+    response_number_ = 0;
     for (const QString & item: urls)
     {
         emit (httpGetRequest(item));

@@ -120,9 +120,8 @@ void RSSSearchGUI::showEvent(QShowEvent *)
 {
     this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
 
-    //tree_node_ = new TreeNode;
     rss_data_.clear();
-
+    data_base_.removeAllDataFromNewRssFeeds();
     rss_search_thread_->stopThread();
     int row_count = model_->rowCount();
     model_->removeRows(0, row_count);
