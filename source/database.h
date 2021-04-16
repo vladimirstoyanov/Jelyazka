@@ -23,15 +23,18 @@ public:
     std::map<QString, RSSData> getRssData();
     QString getURLByName(const QString &name);
     std::vector<QString> getURLs();
+    std::vector<QString> getNewUrls();
     QString getVersionByName(const QString &name);
     int     insertIntoAllURLs(const QString &);
     void    insertIntoFeedList(const QString &name, const QString &url, const QString &version);
+    void    insertIntoNewRssFeeds(const QString &name, const QString &url, const QString &version);
     void    insertIntoRssDataTable(const QString &name
                                 , const QString &title
                                 , const QString &link
                                 , const QString &description);
     void    insertRowToFiltersTable(const QString &filter_name);
     void    removeAllDataFromRssData();
+    void    removeAllDataFromNewRssFeeds();
     void    removeDataFromRssData(const QString &site_name);
     void    removeDataFromFilters();
     void    removeDataFromFeedList(const QString &site_name);
@@ -43,6 +46,7 @@ private:
     void createAllURLTable();
     void createFeedListTable();
     void createFiltersTable();
+    void createNewRssFeeds();
     void createRssDataTable();
     void createTable (const QString &table_name, const QString &query_string);
     int  dropTable(const QString &table_name);

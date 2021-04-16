@@ -18,6 +18,7 @@ void DataBase::createTables()
     createFeedListTable();
     createFiltersTable();
     createRssDataTable();
+    createNewRssFeeds();
 }
 
 void DataBase::openDB()
@@ -114,6 +115,33 @@ std::vector<QString> DataBase::getURLs()
     return urls;
 }
 
+std::vector<QString> DataBase::getNewUrls()
+{
+    std::vector<QString> urls;
+    {
+        openDB();
+        QSqlQuery query(q_sql_data_base_);
+
+        query.prepare( "SELECT * FROM new_rss_feeds" );
+
+        if( !query.exec() )
+        {
+            qDebug()<<__PRETTY_FUNCTION__<<"Error:"<<query.lastError();
+            closeDB();
+            return urls;
+        }
+
+        while(query.next())
+        {
+            QString name;
+            name = query.value(2).toByteArray().data();
+            urls.push_back(name);
+        }
+    }
+    closeDB();
+    return urls;
+}
+
 //fill view_feeds (QListWidget var)
 void DataBase::getFeeds(std::vector<QString> *l_old_view_feed)
 {
@@ -157,6 +185,23 @@ void DataBase::removeAllDataFromRssData()
     closeDB();
 }
 
+
+void DataBase::removeAllDataFromNewRssFeeds()
+{
+    {
+        openDB();
+        QSqlQuery query(q_sql_data_base_);
+
+
+            query.prepare("delete from new_rss_feeds");
+            if (!query.exec())
+            {
+                qDebug()<<"Fail:" + query.lastError().text();
+            }
+    }
+    closeDB();
+}
+
 void DataBase::removeDataFromRssData(const QString &site_name)
 {
     {
@@ -178,6 +223,24 @@ void DataBase::insertIntoFeedList(const QString &name, const QString &url, const
         openDB();
         QSqlQuery query(q_sql_data_base_);
         query.prepare("insert into feed_list (name, url, version) values (?,?,?)");
+        query.addBindValue(name);
+        query.addBindValue(url);
+        query.addBindValue(version);
+
+        if (!query.exec())
+        {
+            qDebug()<<__PRETTY_FUNCTION__<<"Error:"<<query.lastError();
+        }
+    }
+    closeDB();
+}
+
+void DataBase::insertIntoNewRssFeeds(const QString &name, const QString &url, const QString &version)
+{
+    {
+        openDB();
+        QSqlQuery query(q_sql_data_base_);
+        query.prepare("insert into new_rss_feeds (name, url, version) values (?,?,?)");
         query.addBindValue(name);
         query.addBindValue(url);
         query.addBindValue(version);
@@ -429,6 +492,16 @@ void DataBase::createAllURLTable()
                  "create table all_urls "
                  "(id integer PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, "
                  "url varchar)");
+}
+
+void DataBase::createNewRssFeeds()
+{
+    createTable ("new_rss_feeds",
+                 "create table new_rss_feeds "
+                 "(id integer PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, "
+                 "name varchar, "
+                 "url varchar, "
+                 "version integer)");
 }
 
 void DataBase::createFeedListTable()

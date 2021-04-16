@@ -73,7 +73,7 @@ void UpdateRssData::loadRssFeeds()
     qDebug()<<__PRETTY_FUNCTION__;
 
     std::vector<QString> urls;
-    urls = data_base_.getURLs();
+    urls = data_base_.getNewUrls();
     urls_size_ = urls.size();
 
     for (const QString & item: urls)
@@ -97,7 +97,7 @@ void UpdateRssData::onUpdateSettings()
 void UpdateRssData::onAddRssData ()
 {
     qDebug()<<__PRETTY_FUNCTION__;
-    onUpdateSettings ();
+    loadRssFeeds ();
 }
 
 void UpdateRssData::onHttpRequestReceived (const HttpData &httpData)

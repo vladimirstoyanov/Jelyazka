@@ -297,6 +297,7 @@ void RSSSearchGUI::on_addRssFeeds_clicked() //"add RSS feeds" button
     for(it = rss_data_.begin(); it!=rss_data_.end(); ++it)
     {
         data_base_.insertIntoFeedList(it->second->getSiteName(), it->second->getURL(), it->second->getVersion());
+        data_base_.insertIntoNewRssFeeds(it->second->getSiteName(), it->second->getURL(), it->second->getVersion());
     }
 
     QApplication::restoreOverrideCursor();

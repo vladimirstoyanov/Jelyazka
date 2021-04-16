@@ -16,7 +16,6 @@ JelayzkaStateMachine::JelayzkaStateMachine ():
     , tray_icon_state_          (std::make_shared<TrayIconState> ())
     , update_settings_state_    (std::make_shared<UpdateSettingsState> ())
 {
-    //ToDo: add transitions
     transitions_.addTransition("RemoveOldData"         , idle_state_, remove_old_data_state_);
 
     transitions_.addTransition("RemoveOldDataFinished" , remove_old_data_state_, init_window_state_);
