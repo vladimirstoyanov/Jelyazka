@@ -4,9 +4,7 @@ FeedsOptions::FeedsOptions(QWidget *parent,
                            const int tree_widget_width,
                            const int ok_button_height,
                            const int ok_button_y):
-     cf_find_feed_ (std::make_shared<QLineEdit> (parent))
-    , cf_label_search_ (std::make_shared<QLabel>(parent))
-    , feed_list_  (std::make_shared<QListWidget>(parent))
+    feed_list_  (std::make_shared<QListWidget>(parent))
     , remove_button_ (std::make_shared<QPushButton> ("Remove", parent))
     , ok_button_height_ (ok_button_height)
     , ok_button_y_(ok_button_y)
@@ -44,15 +42,10 @@ void FeedsOptions::setupGui ()
 {
     feed_list_->setSelectionMode(QAbstractItemView::MultiSelection);
 
-    connect(cf_find_feed_.get(),SIGNAL(textChanged(QString)), this, SLOT(on_textChanged(QString)));
-
     connect(remove_button_.get(),
                 SIGNAL(clicked()),
                 this,
                 SLOT(on_removeButton_clicked()));
-
-
-    cf_label_search_->setText("Search");
 
     show();
 }
@@ -62,15 +55,11 @@ void FeedsOptions::show ()
 
     remove_button_->show();
     feed_list_->show();
-    cf_find_feed_->show();
-    cf_label_search_->show();
 }
 void FeedsOptions::hide ()
 {
     remove_button_->hide();
     feed_list_->hide();
-    cf_find_feed_->hide();
-    cf_label_search_->hide();
 }
 
 void FeedsOptions::positioningFeedsOptionWidgets()
@@ -78,34 +67,15 @@ void FeedsOptions::positioningFeedsOptionWidgets()
     int width = parent_->width();
     width -= (offset_between_widgets_*2 + tree_widget_width_);
 
-    cf_label_search_->setGeometry(tree_widget_width_ + offset_between_widgets_,
-                                    offset_between_widgets_,
-                                    50,
-                                    cf_label_search_->height());
-
-    cf_find_feed_->setGeometry(cf_label_search_->x() + cf_label_search_width()+offset_between_widgets_,
+    feed_list_->setGeometry(tree_widget_width_ + offset_between_widgets_,
                                 offset_between_widgets_,
-                                width - (cf_label_search_width() + offset_between_widgets_) ,
-                                cf_find_feed_->height());
-
-    feed_list_->setGeometry(cf_label_search_->x(),
-                                cf_find_feed_->y() + cf_find_feed_->height()+10,
                                 width,
-                                parent_->height()-(20 +cf_find_feed_->height() + ok_button_height_));
+                                parent_->height()-(offset_between_widgets_*3 + ok_button_height_));
 
     remove_button_->setGeometry(feed_list_->x(),
                                   ok_button_y_,
                                   remove_button_->width(),
                                   ok_button_height_);
-}
-
-
-int FeedsOptions::cf_label_search_width()
-{
-    QFontMetrics fm(cf_label_search_->font());
-    QRect rect = fm.boundingRect(cf_label_search_->text());
-
-    return rect.width();
 }
 
 void FeedsOptions::fillFeedListView()

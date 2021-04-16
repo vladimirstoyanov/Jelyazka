@@ -39,13 +39,10 @@ private slots:
     void on_removeButton_clicked();
 private:
     int addToFeedList(const QString &feed_name);
-    int cf_label_search_width();
     void fillFeedListView();
     void positioningFeedsOptionWidgets();
 
 private:
-    std::shared_ptr<QLineEdit>              cf_find_feed_;
-    std::shared_ptr<QLabel>                 cf_label_search_;
     std::shared_ptr<QListWidget>            feed_list_;
     std::vector<QString>                    l_old_feed_list_;
     std::shared_ptr<QPushButton>            remove_button_;
