@@ -91,6 +91,7 @@ void UpdateRssData::loadRssFeeds()
 void UpdateRssData::onUpdateSettings()
 {
     qDebug()<<__PRETTY_FUNCTION__;
+    data_base_.removeAllDataFromRssData();
     loadRssFeeds (); //start downloading of rss data
 }
 

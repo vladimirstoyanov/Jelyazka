@@ -14,8 +14,6 @@ FeedsOptions::FeedsOptions(QWidget *parent,
     , tree_widget_width_ (tree_widget_width)
     , parent_ (parent)
 {
-
-
 }
 
 FeedsOptions::~FeedsOptions()
@@ -43,6 +41,12 @@ void FeedsOptions::setupGui ()
     feed_list_->setSelectionMode(QAbstractItemView::MultiSelection);
 
     connect(cf_find_feed_.get(),SIGNAL(textChanged(QString)), this, SLOT(on_textChanged(QString)));
+
+    connect(remove_button_.get(),
+                SIGNAL(clicked()),
+                this,
+                SLOT(on_removeButton_clicked()));
+
 
     cf_label_search_->setText("Search");
 
@@ -154,6 +158,7 @@ void FeedsOptions::on_removeButton_clicked()
         feed_list_->takeItem(index.row());
     }
 
+    //FIXME: this should remove data from DB if Option->Okay button is clicked
     //remove selected items from db
     for (int i=0; i< slist.size(); ++i)
     {
