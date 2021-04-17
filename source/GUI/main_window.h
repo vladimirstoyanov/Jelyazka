@@ -64,7 +64,7 @@ protected:
     void keyPressEvent(QKeyEvent *event);
 
 public slots:
-    void onRssDataUpdated (const QString &updated_rss_data);
+    void onRssDataUpdated (const std::vector<RSSData> &updated_rss_data);
     void onUpdateRSSData  ();
 
 private slots:

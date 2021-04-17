@@ -22,13 +22,13 @@ JelyazkaManager::JelyazkaManager():
 }
 void JelyazkaManager::makeConnections ()
 {
+    qDebug()<<"Before connection";
     connect( refresh_rss_data_.get()
-            , SIGNAL(rssDataUpdated(const QString &))
+            , SIGNAL(updateRssData(const std::vector<RSSData>&))
             , main_window_.get()
-            , SLOT(onRssDataUpdated(const QString &))
+            , SLOT(onRssDataUpdated(const std::vector<RSSData>&))
             , Qt::QueuedConnection);
 
-    qDebug()<<"Before connection";
     connect( refresh_rss_data_.get()
             , SIGNAL(rssDataUpdated(const QString &))
             , notification_window_.get()

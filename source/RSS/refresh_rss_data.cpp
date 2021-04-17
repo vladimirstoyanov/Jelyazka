@@ -55,6 +55,7 @@ void RefreshRssData::onTimeout()
         QString html_source = "";
         generateHtmlSource(html_source);
         emit (rssDataUpdated(html_source));
+        emit (updateRssData(new_articles_));
     }
     new_articles_.clear();
     //loadRssFeeds();
@@ -64,10 +65,6 @@ void RefreshRssData::onTimeout()
 void RefreshRssData::generateHtmlSource (QString &html_source)
 {
     html_source = "";
-    if (new_articles_.size() == 0)
-    {
-        return;
-    }
 
     for (const RSSData &item: new_articles_)
     {

@@ -52,7 +52,7 @@ public:
 
 public slots:
     void onHideAnimationFinished();
-    void onRssDataUpdated(const QString &html_source);
+    void onRssDataUpdated(const QString &);
     void onShowAnimateWindow(const QString &);
     void onShowAnimationFinished();
 

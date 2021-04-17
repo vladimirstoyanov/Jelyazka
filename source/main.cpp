@@ -20,6 +20,7 @@
 #define MAIN_CPP
 
 #include <memory>
+#include <vector>
 
 #include <QApplication>
 
@@ -34,6 +35,7 @@ int main(int argc, char *argv[])
 
     qRegisterMetaType<RSSData>("RSSData"); //RSSData is used as parameter by a SLOT function
     qRegisterMetaType<HttpData>("HttpData"); //HttpData is used as parameter by a SLOT function
+    qRegisterMetaType< std::vector<RSSData> >("std::vector<RSSData>");
 
     std::shared_ptr<JelyazkaManager> jelayzka_manager = std::make_shared <JelyazkaManager> ();
 

@@ -581,11 +581,7 @@ void DataBase::updateArticles(const RSSData &rss_data, std::vector<RSSData> & ne
                                                  , rss_data.articleAt(i).getTitle()
                                                  , rss_data.articleAt(i).getLink()
                                                  , rss_data.articleAt(i).getText());
-                RSSData tmp;
-                tmp.setTitle(rss_data.articleAt(i).getTitle());
-                tmp.setLink(rss_data.articleAt(i).getLink());
-                tmp.setText(rss_data.articleAt(i).getText());
-                new_rss_data.push_back (tmp);
+                new_rss_data.push_back (rss_data);
 
             }
         }
