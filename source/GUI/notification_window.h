@@ -52,7 +52,7 @@ public:
 
 public slots:
     void onHideAnimationFinished();
-    void onRssDataUpdated(const std::vector<RSSData>&);
+    void onRssDataUpdated(const QString &html_source);
     void onShowAnimateWindow(const QString &);
     void onShowAnimationFinished();
 
@@ -60,7 +60,6 @@ private:
     void                delay(const int seconds);
     bool                eventFilter(QObject *, QEvent *);
     void                getDesktopResolution(int& horizontal, int& vertical);
-    QList<unsigned int> getIndexes(const QString &data);
     int                 getTaskBarHeight();
     void                gradientRect(const int x, const int y, const int width, const int height);
     void                hideWindowAnimation();

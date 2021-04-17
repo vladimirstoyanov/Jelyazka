@@ -525,8 +525,9 @@ void MainWindow::onUpdateRSSData()
     this->show();
 }
 
-void MainWindow::onRssDataUpdated (const std::vector<RSSData> &updated_rss_data)
+void MainWindow::onRssDataUpdated (const QString &updated_rss_data)
 {
+    /*
     std::map<QString, RSSData>::iterator it;
 
     for (const RSSData &item: updated_rss_data)
@@ -540,6 +541,7 @@ void MainWindow::onRssDataUpdated (const std::vector<RSSData> &updated_rss_data)
              }
          }
     }
+    */
 }
 
 

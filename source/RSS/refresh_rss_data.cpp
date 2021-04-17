@@ -52,11 +52,33 @@ void RefreshRssData::onTimeout()
     qDebug()<<__PRETTY_FUNCTION__;
     if (new_articles_.size()>0)
     {
-        emit (rssDataUpdated(new_articles_));
+        QString html_source = "";
+        generateHtmlSource(html_source);
+        emit (rssDataUpdated(html_source));
     }
-    new_articles_.clear(); //ToDo: check for memory leaks
-    loadRssFeeds();
+    new_articles_.clear();
+    //loadRssFeeds();
     start(); //start the timer
+}
+
+void RefreshRssData::generateHtmlSource (QString &html_source)
+{
+    html_source = "";
+    if (new_articles_.size() == 0)
+    {
+        return;
+    }
+
+    for (const RSSData &item: new_articles_)
+    {
+        html_source+="<a href = \""
+                + item.articleAt(0).getLink()
+                + "\" style=\"color: #000000\">"
+                + item.getSiteName()
+                + ": "
+                + item.articleAt(0).getTitle()
+                + "</a><br><hr>";
+    }
 }
 
 void RefreshRssData::onTimeValueChanged(const int time_msec)
@@ -69,12 +91,11 @@ void RefreshRssData::onFavoriteFeedsChanged ()
     qDebug()<<__PRETTY_FUNCTION__;
 }
 
-void RefreshRssData::writeData (const RSSData rss_data)
+void RefreshRssData::writeData (const RSSData &rss_data)
 {
     qDebug()<<__PRETTY_FUNCTION__;
 
-    data_base_.updateArticles(rss_data);
-    new_articles_.push_back(rss_data);
+    data_base_.updateArticles(rss_data, new_articles_);
 }
 
 void RefreshRssData::downloadFinished ()
@@ -97,6 +118,12 @@ void RefreshRssData::setupConnections ()
             , this
             , SLOT(onHttpRequestReceived(const HttpData &))
             , Qt::QueuedConnection);
+
+    connect( timer_.get(),
+             SIGNAL(timeout()),
+             this,
+             SLOT(onTimeout()),
+             Qt::QueuedConnection);
 }
 
 void RefreshRssData::loadRssFeeds()
@@ -104,6 +131,8 @@ void RefreshRssData::loadRssFeeds()
     qDebug()<<__PRETTY_FUNCTION__;
     std::vector<QString> urls;
     urls = data_base_.getURLs();
+    urls_size_ = urls.size();
+    response_number_ = 0;
 
 
     for (unsigned int i=0; i<urls_size_; ++i)

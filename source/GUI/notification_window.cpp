@@ -1,7 +1,7 @@
 /*
     animatewindow.cpp
     Jelyazka RSS/RDF reader
-    Copyright (C) 2014 Vladimir Stoyanov
+    Copyright (C) 2021 Vladimir Stoyanov
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 #include "notification_window.h"
 
 NotificationWindow::NotificationWindow(QWidget *parent) :
@@ -28,6 +29,7 @@ NotificationWindow::NotificationWindow(QWidget *parent) :
     , show_window_animation_ (std::make_shared<QPropertyAnimation>(this, "geometry"))
     , ui_(std::make_shared<Ui::NotificationWindow> ())
 {
+    qDebug()<<__PRETTY_FUNCTION__;
     setupGui();
 }
 
@@ -37,12 +39,14 @@ NotificationWindow::~NotificationWindow()
 
 void NotificationWindow::showEvent(QShowEvent *)
 {
+    qDebug()<<__PRETTY_FUNCTION__;
     showWindowAnimation();
 }
 
 //Get horizontal and vertical resolution of a desktop
 void NotificationWindow::getDesktopResolution(int& horizontal, int& vertical)
 {
+   qDebug()<<__PRETTY_FUNCTION__;
    QDesktopWidget widget;
    QRect desktop = widget.availableGeometry(widget.primaryScreen());
 
@@ -54,7 +58,8 @@ void NotificationWindow::getDesktopResolution(int& horizontal, int& vertical)
 //Show window animation
 void NotificationWindow::showWindowAnimation()
 {
-    int width=0, height =0;
+    qDebug()<<__PRETTY_FUNCTION__;
+    int width=0, height=0;
     getDesktopResolution(width, height);
 
     show_window_animation_->setDuration(2000); //time to show
@@ -67,6 +72,7 @@ void NotificationWindow::showWindowAnimation()
 //Hide window animation
 void NotificationWindow::hideWindowAnimation()
 {
+    qDebug()<<__PRETTY_FUNCTION__;
     int width=0, height =0;
     getDesktopResolution(width, height);
 
@@ -79,6 +85,7 @@ void NotificationWindow::hideWindowAnimation()
 //Load 'X' button image
 void NotificationWindow::loadImage()
 {
+   qDebug()<<__PRETTY_FUNCTION__;
    image_label_ = std::make_shared<QLabel>(this);
    close_button_image_  = QImage("../resources/x_button.png");
    image_label_->setPixmap(QPixmap::fromImage(close_button_image_));
@@ -96,6 +103,7 @@ void NotificationWindow::mousePressEvent ( QMouseEvent * e )
 
 void NotificationWindow::onShowAnimateWindow(const QString &data_str)
 {
+    qDebug()<<__PRETTY_FUNCTION__;
     /*
     QString html_source="";
     if (data_str== "")
@@ -124,6 +132,7 @@ void NotificationWindow::onShowAnimateWindow(const QString &data_str)
 
 void NotificationWindow::onShowAnimationFinished()
 {
+    qDebug()<<__PRETTY_FUNCTION__;
     delay(5);
     if (!is_mouse_clicked_)
         hideWindowAnimation(); //window hiding animation
@@ -131,39 +140,14 @@ void NotificationWindow::onShowAnimationFinished()
 
 void NotificationWindow::onHideAnimationFinished()
 {
+    qDebug()<<__PRETTY_FUNCTION__;
     this->hide();
-}
-
-//Get indexes from data string
-QList<unsigned int> NotificationWindow::getIndexes(const QString &data_str)
-{
-    /*
-    QStringList split = data_str.split("<index=");
-    QList<unsigned int> indexes;
-
-    if (split.size() == 0)
-        return indexes;
-
-    for (unsigned int i=0; i<split.size(); i++)
-    {
-        QString tmp_str = split.at(i);
-        if (tmp_str.length() > 0)
-        {
-            tmp_str.remove(tmp_str.length()-1, 1);
-            int index = tmp_str.toInt();
-            if (index>data_->size() || index < 0)
-                continue;
-            indexes.append(index);
-        }
-    }
-    */
-    QList<unsigned int> indexes;
-    return indexes;
 }
 
 //This method is similar of 'Sleep(mseconds)' function in 'windows.h'
 void NotificationWindow::delay(const int seconds)
 {
+    qDebug()<<__PRETTY_FUNCTION__;
     QTime dieTime= QTime::currentTime().addSecs(seconds);
     while( QTime::currentTime() < dieTime )
     {
@@ -226,28 +210,11 @@ void NotificationWindow::gradientRect(const int x, const int y, const int width,
     gradient.setColorAt(0, Qt::gray);
     gradient.setColorAt(1, Qt::white);
     painter.fillRect(myQRect, gradient);
-
 }
 
-void NotificationWindow::onRssDataUpdated(const std::vector<RSSData> &updated_rss_data)
+void NotificationWindow::onRssDataUpdated(const QString &html_source)
 {
-    QString html_source="";
-
-    if (updated_rss_data.size() == 0)
-    {
-        return;
-    }
-
-    for (const RSSData &item: updated_rss_data)
-    {
-        html_source+="<a href = \""
-                + item.articleAt(0).getLink()
-                + "\" style=\"color: #000000\">"
-                + item.getSiteName()
-                + ": "
-                + item.articleAt(0).getTitle()
-                + "</a><br><hr>";
-    }
+    qDebug()<<__PRETTY_FUNCTION__;
 
     ui_->textBrowser->setHtml(html_source);
     this->show();
@@ -255,6 +222,7 @@ void NotificationWindow::onRssDataUpdated(const std::vector<RSSData> &updated_rs
 
 void NotificationWindow::setupGui ()
 {
+    qDebug()<<__PRETTY_FUNCTION__;
     ui_->setupUi(this);
 
     //makes the window without frames

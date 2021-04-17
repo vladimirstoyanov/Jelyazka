@@ -79,7 +79,6 @@ void UpdateRssData::loadRssFeeds()
     for (const QString & item: urls)
     {
         emit (httpGetRequest(item));
-        qDebug()<<__PRETTY_FUNCTION__<<": after";
     }
 
     if (0 == urls_size_)

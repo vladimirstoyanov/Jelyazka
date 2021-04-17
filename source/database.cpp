@@ -554,7 +554,7 @@ void DataBase::createTable (const QString &table_name, const QString &query_stri
     closeDB();
 }
 
-void DataBase::updateArticles(const RSSData &rss_data)
+void DataBase::updateArticles(const RSSData &rss_data, std::vector<RSSData> & new_rss_data)
 {
     std::map<QString, RSSData>::iterator it;
     std::map<QString, RSSData> all_rss_data =  getRssData ();
@@ -581,6 +581,11 @@ void DataBase::updateArticles(const RSSData &rss_data)
                                                  , rss_data.articleAt(i).getTitle()
                                                  , rss_data.articleAt(i).getLink()
                                                  , rss_data.articleAt(i).getText());
+                RSSData tmp;
+                tmp.setTitle(rss_data.articleAt(i).getTitle());
+                tmp.setLink(rss_data.articleAt(i).getLink());
+                tmp.setText(rss_data.articleAt(i).getText());
+                new_rss_data.push_back (tmp);
 
             }
         }
