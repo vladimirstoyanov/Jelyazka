@@ -52,30 +52,11 @@ void RefreshRssData::onTimeout()
     qDebug()<<__PRETTY_FUNCTION__;
     if (new_articles_.size()>0)
     {
-        QString html_source = "";
-        generateHtmlSource(html_source);
-        emit (rssDataUpdated(html_source));
         emit (updateRssData(new_articles_));
     }
     new_articles_.clear();
     //loadRssFeeds();
     start(); //start the timer
-}
-
-void RefreshRssData::generateHtmlSource (QString &html_source)
-{
-    html_source = "";
-
-    for (const RSSData &item: new_articles_)
-    {
-        html_source+="<a href = \""
-                + item.articleAt(0).getLink()
-                + "\" style=\"color: #000000\">"
-                + item.getSiteName()
-                + ": "
-                + item.articleAt(0).getTitle()
-                + "</a><br><hr>";
-    }
 }
 
 void RefreshRssData::onTimeValueChanged(const int time_msec)

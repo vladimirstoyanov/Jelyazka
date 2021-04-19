@@ -30,9 +30,9 @@ void JelyazkaManager::makeConnections ()
             , Qt::QueuedConnection);
 
     connect( refresh_rss_data_.get()
-            , SIGNAL(rssDataUpdated(const QString &))
+            , SIGNAL(updateRssData(const std::vector<RSSData>&))
             , notification_window_.get()
-            , SLOT(onRssDataUpdated(const QString &))
+            , SLOT(onRssDataUpdated(const std::vector<RSSData> &))
             , Qt::QueuedConnection);
 
 

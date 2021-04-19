@@ -40,7 +40,6 @@
 #include <QtCore>
 #include <QTableView>
 #include <QTextCodec>
-//#include <QThreadPool>
 
 #include "Network/http.h"
 #include "logger.h"

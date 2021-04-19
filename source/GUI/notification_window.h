@@ -52,13 +52,13 @@ public:
 
 public slots:
     void onHideAnimationFinished();
-    void onRssDataUpdated(const QString &);
-    void onShowAnimateWindow(const QString &);
+    void onRssDataUpdated(const std::vector<RSSData> &);
     void onShowAnimationFinished();
 
 private:
     void                delay(const int seconds);
     bool                eventFilter(QObject *, QEvent *);
+    void                generateHtmlSource (const std::vector<RSSData> &new_articles, QString &html_source);
     void                getDesktopResolution(int& horizontal, int& vertical);
     int                 getTaskBarHeight();
     void                gradientRect(const int x, const int y, const int width, const int height);

@@ -52,7 +52,6 @@ public slots:
 
 signals:
     void httpGetRequest (const QString &);
-    void rssDataUpdated (const QString &);
     void updateRssData(const std::vector<RSSData> & );
 
 private slots:
@@ -71,7 +70,6 @@ private:
 
 private:
    void downloadFinished ();
-   void generateHtmlSource (QString &html_source);
    void setupConnections ();
    void loadRssFeeds();
    void writeData (const RSSData &rss_data);

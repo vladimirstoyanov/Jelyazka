@@ -101,35 +101,6 @@ void NotificationWindow::mousePressEvent ( QMouseEvent * e )
     }
 }
 
-void NotificationWindow::onShowAnimateWindow(const QString &data_str)
-{
-    qDebug()<<__PRETTY_FUNCTION__;
-    /*
-    QString html_source="";
-    if (data_str== "")
-        return;
-
-    QList<unsigned int> indexes = getIndexes(data_str);
-    if (indexes.size() == 0)
-        return;
-
-    for (int i=0; i<indexes.size(); i++)
-        if (data_->size()>indexes[i])
-            if (data_->at(indexes[i])->getArticlesSize()>0)
-                html_source+="<a href = \""
-                        + data_->at(indexes[i])->articleAt(0).getLink()
-                        + "\" style=\"color: #000000\">"
-                        + data_->at(indexes[i])->getSiteName()
-                        + ": "
-                        + data_->at(indexes[i])->articleAt(0).getTitle()
-                        + "</a><br><hr>";
-
-    //Add links
-    ui_->textBrowser->setHtml(html_source);
-    this->show();
-    */
-}
-
 void NotificationWindow::onShowAnimationFinished()
 {
     qDebug()<<__PRETTY_FUNCTION__;
@@ -212,10 +183,28 @@ void NotificationWindow::gradientRect(const int x, const int y, const int width,
     painter.fillRect(myQRect, gradient);
 }
 
-void NotificationWindow::onRssDataUpdated(const QString &html_source)
+void NotificationWindow::generateHtmlSource (const std::vector<RSSData> &new_articles, QString &html_source)
+{
+    html_source = "";
+
+    for (const RSSData &item: new_articles)
+    {
+        html_source+="<a href = \""
+                + item.articleAt(0).getLink()
+                + "\" style=\"color: #000000\">"
+                + item.getSiteName()
+                + ": "
+                + item.articleAt(0).getTitle()
+                + "</a><br><hr>";
+    }
+}
+
+void NotificationWindow::onRssDataUpdated(const std::vector<RSSData> &rss_data)
 {
     qDebug()<<__PRETTY_FUNCTION__;
 
+    QString html_source;
+    generateHtmlSource(rss_data, html_source);
     ui_->textBrowser->setHtml(html_source);
     this->show();
 }
