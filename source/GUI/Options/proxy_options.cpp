@@ -46,7 +46,7 @@ void ProxyOptions::setupGui ()
 
     cb_enable_proxy_->setGeometry(tree_widget_width_ + offset_between_widgets_,
                                   offset_between_widgets_,
-                                  cb_enable_proxy_->width()+50,
+                                  cb_enable_proxy_->width()+100,
                                   cb_enable_proxy_->height());
     l_proxy_url_->setGeometry(tree_widget_width_ + offset_between_widgets_,
                               cb_enable_proxy_->y() + cb_enable_proxy_->height()+offset_between_widgets_,

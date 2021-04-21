@@ -42,7 +42,11 @@ void NotificationsOptions::setupGui ()
                                  5,
                                  l_refresh_time_->width()+50,
                                  l_refresh_time_->height());
+
+    l_refresh_time_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+    l_refresh_time_->setWordWrap(true);
     l_refresh_time_->setText("Refresh feeds time (minutes):");
+
 
     sb_refresh_time_->setGeometry(tree_widget_width_  + 10,
                                   l_refresh_time_->y()+l_refresh_time_->height() + 5,
@@ -51,8 +55,9 @@ void NotificationsOptions::setupGui ()
     sb_refresh_time_->setMinimum(1);
     sb_refresh_time_->setMaximum(60);
 
+    cb_enable_notification_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
     cb_enable_notification_->setGeometry(tree_widget_width_  + 10,sb_refresh_time_->y() + sb_refresh_time_->height() + 5,
-                                         cb_enable_notification_->width()+50,
+                                         cb_enable_notification_->width()+100,
                                          cb_enable_notification_->height());
 
     cb_enable_notification_->setText("Enable notification window");
