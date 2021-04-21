@@ -95,7 +95,6 @@ private:
     std::shared_ptr<ParseRSS>                       parse_rss_;
     std::map <QString, std::shared_ptr<RSSData >>   rss_data_;
     RSSSearchGUIThread                              *rss_search_thread_;
-    //std::shared_ptr<QThreadPool>                    thread_pool_;
     std::shared_ptr<Ui::RSSSearchGUI>               ui_;
 
 private slots:

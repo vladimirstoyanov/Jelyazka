@@ -19,10 +19,11 @@
 #include "rss_search_thread.h"
 
 RSSSearchGUIThread::RSSSearchGUIThread() :
-    pending_urls_(0)
-    , stop_thread_ (false)
-    , is_search_finished_ (false)
+    is_search_finished_ (false)
+    , max_count_of_pending_urls_ (5)
     , network_manager_(std::make_shared<NetworkManager> ())
+    , pending_urls_(0)
+    , stop_thread_ (false)
 {
     setupConnections ();
 }
@@ -55,11 +56,17 @@ void RSSSearchGUIThread::run()
   {
       if (stop_thread_)
       {
+          emit(changeUrlLabel (""));
           return;
       }
 
-      if (!url_queue_.empty())
+      if (!url_queue_.empty()) //we overload probably the http library
       {
+        if (pending_urls_>max_count_of_pending_urls_)
+        {
+            usleep(100000); //100 milliseconds
+            continue;
+        }
         QString url = url_queue_.front();
         url_queue_.pop();
 
@@ -87,11 +94,10 @@ void RSSSearchGUIThread::onHttpRequestReceived(const HttpData & httpData)
 
     if (!httpData.isResponseSuccessful())
     {
-        emit changeUrlLabel ("Fail to connect!");
         return;
     }
 
-    emit changeUrlLabel(url);
+    emit (changeUrlLabel(url));
 
     if (ContentType::XML == httpData.getContentType()) //xml
     {
@@ -121,6 +127,7 @@ void RSSSearchGUIThread::onHttpRequestReceived(const HttpData & httpData)
     {
             if (stop_thread_)
             {
+                emit (changeUrlLabel (""));
                 return;
             }
 

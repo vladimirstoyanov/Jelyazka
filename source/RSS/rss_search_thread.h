@@ -65,6 +65,7 @@ public:
 private:
     DataBase                        data_base_;
     bool                            is_search_finished_;
+    int                             max_count_of_pending_urls_;
     std::shared_ptr<NetworkManager> network_manager_;
     Logger                          log_;
     int                             pending_urls_;
