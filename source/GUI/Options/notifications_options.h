@@ -41,6 +41,6 @@ private:
 private:
      int                                     ok_button_height_;
      int                                     tree_widget_width_;
-     std::unique_ptr<QWidget>                parent_;
+     QWidget*                                parent_;
 };
 #endif // NOTIFICATIONSOPTIONS_H

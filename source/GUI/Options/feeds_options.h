@@ -54,6 +54,6 @@ private:
      int                                     ok_button_y_;
      const unsigned int                      offset_between_widgets_;
      int                                     tree_widget_width_;
-     std::unique_ptr<QWidget>                parent_;
+     QWidget*                                parent_;
 };
 #endif // FEEDSOPTIONS_H
