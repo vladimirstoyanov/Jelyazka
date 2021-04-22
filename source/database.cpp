@@ -75,12 +75,12 @@ std::map<QString, RSSData> DataBase::getRssData ()
             if (it==result.end())
             {
                 rss_data.setSiteName(name);
-                rss_data.articlesPushFront(rss_article);
+                rss_data.articlesPushBack(rss_article);
                 result[name] = rss_data;
             }
             else
             {
-                it->second.articlesPushFront(rss_article);
+                it->second.articlesPushBack(rss_article);
             }
         }
     }
