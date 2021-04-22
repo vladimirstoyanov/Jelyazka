@@ -73,7 +73,6 @@ void NotificationWindow::showWindowAnimation()
 void NotificationWindow::hideWindowAnimation()
 {
     qDebug()<<__PRETTY_FUNCTION__;
-
     hide_window_animation_->setDuration(2000); //time to hide
     hide_window_animation_->setStartValue(end_coordinates_);
     hide_window_animation_->setEndValue(begin_coordinates_);
@@ -215,20 +214,21 @@ void NotificationWindow::setupGui ()
     ui_->setupUi(this);
 
     //makes the window without frames
+
     #ifdef _WIN32
         setWindowFlags( Qt::FramelessWindowHint | windowFlags() | Qt::Tool);
     #else
-        setWindowFlags( Qt::FramelessWindowHint | Qt::Tool);
+        setWindowFlags( Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint | Qt::Tool);
     #endif
 
     getDesktopResolution(desktop_width_, desktop_height_);
 
     begin_coordinates_ = QRect(desktop_width_-this->width(),
-                               desktop_height_ - this->height(),
+                               desktop_height_,
                                this->width(),
                                this->height());
     end_coordinates_ = QRect(desktop_width_-this->width(),
-                             desktop_height_,
+                             desktop_height_ - this->height(),
                              this->width(),
                              this->height());
 
