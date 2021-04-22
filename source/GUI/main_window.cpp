@@ -534,7 +534,7 @@ void MainWindow::onRssDataUpdated (const std::vector<RSSData> &updated_rss_data)
          it = rss_data_.find(item.getSiteName());
          if (it!=rss_data_.end())
          {
-             for (size_t j=0; j<item.getArticlesSize(); ++j)
+             for (int j=item.getArticlesSize()-1; j>=0; --j)
              {
                  it->second.articlesPushFront(item.articleAt(j));
              }
