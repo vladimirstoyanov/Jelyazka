@@ -22,6 +22,8 @@
 NotificationWindow::NotificationWindow(QWidget *parent) :
     QWidget(parent)
     , close_button_image_ ()
+    , desktop_height_ (0)
+    , desktop_width_ (0)
     , hide_window_animation_ (std::make_shared<QPropertyAnimation>(this, "geometry"))
     , image_label_ (std::make_shared <QLabel> ())
     , is_mouse_clicked_ (false)
@@ -59,12 +61,10 @@ void NotificationWindow::getDesktopResolution(int& horizontal, int& vertical)
 void NotificationWindow::showWindowAnimation()
 {
     qDebug()<<__PRETTY_FUNCTION__;
-    int width=0, height=0;
-    getDesktopResolution(width, height);
 
     show_window_animation_->setDuration(2000); //time to show
-    show_window_animation_->setStartValue(QRect(width-this->width(),height,this->width(),this->height()));
-    show_window_animation_->setEndValue(QRect(width-this->width(),height - this->height(),this->width(),this->height()));
+    show_window_animation_->setStartValue(begin_coordinates_);
+    show_window_animation_->setEndValue(end_coordinates_);
     show_window_animation_->start();
     is_mouse_clicked_ = false;
 }
@@ -73,12 +73,10 @@ void NotificationWindow::showWindowAnimation()
 void NotificationWindow::hideWindowAnimation()
 {
     qDebug()<<__PRETTY_FUNCTION__;
-    int width=0, height =0;
-    getDesktopResolution(width, height);
 
     hide_window_animation_->setDuration(2000); //time to hide
-    hide_window_animation_->setStartValue(QRect(width-this->width(),height - this->height(),this->width(),this->height()));
-    hide_window_animation_->setEndValue(QRect(width-this->width(),height,this->width(),this->height()));
+    hide_window_animation_->setStartValue(end_coordinates_);
+    hide_window_animation_->setEndValue(begin_coordinates_);
     hide_window_animation_->start();
 }
 
@@ -220,6 +218,19 @@ void NotificationWindow::setupGui ()
     #else
         setWindowFlags( Qt::FramelessWindowHint | Qt::Tool);
     #endif
+
+    getDesktopResolution(desktop_width_, desktop_height_);
+
+    begin_coordinates_ = QRect(desktop_width_-this->width(),
+                               desktop_height_ - this->height(),
+                               this->width(),
+                               this->height());
+    end_coordinates_ = QRect(desktop_width_-this->width(),
+                             desktop_height_,
+                             this->width(),
+                             this->height());
+
+    this->setGeometry(begin_coordinates_);
 
     //image of 'X' button load
     loadImage();
