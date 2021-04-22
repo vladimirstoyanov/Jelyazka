@@ -130,11 +130,13 @@ bool NotificationWindow::eventFilter(QObject *o, QEvent *event)
     QPoint p = this->mapFromGlobal(QCursor::pos());
     if (event->type() == QEvent::MouseButtonPress)
     {
-        if (o->objectName() == "CAnimateWindowWindow")
+        if (o->objectName() == "NotificationWindow")
+        {
             is_mouse_clicked_ = true;
+        }
     }
 
-    if (event->type() == QEvent::MouseMove && o->objectName() == "CAnimateWindowWindow")
+    if (event->type() == QEvent::MouseMove && o->objectName() == "NotificationWindow")
     {
         if (is_X_changed_)
         {
@@ -142,7 +144,6 @@ bool NotificationWindow::eventFilter(QObject *o, QEvent *event)
             image_label_->setPixmap(QPixmap::fromImage(close_button_image_));
             image_label_->show();
             is_X_changed_=0;
-
         }
 
         if (p.x()>this->width()-36 && p.x()<this->width() -4 && p.y()>4 && p.y()<36)
@@ -151,8 +152,9 @@ bool NotificationWindow::eventFilter(QObject *o, QEvent *event)
             image_label_->setPixmap(QPixmap::fromImage(close_button_image_));
             image_label_->show();
             is_X_changed_ = 1;
-            QApplication::restoreOverrideCursor();
         }
+
+        QApplication::restoreOverrideCursor();
     }
 
     return 0;

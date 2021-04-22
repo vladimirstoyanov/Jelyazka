@@ -502,7 +502,6 @@ void MainWindow::gradientRect(int x, int y, int width, int height)
 {
     QRect myQRect (x,y,width, height);
     QPainter painter(this);
-    //QLinearGradient gradient(myQRect.topLeft(), myQRect.bottomRight()); // diagonal gradient from top-left to bottom-right
     QLinearGradient gradient(myQRect.bottomLeft(), myQRect.topLeft());
     gradient.setColorAt(0, Qt::black);
     gradient.setColorAt(1, Qt::white);

@@ -22,6 +22,7 @@
 #include <memory>
 
 #include <QCloseEvent>
+#include <QDesktopWidget>
 #include <QShowEvent>
 #include <QWidget>
 
