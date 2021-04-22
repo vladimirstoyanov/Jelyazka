@@ -28,6 +28,7 @@ NotificationWindow::NotificationWindow(QWidget *parent) :
     , image_label_ (std::make_shared <QLabel> ())
     , is_mouse_clicked_ (false)
     , is_X_changed_(true)
+    , show_delay_(15)
     , show_window_animation_ (std::make_shared<QPropertyAnimation>(this, "geometry"))
     , ui_(std::make_shared<Ui::NotificationWindow> ())
 {
@@ -101,7 +102,7 @@ void NotificationWindow::mousePressEvent ( QMouseEvent * e )
 void NotificationWindow::onShowAnimationFinished()
 {
     qDebug()<<__PRETTY_FUNCTION__;
-    delay(5);
+    delay(show_delay_);
     if (!is_mouse_clicked_)
         hideWindowAnimation(); //window hiding animation
 }

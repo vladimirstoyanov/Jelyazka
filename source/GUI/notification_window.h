@@ -81,6 +81,7 @@ private:
     bool                                    is_mouse_clicked_;
     bool                                    is_X_changed_;
     std::shared_ptr<QPropertyAnimation>     show_window_animation_;
+    int                                     show_delay_;
     std::shared_ptr<Ui::NotificationWindow> ui_;
 };
 
