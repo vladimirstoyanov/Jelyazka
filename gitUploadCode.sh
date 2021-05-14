@@ -13,6 +13,10 @@ fi
 rm -rf build-jelyazka-Desktop-Debug/
 rm source/*.pro.user
 
+cd unit_test
+make clean
+cd ..
+
 echo "git add --all"
 git add --all
 
