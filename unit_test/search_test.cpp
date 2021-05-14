@@ -14,6 +14,18 @@ TEST(Search, searchBefore)
     EXPECT_EQ(index, 8);
 }
 
+TEST(Search, TestSubstringThatDoesntExist)
+{
+    Search s;
+
+    QString text = "This is an example.";
+    QString substing = "hello";
+    int index = 0;
+
+    s.searchBefore (text, substing, &index);
+    EXPECT_EQ(index, -1);
+}
+
 TEST(Search, searchAfter)
 {
     Search s;
@@ -24,4 +36,16 @@ TEST(Search, searchAfter)
 
     s.searchAfter (text, substing, &index);
     EXPECT_EQ(index, 10);
+}
+
+TEST(Search, TestSubstringThatDoesntExist2)
+{
+    Search s;
+
+    QString text = "This is an example.";
+    QString substing = "hello";
+    int index = 0;
+
+    s.searchAfter (text, substing, &index);
+    EXPECT_EQ(index, -1);
 }
