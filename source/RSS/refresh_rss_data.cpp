@@ -37,7 +37,10 @@ RefreshRssData::~RefreshRssData()
 void RefreshRssData::start()
 {
     qDebug()<<__PRETTY_FUNCTION__<<": refresh feeds time: "<<Jelyazka::Settings::getRefreshFeedsTime();
-    loadRssFeeds();
+    if (Jelyazka::Settings::getIsNotificationsEnabled())
+    {
+        loadRssFeeds();
+    }
     timer_->start(Jelyazka::Settings::getRefreshFeedsTime()*60000);
 }
 

@@ -96,6 +96,7 @@ void MainWindow::showNextArticle()
         ui_->textBrowser->setHtml("");
         return;
     }
+
     it->second.getNextArticle();
     setHtmlContent (it->second.getCurrentArticle());
 }
@@ -111,6 +112,7 @@ void MainWindow::showPreviousArticle()
         ui_->textBrowser->setHtml("");
         return;
     }
+
     it->second.getPreviousArticle();
     setHtmlContent (it->second.getCurrentArticle());
 }
