@@ -107,7 +107,7 @@ void FiltersOptions::resize ()
 void FiltersOptions::saveSettings ()
 {
     Jelyazka::Settings::setIsFilteringEnabled(cb_enable_filtering_->isChecked());
-    updateFiltersTable ();
+    saveFilters ();
 }
 
 void FiltersOptions::loadSettings ()
@@ -118,7 +118,7 @@ void FiltersOptions::loadSettings ()
     loadFilters();
 }
 
-void FiltersOptions::updateFiltersTable()
+void FiltersOptions::saveFilters()
 {
      //main_window_->filters_qlist.clear();
      data_base_.removeDataFromFilters(); //delete all old filters data

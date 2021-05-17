@@ -51,7 +51,7 @@ private:
     int addStringToFilterList(const QString &current_text);
     void insertRowToFiltersTable(const QString &filter_name);
     void loadFilters();
-    void updateFiltersTable();
+    void saveFilters();
 
 private slots:
     void on_pb_remove_filter();
