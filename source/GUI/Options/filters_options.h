@@ -49,8 +49,8 @@ private:
 
 private:
     int addStringToFilterList(const QString &current_text);
-    void fillFilterListView();
     void insertRowToFiltersTable(const QString &filter_name);
+    void loadFilters();
     void updateFiltersTable();
 
 private slots:

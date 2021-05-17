@@ -107,6 +107,7 @@ void FiltersOptions::resize ()
 void FiltersOptions::saveSettings ()
 {
     Jelyazka::Settings::setIsFilteringEnabled(cb_enable_filtering_->isChecked());
+    updateFiltersTable ();
 }
 
 void FiltersOptions::loadSettings ()
@@ -114,6 +115,7 @@ void FiltersOptions::loadSettings ()
     bool enabled = Jelyazka::Settings::getIsFilteringEnabled();
     cb_enable_filtering_->setChecked(enabled);
     on_cb_enable_filtering_clicked(enabled);
+    loadFilters();
 }
 
 void FiltersOptions::updateFiltersTable()
@@ -123,16 +125,9 @@ void FiltersOptions::updateFiltersTable()
 
      for (int i=0;  i<lw_filter_list_->count(); i++)
      {
-         insertRowToFiltersTable(lw_filter_list_->item(i)->text());
+         data_base_.insertRowToFiltersTable(lw_filter_list_->item(i)->text());
      }
 }
-
-
-void FiltersOptions::insertRowToFiltersTable(const QString &filter_name)
-{
-    data_base_.insertRowToFiltersTable(filter_name);
-}
-
 
 void FiltersOptions::on_cb_enable_filtering_clicked(bool enabled)
 {
@@ -195,7 +190,7 @@ int FiltersOptions::addStringToFilterList(const QString &current_text)
     return 0;
 }
 
-void FiltersOptions::fillFilterListView()
+void FiltersOptions::loadFilters()
 {
     std::vector <QString> tmp;
     data_base_.getFilterList(&tmp);
@@ -212,5 +207,5 @@ void FiltersOptions::fillFilterListView()
 void FiltersOptions::initilize ()
 {
     lw_filter_list_->clear();
-    fillFilterListView();
+    loadFilters();
 }
