@@ -8,6 +8,7 @@
 
 #include "rss_article.h"
 
+
 class RSSData: public RSSArticle
 {
 public:
@@ -20,6 +21,7 @@ public:
     RSSArticle  getCurrentArticle (); //gets the current article
     RSSArticle  getNextArticle (); //change to next article and return it
     RSSArticle  getPreviousArticle (); //change to previous article and return it
+
     void        setEncoding(const QString &enconding);
     void        setSiteName(const QString &site_name);
     void        setType(const QString &type);

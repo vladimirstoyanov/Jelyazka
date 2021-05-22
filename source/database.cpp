@@ -409,7 +409,7 @@ int DataBase::deleteAllFromAllURL()
     return 1;
 }
 
-void DataBase::getFilterList(std::vector<QString> *l_old_filters)
+void DataBase::getFilterList(std::vector<QString> &l_old_filters)
 {
     {
         openDB();
@@ -424,7 +424,7 @@ void DataBase::getFilterList(std::vector<QString> *l_old_filters)
             return;
         }
 
-        l_old_filters->clear(); //clear old list
+        l_old_filters.clear(); //clear old list
 
         //fill with new data
         while( query.next() )
@@ -432,7 +432,7 @@ void DataBase::getFilterList(std::vector<QString> *l_old_filters)
             QString filter;
             filter = query.value( 1 ).toByteArray().data();
             //if (!addStringToFilterList(*filter))
-            l_old_filters->push_back(filter);
+            l_old_filters.push_back(filter);
         }
     }
     closeDB();

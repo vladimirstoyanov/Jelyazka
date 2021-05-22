@@ -85,6 +85,7 @@ void MainWindow::showArticle()
     setHtmlContent (it->second.getCurrentArticle());
 }
 
+
 void MainWindow::showNextArticle()
 {
     //get current value form combobox

@@ -193,7 +193,7 @@ int FiltersOptions::addStringToFilterList(const QString &current_text)
 void FiltersOptions::loadFilters()
 {
     std::vector <QString> tmp;
-    data_base_.getFilterList(&tmp);
+    data_base_.getFilterList(tmp);
 
     l_old_filters_.clear();
 

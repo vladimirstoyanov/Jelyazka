@@ -19,7 +19,7 @@ public:
     void    dropRssDataTable ();
     int     deleteAllFromAllURL();
     void    getFeeds(std::vector<QString> *l_old_view_feed);
-    void    getFilterList(std::vector<QString> *l_old_filters);
+    void    getFilterList(std::vector<QString> &l_old_filters);
     std::map<QString, RSSData> getRssData();
     QString getURLByName(const QString &name);
     std::vector<QString> getURLs();

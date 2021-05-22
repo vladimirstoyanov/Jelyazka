@@ -38,7 +38,6 @@
 
 #include "database.h"
 #include "RSS/rss_data.h"
-//#include "search.h"
 
 #include "ui_mainwindow.h"
 

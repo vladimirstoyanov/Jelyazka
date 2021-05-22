@@ -1,4 +1,5 @@
 #include "rss_data.h"
+#include "database.h"
 
 RSSData::RSSData():
     current_index_rss_articles_ (0)
@@ -116,11 +117,11 @@ RSSArticle  RSSData::getCurrentArticle ()
     {
         return rss_articles_[current_index_rss_articles_];
     }
-    return result; //RSSArticle class with empty values
+    return result;
 }
+
 RSSArticle  RSSData::getNextArticle ()
 {
-    RSSArticle result;
     if ((current_index_rss_articles_+1)<rss_articles_.size())
     {
         ++current_index_rss_articles_;
@@ -132,8 +133,6 @@ RSSArticle  RSSData::getNextArticle ()
 
 RSSArticle  RSSData::getPreviousArticle ()
 {
-    RSSArticle result;
-
     if ((current_index_rss_articles_-1)>-1)
     {
         --current_index_rss_articles_;
