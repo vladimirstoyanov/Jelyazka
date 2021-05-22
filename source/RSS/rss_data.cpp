@@ -1,9 +1,7 @@
 #include "rss_data.h"
-#include "database.h"
 
 RSSData::RSSData():
-    current_index_rss_articles_ (0)
-    , encoding_ ("")
+    encoding_ ("")
     , site_name_ ("")
     , type_ ("")
     , url_ ("")
@@ -109,7 +107,7 @@ void RSSData::setVersion(const QString &version_tmp)
     version_ = version_tmp;
 }
 
-
+/*
 RSSArticle  RSSData::getCurrentArticle ()
 {
     RSSArticle result;
@@ -140,3 +138,4 @@ RSSArticle  RSSData::getPreviousArticle ()
 
     return getCurrentArticle();
 }
+*/

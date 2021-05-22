@@ -18,6 +18,7 @@ CONFIG += c++11
 SOURCES += main.cpp\
     JelayzkaStateMachine/add_rss_data_state.cpp \
     Network/https.cpp \
+    RSS/article_manager.cpp \
     search.cpp \
     logger.cpp \
     Network/http.cpp \
@@ -64,6 +65,7 @@ SOURCES += main.cpp\
 HEADERS  += \
     JelayzkaStateMachine/add_rss_data_state.hpp \
     Network/https.h \
+    RSS/article_manager.h \
     search.h \
     logger.h \
     Network/http.h \

@@ -20,6 +20,7 @@
 
 MainWindow::MainWindow(QWidget *parent):
     QWidget(parent)
+    , article_manager_(RSSData ())
     , add_rss_button_image_ ()
     , is_resizing_          (false)
     , image_add_rss_label_  (std::make_shared<QLabel>(this))
@@ -79,43 +80,22 @@ void MainWindow::showArticle()
     if (it==rss_data_.end())
     {
         ui_->textBrowser->setHtml("");
+        article_manager_.setRssData(RSSData()); //set an empty rss data
         return;
     }
-
-    setHtmlContent (it->second.getCurrentArticle());
+    article_manager_.setRssData (it->second);
+    setHtmlContent (article_manager_.getCurrentRssArticle());
 }
 
 
 void MainWindow::showNextArticle()
 {
-    //get current value form combobox
-    QString web_site_name = ui_->titleComboBox->currentText();
-    std::map<QString, RSSData>::iterator it;
-    it = rss_data_.find(web_site_name);
-    if (it==rss_data_.end())
-    {
-        ui_->textBrowser->setHtml("");
-        return;
-    }
-
-    it->second.getNextArticle();
-    setHtmlContent (it->second.getCurrentArticle());
+    setHtmlContent (article_manager_.getNextRssArticle());
 }
 
 void MainWindow::showPreviousArticle()
 {
-    //get current value form combobox
-    QString web_site_name = ui_->titleComboBox->currentText();
-    std::map<QString, RSSData>::iterator it;
-    it = rss_data_.find(web_site_name);
-    if (it==rss_data_.end())
-    {
-        ui_->textBrowser->setHtml("");
-        return;
-    }
-
-    it->second.getPreviousArticle();
-    setHtmlContent (it->second.getCurrentArticle());
+    setHtmlContent (article_manager_.getPreviousRssArticle());
 }
 
 void MainWindow::on_previousButton_clicked() // button '<'

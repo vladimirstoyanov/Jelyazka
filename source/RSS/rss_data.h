@@ -18,10 +18,6 @@ public:
     void        articlesPushFront(const RSSArticle rss_article);
     void        articlesPushBack(const RSSArticle rss_article);
     void        eraseArticleAt(unsigned int index);
-    RSSArticle  getCurrentArticle (); //gets the current article
-    RSSArticle  getNextArticle (); //change to next article and return it
-    RSSArticle  getPreviousArticle (); //change to previous article and return it
-
     void        setEncoding(const QString &enconding);
     void        setSiteName(const QString &site_name);
     void        setType(const QString &type);
@@ -38,7 +34,6 @@ public:
     RSSArticle  articleAt(unsigned int index) const;
 
 private:
-    int               current_index_rss_articles_;
     QString           encoding_;
     QList<RSSArticle> rss_articles_;
     QString           site_name_;

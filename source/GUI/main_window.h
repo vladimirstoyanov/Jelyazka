@@ -38,6 +38,7 @@
 
 #include "database.h"
 #include "RSS/rss_data.h"
+#include "RSS/article_manager.h"
 
 #include "ui_mainwindow.h"
 
@@ -90,6 +91,7 @@ private:
     void showPreviousArticle ();
 
 private:
+    ArticleManager                  article_manager_;
     QImage                          add_rss_button_image_;
     QPoint                          current_point_;
     ulong                           current_article_index_;
