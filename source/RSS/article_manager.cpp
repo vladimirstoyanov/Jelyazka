@@ -2,8 +2,24 @@
 
 ArticleManager::ArticleManager(const RSSData &rss_data):
     current_index_rss_articles_(0),
+    deafault_text_message_(""),
     rss_data_ (rss_data)
 {
+}
+
+void ArticleManager::generateDefaultTextMessage ()
+{
+    deafault_text_message_ = "No data with the following filters: <br>";
+    for (unsigned int i=0; i<filters_.size(); ++i)
+    {
+        deafault_text_message_+=filters_[i];
+        if (i!=filters_.size()-1)
+        {
+            deafault_text_message_+=", ";
+        }
+    }
+    deafault_text_message_+="<br><br>";
+    deafault_text_message_+="For more results, please disable filters from Options->Filters.";
 }
 
 bool ArticleManager::isArticleContainsFilters (const RSSArticle & article)
@@ -85,9 +101,8 @@ RSSArticle ArticleManager::getCurrentRssArticle ()
     {
         return rss_data_.articleAt(current_index_rss_articles_);
     }
-    result.setLink("No data");
-    result.setTitle("No data");
-    result.setText("No data.");
+    result.setTitle("No data with the following filters: ");
+    result.setText(deafault_text_message_);
     return result;
 }
 
@@ -98,5 +113,6 @@ void  ArticleManager::setRssData (const RSSData &rss_data)
     current_index_rss_articles_ = 0;
     filtered_articles_.clear();
     data_base_.getFilterList(filters_);
+    generateDefaultTextMessage ();
     filterArticles();
 }

@@ -64,12 +64,21 @@ void MainWindow::addToCombobox(const QString &str)
 
 void MainWindow::setHtmlContent (const RSSArticle rss_article)
 {
-    ui_->textBrowser->setHtml(
-                QString("<h2>%1</h2><i>%2</i><br>Link: <a href=\"%3\">%3</a><br><br>%4")
-                .arg(rss_article.getTitle(),
-                     rss_article.getDate(),
-                     rss_article.getLink(),
-                     rss_article.getText()));
+    if ("" == rss_article.getLink())
+    {
+        ui_->textBrowser->setHtml(
+                    QString("<h3>%2</h3>")
+                    .arg(rss_article.getText()));
+    }
+    else
+    {
+        ui_->textBrowser->setHtml(
+                    QString("<h2>%1</h2><i>%2</i><br>Link: <a href=\"%3\">%3</a><br><br>%4")
+                    .arg(rss_article.getTitle(),
+                         rss_article.getDate(),
+                         rss_article.getLink(),
+                         rss_article.getText()));
+    }
 }
 
 void MainWindow::showArticle()
