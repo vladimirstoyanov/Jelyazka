@@ -47,6 +47,7 @@ void Http::getRequest(const QString &urlParam)
         query_string += '/';
     }
 
+    /*
     //ToDo: move this one in NetworkManager class
     if (Jelyazka::Settings::getIsProxyConnectionEnabled())
     {
@@ -55,6 +56,7 @@ void Http::getRequest(const QString &urlParam)
         network_proxy.setPort(Jelyazka::Settings::getProxyPort().toInt());
         socket.setProxy(network_proxy);
     }
+    */
 
     socket.connectToHost(url,80,QIODevice::ReadWrite);
     if(!socket.waitForConnected())
@@ -141,199 +143,6 @@ void Http::getRequest(const QString &urlParam)
     httpData.setIsResponseSuccessful(true);
     emit(httpRequestResult(httpData));
 }
-
-/*
-//http get query
-//ToDo: refactor it
-int Http::getRequest(const QString &urlParam, QString &content , int &type)
-{
-    QTcpSocket socket;
-    QString query_string="";
-    QString url = urlParam;
-
-    url_option_=1;
-    checkAndChangeURL2(url);
-
-    queryPartAndURL(url,query_string);
-    if (query_string == "")
-    {
-        query_string += '/';
-    }
-
-    //ToDo: test it
-    if (Jelyazka::Settings::getIsProxyConnectionEnabled())
-    {
-        QNetworkProxy network_proxy;
-        network_proxy.setHostName(Jelyazka::Settings::getProxyIpAddress());
-        network_proxy.setPort(Jelyazka::Settings::getProxyPort().toInt());
-        socket.setProxy(network_proxy);
-    }
-
-    socket.connectToHost(url,80,QIODevice::ReadWrite);
-    if(!socket.waitForConnected())
-    {
-        socket.close();
-        return 1;
-    }
-    QString http_query = "GET " +query_string + " HTTP/1.1\r\nHost: " + url + "\r\nConnection: close\r\n\r\n";
-    QByteArray ba2;
-    ba2 = http_query.toLocal8Bit();
-    socket.write(ba2.data());
-
-    QByteArray ba1;
-    content ="";
-
-    socket.waitForReadyRead();
-    ba1=socket.readAll();
-    content += ba1.data();
-
-    QString response_num = "";
-    float r_num = 0;
-    int try_num = 0;
-    int try_count = 10;
-
-    checkResponse(content, response_num);
-
-    if (response_num.length() == 3)
-    {
-        r_num = response_num.toFloat();
-    }
-
-    if (r_num>307) //trying to add or remove www (400 bad request)
-    {
-        addOrRemoveWWW(url);
-    }
-
-    while((r_num<200 || r_num>300) && try_num<try_count)
-    {
-        getCorrectURL(content, url);
-        content="";
-        socket.close();
-
-        reconnect(url, content, socket);
-
-        response_num = "";
-        checkResponse(content, response_num);
-        if (response_num.length() == 3)
-        {
-            r_num = response_num.toFloat();//return 0, if it cat't convert QString to float
-        }
-
-        if (r_num>307)
-        {
-            addOrRemoveWWW(url);
-        }
-
-        try_num++;
-    }
-    if (r_num!=200)
-    {
-        socket.close();
-        return 1;
-    }
-
-    type = isHTMLorXML(content);
-    if (!type)
-    {
-        socket.close();
-        return 1;
-    }
-
-    while(socket.waitForReadyRead())
-    {
-        ba1=socket.readAll();
-        content += ba1.data();
-    }
-    socket.close();
-    return 0;
-}
-
-//ToDo: refactor it
-//http get query method with proxy argument
-int Http::getRequest(const QString &urlParam, QString &content)
-{
-    QTcpSocket socket;
-    QString query_string="";
-    QString url = urlParam;
-
-    url_option_=1;
-    checkAndChangeURL2(url);
-
-    queryPartAndURL(url,query_string);
-    if (query_string == "")
-    {
-        query_string += '/';
-    }
-
-
-    //ToDo: test it
-    if (Jelyazka::Settings::getIsProxyConnectionEnabled())
-    {
-        QNetworkProxy network_proxy;
-        network_proxy.setHostName(Jelyazka::Settings::getProxyIpAddress());
-        network_proxy.setPort(Jelyazka::Settings::getProxyPort().toInt());
-        socket.setProxy(network_proxy);
-    }
-
-    socket.connectToHost(url,80,QIODevice::ReadWrite);
-    if(!socket.waitForConnected())
-    {
-        socket.close();
-        return 1;
-    }
-    QString http_query = "GET " +query_string + " HTTP/1.1\r\nHost: " + url + "\r\nConnection: close\r\n\r\n";
-    QByteArray ba2;
-    ba2 = http_query.toLocal8Bit();
-    socket.write(ba2.data());
-
-    QByteArray ba1;
-    content ="";
-
-    //first text
-    socket.waitForReadyRead();
-    ba1=socket.readAll();
-    content += ba1.data();
-
-    QString response_num = "";
-    float r_num = 0;
-    int try_num = 0;
-    int try_count = 5;
-
-    checkResponse(content, response_num);
-
-    if (response_num.length() == 3)
-    {
-        r_num = response_num.toFloat();
-    }
-    while((r_num<200 || r_num>300) && try_num<try_count)
-    {
-        getCorrectURL(content, url);
-        content="";
-        socket.close();
-        reconnect(url, content, socket);
-        response_num = "";
-        r_num = 0;
-        checkResponse(content, response_num);
-        if (response_num.length() == 3)
-        {
-            r_num = response_num.toFloat();
-        }
-        if (r_num>307)
-        {
-            return 1;
-        }
-        try_num++;
-    }
-
-    while(socket.waitForReadyRead())
-    {
-        ba1=socket.readAll();
-        content += ba1.data();
-    }
-    socket.close();
-    return 0;
-}
-*/
 
 int Http::reconnect(QString url, QString &content, QTcpSocket &socket)
 {

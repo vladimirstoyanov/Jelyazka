@@ -67,6 +67,7 @@ void Https::setupConnections ()
             this,
             SLOT(onSslErrors(QNetworkReply *, const QList<QSslError> &)));
 }
+
 void Https::getRequest(const QString &url)
 {
     qDebug()<<__PRETTY_FUNCTION__;
@@ -74,6 +75,7 @@ void Https::getRequest(const QString &url)
     request_.setUrl(QUrl(url));
     request_.setHeader(QNetworkRequest::ServerHeader, "application/json");
 
+    manager_->setTransferTimeout(20000); // 20 sec
     QNetworkReply * reply = manager_->get(request_);
 
 
@@ -93,6 +95,7 @@ void Https::replyFinished(QNetworkReply* reply)
     HttpRequestResultAnalyzer httpRequestResultAnalyzer;
     QString response_code = "";
     httpData.setData(reply->readAll());
+    QString theError = reply->errorString();
     httpData.setUrl(reply->url().toString());
     httpRequestResultAnalyzer.checkResponse(httpData.getData(),response_code);
 

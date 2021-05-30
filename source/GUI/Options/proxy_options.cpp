@@ -11,7 +11,6 @@ ProxyOptions::ProxyOptions(QWidget *parent, const int tree_widget_width, const i
     , tree_widget_width_ (tree_widget_width)
     , parent_ (parent)
 {
-
 }
 
 ProxyOptions::~ProxyOptions()
@@ -23,11 +22,14 @@ void ProxyOptions::resize()
 {
 }
 
+
 void ProxyOptions::saveSettings ()
 {
     Jelyazka::Settings::setIsProxyConnectionEnabled(cb_enable_proxy_->isChecked());
     Jelyazka::Settings::setProxyPort(te_proxy_port_->toPlainText());
     Jelyazka::Settings::setProxyIpAddress(te_proxy_url_->toPlainText());
+    Jelyazka::Settings::setProxySettings ();
+
 }
 void ProxyOptions::loadSettings ()
 {

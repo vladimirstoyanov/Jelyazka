@@ -13,11 +13,29 @@ unsigned int         Settings::refresh_feeds_time_ = 1;
 
 Settings::Settings()
 {
-    loadSettings();
+
 }
 
 Settings::~Settings ()
 {
+}
+
+void Settings::setProxySettings ()
+{
+    if (Jelyazka::Settings::getIsProxyConnectionEnabled())
+    {
+        QNetworkProxy proxy;
+        proxy.setType(QNetworkProxy::HttpProxy);
+        QString proxyAddr = Jelyazka::Settings::getProxyIpAddress();
+        proxy.setHostName(proxyAddr);
+        QString port = Jelyazka::Settings::getProxyPort();
+        proxy.setPort(port.toInt());
+        QNetworkProxy::setApplicationProxy(proxy);
+    }
+    else if (!Jelyazka::Settings::getIsProxyConnectionEnabled())
+    {
+        QNetworkProxy::setApplicationProxy(QNetworkProxy(QNetworkProxy::DefaultProxy));
+    }
 }
 
 //ToDo: refactor the funtion
@@ -200,6 +218,7 @@ void Settings::loadSettings()
     }
 
     file.close();
+    setProxySettings ();
 }
 
 //ToDo: refactor the funtion

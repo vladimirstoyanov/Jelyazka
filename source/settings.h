@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QString>
 #include <QTextStream>
+#include <QNetworkProxy>
 
 namespace Jelyazka
 {
@@ -77,7 +78,9 @@ public:
     }
 
 public:
+    static void loadSettings();
     static void saveSettings ();
+    static void setProxySettings ();
 
 private:
     static bool                 is_filtering_enabled_;
@@ -87,8 +90,6 @@ private:
     static QString              proxy_port_;
     static unsigned int         refresh_feeds_time_;
 
-private:
-    static void loadSettings();
 };
 
 } //namespace Jelyazka

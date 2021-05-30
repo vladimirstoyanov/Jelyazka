@@ -27,6 +27,7 @@
 #include "jelyazka_manager.h"
 #include "RSS/rss_data.h"
 #include "Network/http_data.h"
+#include "settings.h"
 
 
 int main(int argc, char *argv[])
@@ -39,6 +40,7 @@ int main(int argc, char *argv[])
 
     std::shared_ptr<JelyazkaManager> jelayzka_manager = std::make_shared <JelyazkaManager> ();
 
+    Jelyazka::Settings::loadSettings();
     jelayzka_manager->makeConnections();
 
     return a.exec();

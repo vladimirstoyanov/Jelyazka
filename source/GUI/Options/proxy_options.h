@@ -37,6 +37,7 @@ private:
     std::shared_ptr<QTextEdit>              te_proxy_url_;
     std::shared_ptr<QTextEdit>              te_proxy_port_;
 
+
 private:
      int                                     ok_button_height_;
      const unsigned int                      offset_between_widgets_;
