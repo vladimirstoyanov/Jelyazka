@@ -95,7 +95,6 @@ void Https::replyFinished(QNetworkReply* reply)
     HttpRequestResultAnalyzer httpRequestResultAnalyzer;
     QString response_code = "";
     httpData.setData(reply->readAll());
-    QString theError = reply->errorString();
     httpData.setUrl(reply->url().toString());
     httpRequestResultAnalyzer.checkResponse(httpData.getData(),response_code);
 

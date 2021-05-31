@@ -13,9 +13,6 @@ namespace Jelyazka
 class Settings
 {
 public:
-    Settings();
-    virtual ~Settings ();
-
     //get methods
     static bool getIsNotificationsEnabled ()
     {
@@ -83,6 +80,11 @@ public:
     static void setProxySettings ();
 
 private:
+    Settings();
+    ~Settings ();
+
+private:
+
     static bool                 is_filtering_enabled_;
     static bool                 is_notifications_enabled_;
     static bool                 is_proxy_connection_enabled_;

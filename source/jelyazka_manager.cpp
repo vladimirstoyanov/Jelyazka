@@ -10,7 +10,6 @@ JelyazkaManager::JelyazkaManager():
     , option_window_                (std::make_shared<OptionsWindow> ())
     , refresh_rss_data_             (std::make_shared<RefreshRssData> ())
     , rss_search_window_            (std::make_shared<RSSSearchGUI> ())
-    , settings_                     ()
     , tray_icon_                    (std::make_shared<TrayIcon> ())
     , update_rss_data_              (std::make_shared <UpdateRssData> ())
 {

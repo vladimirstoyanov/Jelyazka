@@ -63,7 +63,6 @@ private:
     std::shared_ptr<OptionsWindow>          option_window_;
     std::shared_ptr<RefreshRssData>         refresh_rss_data_;
     std::shared_ptr<RSSSearchGUI>           rss_search_window_;
-    Jelyazka::Settings                      settings_;
     std::shared_ptr<TrayIcon>               tray_icon_;
     std::shared_ptr<UpdateRssData>          update_rss_data_;
 
