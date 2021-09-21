@@ -39,15 +39,13 @@ private:
     std::shared_ptr<QPushButton>            pb_remove_filter_;
     std::shared_ptr<QTextEdit>              te_add_filter_;
 
-private:
-     DataBase                                data_base_;
-     std::vector<QString>                    l_old_filters_;
-     int                                     ok_button_height_;
-     const unsigned int                      offset_between_widgets_;
-     int                                     tree_widget_width_;
-     QWidget*                                parent_;
+    DataBase                                data_base_;
+    std::vector<QString>                    l_old_filters_;
+    int                                     ok_button_height_;
+    const unsigned int                      offset_between_widgets_;
+    int                                     tree_widget_width_;
+    QWidget*                                parent_;
 
-private:
     int addStringToFilterList(const QString &current_text);
     void insertRowToFiltersTable(const QString &filter_name);
     void loadFilters();

@@ -42,6 +42,8 @@ public:
     void    updateArticles(const RSSData &rss_data, std::vector<RSSData> & new_rss_data);
 
 private:
+    QSqlDatabase q_sql_data_base_;
+
     void closeDB();
     void createAllURLTable();
     void createFeedListTable();
@@ -52,8 +54,7 @@ private:
     int  dropTable(const QString &table_name);
     void openDB();
 
-private:
-    QSqlDatabase q_sql_data_base_;
+
 };
 
 #endif // DB_H

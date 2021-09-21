@@ -47,7 +47,6 @@ private slots:
 private:
     std::shared_ptr<Ui::About> ui_;
 
-private:
     void closeEvent(QCloseEvent *); // Overriding the window's close event
     void showEvent(QShowEvent *);
     void setupGui ();

@@ -6,7 +6,7 @@
 class AddRssDataState: public Jelyazka::IState
 {
     Q_OBJECT
-    public:
+public:
         AddRssDataState () = default;
         virtual ~AddRssDataState () = default;
         virtual QString   getName() const override { return "AddRssDataState"; }

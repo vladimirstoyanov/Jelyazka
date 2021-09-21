@@ -75,6 +75,16 @@ protected:
     void showEvent(QShowEvent *);
 
 private:
+    DataBase                                        data_base_;
+    std::shared_ptr<QGridLayout>                    grid_;
+    bool                                            is_user_edit_;
+    bool                                            is_program_edit_;
+    std::shared_ptr<QStandardItemModel>             model_;
+    std::shared_ptr<ParseRSS>                       parse_rss_;
+    std::map <QString, std::shared_ptr<RSSData >>   rss_data_;
+    RSSSearchGUIThread                              *rss_search_thread_;
+    std::shared_ptr<Ui::RSSSearchGUI>               ui_;
+
     QString     changeName(const QString &name);
     void        closeEvent(QCloseEvent *);
     int         checkExistingURL(const QString &url);
@@ -85,17 +95,6 @@ private:
     void        paintRows();
     void        returnModifedString(QString &str);
     void        setupGui ();
-
-private:
-    DataBase                                        data_base_;
-    std::shared_ptr<QGridLayout>                    grid_;
-    bool                                            is_user_edit_;
-    bool                                            is_program_edit_;
-    std::shared_ptr<QStandardItemModel>             model_;
-    std::shared_ptr<ParseRSS>                       parse_rss_;
-    std::map <QString, std::shared_ptr<RSSData >>   rss_data_;
-    RSSSearchGUIThread                              *rss_search_thread_;
-    std::shared_ptr<Ui::RSSSearchGUI>               ui_;
 
 private slots:
     //ToDo: rename the below functions

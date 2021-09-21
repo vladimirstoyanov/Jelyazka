@@ -37,8 +37,6 @@ public:
     HttpRequestResultAnalyzer();
     virtual ~HttpRequestResultAnalyzer();
 
-
-public:
     ContentType  getContentType(const QString &content);
     bool checkResponse(const QString &content, QString &response_num);
 };

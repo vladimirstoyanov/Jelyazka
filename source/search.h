@@ -23,7 +23,7 @@
 #include <QString>
 
 class Search {
-    public:
+public:
         Search();
         virtual ~Search();
 

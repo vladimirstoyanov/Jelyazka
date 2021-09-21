@@ -47,7 +47,6 @@ public:
 private:
     std::shared_ptr <Ui::Help> ui_;
 
-private:
     void closeEvent (QCloseEvent *);
     void loadHelp();
     void resizeEvent(QResizeEvent *event);

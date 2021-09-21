@@ -35,17 +35,18 @@ public:
     NetworkManager ();
     virtual ~NetworkManager();
 
-    //void getHttpRequest (const QString &url);
 public slots:
     void onHttpRequestResult (const HttpData &httpData);
     void onHttpGetRequest       (const QString &);
-signals:
-    void httpRequestReceived (const HttpData &httpData);
-private:
-    void setupConnections();
+
 private:
     std::shared_ptr<Http> http;
     std::shared_ptr<Https> https;
+
+    void setupConnections();
+
+signals:
+    void httpRequestReceived (const HttpData &httpData);
 };
 
 #endif // NETWORK_MANAGER_H

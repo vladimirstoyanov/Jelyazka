@@ -6,7 +6,7 @@
 class UpdateSettingsState: public Jelyazka::IState
 {
     Q_OBJECT
-    public:
+public:
         UpdateSettingsState () = default;
         virtual ~UpdateSettingsState () = default;
         virtual QString   getName() const override{ return "UpdateSettingsState"; }

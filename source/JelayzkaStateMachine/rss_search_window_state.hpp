@@ -6,7 +6,7 @@
 class RssSearchWindowState: public Jelyazka::IState
 {
     Q_OBJECT
-    public:
+public:
         RssSearchWindowState () = default;
         virtual ~RssSearchWindowState () = default;
         virtual QString   getName() const override { return "RssSearchWindowState"; }

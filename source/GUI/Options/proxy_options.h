@@ -27,21 +27,19 @@ public:
     void setupGui () override;
     void show () override;
 
-private slots:
-     void on_cb_enable_proxy_clicked(bool enabled);
-
 private:
+    int                                     ok_button_height_;
+    const unsigned int                      offset_between_widgets_;
+    int                                     tree_widget_width_;
+    QWidget*                                parent_;
+
     std::shared_ptr<QCheckBox>              cb_enable_proxy_;
     std::shared_ptr<QLabel>                 l_proxy_url_;
     std::shared_ptr<QLabel>                 l_proxy_port_;
     std::shared_ptr<QTextEdit>              te_proxy_url_;
     std::shared_ptr<QTextEdit>              te_proxy_port_;
 
-
-private:
-     int                                     ok_button_height_;
-     const unsigned int                      offset_between_widgets_;
-     int                                     tree_widget_width_;
-     QWidget*                                parent_;
+private slots:
+     void on_cb_enable_proxy_clicked(bool enabled);
 };
 #endif // PROXYOPTIONS_H

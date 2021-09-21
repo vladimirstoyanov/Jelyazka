@@ -33,27 +33,23 @@ public:
     void setupGui () override;
     void show () override;
 
-
-
 private slots:
     void on_removeButton_clicked();
-private:
-    int addToFeedList(const QString &feed_name);
-    void fillFeedListView();
-    void positioningFeedsOptionWidgets();
-
-private:
-    std::shared_ptr<QListWidget>            feed_list_;
-    std::vector<QString>                    l_old_feed_list_;
-    std::shared_ptr<QPushButton>            remove_button_;
-    QStringList                             removed_feeds_;
 
 private:
      DataBase                                data_base_;
+     std::shared_ptr<QListWidget>            feed_list_;
+     std::vector<QString>                    l_old_feed_list_;
      int                                     ok_button_height_;
      int                                     ok_button_y_;
      const unsigned int                      offset_between_widgets_;
+     std::shared_ptr<QPushButton>            remove_button_;
+     QStringList                             removed_feeds_;
      int                                     tree_widget_width_;
      QWidget*                                parent_;
+
+     int addToFeedList(const QString &feed_name);
+     void fillFeedListView();
+     void positioningFeedsOptionWidgets();
 };
 #endif // FEEDSOPTIONS_H

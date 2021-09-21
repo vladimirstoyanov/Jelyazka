@@ -56,6 +56,19 @@ public slots:
     void onShowAnimationFinished();
 
 private:
+    QRect                                   begin_coordinates_;
+    QImage                                  close_button_image_;
+    int                                     desktop_height_;
+    int                                     desktop_width_;
+    QRect                                   end_coordinates_;
+    std::shared_ptr<QPropertyAnimation>     hide_window_animation_;
+    std::shared_ptr<QLabel>                 image_label_;
+    bool                                    is_mouse_clicked_;
+    bool                                    is_X_changed_;
+    std::shared_ptr<QPropertyAnimation>     show_window_animation_;
+    int                                     show_delay_;
+    std::shared_ptr<Ui::NotificationWindow> ui_;
+
     void                delay(const int seconds);
     bool                eventFilter(QObject *, QEvent *);
     void                generateHtmlSource (const std::vector<RSSData> &new_articles, QString &html_source);
@@ -69,20 +82,6 @@ private:
     void                setupGui ();
     void                showEvent(QShowEvent *);
     void                showWindowAnimation();
-
-private:
-    QRect                                   begin_coordinates_;
-    QImage                                  close_button_image_;
-    int                                     desktop_height_;
-    int                                     desktop_width_;
-    QRect                                   end_coordinates_;
-    std::shared_ptr<QPropertyAnimation>     hide_window_animation_;
-    std::shared_ptr<QLabel>                 image_label_;
-    bool                                    is_mouse_clicked_;
-    bool                                    is_X_changed_;
-    std::shared_ptr<QPropertyAnimation>     show_window_animation_;
-    int                                     show_delay_;
-    std::shared_ptr<Ui::NotificationWindow> ui_;
 };
 
 

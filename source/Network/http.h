@@ -51,7 +51,6 @@ public:
     void queryPartAndURL(QString &url, QString &query_part);
     void removeSubString(QString &url, const QString &substring);
 
-public:
     void getRequest(const QString &url) override;
     int  reconnect(QString url, QString &content, QTcpSocket &socket);
     bool checkInTheBeginning(const QString &url, const QString &http);

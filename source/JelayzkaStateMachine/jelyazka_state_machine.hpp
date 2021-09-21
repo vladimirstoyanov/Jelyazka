@@ -58,6 +58,26 @@ public slots:
     void onUpdateSettings ();
     void onUpdateRssData ();
 
+private:
+    std::shared_ptr<AboutWindowState>       about_window_state_;
+    std::shared_ptr<AddRssDataState>        add_rss_data_state_;
+    std::shared_ptr<Jelyazka::IState>       current_state_;
+    std::shared_ptr<HelpWindowState>        help_window_state_;
+    std::shared_ptr<IdleState>              idle_state_;
+    std::shared_ptr<InitWindowState>        init_window_state_;
+    std::shared_ptr<MainWindowState>        main_window_state_;
+    std::shared_ptr<OptionWindowState>      option_window_state_;
+    std::shared_ptr<RemoveOldDataState>     remove_old_data_state_;
+    std::shared_ptr<RssDataUpdatedState>    rss_data_updated_state_;
+    std::shared_ptr<RssSearchWindowState>   rss_search_window_state_;
+    Transition                              transitions_;
+    std::shared_ptr<TrayIconState>          tray_icon_state_;
+    std::shared_ptr<UpdateSettingsState>    update_settings_state_;
+
+    void hideWindowConnections ();
+    void makeConnections ();
+    void showWindowConnections ();
+
 signals:
     void addRssData ();
 
@@ -85,28 +105,6 @@ signals:
 
     void updateRssData();
     void updateSettings ();
-
-
-private:
-    std::shared_ptr<AboutWindowState>       about_window_state_;
-    std::shared_ptr<AddRssDataState>        add_rss_data_state_;
-    std::shared_ptr<Jelyazka::IState>       current_state_;
-    std::shared_ptr<HelpWindowState>        help_window_state_;
-    std::shared_ptr<IdleState>              idle_state_;
-    std::shared_ptr<InitWindowState>        init_window_state_;
-    std::shared_ptr<MainWindowState>        main_window_state_;
-    std::shared_ptr<OptionWindowState>      option_window_state_;
-    std::shared_ptr<RemoveOldDataState>     remove_old_data_state_;
-    std::shared_ptr<RssDataUpdatedState>    rss_data_updated_state_;
-    std::shared_ptr<RssSearchWindowState>   rss_search_window_state_;
-    Transition                              transitions_;
-    std::shared_ptr<TrayIconState>          tray_icon_state_;
-    std::shared_ptr<UpdateSettingsState>    update_settings_state_;
-
-private:
-    void hideWindowConnections ();
-    void makeConnections ();
-    void showWindowConnections ();
 };
 
 #endif

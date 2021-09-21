@@ -56,33 +56,6 @@ public:
 
     virtual ~OptionsWindow();
 
-private slots:
-    void on_okButton_clicked(); //'OK' button clicked
-    void on_cancelButton_clicked(); //'Cancel' button clicked
-    void on_treeWidget_clicked(const QModelIndex &index);
-
-private:
-     void closeEvent (QCloseEvent *);
-     void resizeEvent(QResizeEvent *event);
-     void showEvent(QShowEvent *);
-
-private:
-    void addItemToTreeView(const QString &name);
-    void createOptions ();
-    void insertRowToRSSTable(const QString &site_name, const QString &url, const QString &version);
-    void returnModifedString(QString &str);
-    void setupGui ();
-    void treeWidgetSetup ();
-    void widgetsSetup ();
-
-private:
-    void loadSettings();
-    void saveSettings();
-
-private:
-    int addToFeedList(const QString &str);
-    int cf_label_search_width(); //ToDo: change the function name
-
 private:
     DataBase                                data_base_;
     std::shared_ptr<QLabel>                 download_feed_status_;
@@ -90,6 +63,26 @@ private:
     const unsigned int                      offset_between_widgets_;
     std::vector<std::shared_ptr<IOptions>>  options;
     std::shared_ptr<Ui::OptionsWindow>      ui_;
+
+    void addItemToTreeView(const QString &name);
+    int addToFeedList(const QString &str);
+    int cf_label_search_width(); //ToDo: change the function name
+    void closeEvent (QCloseEvent *);
+    void createOptions ();
+    void insertRowToRSSTable(const QString &site_name, const QString &url, const QString &version);
+    void loadSettings();
+    void resizeEvent(QResizeEvent *event);
+    void returnModifedString(QString &str);
+    void saveSettings();
+    void setupGui ();
+    void showEvent(QShowEvent *);
+    void treeWidgetSetup ();
+    void widgetsSetup ();
+
+private slots:
+    void on_okButton_clicked(); //'OK' button clicked
+    void on_cancelButton_clicked(); //'Cancel' button clicked
+    void on_treeWidget_clicked(const QModelIndex &index);
 
 signals:
     void stateChanged   (const QString &);

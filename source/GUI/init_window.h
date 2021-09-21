@@ -48,16 +48,9 @@ public:
     explicit InitWindow(QWidget *parent = nullptr);
     virtual  ~InitWindow();
 
-private:
-    void downloadFinished ();
-    void writeData(const RSSData &rss_data);
 
 private slots:
     void onHttpRequestReceived (const HttpData &httpData);
-
-signals:
-    void stateChanged (const QString &event);
-    void httpGetRequest (const QString &);
 
 private:
     DataBase                            data_base_;
@@ -68,12 +61,16 @@ private:
     std::shared_ptr<Ui::InitWindow>     ui_;
     unsigned int                        urls_size_;
 
-
-private:
+    void downloadFinished ();
     void loadRssFeeds();
     void setupConnections ();
     void setupGui();
     void showEvent(QShowEvent *);
+    void writeData(const RSSData &rss_data);
+
+signals:
+    void stateChanged (const QString &event);
+    void httpGetRequest (const QString &);
 };
 
 #endif // INITWINDOW_H

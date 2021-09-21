@@ -5,7 +5,7 @@
 
 class RssDataUpdatedState: public Jelyazka::IState
 {
-    public:
+public:
         RssDataUpdatedState () = default;
         virtual ~RssDataUpdatedState () = default;
         virtual QString   getName() const override { return "RssDataUpdatedState"; }

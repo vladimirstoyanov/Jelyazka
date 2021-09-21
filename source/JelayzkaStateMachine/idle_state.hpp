@@ -5,7 +5,7 @@
 
 class IdleState: public Jelyazka::IState
 {
-    public:
+public:
         IdleState () = default;
         virtual ~IdleState () = default;
         virtual QString   getName() const override { return "IdleState"; }

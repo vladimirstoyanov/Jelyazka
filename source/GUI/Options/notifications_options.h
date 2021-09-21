@@ -30,17 +30,17 @@ public:
     void setupGui () override;
     void show () override;
 
-private slots:
-    void on_cb_enable_notification(bool enabled);
-
 private:
     std::shared_ptr<QCheckBox>              cb_enable_notification_;
     std::shared_ptr<QLabel>                 l_refresh_time_;
     std::shared_ptr<QSpinBox>               sb_refresh_time_;
 
-private:
-     int                                     ok_button_height_;
-     int                                     tree_widget_width_;
-     QWidget*                                parent_;
+    int                                     ok_button_height_;
+    int                                     tree_widget_width_;
+    QWidget*                                parent_;
+
+private slots:
+    void on_cb_enable_notification(bool enabled);
+
 };
 #endif // NOTIFICATIONSOPTIONS_H

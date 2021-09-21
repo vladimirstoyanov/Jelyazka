@@ -165,7 +165,7 @@ void Settings::loadSettings()
     QFile file(filename_);
     if(!file.open(QIODevice::ReadOnly))
     {
-        QMessageBox::critical(0, "Error!", "Can't read \'Options\' file: " + file.errorString());
+        QMessageBox::critical(0, "Error!", "Can't open \'Options\' file: " + file.errorString());
         return;
     }
 

@@ -81,9 +81,17 @@ public:
 
 private:
     Settings();
-    ~Settings ();
+    virtual ~Settings ();
 
 private:
+    const static QString        filename_;
+    static bool                 is_filtering_enabled_;
+    static bool                 is_notifications_enabled_;
+    static bool                 is_proxy_connection_enabled_;
+    static QString              proxy_ip_address_;
+    static QString              proxy_port_;
+    static unsigned int         refresh_feeds_time_;
+
     static QString extractLineData (int index, const QString &line);
     static bool isSettingsDataValid (const int expected_length,
                              const QString &line,
@@ -97,15 +105,6 @@ private:
     static void saveFiltersSettings (QTextStream & out);
     static void saveNotificationsSettings (QTextStream & out);
     static void saveProxySettings (QTextStream & out);
-
-private:
-    const static QString        filename_;
-    static bool                 is_filtering_enabled_;
-    static bool                 is_notifications_enabled_;
-    static bool                 is_proxy_connection_enabled_;
-    static QString              proxy_ip_address_;
-    static QString              proxy_port_;
-    static unsigned int         refresh_feeds_time_;
 };
 
 } //namespace Jelyazka

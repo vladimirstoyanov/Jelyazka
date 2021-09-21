@@ -6,7 +6,7 @@
 class AboutWindowState: public Jelyazka::IState
 {
     Q_OBJECT
-    public:
+public:
         AboutWindowState () = default;
         virtual ~AboutWindowState () = default;
         virtual QString   getName() const override { return "AboutWindowState"; }

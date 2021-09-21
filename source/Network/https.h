@@ -42,6 +42,7 @@ public:
     virtual ~Https ();
     bool isHttpsProtocol(const QString &url);
     void getRequest (const QString &url) override;
+
 public slots:
     void replyFinished(QNetworkReply* reply);
     void onAuthenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator);
@@ -52,13 +53,14 @@ public slots:
     void onReadyRead();
     void onError(QNetworkReply::NetworkError code);
     void onSslErrorsNetworkReply(const QList<QSslError> &errors);
-private:
-    void setupConnections();
+
 private:
     QSslConfiguration config_;
     std::shared_ptr<QNetworkAccessManager> manager_;
     QString https_prefix_name_;
     QNetworkRequest request_;
+
+    void setupConnections();
 
 signals:
     void httpsRequestResult (const HttpData httpData);

@@ -90,7 +90,6 @@ private:
     void showNextArticle();
     void showPreviousArticle ();
 
-private:
     ArticleManager                  article_manager_;
     QImage                          add_rss_button_image_;
     QPoint                          current_point_;

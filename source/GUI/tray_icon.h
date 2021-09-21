@@ -28,18 +28,17 @@ private slots:
     void quitApplication();
 
 private:
-    void closeEvent(QCloseEvent *);
-    void makeActionsConnection();
-    void createTrayIcon();
-    void setIcon();
-
-private:
     std::shared_ptr<QAction>         about_;
     std::shared_ptr<About>           about_window_;
     std::shared_ptr<QAction>         close_;
     std::shared_ptr<QAction>         main_;
     std::shared_ptr<QSystemTrayIcon> tray_icon_;
     std::shared_ptr<QMenu>           tray_icon_menu_;
+
+    void closeEvent(QCloseEvent *);
+    void makeActionsConnection();
+    void createTrayIcon();
+    void setIcon();
 
 signals:
    void stateChanged (const QString &);

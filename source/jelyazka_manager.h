@@ -47,12 +47,6 @@ public slots:
 
     void onUpdateSettings       ();
 
-
-signals:
-    void stateChanged           (const QString &);
-    void startRssRefreshData    ();
-    void stopRssRefreshData     ();
-
 private:
     std::shared_ptr<About>                  about_window_;
     std::shared_ptr<Help>                   help_window_;
@@ -66,9 +60,13 @@ private:
     std::shared_ptr<TrayIcon>               tray_icon_;
     std::shared_ptr<UpdateRssData>          update_rss_data_;
 
-private:
     void connectionsFromJelyazkaStateMachine ();
     void connectionsToJelyazkaStateMachine ();
+
+signals:
+    void stateChanged           (const QString &);
+    void startRssRefreshData    ();
+    void stopRssRefreshData     ();
 };
 
 #endif // JELYAZKAMANAGER_H
