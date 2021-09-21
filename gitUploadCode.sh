@@ -10,7 +10,7 @@ then
 fi
 
 
-rm -rf build-jelyazka-Desktop-Debug/
+rm -rf build-jelyazka-Desktop*
 rm source/*.pro.user
 
 cd unit_test
