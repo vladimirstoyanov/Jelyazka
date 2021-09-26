@@ -28,8 +28,8 @@ class Logger
 public:
     Logger();
     virtual ~Logger() = default;
-    static void write(QString message, QString filename);
-    void writeHTMLSourceToFile(QString file_name, QString html_source);
+    static void write(const QString &message, const QString &filename);
+    void writeHTMLSourceToFile(const QString &file_name, const QString &html_source);
 };
 
 #endif // LOGGER_H

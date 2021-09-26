@@ -22,7 +22,7 @@ Logger::Logger()
 {
 }
 
-void Logger::write(QString message, QString filename)
+void Logger::write(const QString &message, const QString &filename)
 {
     QFile file(filename);
     file.open(QIODevice::Append | QIODevice::Text);
@@ -32,7 +32,7 @@ void Logger::write(QString message, QString filename)
     file.close();
 }
 
-void Logger::writeHTMLSourceToFile(QString file_name,QString html_source)
+void Logger::writeHTMLSourceToFile(const QString &file_name, const QString &html_source)
 {
     QFile file(file_name);
     file.open(QIODevice::WriteOnly | QIODevice::Text);
