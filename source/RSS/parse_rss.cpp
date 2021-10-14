@@ -43,7 +43,7 @@ int ParseRSS::checkWebSourceForRSSContent(const QString &web_source, QString &ti
         cs.searchAfter(web_source, "<rdf", &r);
         cs.searchAfter(web_source, "<feed", &f);
 
-        if (i==0 || (j==-1 && r==-1 && f ==-1) || (j!=-1 && i>j) || (r!=-1 && i>r) || (f!=-1 && i>f))
+        if (0 == i || (-1 == j && -1 == r && -1 == f) || (j!=-1 && i>j) || (r!=-1 && i>r) || (f!=-1 && i>f))
         {
             return 1;
         }

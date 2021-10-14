@@ -179,7 +179,7 @@ bool RSSSearchGUIThread::setUrlRoot(QString url)
     int index = 0;
     cs.searchBefore(url, "www.", &index);
 
-    if (index == 0) //remove 'www.'
+    if (0 == index) //remove 'www.'
     {
         url_root_="";
         for (int i=4; i<url.length(); i++)
@@ -307,7 +307,7 @@ int RSSSearchGUIThread::fixProtocol(QString &url)
 
     cs.searchBefore(url, "http://", &index);
 
-    if (index == -1 || index == 0)
+    if (-1 == index || 0 == index)
         return 0;
 
     QString url_tmp = "";
@@ -319,6 +319,7 @@ int RSSSearchGUIThread::fixProtocol(QString &url)
     return 1;
 }
 
+//ToDo: refactor the below method
 int RSSSearchGUIThread::checkForRss(const QString &source, QString &title, int &version)
 {
     Search cs;
@@ -336,10 +337,10 @@ int RSSSearchGUIThread::checkForRss(const QString &source, QString &title, int &
     cs.searchAfter(source, "<rdf", &r);
     cs.searchAfter(source, "<feed", &f);
 
-    if (i==0 || (j==-1 && r==-1 && f ==-1) || (j!=-1 && i>j) || (r!=-1 && i>r) || (f!=-1 && i>f))
+    if (0 == i || (-1 == j && -1 == r && -1 == f) || (j!=-1 && i>j) || (r!=-1 && i>r) || (f!=-1 && i>f))
         return 1;
 
-    if (f!=-1 && j==-1 && r==-1)
+    if (f!=-1 && j==-1 && -1 == r)
         version = 2005;
 
     //get rss title

@@ -158,7 +158,7 @@ void FiltersOptions::on_pb_remove_filter()
 
     QList<QListWidgetItem*> l;
     l = lw_filter_list_->selectedItems();
-    if (l.size()==0)
+    if (l.empty())
     {
         return;
     }

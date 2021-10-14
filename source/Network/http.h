@@ -34,7 +34,7 @@
 #include "search.h"
 
 
-
+//ToDo: refactor 'Http' class
 class Http : public IHttpProtocol
 {
         Q_OBJECT

@@ -62,7 +62,7 @@ void RSSSearchGUI::paintRows()
 {
     for(int i = 0; i<model_->rowCount(); ++i)
     {
-        if (i%2 == 0)
+        if (0 == i%2)
         {
             for(int j = 0; j<model_->columnCount(); ++j)
             {
@@ -386,29 +386,6 @@ QString RSSSearchGUI::changeName(const QString &name)
 
 void RSSSearchGUI::on_modelItemChanged(QStandardItem*item)
 {
-    /*
-    bool in_if=false;
-    if (item->column() == 0 && is_user_edit_ && !is_program_edit_)
-    {
-        //check name and make unique
-        QString name  = item->text();
-
-        while(treeContains(tree_node_,name))
-            name = change_name(name); //make unique name
-
-        editNode(tree_node_, old_names_[item->row()],name);
-        old_names_[item->row()] = name;
-
-        if (name != item->text())
-        {
-            is_program_edit_ = true;
-            in_if = true;
-            model_->setData(model_->index(item->row(),0),name); //set new name
-        }
-    }
-    if (is_program_edit_ && !in_if)
-        is_program_edit_ = false;
-        */
 }
 
 void RSSSearchGUI::setupGui ()

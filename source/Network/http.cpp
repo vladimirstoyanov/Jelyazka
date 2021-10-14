@@ -279,11 +279,11 @@ bool Http::checkForProtocol(const QString &url, int &index_after_protocol, QStri
 {
     protocol = "";
     index_after_protocol = 0;
-    for (int i=0; i<url.length(); i++)
+    for (int i=0; i<url.length(); ++i)
     {
-        if (url[i]=='/')
+        if ('/' == url[i])
         {
-            if (i==0 || i+1>=url.length())
+            if (0 == i || i+1>=url.length())
             {
                 return 1;
             }
@@ -304,11 +304,11 @@ bool Http::checkForProtocol(const QString &url, int &index_after_protocol, QStri
 bool Http::checkForProtocol(const QString &url, QString &protocol)
 {
     protocol = "";
-    for (int i=0; i<url.length(); i++)
+    for (int i=0; i<url.length(); ++i)
     {
-        if (url[i]=='/')
+        if ('/' == url[i])
         {
-            if (i==0 || i+1>=url.length())
+            if (0 == i || i+1>=url.length())
             {
                 return 1;
             }
@@ -329,9 +329,9 @@ bool Http::checkForProtocol(const QString &url, int &index)
     index =0;
     for (int i=0; i<url.length(); i++)
     {
-        if (url[i]=='/')
+        if ('/' == url[i])
         {
-            if (i==0 || i+1>=url.length())
+            if (0 == i || i+1>=url.length())
             {
                 return 1;
             }
@@ -352,9 +352,9 @@ bool Http::checkForProtocol(const QString &url)
 {
     for (int i=0; i<url.length(); i++)
     {
-        if (url[i]=='/')
+        if ('/' == url[i])
         {
-            if (i==0 || i+1>=url.length())
+            if (0 == i || i+1>=url.length())
             {
                 return 1;
             }

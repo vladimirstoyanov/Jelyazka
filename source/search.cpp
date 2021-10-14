@@ -29,7 +29,7 @@ void Search::searchBefore(const QString &text, const QString &subtext, int *inde
 {
     std::vector<int> T(subtext.length() + 1, -1);
 
-    if(subtext.length() == 0 && subtext.length()>text.length())
+    if(0 == subtext.length() && subtext.length()>text.length())
     {
         *index = -1;
         return;
@@ -67,7 +67,7 @@ void Search::searchAfter(const QString &text, const QString &subtext, int *index
 {
     std::vector<int> T(subtext.length() + 1, -1);
 
-    if(subtext.length() == 0 && subtext.length()>text.length())
+    if(0 == subtext.length() && subtext.length()>text.length())
     {
         *index = -1;
         return;
