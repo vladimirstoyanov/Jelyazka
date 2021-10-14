@@ -72,7 +72,7 @@ void Search::searchAfter(const QString &text, const QString &subtext, int *index
         *index = -1;
         return;
     }
-    for(int i = 1; i <= subtext.length(); i++)
+    for(int i = 1; i <= subtext.length(); ++i)
     {
         int pos = T[i - 1];
         while(pos != -1 && subtext[pos] != subtext[i - 1])

@@ -196,11 +196,11 @@ void FiltersOptions::loadFilters()
     data_base_.getFilterList(tmp);
 
     l_old_filters_.clear();
+    l_old_filters_.insert(l_old_filters_.end(), tmp.begin(), tmp.end());
 
     for (unsigned int i=0; i<tmp.size(); i++)
     {
         addStringToFilterList(tmp[i]);
-        l_old_filters_.push_back(tmp[i]);
     }
 }
 

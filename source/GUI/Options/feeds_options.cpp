@@ -84,11 +84,11 @@ void FeedsOptions::fillFeedListView()
     data_base_.getFeeds(&tmp);
 
     l_old_feed_list_.clear();
+    l_old_feed_list_.insert(l_old_feed_list_.end(), tmp.begin(), tmp.end());
 
     for (const QString &item: tmp)
     {
         feed_list_->insertItem(feed_list_->count(), item);
-        l_old_feed_list_.push_back(item);
     }
 }
 
