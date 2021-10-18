@@ -23,8 +23,8 @@ public:
     void findFeedDataRDF(int &index, const QString &content, RSSArticle &ar);
 
 public:
-    int  getArticlesFromRDFContent(const QString &web_source, std::shared_ptr<RSSData> data); //ToDo: make it privete
-    int  getArticlesFromRSSContent(const QString &web_source, std::shared_ptr<RSSData> data); //ToDo: make it privete
+    int  getArticlesByRdfContent(const QString &web_source, std::shared_ptr<RSSData> data); //ToDo: make it privete
+    int  getArticlesByRssContent(const QString &web_source, std::shared_ptr<RSSData> data); //ToDo: make it privete
     int  getContent(const int item_b_index, const int item_e_index, QString &description, const QString &web_source);
     int  getDescription(const int item_b_index, const int item_e_index, QString &description, const QString &web_source);
     void getRSSDataByWebSource (const QString &web_source, std::shared_ptr<RSSData> data);

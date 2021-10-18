@@ -64,7 +64,6 @@ std::map<QString, RSSData> DataBase::getRssData ()
 
         while(query.next())
         {
-            RSSData rss_data;
             RSSArticle rss_article;
             rss_article.setTitle(query.value(2).toByteArray().data());
             rss_article.setLink( query.value(3).toByteArray().data());
@@ -74,7 +73,7 @@ std::map<QString, RSSData> DataBase::getRssData ()
             it = result.find(name);
             if (it==result.end())
             {
-                rss_data.setSiteName(name);
+                RSSData rss_data (name, "", "", 0);
                 rss_data.articlesPushBack(rss_article);
                 result[name] = rss_data;
             }

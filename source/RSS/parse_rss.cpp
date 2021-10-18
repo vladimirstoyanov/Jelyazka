@@ -126,12 +126,12 @@ void ParseRSS::getRSSDataByWebSource (const QString &web_source, std::shared_ptr
     {
         rss_data->setVersion(0);
         rss_data->setEncoding(encoding);
-        getArticlesFromRSSContent(web_source, rss_data);
+        getArticlesByRssContent(web_source, rss_data);
     }
     else
     {
         rss_data->setVersion("2005");
-        getArticlesFromRDFContent(web_source, rss_data);
+        getArticlesByRdfContent(web_source, rss_data);
     }
 }
 
@@ -398,7 +398,7 @@ int ParseRSS::getDescription(const int item_b_index, const int item_e_index, QSt
 }
 
 //Get articles from rss source
-int ParseRSS::getArticlesFromRSSContent(const QString &content, std::shared_ptr<RSSData> rssData)
+int ParseRSS::getArticlesByRssContent(const QString &content, std::shared_ptr<RSSData> rssData)
 {
     int item_b_index=0, item_e_index=0;
     Search cs;
@@ -457,7 +457,7 @@ int ParseRSS::getArticlesFromRSSContent(const QString &content, std::shared_ptr<
 }
 
 //Get articles from rdf xml
-int ParseRSS::getArticlesFromRDFContent(const QString &content, std::shared_ptr<RSSData> rssData)
+int ParseRSS::getArticlesByRdfContent(const QString &content, std::shared_ptr<RSSData> rssData)
 {
     int item_b_index=0, item_e_index=0;
     Search cs;

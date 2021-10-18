@@ -75,33 +75,35 @@ protected:
     void showEvent(QShowEvent *);
 
 private:
+    int                                             add_id_;
     DataBase                                        data_base_;
+    int                                             encoding_id_;
     std::shared_ptr<QGridLayout>                    grid_;
-    bool                                            is_user_edit_;
-    bool                                            is_program_edit_;
     std::shared_ptr<QStandardItemModel>             model_;
+    int                                             name_id_;
     std::shared_ptr<ParseRSS>                       parse_rss_;
     std::map <QString, std::shared_ptr<RSSData >>   rss_data_;
     RSSSearchGUIThread                              *rss_search_thread_;
     std::shared_ptr<Ui::RSSSearchGUI>               ui_;
+    int                                             url_id_;
 
-    QString     changeName(const QString &name);
-    void        closeEvent(QCloseEvent *);
-    int         checkExistingURL(const QString &url);
-    void        convertBigEndianToLittleEndian(QString &url);
-    QString     getEncodingFromRSS(const QString &content);
-    QString     insertName(const QString &name);
-    int         isFeedChecked(const QString &url, int &index);
-    void        paintRows();
-    void        returnModifedString(QString &str);
-    void        setupGui ();
+    void                     closeEvent(QCloseEvent *);
+    bool                     isUrlExist(const QString &url);
+    void                     convertUppercaseToLowercase(QString &url);
+    QString                  getEncodingFromRSS(const QString &content);
+    QString                  insertName(const QString &name);
+    bool                     isRssFeedChecked(const QString &url);
+    void                     modifyStringToFitWindowSize(QString &str);
+    void                     paintRows();
+    void                     removeRssData (const QString &name);
+    void                     setRssFeeds (const QString &web_source, std::shared_ptr<RSSData> rss_data);
+    void                     setupGui ();
 
 private slots:
     //ToDo: rename the below functions
     void on_addRssFeeds_clicked(); //"add RSS feeds" button
     void on_removeButton_clicked(); //'Remove' button clicked
     void on_searchButton_clicked(); //'Search' button
-    void on_modelItemChanged(QStandardItem*);
 
 signals:
     void stateChanged (const QString &);

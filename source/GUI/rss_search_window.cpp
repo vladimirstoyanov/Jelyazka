@@ -20,13 +20,15 @@
 
 RSSSearchGUI::RSSSearchGUI(QWidget *parent) :
     QWidget             (parent)
+    , add_id_           (3)
     , data_base_        ()
+    , encoding_id_      (2)
     , grid_             (std::make_shared<QGridLayout> ())
-    , is_user_edit_     (false)
-    , is_program_edit_  (false)
     , model_            (std::make_shared<QStandardItemModel>(0,3,this))
+    , name_id_          (0)
     , parse_rss_        (std::make_shared <ParseRSS> ())
     , ui_               (std::make_shared<Ui::RSSSearchGUI> ())
+    , url_id_           (1)
 
 {
     setupGui();
@@ -79,38 +81,29 @@ void RSSSearchGUI::paintRows()
     }
 }
 
-//check for existing url in tableView second column data
-int RSSSearchGUI::checkExistingURL(const QString &url)
+bool RSSSearchGUI::isUrlExist(const QString &url)
 {
     QString itemText = "";
     for(int i = 0; i<model_->rowCount(); ++i)
     {
-       itemText =  model_->item(i,1)->text();
-        if (url == itemText)
-        {
-            return 1;
-        }
+       itemText =  model_->item(i,url_id_)->text();
+       if (url == itemText)
+       {
+            return true;
+       }
     }
-    return 0;
+    return false;
 }
 
 
-void RSSSearchGUI::convertBigEndianToLittleEndian(QString &url)
+void RSSSearchGUI::convertUppercaseToLowercase(QString &url)
 {
-    for (int i=0; i<url.length(); i++)
-    {
-        int digit = int(url[i].toLatin1());
-        if (digit>64 && digit<91)
-        {
-            url[i] = url[i].toLower();
-        }
-    }
-
+    url = url.toLower();
 }
 
 void RSSSearchGUI::keyPressEvent(QKeyEvent *event)
 {
-    if(event->key()==16777220) //'enter' button
+    if(Qt::Key_Enter == event->key()) //'enter' button
     {
         ui_->searchButton->click();
     }
@@ -155,7 +148,7 @@ void RSSSearchGUI::on_searchButton_clicked()
         rss_search_thread_->stopThread();
         ui_->searchButton->setText("Stop Searching");
         QString url = ui_->lineEdit->text();
-        convertBigEndianToLittleEndian(url);
+        convertUppercaseToLowercase(url);
 
         rss_search_thread_->insertUrlDB(url);
         rss_search_thread_->setInitialUrl(url);
@@ -173,53 +166,39 @@ void RSSSearchGUI::on_searchButton_clicked()
     }
 }
 
+void RSSSearchGUI::setRssFeeds (const QString &web_source, std::shared_ptr<RSSData> rss_data)
+{
+    if ("" == rss_data->getVersion())
+    {
+        parse_rss_->getArticlesByRssContent(web_source, rss_data);
+    }
+    else
+    {
+        parse_rss_->getArticlesByRdfContent(web_source, rss_data);
+    }
+}
+
 void RSSSearchGUI::onFoundRSS(QString name
                               , const QString &url
                               , const QString &encoding
                               , const QString &web_source
-                              , const int version) //event function, when found rss
+                              , const int version)
 {
-    std::map<QString, std::shared_ptr<RSSData> >::iterator it;
-
-    if (checkExistingURL(url))
+    if (isUrlExist(url))
     {
         return;
     }
 
-    is_user_edit_ = false;
     parse_rss_->convertString(name, false);
-
-    //ToDo: insert name
-    it = rss_data_.find(name);
-    while (it != rss_data_.end())
-    {
-        name = changeName (name);
-        it = rss_data_.find(name);
-    }
-
-    std::shared_ptr<RSSData> rss_data = std::make_shared<RSSData>();
-    rss_data->setSiteName(name);
-    rss_data->setURL(url);
-
-
-    if (!version)
-    {
-        rss_data->setVersion(0);
-        rss_data->setEncoding(encoding);
-        parse_rss_->getArticlesFromRSSContent(web_source, rss_data);
-    }
-    else
-    {
-        rss_data->setVersion("2005");
-        parse_rss_->getArticlesFromRDFContent(web_source, rss_data);
-    }
+    std::shared_ptr<RSSData> rss_data = std::make_shared<RSSData>(name, url, encoding, version);
+    setRssFeeds (web_source, rss_data);
     rss_data_[name] = rss_data;
 
     int row_count = model_->rowCount();
     model_->setRowCount(row_count+1);
-    model_->setData(model_->index(row_count,0),name);
-    model_->setData(model_->index(row_count,1),url);
-    model_->setData(model_->index(row_count,2),encoding);
+    model_->setData(model_->index(row_count,name_id_),name);
+    model_->setData(model_->index(row_count,url_id_),url);
+    model_->setData(model_->index(row_count,encoding_id_),encoding);
 
     QStandardItem* item0 = new QStandardItem(true);
     item0->setCheckable(true);
@@ -228,25 +207,23 @@ void RSSSearchGUI::onFoundRSS(QString name
     item0->setEditable(false);
     model_->setItem(row_count, 3, item0);
 
-    model_->item(model_->rowCount()-1,1)->setEditable(false);
-    model_->item(model_->rowCount()-1,2)->setEditable(false);
-    model_->item(model_->rowCount()-1,3)->setEditable(false);
+    model_->item(model_->rowCount()-1,name_id_)->setEditable(false);
+    model_->item(model_->rowCount()-1,url_id_)->setEditable(false);
+    model_->item(model_->rowCount()-1,encoding_id_)->setEditable(false);
 
     paintRows();
 
     ui_->tableView->scrollToBottom();
     ui_->tableView->resizeColumnToContents(0);
-    is_user_edit_ = true;
 }
 
 void RSSSearchGUI::onChangeUrlLabel (QString url)
 {
-    returnModifedString(url);
+    modifyStringToFitWindowSize(url);
     ui_->label->setText(url);
 }
 
-//change string of label to be within a window size
-void RSSSearchGUI::returnModifedString(QString &str)
+void RSSSearchGUI::modifyStringToFitWindowSize(QString &str)
 {
     QRect rect;
     QFontMetrics fm(ui_->label->font());
@@ -272,15 +249,21 @@ void RSSSearchGUI::returnModifedString(QString &str)
     str = str_tmp + add_str;
 }
 
+void RSSSearchGUI::removeRssData (const QString &name)
+{
+    if (rss_data_.find(name)!=rss_data_.end())
+    {
+        rss_data_.erase(name);
+    }
+}
 void RSSSearchGUI::on_removeButton_clicked() //'Remove' button clicked
 {
     QModelIndexList indexes = ui_->tableView->selectionModel()->selectedRows();
     qSort(indexes.begin(), indexes.end());
     while (!indexes.isEmpty())
     {
+        removeRssData(indexes.last().data().toString());
         model_->removeRows(indexes.last().row(), 1);
-        //ToDo: remove the data from rss_data_
-
         indexes.removeLast();
     }
     paintRows();
@@ -291,15 +274,14 @@ void RSSSearchGUI::on_addRssFeeds_clicked() //"add RSS feeds" button
     this->setEnabled(false);
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    std::map <QString, std::shared_ptr<RSSData>>::iterator it;
-
-    for(it = rss_data_.begin(); it!=rss_data_.end(); ++it)
+    for (auto &item: rss_data_)
     {
-        data_base_.insertIntoFeedList(it->second->getSiteName(), it->second->getURL(), it->second->getVersion());
-        data_base_.insertIntoNewRssFeeds(it->second->getSiteName(), it->second->getURL(), it->second->getVersion());
+        if (isRssFeedChecked(item.second->getURL()))
+        {
+            data_base_.insertIntoFeedList(item.second->getSiteName(), item.second->getURL(), item.second->getVersion());
+            data_base_.insertIntoNewRssFeeds(item.second->getSiteName(), item.second->getURL(), item.second->getVersion());
+        }
     }
-
-    QApplication::restoreOverrideCursor();
 
     if (rss_data_.size()>0)
     {
@@ -307,85 +289,27 @@ void RSSSearchGUI::on_addRssFeeds_clicked() //"add RSS feeds" button
     }
 
     rss_data_.clear();
-
     this->setEnabled(true);
-
-    emit (stateChanged("HideRssSearchWindow")); //There are not updates. Hide rss search window.
+    QApplication::restoreOverrideCursor();
+    emit (stateChanged("HideRssSearchWindow")); //Hide rss search window.
 }
 
 
-int RSSSearchGUI::isFeedChecked(const QString &url, int &index)
+bool RSSSearchGUI::isRssFeedChecked(const QString &url)
 {
     for(int i = 0; i<model_->rowCount(); ++i)
     {
-        //check for existing url
-        if (model_->item(i,1)->text() == url )
+        if (model_->item(i,url_id_)->text() == url )
         {
-            index = i;
-            QModelIndex index= ui_->tableView->model()->index(i,3, QModelIndex());
+            QModelIndex index= ui_->tableView->model()->index(i, add_id_, QModelIndex());
             if(index.data(Qt::CheckStateRole) == Qt::Checked)
             {
-                return 1;
+                return true;
             }
-            return 0;
+            return false;
         }
     }
-    return 0;
-}
-
-QString RSSSearchGUI::changeName(const QString &name)
-{
-    QString result = name;
-    if (result.length()<1)
-    {
-        result+="1";
-        return result;
-    }
-
-    int n =  result[result.length()-1].unicode();
-    //qDebug()<<result[index];
-    if (n<48 || n>57)
-    {
-        result+="1";
-        return result;
-    }
-
-    int number = 0;
-    int multiple = 1;
-    int num_len = 0;
-    for (int i=result.length()-1; i>=0; i--)
-    {
-        int num = result[i].unicode();
-        if (num>47 && num<58)
-        {
-            num_len++;
-            number= (num-'0')*multiple + number;
-            multiple*=10;
-            continue;
-        }
-        break;
-    }
-
-    //qDebug()<<names[index];
-    number+=1;
-    QString num_str = QString::number(number);
-
-    if (num_len<num_str.length())
-    {
-        result+="0";
-    }
-
-    int j=result.length()-1;
-    for (int i = num_str.length()-1; i>=0; i--)
-    {
-        result[j--] = num_str[i];
-    }
-
-    return result;
-}
-
-void RSSSearchGUI::on_modelItemChanged(QStandardItem*item)
-{
+    return false;
 }
 
 void RSSSearchGUI::setupGui ()
@@ -404,16 +328,12 @@ void RSSSearchGUI::setupGui ()
      grid_->addWidget(ui_->label,2,0);
      this->setLayout(grid_.get());
 
-     //init QStandardItemModel and set it to ui->tableView (QTableView var)
-
-     model_->setHorizontalHeaderItem(0, new QStandardItem(QString("Name")));
-     model_->setHorizontalHeaderItem(1, new QStandardItem(QString("URL")));
-     model_->setHorizontalHeaderItem(2, new QStandardItem(QString("Encoding")));
-
-     model_->setHorizontalHeaderItem(3, new QStandardItem(QString("Add to list")));
+     model_->setHorizontalHeaderItem(name_id_, new QStandardItem(QString("Name")));
+     model_->setHorizontalHeaderItem(url_id_, new QStandardItem(QString("URL")));
+     model_->setHorizontalHeaderItem(encoding_id_, new QStandardItem(QString("Encoding")));
+     model_->setHorizontalHeaderItem(add_id_, new QStandardItem(QString("Add")));
      ui_->tableView->setModel(model_.get());
 
-     //start thread
      rss_search_thread_ = new RSSSearchGUIThread();
 
      connect(rss_search_thread_
@@ -436,6 +356,4 @@ void RSSSearchGUI::setupGui ()
      connect(model_.get(), SIGNAL(itemChanged(QStandardItem*)), this, SLOT(on_modelItemChanged(QStandardItem*)));
 
      ui_->label->setText("");
-     is_user_edit_ = true;
-     is_program_edit_ = false;
 }

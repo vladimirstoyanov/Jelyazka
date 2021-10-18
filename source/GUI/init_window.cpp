@@ -125,8 +125,7 @@ void InitWindow::onHttpRequestReceived (const HttpData & httpData)
     if (httpData.isResponseSuccessful())
     {
         ParseRSS parse;
-        std::shared_ptr<RSSData> rss_data = std::make_shared<RSSData> ();
-        rss_data->setURL(httpData.getUrl());
+        std::shared_ptr<RSSData> rss_data = std::make_shared<RSSData> ("", httpData.getUrl(),"",0);
 
         //pasrse web content to RSSData
         parse.getRSSDataByWebSource(httpData.getData(), rss_data);

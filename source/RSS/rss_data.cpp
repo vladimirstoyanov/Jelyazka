@@ -3,19 +3,23 @@
 RSSData::RSSData():
     encoding_ ("")
     , site_name_ ("")
-    , type_ ("")
     , url_ ("")
     , version_ ("")
 {
 
 }
 
-
-//get
-QString RSSData::getType () const
+RSSData::RSSData (const QString &name
+                  , const QString &url
+                  , const QString &encoding
+                  , const int version):
+    encoding_(encoding),
+    site_name_(name),
+    url_ (url),
+    version_(version==0?"":"2005")
 {
-    return type_;
 }
+
 
 QString RSSData::getSiteName() const
 {
@@ -81,12 +85,6 @@ void RSSData::articlesPushBack(const RSSArticle rss_article)
     rss_articles_.push_back(rss_article);
 }
 
-//set
-void RSSData::setType(const QString &type)
-{
-    type_ = type;
-}
-
 void RSSData::setSiteName(const QString &site_name)
 {
     site_name_ = site_name;
@@ -107,35 +105,3 @@ void RSSData::setVersion(const QString &version_tmp)
     version_ = version_tmp;
 }
 
-/*
-RSSArticle  RSSData::getCurrentArticle ()
-{
-    RSSArticle result;
-    if (current_index_rss_articles_<rss_articles_.size())
-    {
-        return rss_articles_[current_index_rss_articles_];
-    }
-    return result;
-}
-
-RSSArticle  RSSData::getNextArticle ()
-{
-    if ((current_index_rss_articles_+1)<rss_articles_.size())
-    {
-        ++current_index_rss_articles_;
-        return rss_articles_[current_index_rss_articles_];
-    }
-
-    return getCurrentArticle();
-}
-
-RSSArticle  RSSData::getPreviousArticle ()
-{
-    if ((current_index_rss_articles_-1)>-1)
-    {
-        --current_index_rss_articles_;
-    }
-
-    return getCurrentArticle();
-}
-*/

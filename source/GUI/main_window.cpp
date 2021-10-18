@@ -39,15 +39,14 @@ MainWindow::~MainWindow()
 {
 }
 
-//initialize combobox from structure
+//initialize combobox with RSS feed names
 void MainWindow::initDataInComboBoxFromStructure()
 {
-    std::map<QString, RSSData>::iterator it;
     ui_->titleComboBox->clear();
 
-    for (it = rss_data_.begin(); it!=rss_data_.end(); ++it)
+    for (auto &item: rss_data_)
     {
-        addToCombobox(it->first);
+        addToCombobox(item.first);
     }
 }
 
