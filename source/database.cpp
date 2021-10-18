@@ -370,6 +370,30 @@ QString DataBase::getVersionByName(const QString &name)
     return "";
 }
 
+bool DataBase::isUrlExist (const QString &url)
+{
+    {
+        openDB();
+        QSqlQuery query(q_sql_data_base_);
+
+        query.prepare(QString("SELECT url FROM feed_list where url=\"%1\"").arg(url));
+
+        if( !query.exec() )
+        {
+            qDebug()<<__PRETTY_FUNCTION__<<"Error:"<<query.lastError();
+            closeDB();
+            return false;
+        }
+
+        if (query.next())
+        {
+            return true;
+        }
+    }
+    closeDB();
+    return false;
+}
+
 int DataBase::selectURLFromAllURLs(const QString &url)
 {
     {

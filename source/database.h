@@ -33,6 +33,7 @@ public:
                                 , const QString &link
                                 , const QString &description);
     void    insertRowToFiltersTable(const QString &filter_name);
+    bool    isUrlExist (const QString &url);
     void    removeAllDataFromRssData();
     void    removeAllDataFromNewRssFeeds();
     void    removeDataFromRssData(const QString &site_name);

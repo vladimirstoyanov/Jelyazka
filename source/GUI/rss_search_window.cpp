@@ -276,7 +276,8 @@ void RSSSearchGUI::on_addRssFeeds_clicked() //"add RSS feeds" button
 
     for (auto &item: rss_data_)
     {
-        if (isRssFeedChecked(item.second->getURL()))
+        if (isRssFeedChecked(item.second->getURL()) &&
+                !data_base_.isUrlExist(item.second->getURL()))
         {
             data_base_.insertIntoFeedList(item.second->getSiteName(), item.second->getURL(), item.second->getVersion());
             data_base_.insertIntoNewRssFeeds(item.second->getSiteName(), item.second->getURL(), item.second->getVersion());
