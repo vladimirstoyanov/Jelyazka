@@ -139,6 +139,7 @@ void InitWindow::onHttpRequestReceived (const HttpData & httpData)
 
 void InitWindow::showEvent(QShowEvent *event)
 {
+    Q_UNUSED(event);
     qDebug()<<__PRETTY_FUNCTION__;
     setupConnections();
     loadRssFeeds();

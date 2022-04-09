@@ -25,6 +25,12 @@ void ArticleManager::generateDefaultTextMessage ()
 bool ArticleManager::isArticleContainsFilters (const RSSArticle & article)
 {
     Search search;
+
+    if (0 == filters_.size())
+    {
+        return true;
+    }
+
     for (unsigned int i=0; i<filters_.size(); ++i)
     {
         //check the title

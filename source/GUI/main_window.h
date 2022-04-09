@@ -100,8 +100,8 @@ private:
     int                             height_;
     std::shared_ptr<QLabel>         image_add_rss_label_;
     std::shared_ptr<QLabel>         image_help_label_;
-    std::shared_ptr<QLabel>         image_minimize_label_;
     std::shared_ptr<QLabel>         image_maximize_label_;
+    std::shared_ptr<QLabel>         image_minimize_label_;
     std::shared_ptr<QLabel>         image_options_label_;
     std::shared_ptr<QLabel>         image_refresh_label_;
     std::shared_ptr<QLabel>         image_X_label_;

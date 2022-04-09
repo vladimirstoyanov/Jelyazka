@@ -39,6 +39,7 @@ void Help::showEvent(QShowEvent *)
 
 void Help::resizeEvent(QResizeEvent *event)
 {
+    Q_UNUSED(event);
     ui_->textBrowser->setGeometry(5,5,this->width()-10, this->height()-10);
 }
 

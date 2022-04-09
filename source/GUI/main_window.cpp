@@ -22,14 +22,14 @@ MainWindow::MainWindow(QWidget *parent):
     QWidget(parent)
     , article_manager_(RSSData ())
     , add_rss_button_image_ ()
-    , is_resizing_          (false)
     , image_add_rss_label_  (std::make_shared<QLabel>(this))
+    , image_help_label_     (std::make_shared<QLabel>(this))
+    , image_maximize_label_ (std::make_shared<QLabel>(this))
+    , image_minimize_label_ (std::make_shared<QLabel>(this))
     , image_options_label_  (std::make_shared<QLabel>(this))
     , image_refresh_label_  (std::make_shared<QLabel>(this))
-    , image_help_label_     (std::make_shared<QLabel>(this))
     , image_X_label_        (std::make_shared<QLabel>(this))
-    , image_minimize_label_ (std::make_shared<QLabel>(this))
-    , image_maximize_label_ (std::make_shared<QLabel>(this))
+    , is_resizing_          (false)
     , ui_                   (std::make_shared<Ui::MainWindow> ())
 {
     setupGui();
