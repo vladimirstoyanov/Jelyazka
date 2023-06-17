@@ -30,6 +30,7 @@
 #include <QList>
 #include <QPainter>
 #include <QResizeEvent>
+#include <QScreen>
 #include <QShowEvent>
 #include <QStringList>
 #include <QStyle>

@@ -28,6 +28,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPropertyAnimation>
+#include <QScreen>
 #include <QShowEvent>
 #include <QTime>
 #include <QWidget>

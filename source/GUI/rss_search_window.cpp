@@ -17,6 +17,7 @@
     along with this program.  If not, see <htthread_pool://www.gnu.org/licenses/>.
 */
 #include "rss_search_window.h"
+#include "qscreen.h"
 
 RSSSearchGUI::RSSSearchGUI(QWidget *parent) :
     QWidget             (parent)
@@ -111,7 +112,7 @@ void RSSSearchGUI::keyPressEvent(QKeyEvent *event)
 
 void RSSSearchGUI::showEvent(QShowEvent *)
 {
-    this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
+    this->move(this->screen()->availableGeometry().center()- this->rect().center());
 
     rss_data_.clear();
     data_base_.removeAllDataFromNewRssFeeds();
@@ -259,7 +260,7 @@ void RSSSearchGUI::removeRssData (const QString &name)
 void RSSSearchGUI::on_removeButton_clicked() //'Remove' button clicked
 {
     QModelIndexList indexes = ui_->tableView->selectionModel()->selectedRows();
-    qSort(indexes.begin(), indexes.end());
+    std::sort(indexes.begin(), indexes.end());
     while (!indexes.isEmpty())
     {
         removeRssData(indexes.last().data().toString());

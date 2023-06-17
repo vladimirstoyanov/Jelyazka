@@ -18,6 +18,7 @@
 */
 
 #include "options_window.h"
+#include "qscreen.h"
 
 OptionsWindow::OptionsWindow(QWidget *parent) :
     QWidget(parent)
@@ -120,7 +121,8 @@ void OptionsWindow::resizeEvent(QResizeEvent *event)
 //show event
 void OptionsWindow::showEvent(QShowEvent *event)
 {
-    this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
+    Q_UNUSED(event);
+    this->move(this->screen()->availableGeometry().center() - this->rect().center());
     loadSettings();
 
     download_feed_status_->hide();
@@ -158,7 +160,7 @@ void OptionsWindow::on_treeWidget_clicked(const QModelIndex &index)
 
     for (unsigned int i=0; i<options.size(); ++i)
     {
-        if (row==i)
+         if (row==(int)i)
         {
             continue;
         }

@@ -49,7 +49,7 @@ size_t RSSData::getArticlesSize() const
 RSSArticle RSSData::articleAt(unsigned int index) const
 {
     RSSArticle default_value;
-    if (index >= rss_articles_.size())
+    if ((int)index >= rss_articles_.size())
     {
         return default_value;
     }

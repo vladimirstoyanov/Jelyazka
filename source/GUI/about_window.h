@@ -27,6 +27,7 @@
 #include <QWidget>
 
 #include "ui_about.h"
+#include <QScreen>
 
 namespace Ui
 {

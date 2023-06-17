@@ -137,7 +137,7 @@ void MainWindow::showEvent(QShowEvent *)
     }
 
     this->adjustSize();
-    this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
+    this->move(this->screen()->availableGeometry().center()- this->rect().center());
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
@@ -426,6 +426,7 @@ bool MainWindow::eventFilter(QObject *o, QEvent *event)
 
 void MainWindow::paintEvent(QPaintEvent *e) //paint backgraund image
 {
+    Q_UNUSED(e);
    //setAttribute(Qt::WA_OpaquePaintEvent);
    gradientRect(0,0,this->width_, this->height_);
    QPainter painter(this);

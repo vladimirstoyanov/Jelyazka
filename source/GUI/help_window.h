@@ -25,6 +25,7 @@
 #include <QDesktopWidget>
 #include <QFile>
 #include <QMessageBox>
+#include <QScreen>
 #include <QTextStream>
 #include <QtDebug>
 #include <QWidget>

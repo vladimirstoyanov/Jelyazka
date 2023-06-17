@@ -28,8 +28,8 @@ NotificationWindow::NotificationWindow(QWidget *parent) :
     , image_label_ (std::make_shared <QLabel> ())
     , is_mouse_clicked_ (false)
     , is_X_changed_(true)
-    , show_delay_(15)
     , show_window_animation_ (std::make_shared<QPropertyAnimation>(this, "geometry"))
+    , show_delay_(15)
     , ui_(std::make_shared<Ui::NotificationWindow> ())
 {
     qDebug()<<__PRETTY_FUNCTION__;
@@ -51,7 +51,7 @@ void NotificationWindow::getDesktopResolution(int& horizontal, int& vertical)
 {
    qDebug()<<__PRETTY_FUNCTION__;
    QDesktopWidget widget;
-   QRect desktop = widget.availableGeometry(widget.primaryScreen());
+   QRect desktop = this->screen()->availableGeometry();//widget.availableGeometry(widget.primaryScreen());
 
    horizontal = desktop.width();
    vertical = desktop.height();

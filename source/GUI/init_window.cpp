@@ -17,6 +17,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "init_window.h"
+#include "qscreen.h"
 
 InitWindow::InitWindow(QWidget *parent) :
     QWidget(parent)
@@ -48,7 +49,7 @@ void InitWindow::setupGui()
 
     this->setWindowFlags(Qt::FramelessWindowHint);
     this->setGeometry(30,100,300,300);
-    this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center()); //move the window to the center of the screen
+    this->move(this->screen()->availableGeometry().center() - this->rect().center()); //move the window to the center of the screen
     this->setStyleSheet("background-color:black;");
 
     image_init_label_->setPixmap(QPixmap::fromImage(*init_image_));

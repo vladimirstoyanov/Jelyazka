@@ -17,6 +17,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "about_window.h"
+#include "qscreen.h"
 
 About::About(QWidget *parent) :
     QWidget(parent),
@@ -49,14 +50,11 @@ void About::showEvent(QShowEvent *)
 void About::setupGui ()
 {
     ui_->setupUi(this);
-
     this->adjustSize();
-    this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
+    this->move(this->screen()->availableGeometry().center() - this->rect().center());
 
     ui_->textBrowser->setGeometry(0,0,this->width(), this->height());
-
     ui_->textBrowser->setHtml("Jelyazka RSS Reader written by Vladimir Stoyanov.<p>e-mail: <a href=\"mailto:vlado_stoyanov@yahoo.com\">vlado_stoyanov@yahoo.com</p>");
-
     ui_->textBrowser->setOpenLinks(1);
     ui_->textBrowser->setOpenExternalLinks(1);
 }

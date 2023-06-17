@@ -5,10 +5,10 @@ FeedsOptions::FeedsOptions(QWidget *parent,
                            const int ok_button_height,
                            const int ok_button_y):
     feed_list_  (std::make_shared<QListWidget>(parent))
-    , remove_button_ (std::make_shared<QPushButton> ("Remove", parent))
     , ok_button_height_ (ok_button_height)
     , ok_button_y_(ok_button_y)
     , offset_between_widgets_(5)
+    , remove_button_ (std::make_shared<QPushButton> ("Remove", parent))
     , tree_widget_width_ (tree_widget_width)
     , parent_ (parent)
 {
