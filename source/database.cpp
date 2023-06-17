@@ -84,6 +84,7 @@ std::map<QString, RSSData> DataBase::getRssData ()
         }
     }
     closeDB();
+    return result;
 }
 
 //fill view_feeds (QListWidget var)
