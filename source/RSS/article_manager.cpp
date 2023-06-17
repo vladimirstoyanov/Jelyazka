@@ -66,13 +66,13 @@ void ArticleManager::filterArticles ()
 RSSArticle ArticleManager::getNextRssArticle ()
 {
     if (Jelyazka::Settings::getIsFilteringEnabled()
-        && (current_index_rss_articles_+1)< filtered_articles_.size())
+        && (current_index_rss_articles_+1)< (int) filtered_articles_.size())
     {
         ++current_index_rss_articles_;
         return filtered_articles_[current_index_rss_articles_];
     }
     else if (!Jelyazka::Settings::getIsFilteringEnabled()
-               &&(current_index_rss_articles_+1)<rss_data_.getArticlesSize())
+               &&(current_index_rss_articles_+1)<(int)rss_data_.getArticlesSize())
     {
         ++current_index_rss_articles_;
         return rss_data_.articleAt(current_index_rss_articles_);
@@ -97,13 +97,13 @@ RSSArticle ArticleManager::getCurrentRssArticle ()
     RSSArticle result;
 
     if (Jelyazka::Settings::getIsFilteringEnabled()
-        && current_index_rss_articles_<filtered_articles_.size())
+        && current_index_rss_articles_<(int)filtered_articles_.size())
     {
         return filtered_articles_[current_index_rss_articles_];
     }
 
     else if (!Jelyazka::Settings::getIsFilteringEnabled()
-             && current_index_rss_articles_<rss_data_.getArticlesSize())
+             && current_index_rss_articles_<(int)rss_data_.getArticlesSize())
     {
         return rss_data_.articleAt(current_index_rss_articles_);
     }
