@@ -19,7 +19,6 @@ SOURCES += main.cpp\
     JelayzkaStateMachine/add_rss_data_state.cpp \
     Network/https.cpp \
     RSS/article_manager.cpp \
-    screen.cpp \
     search.cpp \
     logger.cpp \
     Network/http.cpp \
@@ -67,7 +66,6 @@ HEADERS  += \
     JelayzkaStateMachine/add_rss_data_state.hpp \
     Network/https.h \
     RSS/article_manager.h \
-    screen.h \
     search.h \
     logger.h \
     Network/http.h \
