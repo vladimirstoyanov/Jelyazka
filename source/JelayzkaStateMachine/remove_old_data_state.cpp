@@ -3,6 +3,7 @@
 
 void RemoveOldDataState::onEntry(const QString &event)
 {
+    Q_UNUSED(event);
     qDebug()<<__PRETTY_FUNCTION__;
 
     //remove the old data
@@ -15,11 +16,13 @@ void RemoveOldDataState::onEntry(const QString &event)
 
 void RemoveOldDataState::onState(const QString &event)
 {
+    Q_UNUSED(event);
     qDebug()<<__PRETTY_FUNCTION__;
 }
 
 void RemoveOldDataState::onExit (const QString &event)
 {
+    Q_UNUSED(event);
     qDebug()<<__PRETTY_FUNCTION__;
 }
 
