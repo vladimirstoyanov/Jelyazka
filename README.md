@@ -23,7 +23,7 @@ Jelyazka is a RSS reader program written in C++ with Qt (Based on Qt 6.5.1).
 
 ## Getting Started
 
-`$ git clone https://github.com/vladimirstoyanov/Jelyazka/`
+`$ git clone https://github.com/vladimirstoyanov/Jelyazka`
 
 ### Prerequisites
 
