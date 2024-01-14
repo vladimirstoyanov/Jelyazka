@@ -1,6 +1,6 @@
 # Jelyazka
 
-[![License](https://img.shields.io/badge/license-LGPL-blue.svg)](https://github.com/vladimirstoyanov/Jelyazka/blob/main/LICENSE)
+[![License](https://img.shields.io/badge/license-LGPL-blue.svg)](https://github.com/vladimirstoyanov/Jelyazka/blob/main/COPING)
 [![GitHub Issues](https://img.shields.io/github/issues/vladimirstoyanov/Jelyazka)](https://github.com/vladimirstoyanov/Jelyazka/issues)
 [![GitHub Stars](https://img.shields.io/github/stars/vladimirstoyanov/Jelyazka)](https://github.com/vladimirstoyanov/Jelyazka/stargazers)
 
